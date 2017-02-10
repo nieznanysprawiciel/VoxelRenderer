@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  
+  <PropertyGroup Label="UserMacros">
+	<RootDir>$(MSBuildThisFileDirectory)..\</RootDir>
+	<ProjectsDir>$(RootDir)Project\</ProjectsDir>
+	<TestsDir>$(RootDir)Tests\</TestsDir>
+	<ReleaseDir>$(RootDir)</ReleaseDir>
+	<LibDir>$(ReleaseDir)LibDir\</LibDir>
+	<BuildDir>$(ReleaseDir)BuildDir\</BuildDir>
+	<SourceInclude>$(RootDir)Code\</SourceInclude>
+	<SourceDir>$(SourceInclude)</SourceDir>
+	<ExternalDir>$(RootDir)External\</ExternalDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <_PropertySheetDisplayName>Paths</_PropertySheetDisplayName>
+  </PropertyGroup>
+  
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SourceInclude);$(SourceInclude)swCommonLib/Reflection/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	  <PreprocessorDefinitions>RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+</Project>

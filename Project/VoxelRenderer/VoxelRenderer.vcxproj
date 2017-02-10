@@ -58,15 +58,23 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VoxelRendererConfig.props" />
+    <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VoxelRendererConfig.props" />
+    <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VoxelRendererConfig.props" />
+    <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VoxelRendererConfig.props" />
+    <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -151,6 +159,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">
+      <Project>{9abcbab4-05b4-47c5-b5d8-f201559fd096}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\Serialization\Serialization.vcxproj">
+      <Project>{561754cb-295d-4d69-8dbc-bc069d1a636a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\SerializerXML\SerializerXML.vcxproj">
+      <Project>{91cc6d16-f22c-434a-95e0-35ee857054c7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\swGraphicAPI\ProjectsDir\Visual2015\DX11API\DX11API.vcxproj">
+      <Project>{44643d7f-1c71-41c1-b452-b2dc5e088a58}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\swGUI\ProjectDir\Visual2015\CoreGUI\CoreGUI.vcxproj">
+      <Project>{c6dab3ee-e9a7-47fc-9b33-a8f4250c219b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Code\swGUI\ProjectDir\Visual2015\Win32NativeGUI\Win32NativeGUI.vcxproj">
+      <Project>{267292a0-c262-43e7-afb1-1f63439fd465}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
