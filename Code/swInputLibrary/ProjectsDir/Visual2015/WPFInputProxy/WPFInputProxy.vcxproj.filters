@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="WPFInputProxy">
+      <UniqueIdentifier>{1bc00c9a-5b26-44a5-a6b7-68a21040a909}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputLibrary">
+      <UniqueIdentifier>{9a2c5750-96a0-4858-a6c9-11803e73bb30}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\InputWPF\WPFInputProxy.h">
+      <Filter>WPFInputProxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Factory.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\IInput.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputDeviceInfo.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\JoystickState.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\KeyboardState.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\KeyState.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MouseState.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\InputWPF\WPFInputProxy.cpp">
+      <Filter>WPFInputProxy</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

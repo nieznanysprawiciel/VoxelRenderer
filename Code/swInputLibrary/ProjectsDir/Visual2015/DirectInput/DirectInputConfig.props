@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <DirectInputName>DirectInput</DirectInputName>
+    <DirectInputLibDir>$(LibDir)$(DirectInputName)\</DirectInputLibDir>
+    <DirectInputSourceDir>$(SourceDir)$(DirectInputName)\</DirectInputSourceDir>
+    <DirectInputFileName>$(DirectInputName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</DirectInputFileName>
+    <DirectInputBuildDir>$(BuildDir)$(DirectInputName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</DirectInputBuildDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(DirectInputBuildDir)</IntDir>
+    <TargetName>$(DirectInputFileName)</TargetName>
+    <OutDir>$(DirectInputLibDir)</OutDir>
+  </PropertyGroup>
+
+</Project>
