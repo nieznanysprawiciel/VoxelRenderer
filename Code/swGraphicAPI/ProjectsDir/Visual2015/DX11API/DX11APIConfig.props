@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <Import Project="..\Paths.props" />
+  <Import Project="IncludeDirectX11.props" />
+  <PropertyGroup Label="UserMacros">
+    <DX11APIName>DX11API</DX11APIName>
+    <DX11APILibDir>$(LibDir)$(DX11APIName)\</DX11APILibDir>
+    <DX11APISourceDir>$(SourceDir)$(DX11APIName)\</DX11APISourceDir>
+    <DX11APIFileName>$(DX11APIName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</DX11APIFileName>
+    <DX11APIBuildDir>$(BuildDir)$(DX11APIName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</DX11APIBuildDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(DX11APIBuildDir)</IntDir>
+    <TargetName>$(DX11APIFileName)</TargetName>
+    <OutDir>$(DX11APILibDir)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeaderFile>swGraphicAPI/DX11API/stdafx.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SourceInclude)/swGraphicAPI/DX11API/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+</Project>

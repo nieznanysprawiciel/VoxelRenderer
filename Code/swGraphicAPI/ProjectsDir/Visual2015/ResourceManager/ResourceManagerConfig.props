@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <ResourceManagerName>ResourceManager</ResourceManagerName>
+    <ResourceManagerLibDir>$(LibDir)$(ResourceManagerName)\</ResourceManagerLibDir>
+    <ResourceManagerSourceDir>$(SourceDir)$(ResourceManagerName)\</ResourceManagerSourceDir>
+    <ResourceManagerFileName>$(ResourceManagerName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</ResourceManagerFileName>
+    <ResourceManagerBuildDir>$(BuildDir)$(ResourceManagerName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</ResourceManagerBuildDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(ResourceManagerBuildDir)</IntDir>
+    <TargetName>$(ResourceManagerFileName)</TargetName>
+    <OutDir>$(ResourceManagerLibDir)</OutDir>
+  </PropertyGroup>
+
+
+</Project>
