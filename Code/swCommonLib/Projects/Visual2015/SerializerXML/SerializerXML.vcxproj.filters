@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SerializerXML">
+      <UniqueIdentifier>{10abb098-37b2-4781-b253-0ce60f2882c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Serialization\Serializers\SerializerXML\Deserializer.cpp">
+      <Filter>SerializerXML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Serialization\Serializers\SerializerXML\Serializer.cpp">
+      <Filter>SerializerXML</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

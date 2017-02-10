@@ -1,0 +1,396 @@
+{
+    "FreeValue": "value",
+    "FirstObject": {
+        "Map": "LightmapGen1",
+        "Path": "/LightmapGen1.map",
+        "Load": true,
+        "Data": {
+            "NumberUnits": 1266643,
+            "PositionOffset": 0.4124667623,
+            "Visible": true,
+            "Key": 218588284382834538
+        },
+			"Actors": [
+            {
+                "Name": "TIE Fighter 0",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 1",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 2",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 3",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 4",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 5",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 6",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 7",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 8",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 9",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 10",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            },
+            {
+                "Name": "TIE Fighter 11",
+                "Position": {
+                    "X": 12,
+                    "Y": 12,
+                    "Z": 12
+                }
+            }
+        ],
+        "Data1": {
+            "Map": "LightmapGen1",
+            "Path": "/LightmapGen1.map",
+            "Load": true
+        },
+        "Data2": {
+            "Asset1": "TIE Fighter model",
+            "Asset2": "Nebulon B",
+            "Asset3": "Death Star",
+            "Asset4": "Calamarian Cruiser",
+            "Asset5": "Star Destroyer"
+        },
+        "Data3": {
+            "NumberUnits": 4294967295,
+            "UnitsModifier": -2147483648,
+            "PositionOffset": 0.41246676237575899,
+            "Visible": true,
+            "Key": -9223372036854775808,
+            "KeyHash": 18446744073709551615
+        },
+        "ActorEnemies": [
+            {
+                "Name": "X-wing 0",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 1",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 2",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 3",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 4",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 5",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 6",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 7",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 8",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 9",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 10",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 11",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 12",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 13",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 14",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 15",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 16",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 17",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 18",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 19",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 20",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 21",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 22",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 23",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 24",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 25",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 26",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 27",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 28",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            },
+            {
+                "Name": "X-wing 29",
+                "Position": {
+                    "X": 15,
+                    "Y": 124,
+                    "Z": 97
+                }
+            }
+        ],
+        "ButtonContainer": {
+            "PushButton": {
+                "ButtonName": "Exit",
+                "Visible": true
+            },
+            "PushButton": {
+                "ButtonName": "Start",
+                "Visible": true
+            },
+            "TriStateButton": {
+                "ButtonName": "GameMode",
+                "Visible": false
+            },
+            "SwitchButton": {
+                "ButtonName": "GameMode2",
+                "Visible": true
+            },
+            "SelectField": {
+                "ButtonName": "TankType",
+                "Visible": true
+            }
+        }
+	}
+}

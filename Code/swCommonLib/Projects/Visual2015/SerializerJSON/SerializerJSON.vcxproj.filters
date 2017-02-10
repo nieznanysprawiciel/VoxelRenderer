@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SerializerJSON">
+      <UniqueIdentifier>{fc2cbdf3-03a0-45d3-9ee4-c6f9a0179d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{f70edd2b-62e1-4475-8c69-9633ff5adcc2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Serialization\Serializers\SerializerJson\Deserializer.cpp">
+      <Filter>SerializerJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Serialization\Serializers\SerializerJson\ErrorCodes.cpp">
+      <Filter>SerializerJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Serialization\Serializers\SerializerJson\Serializer.cpp">
+      <Filter>SerializerJSON</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Serialization\Serializers\SerializerJson\ErrorCodes.h">
+      <Filter>SerializerJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\Deserializer.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\SerializationContext.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\Serializer.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

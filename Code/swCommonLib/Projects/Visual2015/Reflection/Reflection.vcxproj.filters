@@ -1,0 +1,514 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ReflectionCode">
+      <UniqueIdentifier>{02d75b4b-fad0-4c83-9065-4001e0a8acb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr">
+      <UniqueIdentifier>{16701b80-9b0a-4646-8aa2-4b1da6e949c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail">
+      <UniqueIdentifier>{8a05b54b-be62-4fdc-af63-b89d75b2dd2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\array">
+      <UniqueIdentifier>{4e452b4f-9553-4423-bb77-a81013014bbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\base">
+      <UniqueIdentifier>{e2f8cf84-e411-4776-a510-aa4304d1384e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\constructor">
+      <UniqueIdentifier>{2cd3a7c5-887f-45c0-849c-e5b3788bb9d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\conversion">
+      <UniqueIdentifier>{1273da6a-c88c-4f22-855a-f3ca8002c466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\default_arguments">
+      <UniqueIdentifier>{6aa16a28-b436-43fa-8664-a4c5e519ea31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\destructor">
+      <UniqueIdentifier>{dc61d16b-1849-45b2-be10-ceb33928e567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\enumeration">
+      <UniqueIdentifier>{9e55ff77-884d-41ee-8539-fbbe116b62b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\impl">
+      <UniqueIdentifier>{42005322-f422-47af-9057-1f54d72c0159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\metadata">
+      <UniqueIdentifier>{b0899390-69ae-4021-8e33-cf77b10ebe5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\method">
+      <UniqueIdentifier>{66e021c0-d7d1-4c5f-9d23-5d54374771ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\misc">
+      <UniqueIdentifier>{16e9a2e6-0e45-4b58-be84-867f8160cc80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\parameter_info">
+      <UniqueIdentifier>{5b6a4b65-2572-4577-87ab-81529f44672e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\policies">
+      <UniqueIdentifier>{e897421f-bcbc-4d12-9343-3bcc94cb75cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\property">
+      <UniqueIdentifier>{f5b4fa57-fc48-4c7f-accf-aee78db336b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\registration">
+      <UniqueIdentifier>{0f4c78a2-bacc-42b6-b00a-332b6300bd88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\type">
+      <UniqueIdentifier>{892646ed-1475-443a-a864-047d45a8c387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\variant">
+      <UniqueIdentifier>{fe0a78f5-4081-43cc-9c0f-f6bcaebd349d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\variant_array_view">
+      <UniqueIdentifier>{40ee1ae7-ae07-4d27-8c37-a8eac4ba99a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{ff29a58f-8d26-4a8f-8d90-9a88d38db484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\comparision">
+      <UniqueIdentifier>{3a1cdfae-4994-4d91-9957-a3e5b08a84cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReflectionCode\rttr\detail\filter">
+      <UniqueIdentifier>{01004497-5c76-4139-bc9a-8af36eba2e56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\access_levels.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\argument.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\array_mapper.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\constructor.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\destructor.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\enumeration.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\instance.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\method.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\parameter_info.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\policy.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\property.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\registration.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\rttr_cast.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\rttr_enable.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\type.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant_array_view.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\wrapper_mapper.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_accessor.h">
+      <Filter>ReflectionCode\rttr\detail\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_accessor_impl.h">
+      <Filter>ReflectionCode\rttr\detail\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_mapper_impl.h">
+      <Filter>ReflectionCode\rttr\detail\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\array</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\core_prerequisites.h">
+      <Filter>ReflectionCode\rttr\detail\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\pch.h">
+      <Filter>ReflectionCode\rttr\detail\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_invoker.h">
+      <Filter>ReflectionCode\rttr\detail\constructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\constructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\constructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_defaults.h">
+      <Filter>ReflectionCode\rttr\detail\constructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\conversion\number_conversion.h">
+      <Filter>ReflectionCode\rttr\detail\conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\conversion\std_conversion_functions.h">
+      <Filter>ReflectionCode\rttr\detail\conversion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\default_arguments\default_arguments.h">
+      <Filter>ReflectionCode\rttr\detail\default_arguments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\default_arguments\invoke_with_defaults.h">
+      <Filter>ReflectionCode\rttr\detail\default_arguments</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\destructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\destructor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enum_data.h">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_helper.h">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\metadata\metadata.h">
+      <Filter>ReflectionCode\rttr\detail\metadata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\metadata\metadata_handler.h">
+      <Filter>ReflectionCode\rttr\detail\metadata</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_accessor.h">
+      <Filter>ReflectionCode\rttr\detail\method</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_invoker.h">
+      <Filter>ReflectionCode\rttr\detail\method</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\method</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\method</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\parameter_info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\parameter_info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_infos.h">
+      <Filter>ReflectionCode\rttr\detail\parameter_info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_names.h">
+      <Filter>ReflectionCode\rttr\detail\parameter_info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\ctor_policies.h">
+      <Filter>ReflectionCode\rttr\detail\policies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\meth_policies.h">
+      <Filter>ReflectionCode\rttr\detail\policies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\prop_policies.h">
+      <Filter>ReflectionCode\rttr\detail\policies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_accessor.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_base.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_func.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_member_func.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_member_object.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_object.h">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\bind_impl.h">
+      <Filter>ReflectionCode\rttr\detail\registration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\bind_types.h">
+      <Filter>ReflectionCode\rttr\detail\registration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\registration_executer.h">
+      <Filter>ReflectionCode\rttr\detail\registration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\registration_impl.h">
+      <Filter>ReflectionCode\rttr\detail\registration</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_creator.h">
+      <Filter>ReflectionCode\rttr\detail\variant_array_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_creator_impl.h">
+      <Filter>ReflectionCode\rttr\detail\variant_array_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_impl.h">
+      <Filter>ReflectionCode\rttr\detail\variant_array_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_traits.h">
+      <Filter>ReflectionCode\rttr\detail\variant_array_view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\version.h">
+      <Filter>ReflectionCode\rttr\detail\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\array_range.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\enum_flags.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\filter_item.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\string_view.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\comparable_types.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_equal.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_equal_impl.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_less.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_less_impl.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal_impl.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less_impl.h">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\filter\filter_item_funcs.h">
+      <Filter>ReflectionCode\rttr\detail\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\argument_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\array_range_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\enum_flags_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\instance_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\rttr_cast_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\string_view_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\wrapper_mapper_impl.h">
+      <Filter>ReflectionCode\rttr\detail\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\argument_extractor.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\argument_wrapper.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\class_item_mapper.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\data_address_container.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\flat_map.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\flat_multimap.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\function_traits.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\misc_type_traits.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\std_type_traits.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\utility.h">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\accessor_type.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\base_classes.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\get_create_variant_func.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\get_derived_info_func.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_comparator.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_converter.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_data.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_impl.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_name.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_register.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_register_p.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_string_utils.h">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_compare.h">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data.h">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data_converter.h">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data_policy.h">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_impl.h">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\constructor.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\destructor.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\enumeration.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\method.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\parameter_info.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\policy.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\property.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\registration.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\type.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant_array_view.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\constructor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\conversion\std_conversion_functions.cpp">
+      <Filter>ReflectionCode\rttr\detail\conversion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\destructor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_helper.cpp">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\enumeration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\method</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\parameter_info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_base.cpp">
+      <Filter>ReflectionCode\rttr\detail\property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\registration\registration_executer.cpp">
+      <Filter>ReflectionCode\rttr\detail\registration</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal.cpp">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less.cpp">
+      <Filter>ReflectionCode\rttr\detail\comparision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\misc\standard_types.cpp">
+      <Filter>ReflectionCode\rttr\detail\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\type\type_register.cpp">
+      <Filter>ReflectionCode\rttr\detail\type</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\variant\variant_compare.cpp">
+      <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Reflection\src\rttr\rttr.cmake">
+      <Filter>ReflectionCode\rttr</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\Reflection\src\rttr\detail\base\version.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

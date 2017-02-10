@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <SerializerXMLName>SerializerXML</SerializerXMLName>
+    <SerializerXMLLibDir>$(LibDir)$(SerializerXMLName)\</SerializerXMLLibDir>
+    <SerializerXMLSourceDir>$(SourceDir)$(SerializerXMLName)\</SerializerXMLSourceDir>
+    <SerializerXMLFileName>$(SerializerXMLName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</SerializerXMLFileName>
+    <SerializerXMLBuildDir>$(BuildDir)$(SerializerXMLName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</SerializerXMLBuildDir>
+  </PropertyGroup>
+  
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>$(SerializerXMLLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SerializerXMLFileName).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(SerializerXMLBuildDir)</IntDir>
+    <TargetName>$(SerializerXMLFileName)</TargetName>
+    <OutDir>$(SerializerXMLLibDir)</OutDir>
+  </PropertyGroup>
+  
+</Project>

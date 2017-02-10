@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <ReflectionName>Reflection</ReflectionName>
+    <ReflectionLibDir>$(LibDir)$(ReflectionName)\$(PlatformToolset)\$(PlatformShortName)\$(Configuration)\</ReflectionLibDir>
+    <ReflectionSourceDir>$(SourceDir)$(ReflectionName)\</ReflectionSourceDir>
+    <ReflectionFileName>$(ReflectionName)</ReflectionFileName>
+    <ReflectionBuildDir>$(BuildDir)$(ReflectionName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</ReflectionBuildDir>
+  </PropertyGroup>
+  
+  <ItemDefinitionGroup>
+    <ClCompile>
+	  <PreprocessorDefinitions>RTTR_DLL;RTTR_DLL_EXPORTS;CMAKE_INTDIR="Debug";TypeInfo_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+	</ClCompile>
+  </ItemDefinitionGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(ReflectionBuildDir)</IntDir>
+    <TargetName>$(ReflectionFileName)</TargetName>
+    <OutDir>$(ReflectionLibDir)</OutDir>
+  </PropertyGroup>
+
+</Project>

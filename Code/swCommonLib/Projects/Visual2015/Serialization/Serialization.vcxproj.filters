@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="PrecompiledHeader">
+      <UniqueIdentifier>{2e86127b-a4e8-408d-b9ea-e97f80e3d36e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PropertySerialization">
+      <UniqueIdentifier>{5008cbf0-99be-4d98-9402-a04e85fc61b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serializer">
+      <UniqueIdentifier>{06d2f42b-7176-414b-b33e-7df3e6ee02c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Serialization\PropertySerialization\EngineSerializationContext.h">
+      <Filter>PropertySerialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\PropertySerialization\Serialization.h">
+      <Filter>PropertySerialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\Deserializer.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\SerializationContext.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\Serializer.h">
+      <Filter>Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Serialization\PropertySerialization\stdafx.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Serialization\PropertySerialization\Serialization.cpp">
+      <Filter>PropertySerialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Serialization\PropertySerialization\stdafx.cpp">
+      <Filter>PrecompiledHeader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Serialization\PropertySerialization\Serialization.inl">
+      <Filter>PropertySerialization</Filter>
+    </None>
+  </ItemGroup>
+</Project>

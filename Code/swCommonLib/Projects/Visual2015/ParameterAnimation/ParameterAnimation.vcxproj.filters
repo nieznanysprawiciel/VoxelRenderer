@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ParameterAnimation">
+      <UniqueIdentifier>{dfebe689-4248-4d7c-a6af-2d0799fed71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterAnimation\Interpolators">
+      <UniqueIdentifier>{df11845c-a310-43c2-9b97-b6c744868b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterAnimation\Animation">
+      <UniqueIdentifier>{40b7da16-05cb-4d79-ae5f-6b162114a8a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterAnimation\Parameters">
+      <UniqueIdentifier>{80aaf911-ccca-4b24-9d55-9092b047dfeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParameterAnimation\Timelines">
+      <UniqueIdentifier>{8f49510d-502c-4202-9f81-aa678dad0767}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\ParameterAnimation\Interpolators\DefaultInterpolators.cpp">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ParameterAnimation\Timelines\RelativeTimeline.cpp">
+      <Filter>ParameterAnimation\Timelines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ParameterAnimation\Timelines\TimelineBase.cpp">
+      <Filter>ParameterAnimation\Timelines</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\ParameterAnimation\Interpolators\DefaultInterpolators.h">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Interpolators\DiscreteInterpolator.h">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Interpolators\IInterpolator.h">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Interpolators\LinearInterpolator.h">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Animation\Animation.h">
+      <Filter>ParameterAnimation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Animation\AnimationSet.h">
+      <Filter>ParameterAnimation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Animation\AnimEvaluator.h">
+      <Filter>ParameterAnimation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Animation\IAnimation.h">
+      <Filter>ParameterAnimation\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Timelines\RelativeTimeline.h">
+      <Filter>ParameterAnimation\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Timelines\TimelineBase.h">
+      <Filter>ParameterAnimation\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Timelines\TimelineTypes.h">
+      <Filter>ParameterAnimation\Timelines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Parameters\DirectPropertyh.h">
+      <Filter>ParameterAnimation\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Parameters\PropertyPath.h">
+      <Filter>ParameterAnimation\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Parameters\StringPropertyPath.h">
+      <Filter>ParameterAnimation\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Key.h">
+      <Filter>ParameterAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\KeySet.h">
+      <Filter>ParameterAnimation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ParameterAnimation\Interpolators\CosinusInterpolator.h">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\ParameterAnimation\Interpolators\DefaultInterpolators.inl">
+      <Filter>ParameterAnimation\Interpolators</Filter>
+    </None>
+    <None Include="..\..\..\ParameterAnimation\Animation\Animation.inl">
+      <Filter>ParameterAnimation\Animation</Filter>
+    </None>
+  </ItemGroup>
+</Project>
