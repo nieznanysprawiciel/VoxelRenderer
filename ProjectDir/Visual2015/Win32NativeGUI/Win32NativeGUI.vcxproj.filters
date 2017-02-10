@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Win32">
+      <UniqueIdentifier>{ba95f1fb-0a55-4562-b9e2-33b00d4c2bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Native">
+      <UniqueIdentifier>{3d9c25e6-f28e-4c3f-9909-a010ebd7d96c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Native\INativeGUI.h">
+      <Filter>Native</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Native\INativeWindow.h">
+      <Filter>Native</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Native\WinAPI\Win32ApiWindow.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Native\WinAPI\WinAPIGUI.h">
+      <Filter>Win32</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Native\WinAPI\Win32ApiWindow.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Native\WinAPI\WinAPIGUI.cpp">
+      <Filter>Win32</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
