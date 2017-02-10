@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Common">
+      <UniqueIdentifier>{44bd5427-fbf3-460d-be60-e0f466a0bde3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Properties">
+      <UniqueIdentifier>{ae5d449f-760a-4789-ab94-c8f6e2ef9644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Properties\Containers">
+      <UniqueIdentifier>{0e26b253-c21f-44e7-b471-9f1660539e0d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Common\Converters.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\EngineObject.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Properties\Properties.cpp">
+      <Filter>Common\Properties</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Common\Converters.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\EngineObject.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\MemoryChunk.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\MemoryLeaks.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Nullable.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\ObjectDeleter.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\RTTR.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Traits.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\TypesDefinitions.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\UPtr.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Properties\IEnableProperty.h">
+      <Filter>Common\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Properties\Properties.h">
+      <Filter>Common\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Properties\Property.h">
+      <Filter>Common\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h">
+      <Filter>Common\Properties\Containers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

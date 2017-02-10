@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <CommonBaseName>CommonBase</CommonBaseName>
+    <CommonBaseLibDir>$(LibDir)$(CommonBaseName)\</CommonBaseLibDir>
+    <CommonBaseSourceDir>$(SourceDir)$(CommonBaseName)\</CommonBaseSourceDir>
+    <CommonBaseFileName>$(CommonBaseName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</CommonBaseFileName>
+    <CommonBaseBuildDir>$(BuildDir)$(CommonBaseName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</CommonBaseBuildDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(CommonBaseBuildDir)</IntDir>
+    <TargetName>$(CommonBaseFileName)</TargetName>
+    <OutDir>$(CommonBaseLibDir)</OutDir>
+  </PropertyGroup>
+
+</Project>

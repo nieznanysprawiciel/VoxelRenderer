@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\access_levels.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\argument.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\array_mapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\array_range.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\constructor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\destructor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_accessor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_accessor_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_mapper_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\core_prerequisites.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\pch.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\base\version.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\comparable_types.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_equal.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_equal_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_less.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_array_less_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_invoker.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_defaults.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\conversion\number_conversion.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\conversion\std_conversion_functions.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\default_arguments\default_arguments.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\default_arguments\invoke_with_defaults.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_helper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\enumeration\enum_data.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\filter\filter_item_funcs.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\argument_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\array_range_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\enum_flags_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\instance_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\rttr_cast_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\string_view_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\impl\wrapper_mapper_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\metadata\metadata.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\metadata\metadata_handler.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_accessor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_invoker.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\argument_extractor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\argument_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\class_item_mapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\data_address_container.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\flat_map.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\flat_multimap.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\function_traits.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\misc_type_traits.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\std_type_traits.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\misc\utility.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_infos.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_names.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\ctor_policies.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\meth_policies.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\policies\prop_policies.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_accessor.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_base.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_func.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_member_func.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_member_object.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_object.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\bind_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\bind_types.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\registration_executer.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\registration\registration_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\accessor_type.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\base_classes.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\get_create_variant_func.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\get_derived_info_func.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_comparator.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_converter.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_data.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_name.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_register.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_register_p.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\type\type_string_utils.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_compare.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data_converter.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_data_policy.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_creator.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_creator_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_impl.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant_array_view\variant_array_view_traits.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\enumeration.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\enum_flags.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\filter_item.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\instance.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\method.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\parameter_info.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\policy.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\property.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\registration.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\rttr_cast.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\rttr_enable.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\string_view.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\type.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant_array_view.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\wrapper_mapper.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\constructor.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\destructor.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_equal.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\comparison\compare_less.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\constructor\constructor_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\conversion\std_conversion_functions.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\destructor\destructor_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_helper.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\enumeration\enumeration_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\method\method_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\misc\standard_types.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\parameter_info\parameter_info_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\property\property_wrapper_base.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\registration\registration_executer.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\type\type_register.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\detail\variant\variant_compare.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\enumeration.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\method.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\parameter_info.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\policy.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\property.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\registration.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\type.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant_array_view.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Reflection\src\rttr\rttr.cmake" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\Reflection\src\rttr\detail\base\version.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{59FA8028-2346-4246-854F-14DCFAB6AB56}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Reflection</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolset>v140</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="ReflectionConfig.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="ReflectionConfig.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="ReflectionConfig.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="ReflectionConfig.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;REFLECTION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;REFLECTION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;REFLECTION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;REFLECTION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
