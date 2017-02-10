@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="VoxelRenderer">
+      <UniqueIdentifier>{0c03c520-ba9d-4eed-82ad-82270ff30190}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VoxelRenderer\Application">
+      <UniqueIdentifier>{03e3191d-40a2-43d5-ad74-aef35d1fe8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VoxelRenderer\Octree">
+      <UniqueIdentifier>{dac629a7-41ee-4465-8e91-48bc41f06688}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
