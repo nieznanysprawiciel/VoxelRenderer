@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DX11API">
+      <UniqueIdentifier>{ae039af9-e125-43c2-9c4b-8e5d1ce78570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11API\DX11Resources">
+      <UniqueIdentifier>{a5077a80-4283-4fc0-b644-5335e5ae17bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11API\DX11Renderer">
+      <UniqueIdentifier>{441fdd6b-c1f3-4c05-9be9-657003788475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DX11API\DX11Initializer">
+      <UniqueIdentifier>{b75d6c25-6aa4-49fc-a15b-0750b2dace7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PrecompiledHeader">
+      <UniqueIdentifier>{63446aa1-bb12-4d8e-af24-6396dd0933e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\DX11API\stdafx.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11Buffer.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11ComputeShader.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11InputLayout.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11InputLayoutDescriptor.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11PipelineState.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11PixelShader.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11RenderTarget.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11SwapChain.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11Texture.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11VertexShader.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Renderer\DX11Renderer.h">
+      <Filter>DX11API\DX11Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Initializer\DX11APIObjects.h">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Initializer\DX11ConstantsMapper.h">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Initializer\DX11Initializer.h">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\DX11API\stdafx.cpp">
+      <Filter>PrecompiledHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11Buffer.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11ComputeShader.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11InputLayout.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11InputLayoutDescriptor.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11PipelineState.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11PixelShader.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11RenderTarget.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11SwapChain.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11Texture.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11VertexShader.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\ResourcesFactory.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Renderer\DX11Renderer.cpp">
+      <Filter>DX11API\DX11Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Initializer\DX11APIObjects.cpp">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Initializer\DX11ConstantsMapper.cpp">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Initializer\DX11Initializer.cpp">
+      <Filter>DX11API\DX11Initializer</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
