@@ -16,8 +16,10 @@ build/
 [Oo]bj/
 BuildDir/
 LibDir/
-External/SVOBuilder/
-
+External/ooc_svo_builder/
+External/cpu_voxel_raycster/
+External/trimesh2/
+WorkingDir/
 
 
 # Generated documentation

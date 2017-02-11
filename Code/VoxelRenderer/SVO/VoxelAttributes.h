@@ -1,6 +1,9 @@
 #pragma once
 
+
 #include <DirectXMath.h>
+#include <DirectXPackedVector.h>
+
 
 
 /**@brief Attributes.
@@ -8,6 +11,6 @@
 @todo In first version only color is supported.*/
 struct VoxelAttributes
 {
-
+	DirectX::PackedVector::XMCOLOR		Color;
 };
 

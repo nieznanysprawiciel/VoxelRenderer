@@ -10,6 +10,9 @@
     <Filter Include="VoxelRenderer\SVO">
       <UniqueIdentifier>{dac629a7-41ee-4465-8e91-48bc41f06688}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelRenderer\Raycaster">
+      <UniqueIdentifier>{bf136db5-4bf4-4093-bee9-a673209fc81d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -17,6 +20,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp">
       <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp">
+      <Filter>VoxelRenderer\SVO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -27,6 +33,9 @@
       <Filter>VoxelRenderer\SVO</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h">
+      <Filter>VoxelRenderer\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h">
       <Filter>VoxelRenderer\SVO</Filter>
     </ClInclude>
   </ItemGroup>
