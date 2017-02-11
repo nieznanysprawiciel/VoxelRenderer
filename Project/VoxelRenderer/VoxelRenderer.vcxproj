@@ -159,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">

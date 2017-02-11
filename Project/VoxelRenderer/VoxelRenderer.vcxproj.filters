@@ -7,7 +7,7 @@
     <Filter Include="VoxelRenderer\Application">
       <UniqueIdentifier>{03e3191d-40a2-43d5-ad74-aef35d1fe8c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VoxelRenderer\Octree">
+    <Filter Include="VoxelRenderer\SVO">
       <UniqueIdentifier>{dac629a7-41ee-4465-8e91-48bc41f06688}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -22,6 +22,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
       <Filter>VoxelRenderer\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h">
+      <Filter>VoxelRenderer\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h">
+      <Filter>VoxelRenderer\SVO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
