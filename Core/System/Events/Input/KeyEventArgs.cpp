@@ -3,6 +3,6 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::KeyEventArgs >( "GUI::KeyEventArgs" );
+	rttr::registration::class_< sw::gui::KeyEventArgs >( "sw::gui::KeyEventArgs" );
 }
 

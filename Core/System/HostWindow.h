@@ -11,7 +11,10 @@
 
 class IGraphicAPIInitializer;
 
-namespace GUI
+
+
+namespace sw {
+namespace gui
 {
 
 /**@brief Root class for controls hierarchy, contains native window.
@@ -51,7 +54,7 @@ private:
 protected:
 public:
 	explicit		HostWindow	( INativeWindow* nativeWindow, IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi );
-					~HostWindow	();
+	~HostWindow	();
 
 
 	Size				GetMemorySize		();
@@ -83,4 +86,5 @@ public:
 };
 
 
-}	// GUI
+}	// gui
+}	// sw

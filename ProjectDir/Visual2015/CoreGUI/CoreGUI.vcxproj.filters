@@ -25,6 +25,12 @@
     <Filter Include="Native">
       <UniqueIdentifier>{e51df8e3-b6f5-4724-b1c5-ca1be764df67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\System\DataBinding">
+      <UniqueIdentifier>{3db028bf-2e23-4c8f-8c86-748a23127222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System\Rendering">
+      <UniqueIdentifier>{94cbd7b1-895c-444b-88d7-ceb1d8c74bd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\targetver.h">
@@ -90,6 +96,21 @@
     <ClInclude Include="..\..\..\Core\System\HostWindow.h">
       <Filter>Core\System</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\DataBinding\DependencyObject.h">
+      <Filter>Core\System\DataBinding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Controls\UIElement.h">
+      <Filter>Core\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Controls\Visual.h">
+      <Filter>Core\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Rendering\RenderingSystem.h">
+      <Filter>Core\System\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Rendering\DrawingContext.h">
+      <Filter>Core\System\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp">
@@ -139,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Core\System\Initializers.cpp">
       <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\DataBinding\DependencyObject.cpp">
+      <Filter>Core\System\DataBinding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\Controls\UIElement.cpp">
+      <Filter>Core\Controls</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

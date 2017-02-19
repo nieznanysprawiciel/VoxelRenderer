@@ -3,5 +3,5 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::MouseButtonEventArgs >( "GUI::MouseButtonEventArgs" );
+	rttr::registration::class_< sw::gui::MouseButtonEventArgs >( "sw::gui::MouseButtonEventArgs" );
 }

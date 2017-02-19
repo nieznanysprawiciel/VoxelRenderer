@@ -21,7 +21,8 @@ class WinApiInputProxy;
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
@@ -35,10 +36,10 @@ private:
 protected:
 public:
 	explicit			WinAPIGUI();
-						~WinAPIGUI() = default;
+	~WinAPIGUI() = default;
 
 
-	// Inherited via INativeGUI
+// Inherited via INativeGUI
 	virtual bool				MainLoop		( bool blockingMode )							override;
 	virtual bool				Init			( const NativeGUIInitData& initData )			override;
 	virtual IInput*				UseNativeInput	()												override;
@@ -63,3 +64,4 @@ public:
 };
 
 }	// GUI
+}	// sw

@@ -2,20 +2,27 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::Grid >( "GUI::Grid" );
+	rttr::registration::class_< sw::gui::Grid >( "sw::gui::Grid" );
 }
 
 
-namespace GUI
+
+
+
+namespace sw {
+namespace gui
 {
 
 /**@brief */
 Grid::Grid( IControl* parent )
 	:IPanel( parent )
-{}
+{ }
 
 /**@brief */
 Grid::~Grid()
 { }
 
-}	// GUI
+}	// gui
+}	// sw
+
+

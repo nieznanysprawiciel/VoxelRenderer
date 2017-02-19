@@ -12,7 +12,8 @@
 #include <iostream>
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 // One pointer at least, but I don't know how much it needs in reality
@@ -21,9 +22,9 @@ namespace GUI
 
 
 HostWindow::HostWindow( INativeWindow* nativeWindow, IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi )
-	:	m_input( input )
-	,	m_nativeWindow( nativeWindow )
-	,	m_resourceManager( resourceManager )
+	: m_input( input )
+	, m_nativeWindow( nativeWindow )
+	, m_resourceManager( resourceManager )
 {
 	// Create RenderTarget and SwapChain
 	SwapChainInitData init;
@@ -99,7 +100,7 @@ const std::string& HostWindow::GetControlName		( IControl* control )
 	auto iter = m_controlsNames.find( control );
 	if( iter != m_controlsNames.end() )
 		return iter->second;
-	else 
+	else
 		return EMPTY_STRING;
 }
 
@@ -128,4 +129,5 @@ void				HostWindow::GotFocus			()
 	std::cout << "Window [" + m_nativeWindow->GetTitle() + "] got focus." << std::endl;
 }
 
-}	// GUI
+}	// gui
+}	// sw

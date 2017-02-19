@@ -6,7 +6,8 @@
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
@@ -19,8 +20,8 @@ WinAPIGUI*				GetNativeAPIPointer	( HWND window );
 // ================================ //
 //
 WinAPIGUI::WinAPIGUI()
-	:	m_input( nullptr )
-{}
+	: m_input( nullptr )
+{ }
 
 
 /**@brief Creates WinAPIGUI object.*/
@@ -36,7 +37,7 @@ WinAPIGUI*		WinAPIGUI::Create()
 //====================================================================================//
 
 
-const wchar_t WINDOW_CLASS_NAME[] = L"GUI Window";
+const wchar_t WINDOW_CLASS_NAME[] = L"gui Window";
 
 /**@brief Window class registered in WinAPI.*/
 const wchar_t*	WinAPIGUI::GetWindowClassName()
@@ -70,10 +71,10 @@ INativeWindow*	WinAPIGUI::CreateWindow		( NativeWindowDescriptor& descriptor )
 {
 	Win32ApiWindow* newWindow = Win32ApiWindow::CreateWindowInstance( descriptor );
 	HWND newWindowHandle = (HWND)newWindow->GetHandle();
-	
+
 	if( GetNativeAPIPointer( newWindowHandle ) == nullptr )
 	{
-		SetClassLongPtr( newWindowHandle, 0, (LONG_PTR)this );
+		SetClassLongPtr( newWindowHandle, 0, ( LONG_PTR )this );
 	}
 
 	return newWindow;
@@ -115,9 +116,9 @@ void		WinAPIGUI::PrintLastError()
 {
 	LPVOID messageBuffer;
 	DWORD error = GetLastError();
-	FormatMessage(	FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-					NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-					(LPTSTR)&messageBuffer, 0, NULL );
+	FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+				   NULL, error, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
+				   (LPTSTR)&messageBuffer, 0, NULL );
 	OutputDebugString( (LPCTSTR)messageBuffer );
 	LocalFree( messageBuffer );
 }
@@ -161,7 +162,7 @@ bool		WinAPIGUI::MainLoopCore             ( MSG* msg )
 		m_input->HandleEvent( msg->hwnd, msg->message, msg->wParam, msg->lParam );
 
 	// Don't process same message two times.
-    //HandleEvent( msg->hwnd, msg->message, msg->wParam, msg->lParam );
+	//HandleEvent( msg->hwnd, msg->message, msg->wParam, msg->lParam );
 
 	DispatchMessage( msg );
 
@@ -175,21 +176,21 @@ bool		WinAPIGUI::MainLoopCore             ( MSG* msg )
 /**@brief Captures important events like changing focus.*/
 void        WinAPIGUI::HandleEvent              ( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-    switch( message )
-    {
-        case WM_SETFOCUS:
+	switch( message )
+	{
+		case WM_SETFOCUS:
 			m_initData.FocusChanged( GetNativePointer( hWnd ), true );
-            break;
-        case WM_KILLFOCUS:
+			break;
+		case WM_KILLFOCUS:
 			m_initData.FocusChanged( GetNativePointer( hWnd ), false );
-            break;
+			break;
 		case WM_ACTIVATE:
 			m_initData.FocusChanged( GetNativePointer( hWnd ), wParam != 0 );
-            break;
+			break;
 		//case WM_MOUSEACTIVATE:
 		//	m_initData.FocusChanged( GetNativePointer( hWnd ), true );
   //          break;
-    }
+	}
 }
 
 
@@ -229,28 +230,29 @@ LRESULT CALLBACK		WindowProcedure		( HWND hWnd, UINT message, WPARAM wParam, LPA
 
 	switch( message )
 	{
-	case WM_PAINT:
-		hdc = BeginPaint( hWnd, &ps );
-		// TODO: Add any drawing code here...
-		EndPaint( hWnd, &ps );
-	break;
-    case WM_SETFOCUS:
-    case WM_KILLFOCUS:
-	case WM_ACTIVATE:
-	{
-		auto nativeGUI = GetNativeAPIPointer( hWnd );
-		if( nativeGUI )
-			nativeGUI->HandleEvent( hWnd, message, wParam, lParam );
-		break;
-	}
-	case WM_DESTROY:
-		PostQuitMessage( 0 );
-		break;
-	default:
-		return DefWindowProc( hWnd, message, wParam, lParam );
+		case WM_PAINT:
+			hdc = BeginPaint( hWnd, &ps );
+			// TODO: Add any drawing code here...
+			EndPaint( hWnd, &ps );
+			break;
+		case WM_SETFOCUS:
+		case WM_KILLFOCUS:
+		case WM_ACTIVATE:
+		{
+			auto nativeGUI = GetNativeAPIPointer( hWnd );
+			if( nativeGUI )
+				nativeGUI->HandleEvent( hWnd, message, wParam, lParam );
+			break;
+		}
+		case WM_DESTROY:
+			PostQuitMessage( 0 );
+			break;
+		default:
+			return DefWindowProc( hWnd, message, wParam, lParam );
 	}
 	return 0;
 }
 
 
-}	// GUI
+}	// gui
+}	// sw

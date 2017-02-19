@@ -3,7 +3,8 @@
 #include "InputEventArgs.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 struct MouseEventArgs : public InputEventArgs
@@ -13,4 +14,6 @@ public:
 
 };
 
-}	// GUI
+}	// gui
+}	// sw
+

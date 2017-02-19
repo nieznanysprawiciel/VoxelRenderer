@@ -9,7 +9,8 @@
 class ResourceManager;
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
@@ -20,11 +21,11 @@ struct CommandLineArgs
 
 
 	CommandLineArgs( int argc, char** argv )
-		:	ArgsCount( argc )
-		,	Arguments( argv )
-	{}
+		: ArgsCount( argc )
+		, Arguments( argv )
+	{ }
 
-	const char*		ProgramName	()	{ return Arguments[ 0 ];}
+	const char*		ProgramName	() { return Arguments[ 0 ]; }
 };
 
 
@@ -74,7 +75,7 @@ protected:
 public:
 	explicit		GUISystem		( int argc, char** argv, INativeGUI* gui );
 	virtual			~GUISystem		();
-	
+
 	Size			GetMemorySize	();
 
 	int				NumCommandLineArgs	();
@@ -98,7 +99,7 @@ protected:
 	///@}
 
 public:
-	
+
 	///@name Main functions
 	///@{
 	void			Init			();
@@ -126,4 +127,5 @@ public:
 };
 
 
-}	// GUI
+}	// gui
+}	// sw

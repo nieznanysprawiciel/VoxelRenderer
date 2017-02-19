@@ -3,7 +3,8 @@
 #include "swCommonLib/Common/RTTR.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 /**@brief Klasa bazowa dla eventów.*/
@@ -15,5 +16,6 @@ public:
 };
 
 
-}	// GUI
+}	// gui
+}	// sw
 

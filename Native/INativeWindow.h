@@ -5,7 +5,10 @@
 
 #include <string>
 
-namespace GUI
+
+
+namespace sw {
+namespace gui
 {
 
 
@@ -17,14 +20,14 @@ struct NativeWindowDescriptor
 	unsigned short			Height;
 	unsigned short			PositionX;
 	unsigned short			PositionY;
-	bool					Fullscreen			: 1;
-	bool					ShowWindow			: 1;	///< Show window immediately after creation.
-	bool					AddExitButton		: 1;
-	bool					AddMinimizeButton	: 1;
-	bool					AddMaximizeButton	: 1;
-	bool					AddFrame			: 1;
-	bool					AddTitleBar			: 1;
-	bool					AdjustSize			: 1;	///< Adjust window size to client area.
+	bool					Fullscreen : 1;
+	bool					ShowWindow : 1;	///< Show window immediately after creation.
+	bool					AddExitButton : 1;
+	bool					AddMinimizeButton : 1;
+	bool					AddMaximizeButton : 1;
+	bool					AddFrame : 1;
+	bool					AddTitleBar : 1;
+	bool					AdjustSize : 1;	///< Adjust window size to client area.
 	std::string				WindowTitle;
 
 
@@ -36,7 +39,7 @@ struct NativeWindowDescriptor
 	}
 
 	NativeWindowDescriptor( const std::string& windowTitle )
-		:	WindowTitle( windowTitle )
+		: WindowTitle( windowTitle )
 	{
 		InitDefaults();
 	}
@@ -84,10 +87,11 @@ public:
 
 	virtual void				Show		() = 0;
 	virtual void				Hide		() = 0;
-	
+
 	virtual void				SetTitle	( const std::string& newTitle ) = 0;
 };
 
 
 
-}	// GUI
+}	// gui
+}	// sw

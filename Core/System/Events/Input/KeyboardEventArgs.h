@@ -3,7 +3,8 @@
 #include "swGUI/Core/System/Events/Input/InputEventArgs.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 struct KeyboardEventArgs : public InputEventArgs
@@ -13,4 +14,5 @@ public:
 
 };
 
-}	// GUI
+}	// gui
+}	// sw

@@ -3,7 +3,8 @@
 #include "IPanel.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 /**@brief */
@@ -13,11 +14,12 @@ class StackPanel : public IPanel
 private:
 protected:
 public:
-				StackPanel		( IControl* parent );
+	StackPanel		( IControl* parent );
 	virtual		~StackPanel		();
 
 };
 
 
-}	// GUI
+}	// gui
+}	// sw
 
