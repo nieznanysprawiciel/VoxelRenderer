@@ -3,6 +3,6 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::InputEventArgs >( "GUI::InputEventArgs" );
+	rttr::registration::class_< sw::gui::InputEventArgs >( "sw::gui::InputEventArgs" );
 }
 

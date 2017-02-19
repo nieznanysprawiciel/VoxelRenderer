@@ -3,21 +3,24 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::StackPanel >( "GUI::StackPanel" );
+	rttr::registration::class_< sw::gui::StackPanel >( "sw::gui::StackPanel" );
 }
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
 
 
 StackPanel::StackPanel( IControl* parent )
-	:	IPanel( parent )
+	: IPanel( parent )
 { }
 
 StackPanel::~StackPanel()
 { }
 
 
-}	// GUI
+}	// gui
+}	// sw
+

@@ -5,7 +5,8 @@
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
@@ -18,4 +19,6 @@ public:
 
 
 
-}	// GUI
+}	// gui
+
+}	// sw

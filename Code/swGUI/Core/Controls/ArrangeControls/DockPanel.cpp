@@ -4,21 +4,24 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::DockPanel >( "GUI::DockPanel" );
+	rttr::registration::class_< sw::gui::DockPanel >( "sw::gui::DockPanel" );
 }
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
 DockPanel::DockPanel( IControl* parent )
-	:	IPanel( parent )
+	: IPanel( parent )
 { }
 
 DockPanel::~DockPanel()
 { }
 
 
-}	// GUI
+}	// gui
+}	// sw
+

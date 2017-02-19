@@ -6,18 +6,19 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::IControl >( "GUI::IControl" );
-	rttr::registration::class_< GUI::TopLevelControl >( "GUI::TopLevelControl" );
+	rttr::registration::class_< sw::gui::IControl >( "sw::gui::IControl" );
+	rttr::registration::class_< sw::gui::TopLevelControl >( "sw::gui::TopLevelControl" );
 }
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
 /**@brief */
 IControl::IControl( IControl* parent )
-	:	m_parent( parent )
+	: m_parent( parent )
 { }
 
 /**@brief */
@@ -31,7 +32,7 @@ TopLevelControl*	IControl::GetRootControl()
 	if( m_parent )
 		return m_parent->GetRootControl();
 	else
-		return static_cast< TopLevelControl* >( this );
+		return static_cast<TopLevelControl*>( this );
 }
 
 /**@brief Zwraca obiekt zarz¹dzaj¹cy GUI.*/
@@ -48,4 +49,5 @@ const std::string&	IControl::GetName()
 	return host->GetControlName( this );
 }
 
-}	// GUI
+}	// gui
+}	// sw

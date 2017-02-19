@@ -6,14 +6,15 @@
 
 #ifdef USE_WIN32_API
 	#include "swGUI/Native/WinAPI/WinAPIGUI.h"
-	typedef GUI::WinAPIGUI NativeGUI;
+	typedef sw::gui::WinAPIGUI NativeGUI;
 #else
 	#error Macro USE_WIN32_API not defined!
 #endif
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
@@ -24,4 +25,5 @@ INativeGUI*			CreateNativeGUI()
 }
 
 
-}	// GUI
+}	// gui
+}	// sw

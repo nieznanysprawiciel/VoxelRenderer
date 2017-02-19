@@ -7,7 +7,10 @@
 #include <map>
 #include <string>
 
-namespace GUI
+
+
+namespace sw {
+namespace gui
 {
 
 /// @todo This should be moved domewhere else.
@@ -21,11 +24,11 @@ GUISystem*			GUISystem::m_instance = nullptr;
 // ================================ //
 //
 GUISystem::GUISystem( int argc, char** argv, INativeGUI* gui )
-	:	m_cmdArgs( argc, argv )
-	,	m_nativeGUI( gui )
-	,	m_focusedWindow( nullptr )
-	,	m_resourceManager( nullptr )
-	,	m_input( nullptr )
+	: m_cmdArgs( argc, argv )
+	, m_nativeGUI( gui )
+	, m_focusedWindow( nullptr )
+	, m_resourceManager( nullptr )
+	, m_input( nullptr )
 {
 	m_instance = this;
 }
@@ -222,7 +225,7 @@ int					GUISystem::NumCommandLineArgs()
 not program name.*/
 const char*			GUISystem::CommandLineArg( int num )
 {
-	return m_cmdArgs.Arguments[ num -1 ];
+	return m_cmdArgs.Arguments[ num - 1 ];
 }
 
 /**@brief Returns program name retrived from 0 command line argument.*/
@@ -239,5 +242,6 @@ GUISystem&	GUISystem::Get()
 	return *m_instance;
 }
 
-}	// GUI
+}	// gui
+}	// sw
 

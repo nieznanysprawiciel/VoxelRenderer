@@ -4,8 +4,8 @@
 
 // ================================ //
 //
-Application::Application	( int argc, char** argv, GUI::INativeGUI* gui )
-	:	GUI::GUISystem( argc, argv, gui )
+Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
+	:	sw::gui::GUISystem( argc, argv, gui )
 {}
 
 

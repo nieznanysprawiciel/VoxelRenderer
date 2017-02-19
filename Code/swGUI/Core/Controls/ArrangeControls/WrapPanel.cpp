@@ -3,21 +3,24 @@
 
 RTTR_REGISTRATION
 {
-	rttr::registration::class_< GUI::WrapPanel >( "GUI::WrapPanel" );
+	rttr::registration::class_< sw::gui::WrapPanel >( "sw::gui::WrapPanel" );
 }
 
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
 WrapPanel::WrapPanel( IControl* parent )
-	:	IPanel( parent )
+	: IPanel( parent )
 { }
 
 WrapPanel::~WrapPanel()
 { }
 
 
-}	// GUI
+}	// gui
+}	// sw
+

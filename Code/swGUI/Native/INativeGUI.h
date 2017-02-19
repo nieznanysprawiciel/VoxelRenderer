@@ -7,7 +7,8 @@
 
 class IInput;
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 typedef fastdelegate::FastDelegate2< INativeWindow*, bool > ChangedFocusDelegate;
@@ -50,5 +51,5 @@ public:
 };
 
 
-}	// GUI
-
+}	// gui
+}	// sw

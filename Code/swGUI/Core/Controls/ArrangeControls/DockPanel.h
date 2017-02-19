@@ -3,7 +3,8 @@
 #include "IPanel.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 class DockPanel : public IPanel
@@ -11,10 +12,10 @@ class DockPanel : public IPanel
 	RTTR_ENABLE( IPanel )
 private:
 public:
-				DockPanel		( IControl* parent );
+	DockPanel		( IControl* parent );
 	virtual		~DockPanel		();
 };
 
 
-}	// GUI
-
+}	// gui
+}	// sw

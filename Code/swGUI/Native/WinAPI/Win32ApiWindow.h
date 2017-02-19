@@ -6,14 +6,18 @@
 #include <Windows.h>
 #undef CreateWindow
 
-namespace GUI
+
+
+
+namespace sw {
+namespace gui
 {
 
 
 /**@brief Native window uses WinApi.
 
 @todo Move to separate library in future.*/
-class Win32ApiWindow :	public INativeWindow
+class Win32ApiWindow : public INativeWindow
 {
 private:
 
@@ -25,7 +29,7 @@ private:
 
 public:
 	explicit			Win32ApiWindow	();
-						~Win32ApiWindow	();
+	~Win32ApiWindow	();
 
 
 	static Win32ApiWindow*		CreateWindowInstance	( NativeWindowDescriptor& descriptor );
@@ -55,4 +59,5 @@ public:
 };
 
 
-}	// GUI
+}	// gui
+}	// sw

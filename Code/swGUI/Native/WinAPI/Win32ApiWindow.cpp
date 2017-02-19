@@ -4,18 +4,19 @@
 #include "swCommonLib/Common/Converters.h"
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 
 
 
 Win32ApiWindow::Win32ApiWindow()
-{}
+{ }
 
 
 Win32ApiWindow::~Win32ApiWindow()
-{}
+{ }
 
 /**@brief */
 Win32ApiWindow*		Win32ApiWindow::CreateWindowInstance	( NativeWindowDescriptor& descriptor )
@@ -64,8 +65,8 @@ bool		Win32ApiWindow::Initialize	( NativeWindowDescriptor& descriptor )
 		RECT windowRect ={ 0, 0, descriptor.Width, descriptor.Height };
 		AdjustWindowRect( &windowRect, windowStyle, FALSE );
 
-		descriptor.Width = static_cast< uint16 >( windowRect.right - windowRect.left );
-		descriptor.Height = static_cast< uint16 >( windowRect.bottom - windowRect.top );
+		descriptor.Width = static_cast<uint16>( windowRect.right - windowRect.left );
+		descriptor.Height = static_cast<uint16>( windowRect.bottom - windowRect.top );
 	}
 
 	m_width = descriptor.Width;
@@ -75,14 +76,14 @@ bool		Win32ApiWindow::Initialize	( NativeWindowDescriptor& descriptor )
 	if( descriptor.Fullscreen )
 	{
 		m_windowHandle = CreateWindowEx( NULL, WinAPIGUI::GetWindowClassName(), m_title.c_str(), windowStyle, //WS_EX_TOPMOST | WS_POPUP,
-												  0, 0, m_width, m_height,
-												  (HWND)descriptor.ParentHandle, NULL, instance, NULL );
+										 0, 0, m_width, m_height,
+										 (HWND)descriptor.ParentHandle, NULL, instance, NULL );
 	}
 	else
 	{
 		m_windowHandle = CreateWindowEx( NULL, WinAPIGUI::GetWindowClassName(), m_title.c_str(), windowStyle, //WS_OVERLAPPEDWINDOW^WS_THICKFRAME,
-												  descriptor.PositionX, descriptor.PositionY, m_width, m_height,
-												  (HWND)descriptor.ParentHandle, NULL, instance, NULL );
+										 descriptor.PositionX, descriptor.PositionY, m_width, m_height,
+										 (HWND)descriptor.ParentHandle, NULL, instance, NULL );
 	}
 
 	if( !m_windowHandle )
@@ -91,7 +92,7 @@ bool		Win32ApiWindow::Initialize	( NativeWindowDescriptor& descriptor )
 		return false;
 	}
 
-	SetWindowLongPtr( m_windowHandle, 0, (LONG_PTR)this );
+	SetWindowLongPtr( m_windowHandle, 0, ( LONG_PTR )this );
 
 	if( descriptor.ShowWindow )
 		ShowAppWindow();
@@ -156,7 +157,7 @@ uint16 Win32ApiWindow::GetClientWidth() const
 	RECT windowRect;
 	GetClientRect( m_windowHandle, &windowRect );
 
-	return static_cast< uint16 >( windowRect.right - windowRect.left );
+	return static_cast<uint16>( windowRect.right - windowRect.left );
 }
 
 // ================================ //
@@ -166,7 +167,7 @@ uint16 Win32ApiWindow::GetClientHeight() const
 	RECT windowRect;
 	GetClientRect( m_windowHandle, &windowRect );
 
-	return static_cast< uint16 >( windowRect.bottom - windowRect.top );
+	return static_cast<uint16>( windowRect.bottom - windowRect.top );
 }
 
 
@@ -187,5 +188,6 @@ void		Win32ApiWindow::HideAppWindow()
 
 
 
-}	// GUI
+}	// gui
+}	// sw
 

@@ -1,7 +1,8 @@
 #pragma once
 
 
-namespace GUI
+namespace sw {
+namespace gui
 {
 
 struct Thickness
@@ -13,4 +14,5 @@ struct Thickness
 };
 
 
-}	// GUI
+}	// gui
+}	// sw

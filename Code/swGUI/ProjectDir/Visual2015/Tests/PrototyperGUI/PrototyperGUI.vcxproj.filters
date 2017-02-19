@@ -4,6 +4,9 @@
     <Filter Include="PrototyperGUI">
       <UniqueIdentifier>{4fd9b260-c336-4b26-9175-67fcc0866e95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PrototyperGUI\Sizeofs">
+      <UniqueIdentifier>{966a4e4f-f08e-41d5-b6bf-87b652a0e325}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Tests\PrototyperGUI\main.cpp">
@@ -12,10 +15,16 @@
     <ClCompile Include="..\..\..\..\Tests\PrototyperGUI\Application.cpp">
       <Filter>PrototyperGUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\PrototyperGUI\Sizeofs\Sizeofs.cpp">
+      <Filter>PrototyperGUI\Sizeofs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Tests\PrototyperGUI\Application.h">
       <Filter>PrototyperGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Tests\PrototyperGUI\Sizeofs\Sizeofs.h">
+      <Filter>PrototyperGUI\Sizeofs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

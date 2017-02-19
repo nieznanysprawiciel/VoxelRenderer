@@ -1,11 +1,14 @@
 #include "Application.h"
 
 
+#include "Sizeofs/Sizeofs.h"
+
+
 
 // ================================ //
 //
-Application::Application	( int argc, char** argv, GUI::INativeGUI* gui )
-	:	GUI::GUISystem( argc, argv, gui )
+Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
+	:	sw::gui::GUISystem( argc, argv, gui )
 {}
 
 
@@ -24,6 +27,9 @@ In this function you should initialize your application logic.
 */
 void		Application::OnInitialized()
 {
+	// In this function sizeofs basic classes are printed. Test purposes only.
+	PrintSizeofs();
+
 	CreateNativeHostWindow( 500, 500, "Additional window" );
 }
 

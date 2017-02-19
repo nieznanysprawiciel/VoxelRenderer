@@ -144,8 +144,11 @@
     <ClInclude Include="..\..\..\Core\Controls\ArrangeControls\WrapPanel.h" />
     <ClInclude Include="..\..\..\Core\Controls\IControl.h" />
     <ClInclude Include="..\..\..\Core\Controls\TopLevelControl.h" />
+    <ClInclude Include="..\..\..\Core\Controls\UIElement.h" />
+    <ClInclude Include="..\..\..\Core\Controls\Visual.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\CommonTypes.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\Thickness.h" />
+    <ClInclude Include="..\..\..\Core\System\DataBinding\DependencyObject.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\IEventArgs.h" />
@@ -155,6 +158,8 @@
     <ClInclude Include="..\..\..\Core\System\Events\Input\MouseWheelEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\GUISystem.h" />
     <ClInclude Include="..\..\..\Core\System\HostWindow.h" />
+    <ClInclude Include="..\..\..\Core\System\Rendering\DrawingContext.h" />
+    <ClInclude Include="..\..\..\Core\System\Rendering\RenderingSystem.h" />
     <ClInclude Include="..\..\..\Native\INativeGUI.h" />
     <ClInclude Include="..\..\..\Native\INativeWindow.h" />
     <ClInclude Include="..\..\..\targetver.h" />
@@ -166,6 +171,8 @@
     <ClCompile Include="..\..\..\Core\Controls\ArrangeControls\StackPanel.cpp" />
     <ClCompile Include="..\..\..\Core\Controls\ArrangeControls\WrapPanel.cpp" />
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp" />
+    <ClCompile Include="..\..\..\Core\Controls\UIElement.cpp" />
+    <ClCompile Include="..\..\..\Core\System\DataBinding\DependencyObject.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\IEventArgs.cpp" />
