@@ -19,5 +19,5 @@ It is used if 23 bits of OctreeNode::ChildPackPtr is not enough to index next no
 Normally OctreeNodes are enough, so this struct should be used seldom.*/
 struct OctreeFarPointer
 {
-	uint64		Offset;						///< Offset to next children array.
+	uint32		Offset;						///< Offset to next children array.
 };
