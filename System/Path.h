@@ -62,31 +62,38 @@ public:
 	bool					IsRelative		() const;
 	bool					IsAbsolut		() const;
 
+	/**@brief Checks if file or directory exists on filesystem.*/
+	bool					Exists			() const;
+
+	static Path				WorkingDirectory();
+
+public:
+	const experimental::path&		GetStdPath		() const;
 };
 
 
 /**@brief */
 template< class Source >
-inline Path::Path( const Source& source )
+inline		Path::Path		( const Source& source )
 	:	m_path( experimental::path( source ) )
 {}
 
 /**@brief */
-inline Path::Path()
+inline		Path::Path()
 {}
 
 /**@brief */
-inline Path::Path( const Path& path )
+inline		Path::Path		( const Path& path )
 	:	m_path( path.m_path )
 {}
 
 /**@brief */
-inline Path::Path( Path&& path )
+inline		Path::Path		( Path&& path )
 	:	m_path( std::move( path.m_path ) )
 {}
 
 /**@brief */
-inline Path::Path( const std::wstring& path )
+inline		Path::Path		( const std::wstring& path )
 {
 	typedef std::codecvt_utf8< wchar_t > ConvertType;
 	std::wstring_convert< ConvertType, wchar_t > converter;
@@ -96,70 +103,64 @@ inline Path::Path( const std::wstring& path )
 }
 
 /**@brief */
-inline Path& Path::operator=( const Path& other )
+inline Path&	Path::operator=		( const Path& other )
 {
 	m_path = other.m_path;
 	return *this;
 }
 
 /**@brief */
-inline Path& Path::operator=( Path&& other )
+inline Path&	Path::operator=		( Path&& other )
 {
 	m_path = std::move( other.m_path );
 	return *this;
 }
 
 /**@brief */
-inline Path& Path::operator/=( const Path& other )
+inline Path&	Path::operator/=	( const Path& other )
 {
 	m_path /= other.m_path;
 	return *this;
 }
 
 /**@brief */
-inline bool Path::operator==( const Path& other ) const
+inline bool		Path::operator==	( const Path& other ) const
 {
-	return m_path == other.m_path;
+	return experimental::equivalent( m_path, other.m_path );
 }
 
 /**@brief Porównuje œcie¿ki. Przed porównaniem œcie¿ki s¹ normalizowane.*/
-inline bool Path::Compare( const Path& path1, const Path& path2 )
+inline bool		Path::Compare		( const Path& path1, const Path& path2 )
 {
-	Path firstPath( path1 );
-	Path secondPath( path2 );
-
-	firstPath.Normalize();
-	secondPath.Normalize();
-
-	return firstPath == secondPath;
+	return experimental::equivalent( path1.m_path, path2.m_path );
 }
 
 /**@brief */
-inline std::string Path::String() const
+inline std::string		Path::String() const
 {
 	return m_path.string();
 }
 
 /**@brief */
-inline std::string Path::GetFileName() const
+inline std::string		Path::GetFileName() const
 {
 	return m_path.filename().string();
 }
 
 /**@brief */
-inline std::string Path::GetExtension() const
+inline std::string		Path::GetExtension() const
 {
 	return m_path.extension().string();
 }
 
 /**@brief */
-inline Path Path::GetParent() const
+inline Path				Path::GetParent() const
 {
 	return m_path.parent_path();
 }
 
 /**@brief */
-inline Path Path::GetDirectory() const
+inline Path				Path::GetDirectory() const
 {
 	if( m_path.has_filename() )
 		return GetParent();
@@ -169,47 +170,67 @@ inline Path Path::GetDirectory() const
 
 /**@brief Normalizuje œcie¿kê.
 @attention Obecna implementacja mo¿e nie dzia³aæ do koñca.*/
-inline void Path::Normalize()
+inline void				Path::Normalize()
 {
 	//m_path = experimental::complete( m_path );
 }
 
 /**@brief */
-inline bool Path::HasRoot() const
+inline bool				Path::HasRoot() const
 {
 	return m_path.has_root_directory();
 }
 
 /**@brief */
-inline bool Path::HasFileName() const
+inline bool				Path::HasFileName() const
 {
 	return m_path.has_filename();
 }
 
 /**@brief */
-inline bool Path::HasExtension() const
+inline bool				Path::HasExtension() const
 {
 	return !GetExtension().empty();
 }
 
 /**@brief */
-inline bool Path::IsRelative() const
+inline bool				Path::IsRelative() const
 {
 	return !IsAbsolut();
 }
 
 /**@brief */
-inline bool Path::IsAbsolut() const
+inline bool				Path::IsAbsolut() const
 {
 	return m_path.has_root_name() && m_path.has_root_directory();
 }
 
+/**@brief Check if file exists.*/
+inline bool				Path::Exists() const
+{
+	return experimental::exists( m_path );
+}
+
+// ================================ //
+//
+inline Path				Path::WorkingDirectory()
+{
+	return experimental::current_path();
+}
+
 /**@brief */
-inline Path operator/( const Path& path1, const Path& path2 )
+inline Path				operator/( const Path& path1, const Path& path2 )
 {
 	Path newPath = path1;
 	newPath /= path2;
 	return newPath;
+}
+
+/**@brief Returns standard library path.
+Use only if you must.*/
+inline const experimental::path&	Path::GetStdPath() const
+{
+	return m_path;
 }
 
 }

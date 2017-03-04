@@ -1,17 +1,22 @@
 #pragma once
-/**@file SerializationContext
+
+/**
+@file SerializationContext
 @author nieznanysprawiciel
-@copyright Plik jest czêœci¹ silnika graficznego SWEngine.
-
-@brief Interface kontekstu serializacji i deserializacji.*/
-
+@copyright File is part of Sleeping Wombat Libraries.
+*/
 
 
 
-/**@brief Interface kontekstu serializacji i deserializacji.
+/**@brief Interface for context used in serialization and deserialization.
 @ingroup Serialization
 
-W klasach pochodnych nale¿y umieœciæ dowolne dane, które s¹ potrzebne w trakcie serializacji.*/
+SerializationContext is used to store additional data during serialization and deserialization.
+Classes derived from @ref EngineObject can provide their own implementation of Serialize and Deserialize function
+which can retrive context by calling @ref ISerializer::GetContext or @ref IDeserializer::GetContext function.
+
+You can derive from this class and set your object as context before serialization.
+*/
 struct SerializationContext
 {
 public:

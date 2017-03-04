@@ -19,40 +19,47 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Common\Converters.cpp" />
-    <ClCompile Include="..\..\..\Common\EngineObject.cpp" />
-    <ClCompile Include="..\..\..\Common\Properties\Properties.cpp" />
-    <ClCompile Include="..\..\..\System\Dir.cpp" />
-    <ClCompile Include="..\..\..\System\File.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Attribute.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Attributes\ChunkNameAttrib.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Chunk.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\HCF.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Internal\AttributeRepr.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Internal\ChunkRepr.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\Internal\ImplHCF.cpp" />
+    <ClCompile Include="..\..\..\HierarchicalChunkedFormat\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">swCommonLib/Tests/TestHCF/stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swCommonLib/Tests/TestHCF/stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">swCommonLib/Tests/TestHCF/stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">swCommonLib/Tests/TestHCF/stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Common\Converters.h" />
-    <ClInclude Include="..\..\..\Common\EngineObject.h" />
-    <ClInclude Include="..\..\..\Common\MemoryChunk.h" />
-    <ClInclude Include="..\..\..\Common\MemoryLeaks.h" />
-    <ClInclude Include="..\..\..\Common\Nullable.h" />
-    <ClInclude Include="..\..\..\Common\ObjectDeleter.h" />
-    <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h" />
-    <ClInclude Include="..\..\..\Common\Properties\IEnableProperty.h" />
-    <ClInclude Include="..\..\..\Common\Properties\Properties.h" />
-    <ClInclude Include="..\..\..\Common\Properties\Property.h" />
-    <ClInclude Include="..\..\..\Common\RTTR.h" />
-    <ClInclude Include="..\..\..\Common\Traits.h" />
-    <ClInclude Include="..\..\..\Common\TypesDefinitions.h" />
-    <ClInclude Include="..\..\..\Common\UPtr.h" />
-    <ClInclude Include="..\..\..\System\Dir.h" />
-    <ClInclude Include="..\..\..\System\File.h" />
-    <ClInclude Include="..\..\..\System\Path.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Attribute.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Attributes\AttributeTypes.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Attributes\ChunkNameAttrib.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Attributes\IAttribute.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Chunk.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\HCF.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Headers\AttributeHeader.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Headers\ChunkHeader.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Headers\FileHeader.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Internal\AttributeRepr.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Internal\ChunkRepr.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\Internal\ImplHCF.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\stdafx.h" />
+    <ClInclude Include="..\..\..\HierarchicalChunkedFormat\targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Serialization\Serialization.vcxproj">
-      <Project>{561754cb-295d-4d69-8dbc-bc069d1a636a}</Project>
-    </ProjectReference>
+    <None Include="..\..\..\HierarchicalChunkedFormat\HCF.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9ABCBAB4-05B4-47C5-B5D8-F201559FD096}</ProjectGuid>
+    <ProjectGuid>{50CF2C5D-4A13-4D16-8E65-441FE7155333}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>CommonBase</RootNamespace>
+    <RootNamespace>HierarchicalChunkedFormat</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -89,26 +96,24 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="CommonBaseConfig.props" />
+    <Import Project="HierarchicalChunkedFormatConfig.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="CommonBaseConfig.props" />
+    <Import Project="HierarchicalChunkedFormatConfig.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="CommonBaseConfig.props" />
+    <Import Project="HierarchicalChunkedFormatConfig.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="CommonBaseConfig.props" />
+    <Import Project="HierarchicalChunkedFormatConfig.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -119,8 +124,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -132,8 +135,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -148,8 +149,6 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

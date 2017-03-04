@@ -10,8 +10,8 @@ typedef std::mutex SpinLock;
 #else
 
 /**
-@defgroup Multithreading Narzêdzia pomocnicze do obs³ugi wielow¹tkowoœci.
-@ingroup CommonFiles
+@defgroup Multithreading Helpers for multithreading
+@ingroup CommonLibrary
 */
 
 /**

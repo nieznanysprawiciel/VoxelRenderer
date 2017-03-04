@@ -9,6 +9,15 @@
 #include <float.h>
 
 
+/**@defgroup SerializerXML XML Serializer
+@ingroup Serialization
+@brief Implementation of XML serialization.
+
+Project SerializerXML contains implementation of XML serialization based on RapidXML library.
+http://rapidxml.sourceforge.net/*/
+
+
+
 
 struct SerializerImpl
 {
