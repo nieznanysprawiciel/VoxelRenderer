@@ -12,6 +12,14 @@
 #include <stack>
 
 
+/**@defgroup SerializerJSON JSON Serializer
+@ingroup Serialization
+@brief Implementation of JSON serialization.
+
+Project SerializerJSON contains implementation of JSON serialization based on RapidJSON library.
+http://rapidjson.org/md_doc_tutorial.html*/
+
+
 
 
 struct SerializerImpl

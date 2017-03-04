@@ -14,7 +14,7 @@ Definicje s¹ stworzone w celu ³atwiejszego u¿ytku. Biblioteka standardowa defini
 typ int8_t, który jest zamieniany na int8.
 */
 
-/**@defgroup CommonFiles Common
+/**@defgroup CommonLibrary Common Library
 @ingroup ModulesStructure
 @brief Czêsto u¿ywane deklaracje i inne funkcjonalnoœci.*/
 
@@ -54,6 +54,11 @@ using UPtr = std::shared_ptr< PtrType >;
 template< typename PtrType >
 using Ptr = std::shared_ptr< PtrType >;
 
+/// Declares that class holding this pointer is it's owner. Note: there's only semantical difference between OPtr
+/// and UPtr. UPtr should be unique in whole system. OPtr says that, there can exist some raw pointers, but class
+/// holding this pointer is responsible for releasing memory.
+template< typename PtrType >
+using OPtr = std::unique_ptr< PtrType >;
 
 template< typename PtrType, typename... Args >
 Ptr< PtrType >		MakePtr		( Args&&... args )
@@ -68,7 +73,15 @@ UPtr< PtrType >		MakeUPtr		( Args... args )
 }
 
 
+template< typename PtrType, typename... Args >
+UPtr< PtrType >		MakeOPtr		( Args... args )
+{
+	return std::make_unique< PtrType >( args... );
+}
+
+
 #define DEFINE_PTR_TYPE( type )			typedef Ptr< type > type ## Ptr;
 #define DEFINE_UPTR_TYPE( type )		typedef UPtr< type > type ## UPtr;
 #define DEFINE_WPTR_TYPE( type )		typedef std::weak_ptr< type > type ## WPtr;
+#define DEFINE_OPTR_TYPE( type )		typedef OPtr< type > type ## OPtr;
 

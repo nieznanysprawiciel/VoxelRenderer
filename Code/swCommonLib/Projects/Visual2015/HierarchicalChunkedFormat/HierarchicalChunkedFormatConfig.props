@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <Import Project="..\Paths.props" />
+  <PropertyGroup Label="UserMacros">
+    <HierarchicalChunkedFormatName>HierarchicalChunkedFormat</HierarchicalChunkedFormatName>
+    <HierarchicalChunkedFormatLibDir>$(LibDir)$(HierarchicalChunkedFormatName)\</HierarchicalChunkedFormatLibDir>
+    <HierarchicalChunkedFormatSourceDir>$(SourceDir)$(HierarchicalChunkedFormatName)\</HierarchicalChunkedFormatSourceDir>
+    <HierarchicalChunkedFormatFileName>$(HierarchicalChunkedFormatName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</HierarchicalChunkedFormatFileName>
+    <HierarchicalChunkedFormatBuildDir>$(BuildDir)$(HierarchicalChunkedFormatName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</HierarchicalChunkedFormatBuildDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(HierarchicalChunkedFormatBuildDir)</IntDir>
+    <TargetName>$(HierarchicalChunkedFormatFileName)</TargetName>
+    <OutDir>$(HierarchicalChunkedFormatLibDir)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeaderFile>swCommonLib/HierarchicalChunkedFormat/stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

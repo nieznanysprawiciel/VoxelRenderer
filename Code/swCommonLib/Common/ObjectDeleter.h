@@ -11,9 +11,9 @@ template <class TYPE> class ResourceContainer;
 
 
 /**
-@defgroup DeletingObjects Usuwanie zasobów silnika
-@ingroup CommonFiles
-@brief Modu³ umo¿liwia kasowanie zasobów silnika tylko niektórym klasom.
+@defgroup DeletingObjects Private Deleter
+@ingroup CommonLibrary
+@brief You can specify classes that can delete objects with private constructors.
 
 Niektóre obiekty s¹ zadeklarowane z prywatnym (chronionym) destruktorem, w celu uniemo¿liwienia
 skasowania ich przez niepowo³ane klasy. Jednak¿e musi istnieæ jakiœ dostêp do destruktorów,

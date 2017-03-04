@@ -10,6 +10,9 @@
     <Filter Include="Common\Properties\Containers">
       <UniqueIdentifier>{0e26b253-c21f-44e7-b471-9f1660539e0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{18dd7ec4-67fd-4084-a086-f45872537055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp">
@@ -20,6 +23,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Common\Properties\Properties.cpp">
       <Filter>Common\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\System\Dir.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\System\File.cpp">
+      <Filter>System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +73,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h">
       <Filter>Common\Properties\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\Dir.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\File.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\Path.h">
+      <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

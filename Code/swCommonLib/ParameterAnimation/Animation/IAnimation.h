@@ -7,7 +7,7 @@
 
 /**@defgroup KeyFrameAnimation Keyframe Animation
 Animation of rttr properties.
-@ingroup CommonFiles*/
+@ingroup CommonLibrary*/
 
 
 class TimelineBase;

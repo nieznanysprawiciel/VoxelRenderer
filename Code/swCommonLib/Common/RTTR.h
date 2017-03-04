@@ -31,8 +31,8 @@ enum class MetaDataType
 
 typedef rttr::type TypeID;
 
-/**@defgroup Reflection Mechanizm refleksji
-@ingroup Tools
+/**@defgroup Reflection Reflection
+@ingroup CommonLibrary
 @brief Biblioteka zapewnia dynamiczn¹ kontrolê typów obiektów oraz mechanizmy rejestrowania
 metainformacji.
 

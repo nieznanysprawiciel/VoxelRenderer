@@ -1,9 +1,9 @@
 #pragma once
-/**@file Serializer.h
+/**
+@file Serialzier.h
 @author nieznanysprawiciel
-@copyright Plik jest czêœci¹ silnika graficznego SWEngine.
-
-@brief Deklaracja klasy serializatora.*/
+@copyright File is part of Sleeping Wombat Libraries.
+*/
 
 #include "swCommonLib/Common/TypesDefinitions.h"
 #include "swCommonLib/Serialization/SerializationContext.h"
@@ -13,9 +13,9 @@
 #include <memory>
 
 
-/**@defgroup Serialization Serializacja
-@ingroup Tools
-@brief Biblioteki do serializacji.*/
+/**@defgroup Serialization Serialization
+@ingroup CommonLibrary
+@brief Automatic serialization library based on rttr properties.*/
 
 
 
@@ -29,7 +29,7 @@ enum class WritingMode
 	Readable				///< Tryb przeznaczony do czytania przez ludzi.
 };
 
-/**@brief Interfejs dla serializatorów.
+/**@brief Serializers interface.
 
 @ingroup Serialization*/
 class ISerializer
@@ -63,9 +63,11 @@ public:
 
 public:
 
-	/**@brief Zwraca kontekst serializacji.
-	
-	Funkcja sprawdza typ kontekstu jedynie w trybie debug (assert).*/
+	/**@brief Returns serialization context.
+
+	Check documentation for @ref SerializationContext for more information.
+
+	Context type is checked only in debug mode (asserts).*/
 	template< typename ContextType >
 	inline ContextType*			GetContext	()
 	{

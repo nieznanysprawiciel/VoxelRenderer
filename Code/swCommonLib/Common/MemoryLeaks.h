@@ -5,9 +5,7 @@
 @brief Plik s³u¿y do wykrywania wycieków pamiêci.
 */
 
-/**@defgroup MemoryLeaks Œledzenie wycieków pamiêci
-@ingroup CommonFiles
-@brief Plik umo¿liwiaj¹cy œledzenie wycieków pamiêci.
+/**@brief Plik umo¿liwiaj¹cy œledzenie wycieków pamiêci.
 
 Aby uruchomiæ sprawdzanie wycieków pamiêci nale¿y zaincludowaæ ten plik w testowanym pliku .cpp.
 Aby wszystko kompilowa³o siê poprawnie, musi byæ on ostatnim do³¹czanym plikiem ze wszystkich.
