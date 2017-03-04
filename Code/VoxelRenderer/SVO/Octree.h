@@ -8,6 +8,11 @@
 
 #include <vector>
 
+
+namespace svo
+{
+
+
 class Octree;
 DEFINE_PTR_TYPE( Octree );
 DEFINE_WPTR_TYPE( Octree );
@@ -49,4 +54,6 @@ public:
 	Size			GetGridSize				() { return m_gridSize; }
 };
 
+
+}	// svo
 

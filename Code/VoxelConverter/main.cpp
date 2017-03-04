@@ -2,6 +2,7 @@
 
 #include "swCommonLib/System/Path.h"
 
+#include "VoxelConverter.h"
 
 #include <iostream>
 #include <string>
@@ -31,8 +32,24 @@ int main( int argc, char** argv )
 			return 1;
 		}
 
+		if( inputFile.GetExtension() != ".octree" )
+		{
+			std::cout << "Input Path: [" << inputFile.String() << "] should have .octree extension." << std::endl;
+			return 1;
+		}
+
+		VoxelConverter converter;
+		bool result = converter.Convert( inputFile, outputFile );
 		
-		
+		if( result )
+		{
+			std::cout << "Converted successfully." << std::endl;
+		}
+		else
+		{
+			std::cout << "Conversion failed." << std::endl;
+		}
+
 	}
 	catch( TCLAP::ArgException &e )
 	{

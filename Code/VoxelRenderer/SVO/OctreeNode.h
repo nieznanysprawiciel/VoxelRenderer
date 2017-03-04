@@ -3,13 +3,16 @@
 #include "swCommonLib/Common/TypesDefinitions.h"
 
 
+namespace svo
+{
+
 
 /**@brief Represents normal node with children.*/
 struct OctreeNode
 {
-	uint32		ChildPackPtr	: 23;		///< Offset to first child in children array.
-	uint32		IndirectPtr		: 1;		///< ChildPackPtr points to poiinter instead directly to children.
-	uint32		ChildMask		: 8;		///< Says about children existance. All bits set to 0 means, that ChildPackPtr points to VoxelAttributes.
+	uint32		ChildPackPtr : 23;		///< Offset to first child in children array.
+	uint32		IndirectPtr : 1;		///< ChildPackPtr points to poiinter instead directly to children.
+	uint32		ChildMask : 8;		///< Says about children existance. All bits set to 0 means, that ChildPackPtr points to VoxelAttributes.
 };
 
 
@@ -21,3 +24,5 @@ struct OctreeFarPointer
 {
 	uint32		Offset;						///< Offset to next children array.
 };
+
+}	// svo

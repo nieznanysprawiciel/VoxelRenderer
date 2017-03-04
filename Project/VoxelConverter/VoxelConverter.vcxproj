@@ -152,6 +152,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
+    <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

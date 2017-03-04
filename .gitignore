@@ -18,6 +18,7 @@ BuildDir/
 LibDir/
 External/ooc_svo_builder/
 External/cpu_voxel_raycster/
+External/liboctree/
 External/trimesh2/
 WorkingDir/
 

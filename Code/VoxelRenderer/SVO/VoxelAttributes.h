@@ -5,6 +5,9 @@
 #include <DirectXPackedVector.h>
 
 
+namespace svo
+{
+
 
 /**@brief Attributes.
 @todo Attributes should be better compressed in future.
@@ -14,3 +17,5 @@ struct VoxelAttributes
 	DirectX::PackedVector::XMCOLOR		Color;
 };
 
+
+}

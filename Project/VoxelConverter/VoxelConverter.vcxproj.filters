@@ -9,5 +9,13 @@
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
       <Filter>VoxelConverter</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp">
+      <Filter>VoxelConverter</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h">
+      <Filter>VoxelConverter</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
