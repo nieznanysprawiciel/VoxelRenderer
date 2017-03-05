@@ -1,5 +1,8 @@
 #include "Application.h"
 
+#include "VoxelRenderer/Raycaster/RaycasterCPU.h"
+
+
 
 namespace vr
 {
@@ -29,7 +32,8 @@ In this function you should initialize your application logic.
 */
 void		Application::OnInitialized()
 {
-	
+	InitCamera();
+	InitRaycaster();
 
 }
 
@@ -59,7 +63,43 @@ void		Application::Update()
 //
 void		Application::Render()
 {
+	//m_raycaster->Render( m_octree, , m_camera );
 
+
+}
+
+// ================================ //
+//
+void		Application::InitCamera		()
+{
+	m_camera->SetFov( m_config->CameraFov() );
+	m_camera->SetNearPlane( m_config->CameraNear() );
+	m_camera->SetFarPlane( m_config->CameraFar() );
+	m_camera->Teleport( DirectX::XMLoadFloat3( &m_config->CameraPosition() ) );
+
+	//m_camera->SetDirection( DirectX::XMLoadFloat3( &m_config->CameraDirection() ) );
+}
+
+// ================================ //
+//
+void		Application::InitRaycaster	()
+{
+	std::string raycasterType = m_config->RaycasterType();
+	if( raycasterType == "CPU Raycaster" )
+		m_raycaster = MakeUPtr< RaycasterCPU >();
+	else
+	{
+		/// Error !
+	}
+/*
+	if( m_raycaster )
+		m_raycaster->Init( )*/
+}
+
+// ================================ //
+//
+void		Application::InitOctree		()
+{
 
 
 }

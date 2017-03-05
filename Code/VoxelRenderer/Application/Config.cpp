@@ -13,6 +13,9 @@
 // ================================ //
 //
 Config::Config	( const std::string& filePath )
+	:	m_CameraDirection( DirectX::XMFLOAT3( 0.0, 0.0, 1.0 ) )
+	,	m_CameraFov( 45 )
+	,	m_CameraPosition( DirectX::XMFLOAT3( 0.0, 0.0, 0.0 ) )
 {
 	IDeserializer deser;
 	if( deser.LoadFromFile( filePath, ParsingMode::ParseInsitu ) )
@@ -21,16 +24,44 @@ Config::Config	( const std::string& filePath )
 		{
 			if( deser.EnterObject( "Screen" ) )
 			{
-				m_ScreenWidth	= deser.GetAttribute( "Height", m_ScreenWidth );
-				m_ScreenHeight	= deser.GetAttribute( "Width", m_ScreenHeight );
+				m_ScreenHeight	= deser.GetAttribute( "Height", m_ScreenHeight );
+				m_ScreenWidth	= deser.GetAttribute( "Width", m_ScreenWidth );
 
 				deser.Exit();
 			}
 
 			if( deser.EnterObject( "Camera" ) )
 			{
+				if( deser.EnterObject( "Position" ) )
+				{
+					m_CameraPosition.x = (float)deser.GetAttribute( "X", m_CameraPosition.x );
+					m_CameraPosition.y = (float)deser.GetAttribute( "Y", m_CameraPosition.y );
+					m_CameraPosition.z = (float)deser.GetAttribute( "Z", m_CameraPosition.z );
 
+					deser.Exit();
+				}
 
+				if( deser.EnterObject( "Direction" ) )
+				{
+					m_CameraDirection.x = (float)deser.GetAttribute( "X", m_CameraDirection.x );
+					m_CameraDirection.y = (float)deser.GetAttribute( "Y", m_CameraDirection.y );
+					m_CameraDirection.z = (float)deser.GetAttribute( "Z", m_CameraDirection.z );
+
+					deser.Exit();
+				}
+
+				m_CameraFov = (float)deser.GetAttribute( "FOV", m_CameraDirection.x );
+				m_CameraNear = (float)deser.GetAttribute( "NearPlane", m_CameraNear );
+				m_CameraFar = (float)deser.GetAttribute( "FarPlane", m_CameraFar );
+
+				deser.Exit();
+			}
+
+			if( deser.EnterObject( "Raycaster" ) )
+			{
+				m_RaycasterType = deser.GetAttribute( "Type", m_RaycasterType );
+
+				deser.Exit();
 			}
 
 			deser.Exit();
@@ -49,6 +80,22 @@ bool			Config::SaveConfig	( const std::string& filePath ) const
 		ser.EnterObject( "Screen" );
 			ser.SetAttribute( "Height", m_ScreenHeight );
 			ser.SetAttribute( "Width", m_ScreenWidth );
+		ser.Exit();
+
+		ser.EnterObject( "Camera" );
+			ser.EnterObject( "Position" );
+				ser.SetAttribute( "X", m_CameraPosition.x );
+				ser.SetAttribute( "Y", m_CameraPosition.y );
+				ser.SetAttribute( "Z", m_CameraPosition.z );
+			ser.Exit();
+
+			ser.EnterObject( "Direction" );
+				ser.SetAttribute( "X", m_CameraDirection.x );
+				ser.SetAttribute( "Y", m_CameraDirection.y );
+				ser.SetAttribute( "Z", m_CameraDirection.z );
+			ser.Exit();
+
+			ser.SetAttribute( "FOV", m_CameraFov );
 		ser.Exit();
 
 	ser.Exit();

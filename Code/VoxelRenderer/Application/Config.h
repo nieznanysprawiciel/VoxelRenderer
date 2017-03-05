@@ -29,6 +29,10 @@ private:
 	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraPosition );
 	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraDirection );
 	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraFov, 45.0f );
+	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraFar, 1.0f );
+	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraNear, 1000.0f );
+
+	DEFINE_CONFIG_VALUE_DEFAULT( std::string, RaycasterType, "" );
 
 public:
 	explicit		Config	( const std::string& filePath );

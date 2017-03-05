@@ -49,7 +49,7 @@ private:
 	///@{
 	void			InitCamera		();
 	void			InitRaycaster	();
-
+	void			InitOctree		();
 	///@}
 };
 
