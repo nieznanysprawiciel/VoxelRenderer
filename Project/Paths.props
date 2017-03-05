@@ -12,6 +12,7 @@
 	<SourceInclude>$(RootDir)Code\</SourceInclude>
 	<SourceDir>$(SourceInclude)</SourceDir>
 	<ExternalDir>$(RootDir)External\</ExternalDir>
+	<WorkingDir>$(RootDir)WorkingDir\</WorkingDir>
   </PropertyGroup>
   
   <PropertyGroup>

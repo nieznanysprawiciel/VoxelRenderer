@@ -21,5 +21,6 @@ public:
 	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
 };
 
+DEFINE_UPTR_TYPE( IRaycaster );
 
 }

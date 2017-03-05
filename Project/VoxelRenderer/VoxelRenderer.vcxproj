@@ -159,6 +159,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />

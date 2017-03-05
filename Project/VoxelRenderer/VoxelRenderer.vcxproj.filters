@@ -42,6 +42,9 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp">
       <Filter>VoxelRenderer\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h">
       <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h">
+      <Filter>VoxelRenderer\Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

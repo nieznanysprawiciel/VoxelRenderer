@@ -2,6 +2,10 @@
 
 #include "swGUI/Core/System/GUISystem.h"
 
+#include "Config.h"
+
+#include "VoxelRenderer/Raycaster/IRaycaster.h"
+#include "VoxelRenderer/Actors/CameraActor.h"
 
 
 
@@ -16,6 +20,13 @@ User should implement virtual functions to use GUI.*/
 class Application : public sw::gui::GUISystem
 {
 private:
+
+	ConfigUPtr			m_config;
+	
+	IRaycasterUPtr		m_raycaster;
+	CameraActor*		m_camera;
+	OctreePtr			m_octree;
+
 protected:
 public:
 	explicit	Application		( int argc, char** argv, sw::gui::INativeGUI* gui );
@@ -31,6 +42,15 @@ protected:
 private:
 	void			Update		();
 	void			Render		();
+
+
+private:
+	///@name Initialization functions
+	///@{
+	void			InitCamera		();
+	void			InitRaycaster	();
+
+	///@}
 };
 
 
