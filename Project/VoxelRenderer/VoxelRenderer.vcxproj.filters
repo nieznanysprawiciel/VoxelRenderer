@@ -13,6 +13,9 @@
     <Filter Include="VoxelRenderer\Raycaster">
       <UniqueIdentifier>{bf136db5-4bf4-4093-bee9-a673209fc81d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelRenderer\Actors">
+      <UniqueIdentifier>{b026c38b-db8d-4da7-99f4-a3ec2bb58736}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -24,8 +27,20 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp">
       <Filter>VoxelRenderer\SVO</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Logic.cpp">
-      <Filter>VoxelRenderer\Application</Filter>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraActor.cpp">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Actors\ActorBase.cpp">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.cpp">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp">
+      <Filter>VoxelRenderer\Actors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,8 +56,23 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h">
       <Filter>VoxelRenderer\SVO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Logic.h">
-      <Filter>VoxelRenderer\Application</Filter>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraActor.h">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Actors\ActorBase.h">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.h">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h">
+      <Filter>VoxelRenderer\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

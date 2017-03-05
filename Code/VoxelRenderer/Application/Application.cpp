@@ -16,7 +16,7 @@ Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
 
 If you need specific gui initialization in your application override this function.
 You can set different GraphicApi or input api.*/
-void Application::Initialize()
+void		Application::Initialize()
 {
 	DefaultInit( 1024, 768, "Voxel skeletal animation" );
 }
@@ -34,7 +34,30 @@ void		Application::OnClosing()
 
 /**@brief */
 void		Application::OnIdle()
+{
+	Update();
+	Render();
+}
+
+
+//====================================================================================//
+//				
+//====================================================================================//
+
+// ================================ //
+//
+void		Application::Update()
 {}
+
+
+// ================================ //
+//
+void		Application::Render()
+{
+
+
+
+}
 
 
 }	// vr

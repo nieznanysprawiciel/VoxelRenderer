@@ -3,6 +3,8 @@
 #include "swGUI/Core/System/GUISystem.h"
 
 
+
+
 namespace vr
 {
 
@@ -25,6 +27,10 @@ protected:
 	virtual void	OnClosing		() override;
 	virtual void	OnIdle			() override;
 
+
+private:
+	void			Update		();
+	void			Render		();
 };
 
 
