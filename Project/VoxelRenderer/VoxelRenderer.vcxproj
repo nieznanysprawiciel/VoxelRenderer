@@ -155,11 +155,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Logic.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Logic.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />

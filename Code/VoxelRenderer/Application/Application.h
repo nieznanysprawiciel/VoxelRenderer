@@ -3,6 +3,10 @@
 #include "swGUI/Core/System/GUISystem.h"
 
 
+namespace vr
+{
+
+
 
 /**@brief Application template class.
 
@@ -23,3 +27,5 @@ protected:
 
 };
 
+
+}	// vr

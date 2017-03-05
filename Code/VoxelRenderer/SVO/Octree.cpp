@@ -1,7 +1,7 @@
 #include "Octree.h"
 
 
-namespace svo
+namespace vr
 {
 
 

@@ -6,7 +6,7 @@
 
 int main( int argc, char** argv )
 {
-	Application app( argc, argv, sw::gui::WinAPIGUI::Create() );
+	vr::Application app( argc, argv, sw::gui::WinAPIGUI::Create() );
 	app.Init();
 
 	return app.MainLoop();

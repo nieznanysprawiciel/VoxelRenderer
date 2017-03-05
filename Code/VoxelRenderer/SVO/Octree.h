@@ -9,7 +9,7 @@
 #include <vector>
 
 
-namespace svo
+namespace vr
 {
 
 

@@ -5,7 +5,7 @@
 #include <DirectXPackedVector.h>
 
 
-namespace svo
+namespace vr
 {
 
 

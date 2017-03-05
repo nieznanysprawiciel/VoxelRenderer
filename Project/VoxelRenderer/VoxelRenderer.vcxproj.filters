@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp">
       <Filter>VoxelRenderer\SVO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Logic.cpp">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -37,6 +40,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h">
       <Filter>VoxelRenderer\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Logic.h">
+      <Filter>VoxelRenderer\Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

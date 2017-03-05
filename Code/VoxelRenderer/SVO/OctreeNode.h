@@ -3,7 +3,7 @@
 #include "swCommonLib/Common/TypesDefinitions.h"
 
 
-namespace svo
+namespace vr
 {
 
 

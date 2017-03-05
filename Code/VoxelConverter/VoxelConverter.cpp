@@ -9,17 +9,17 @@
 
 // ================================ //
 //
-svo::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
+vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 {
 	auto srcOctree = readOctreeFile( inputFilePath.String() );
 
 
-	return svo::OctreePtr();
+	return vr::OctreePtr();
 }
 
 // ================================ //
 //
-bool			VoxelConverter::Write		( const filesystem::Path& outputFilePath, svo::OctreePtr octree )
+bool			VoxelConverter::Write		( const filesystem::Path& outputFilePath, vr::OctreePtr octree )
 {
 	return false;
 }
@@ -28,7 +28,7 @@ bool			VoxelConverter::Write		( const filesystem::Path& outputFilePath, svo::Oct
 //
 bool			VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath )
 {
-	svo::OctreePtr octree = Load( inputFilePath );
+	vr::OctreePtr octree = Load( inputFilePath );
 	return Write( outputFilePath, octree );
 }
 

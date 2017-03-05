@@ -1,11 +1,14 @@
 #include "Application.h"
 
 
+namespace vr
+{
+
 
 // ================================ //
 //
 Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
-	:	sw::gui::GUISystem( argc, argv, gui )
+	: sw::gui::GUISystem( argc, argv, gui )
 {}
 
 
@@ -32,3 +35,6 @@ void		Application::OnClosing()
 /**@brief */
 void		Application::OnIdle()
 {}
+
+
+}	// vr
