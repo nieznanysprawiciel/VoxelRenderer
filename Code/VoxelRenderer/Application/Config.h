@@ -6,26 +6,33 @@
 */
 
 #include "swCommonLib/Common/TypesDefinitions.h"
+#include "swCommonLib/Common/Config/ConfigHelper.h"
 
 #include <string>
+#include <DirectXMath.h>
+
+
+
+
+//====================================================================================//
+//			Config Implementation	
+//====================================================================================//
 
 
 /**@brief Engine start configuration.*/
 class Config
 {
 private:
+	DEFINE_CONFIG_VALUE_DEFAULT( uint16, ScreenWidth, 1024 );
+	DEFINE_CONFIG_VALUE_DEFAULT( uint16, ScreenHeight, 768 );
 
-	uint16			m_screenWidth;
-	uint16			m_screenHeight;
+	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraPosition );
+	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraDirection );
+	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraFov, 45.0f );
 
-protected:
 public:
 	explicit		Config	( const std::string& filePath );
 					~Config	() = default;
-
-
-	uint16			ScreenWidth		() const;
-	uint16			ScreenHeight	() const;
 
 	bool			SaveConfig		( const std::string& filePath ) const;
 };

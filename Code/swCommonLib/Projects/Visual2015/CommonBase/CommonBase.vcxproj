@@ -26,6 +26,7 @@
     <ClCompile Include="..\..\..\System\File.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Common\Config\ConfigHelper.h" />
     <ClInclude Include="..\..\..\Common\Converters.h" />
     <ClInclude Include="..\..\..\Common\EngineObject.h" />
     <ClInclude Include="..\..\..\Common\MemoryChunk.h" />

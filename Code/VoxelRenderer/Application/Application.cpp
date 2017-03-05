@@ -29,7 +29,7 @@ In this function you should initialize your application logic.
 */
 void		Application::OnInitialized()
 {
-
+	
 
 }
 

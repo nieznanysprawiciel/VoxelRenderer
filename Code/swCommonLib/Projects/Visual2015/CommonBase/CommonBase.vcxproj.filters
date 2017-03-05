@@ -13,6 +13,9 @@
     <Filter Include="System">
       <UniqueIdentifier>{18dd7ec4-67fd-4084-a086-f45872537055}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Config">
+      <UniqueIdentifier>{9fe33451-06b3-4f57-b44c-6d13c623c1db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\System\Path.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Config\ConfigHelper.h">
+      <Filter>Common\Config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

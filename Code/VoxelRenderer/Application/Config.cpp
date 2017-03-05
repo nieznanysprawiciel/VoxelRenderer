@@ -13,8 +13,6 @@
 // ================================ //
 //
 Config::Config	( const std::string& filePath )
-	:	m_screenWidth( 1024 )
-	,	m_screenHeight( 768 )
 {
 	IDeserializer deser;
 	if( deser.LoadFromFile( filePath, ParsingMode::ParseInsitu ) )
@@ -23,29 +21,21 @@ Config::Config	( const std::string& filePath )
 		{
 			if( deser.EnterObject( "Screen" ) )
 			{
-				m_screenHeight	= deser.GetAttribute( "Height", m_screenHeight );
-				m_screenWidth	= deser.GetAttribute( "Width", m_screenWidth );
+				m_ScreenWidth	= deser.GetAttribute( "Height", m_ScreenWidth );
+				m_ScreenHeight	= deser.GetAttribute( "Width", m_ScreenHeight );
 
 				deser.Exit();
+			}
+
+			if( deser.EnterObject( "Camera" ) )
+			{
+
+
 			}
 
 			deser.Exit();
 		}
 	}
-}
-
-// ================================ //
-//
-uint16			Config::ScreenWidth() const
-{
-	return m_screenWidth;
-}
-
-// ================================ //
-//
-uint16			Config::ScreenHeight() const
-{
-	return m_screenHeight;
 }
 
 // ================================ //
@@ -57,8 +47,8 @@ bool			Config::SaveConfig	( const std::string& filePath ) const
 	ser.EnterObject( "Config" );
 
 		ser.EnterObject( "Screen" );
-			ser.SetAttribute( "Height", m_screenHeight );
-			ser.SetAttribute( "Width", m_screenWidth );
+			ser.SetAttribute( "Height", m_ScreenHeight );
+			ser.SetAttribute( "Width", m_ScreenWidth );
 		ser.Exit();
 
 	ser.Exit();
