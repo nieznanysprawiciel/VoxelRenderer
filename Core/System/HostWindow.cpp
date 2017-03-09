@@ -106,6 +106,20 @@ const std::string& HostWindow::GetControlName		( IControl* control )
 
 // ================================ //
 //
+ResourcePtr< RenderTargetObject >	HostWindow::GetRenderTarget()
+{
+	return m_renderTarget;
+}
+
+// ================================ //
+//
+ResourcePtr< SwapChain >	HostWindow::GetSwapChain()
+{
+	return m_swapChain;
+}
+
+// ================================ //
+//
 INativeWindow*		HostWindow::GetNativeWindow		()
 {
 	return m_nativeWindow;

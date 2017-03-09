@@ -59,7 +59,10 @@ int					GUISystem::MainLoop()
 		bool end = m_nativeGUI->MainLoop( true );
 		if( end ) break;
 
-		// @todo Now display all objects.
+		// @todo How should it be done ??
+		OnIdle();
+		if( m_focusedWindow )
+			m_focusedWindow->GetSwapChain()->Present( 1 );
 	}
 
 	OnClosing();
