@@ -6,6 +6,12 @@
 */
 
 
+#include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
+#include "swGraphicAPI/Rendering/IRenderer.h"
+#include "swGraphicAPI/ResourceManager/ResourceManager.h"
+
+
+DEFINE_OPTR_TYPE( IRenderer );
 
 namespace sw {
 namespace gui
@@ -16,13 +22,22 @@ namespace gui
 class RenderingSystem
 {
 private:
+
+	IRendererOPtr		m_renderer;
+	ResourceManager*	m_resourceManager;
+
 protected:
 public:
-	explicit		RenderingSystem		() = default;
-	~RenderingSystem	() = default;
+	explicit		RenderingSystem		( ResourceManager* resourceManager, IRendererOPtr&& renderer );
+					~RenderingSystem	() = default;
 
+	/**@brief Returns renderer.
+	You probably don't need it. Use only if you write graphic application which renders something by itself.
+	You are not owner of this object.*/
+	IRenderer*		GetRenderer			() const			{ return m_renderer.get(); }
 };
 
+DEFINE_OPTR_TYPE( RenderingSystem );
 
 
 }	// gui
