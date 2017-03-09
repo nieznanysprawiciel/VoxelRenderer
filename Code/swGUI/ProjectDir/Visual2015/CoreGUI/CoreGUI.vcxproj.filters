@@ -31,6 +31,12 @@
     <Filter Include="Core\System\Rendering">
       <UniqueIdentifier>{94cbd7b1-895c-444b-88d7-ceb1d8c74bd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Media">
+      <UniqueIdentifier>{f76314cf-6da4-4026-8fdb-00e7af5e62d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Media\Brushes">
+      <UniqueIdentifier>{021863e9-327c-4478-b54e-6aaa913b72b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\targetver.h">
@@ -111,6 +117,30 @@
     <ClInclude Include="..\..\..\Core\System\Rendering\DrawingContext.h">
       <Filter>Core\System\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\DelegateContainer.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\EventsManager.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\Brush.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\SolidColorBrush.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\GradientBrush.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\ImageBrush.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\LinearGradient.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Brushes\RadialGradient.h">
+      <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp">
@@ -166,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Core\Controls\UIElement.cpp">
       <Filter>Core\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\Rendering\RenderingSystem.cpp">
+      <Filter>Core\System\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\Events\EventsManager.cpp">
+      <Filter>Core\System\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,6 +3,8 @@
 #include "swCommonLib/Common/EngineObject.h"
 #include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
 #include "swGUI/Native/INativeGUI.h"
+#include "Events/EventsManager.h"
+#include "swGUI/Core/System/Rendering/RenderingSystem.h"
 
 #include "HostWindow.h"
 
@@ -65,7 +67,9 @@ protected:
 	IGraphicAPIInitializer*		m_graphicApi;		///< Contains object responsible for dealing with specifics graphic apis.
 	INativeGUI*					m_nativeGUI;		///< Native window system used to display main application window.
 	IInput*						m_input;			///< Input processor.
+
 	ResourceManager*			m_resourceManager;	///< Resources.
+	RenderingSystemOPtr			m_renderingSystem;	///< All rendering connceted functionalities.
 
 	std::vector< HostWindow* >	m_windows;
 	HostWindow*					m_focusedWindow;	///< Only one window can have focus and only this will be processed.
@@ -93,9 +97,11 @@ protected:
 
 	///@name Default initialization functions
 	///@{
-	void			DefaultInit				( uint16 width, uint16 height, const std::string& windowTitle );
-	bool			DefaultInitNativeGUI	();
-	bool			DefaultInitGraphicAPI	();
+	void			DefaultInitWithoutWindow	();
+	void			DefaultInit					( uint16 width, uint16 height, const std::string& windowTitle );
+	bool			DefaultInitNativeGUI		();
+	bool			DefaultInitGraphicAPI		();
+	bool			DefaultInitRenderingSystem	();
 	///@}
 
 public:
@@ -123,7 +129,7 @@ public:
 
 
 public:
-	static GUISystem&	Get			();
+	static GUISystem&	Get				();
 };
 
 

@@ -24,11 +24,12 @@ GUISystem*			GUISystem::m_instance = nullptr;
 // ================================ //
 //
 GUISystem::GUISystem( int argc, char** argv, INativeGUI* gui )
-	: m_cmdArgs( argc, argv )
-	, m_nativeGUI( gui )
-	, m_focusedWindow( nullptr )
-	, m_resourceManager( nullptr )
-	, m_input( nullptr )
+	:	m_cmdArgs( argc, argv )
+	,	m_nativeGUI( gui )
+	,	m_focusedWindow( nullptr )
+	,	m_resourceManager( nullptr )
+	,	m_input( nullptr )
+	,	m_renderingSystem( nullptr )
 {
 	m_instance = this;
 }
@@ -84,14 +85,20 @@ void				GUISystem::Initialize()
 	DefaultInit( 1024, 768, "Window Tittle" );
 }
 
-
-/**@brief Default GUI system initialization function.*/
-void				GUISystem::DefaultInit				( uint16 width, uint16 height, const std::string& windowTitle )
+/**@brief Makes initialization but leaves window creation for user.*/
+void				GUISystem::DefaultInitWithoutWindow	()
 {
 	m_resourceManager = new ResourceManager();
 
 	DefaultInitGraphicAPI();
 	DefaultInitNativeGUI();
+	DefaultInitRenderingSystem();
+}
+
+/**@brief Default GUI system initialization function.*/
+void				GUISystem::DefaultInit				( uint16 width, uint16 height, const std::string& windowTitle )
+{
+	DefaultInitWithoutWindow();
 
 	// Note: we must always initialize first focus window. This is probably hack, but OnFocusChanged delegate won't be invoked.
 	m_focusedWindow = CreateNativeHostWindow( width, height, windowTitle );
@@ -129,6 +136,23 @@ bool				GUISystem::DefaultInitGraphicAPI	()
 	assert( result );
 
 	return result;
+}
+
+/**@brief Initializes rendering system.
+
+@note m_resourceManager and m_graphicApi must be already initialized;*/
+bool				GUISystem::DefaultInitRenderingSystem	()
+{
+	if( !m_graphicApi )
+		return false;
+
+	if( !m_resourceManager )
+		return false;
+
+	IRendererOPtr renderer = std::unique_ptr< IRenderer >( m_graphicApi->CreateRenderer( RendererUsage::USE_AS_IMMEDIATE ) );
+	m_renderingSystem = std::unique_ptr< RenderingSystem >( new RenderingSystem( m_resourceManager, std::move( renderer ) ) );
+
+	return true;
 }
 
 /**@brief Changes focused window.
@@ -237,10 +261,11 @@ const char*			GUISystem::ProgramPath()
 
 
 /**@brief */
-GUISystem&	GUISystem::Get()
+GUISystem&			GUISystem::Get()
 {
 	return *m_instance;
 }
+
 
 }	// gui
 }	// sw

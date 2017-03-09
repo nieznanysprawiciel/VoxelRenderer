@@ -8,7 +8,7 @@
 
 
 #include "swGUI/Core/Controls/Visual.h"
-
+#include "swGUI/Core/System/Events/DelegateContainer.h"
 
 
 namespace sw {
@@ -37,8 +37,8 @@ Provides functionalities:
 Connects WPF UIElement and FrameworkElement classes.*/
 class UIElement : public Visual
 {
-	RTTR_ENABLE( Visual )
-		RTTR_REGISTRATION_FRIEND
+	RTTR_ENABLE( Visual );
+	RTTR_REGISTRATION_FRIEND;
 private:
 protected:
 
@@ -61,7 +61,7 @@ public:
 
 ///@name Layout fuctions
 ///@{
-/**@brief Meassure pass. Check documentation in WPF.*/
+	/**@brief Meassure pass. Check documentation in WPF.*/
 	virtual Size2D			Measure				( Size2D availableSize )		= 0;
 	/**@brief Arragement pass. Check WPF documentation.*/
 	virtual void			Arrange				( Rect& finalRect )				= 0;

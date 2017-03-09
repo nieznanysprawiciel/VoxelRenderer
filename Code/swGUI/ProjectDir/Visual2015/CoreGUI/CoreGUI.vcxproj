@@ -146,9 +146,17 @@
     <ClInclude Include="..\..\..\Core\Controls\TopLevelControl.h" />
     <ClInclude Include="..\..\..\Core\Controls\UIElement.h" />
     <ClInclude Include="..\..\..\Core\Controls\Visual.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\Brush.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\GradientBrush.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\ImageBrush.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\LinearGradient.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\RadialGradient.h" />
+    <ClInclude Include="..\..\..\Core\Media\Brushes\SolidColorBrush.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\CommonTypes.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\Thickness.h" />
     <ClInclude Include="..\..\..\Core\System\DataBinding\DependencyObject.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\DelegateContainer.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\EventsManager.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\IEventArgs.h" />
@@ -173,6 +181,7 @@
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp" />
     <ClCompile Include="..\..\..\Core\Controls\UIElement.cpp" />
     <ClCompile Include="..\..\..\Core\System\DataBinding\DependencyObject.cpp" />
+    <ClCompile Include="..\..\..\Core\System\Events\EventsManager.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\IEventArgs.cpp" />
@@ -183,6 +192,7 @@
     <ClCompile Include="..\..\..\Core\System\GUISystem.cpp" />
     <ClCompile Include="..\..\..\Core\System\HostWindow.cpp" />
     <ClCompile Include="..\..\..\Core\System\Initializers.cpp" />
+    <ClCompile Include="..\..\..\Core\System\Rendering\RenderingSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\swGraphicAPI\ProjectsDir\Visual2015\ResourceManager\ResourceManager.vcxproj">
