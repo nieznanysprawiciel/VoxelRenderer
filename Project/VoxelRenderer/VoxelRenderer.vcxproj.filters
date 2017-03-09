@@ -16,6 +16,9 @@
     <Filter Include="VoxelRenderer\Actors">
       <UniqueIdentifier>{b026c38b-db8d-4da7-99f4-a3ec2bb58736}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{79e9462c-2e95-4278-b926-d2118347240c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -43,6 +46,12 @@
       <Filter>VoxelRenderer\Actors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.cpp">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\TimeManager.cpp">
       <Filter>VoxelRenderer\Application</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,5 +89,16 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h">
       <Filter>VoxelRenderer\Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\TimeManager.h">
+      <Filter>VoxelRenderer\Application</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

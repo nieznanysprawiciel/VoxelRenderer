@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "VoxelRenderer/Raycaster/RaycasterCPU.h"
+#include "VoxelRenderer/Raycaster/FakeRaycaster.h"
 
 
 
@@ -34,7 +35,8 @@ void		Application::OnInitialized()
 {
 	InitCamera();
 	InitRaycaster();
-
+	InitOctree();
+	InitResources();
 }
 
 /**@brief Function invoked when application is going to close itself.*/
@@ -63,9 +65,12 @@ void		Application::Update()
 //
 void		Application::Render()
 {
-	//m_raycaster->Render( m_octree, , m_camera );
+	m_timeManager.onStartRenderFrame();
+	double time = m_timeManager.QueryTimeFromBegin();
+		
 
-
+	//m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
+	m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
 }
 
 // ================================ //
@@ -87,21 +92,39 @@ void		Application::InitRaycaster	()
 	std::string raycasterType = m_config->RaycasterType();
 	if( raycasterType == "CPU Raycaster" )
 		m_raycaster = MakeUPtr< RaycasterCPU >();
+	else if( raycasterType == "FakeRaycaster" )
+		m_raycaster = MakeUPtr< FakeRaycaster >();
 	else
 	{
 		/// Error !
 	}
-/*
+
 	if( m_raycaster )
-		m_raycaster->Init( )*/
+		m_raycaster->Init( m_renderingSystem->GetRenderer(), m_resourceManager );
 }
 
 // ================================ //
 //
 void		Application::InitOctree		()
+{}
+
+// ================================ //
+//
+void Application::InitResources()
 {
+	sw::gui::HostWindow* window = m_windows[ 0 ];
+	m_mainRT = window->GetRenderTarget();
 
+	RenderTargetDescriptor svoRTDescriptor;
+	svoRTDescriptor.TextureWidth = m_config->ScreenWidth();
+	svoRTDescriptor.TextureHeight = m_config->ScreenHeight();
+	svoRTDescriptor.TextureType = TextureType::TEXTURE_TYPE_TEXTURE2D;
+	svoRTDescriptor.ColorBuffFormat = ResourceFormat::RESOURCE_FORMAT_B8G8R8A8_UNORM;
+	svoRTDescriptor.DepthStencilFormat = DepthStencilFormat::DEPTH_STENCIL_FORMAT_D16_UNORM;
+	svoRTDescriptor.Usage = ResourceUsage::RESOURCE_USAGE_DYNAMIC;
 
+	m_svoRT = m_resourceManager->CreateRenderTarget( L"::SVO_RenderTarget", svoRTDescriptor );
+	assert( m_svoRT );
 }
 
 

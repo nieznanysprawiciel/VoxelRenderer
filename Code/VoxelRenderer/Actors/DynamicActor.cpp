@@ -66,7 +66,7 @@ DynamicActor::DynamicActor( const XMFLOAT3& move_speed, const XMFLOAT4& rot_spee
 /**@brief Usuwa przypisany kontroler.*/
 DynamicActor::~DynamicActor()
 {
-	delete m_controller;
+	//delete m_controller;
 }
 
 

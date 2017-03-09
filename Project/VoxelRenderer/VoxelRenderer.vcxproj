@@ -161,6 +161,8 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\TimeManager.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
@@ -171,6 +173,8 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\TimeManager.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
@@ -196,6 +200,18 @@
     <ProjectReference Include="..\..\Code\swGUI\ProjectDir\Visual2015\Win32NativeGUI\Win32NativeGUI.vcxproj">
       <Project>{267292a0-c262-43e7-afb1-1f63439fd465}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

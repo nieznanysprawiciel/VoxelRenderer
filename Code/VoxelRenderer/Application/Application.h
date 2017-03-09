@@ -7,6 +7,8 @@
 #include "VoxelRenderer/Raycaster/IRaycaster.h"
 #include "VoxelRenderer/Actors/CameraActor.h"
 
+#include "VoxelRenderer/Application/TimeManager.h"
+
 
 
 namespace vr
@@ -26,6 +28,11 @@ private:
 	IRaycasterUPtr		m_raycaster;
 	CameraActor*		m_camera;
 	OctreePtr			m_octree;
+
+	ResourcePtr< RenderTargetObject >		m_svoRT;
+	ResourcePtr< RenderTargetObject >		m_mainRT;
+
+	TimeManager			m_timeManager;
 
 protected:
 public:
@@ -50,6 +57,7 @@ private:
 	void			InitCamera		();
 	void			InitRaycaster	();
 	void			InitOctree		();
+	void			InitResources	();
 	///@}
 };
 
