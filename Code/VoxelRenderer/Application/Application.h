@@ -59,6 +59,8 @@ private:
 	void			InitOctree		();
 	void			InitResources	();
 	///@}
+
+	void			Blit			( RenderTargetObject* svoRenderTarget, RenderTargetObject* mainRT );
 };
 
 

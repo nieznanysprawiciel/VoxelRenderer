@@ -20,9 +20,13 @@ private:
 	IRenderer*				m_renderer;
 	ResourceManager*		m_resourceManager;
 
-	ResourcePtr< VertexShader >		m_vertexShader;
-	ResourcePtr< PixelShader >		m_pixelShader;
+	ResourcePtr< VertexShader >			m_vertexShader;
+	ResourcePtr< PixelShader >			m_pixelShader;
+	ResourcePtr< ShaderInputLayout >	m_layout;
 
+	ResourcePtr< BlendingState >		m_blendingState;
+	ResourcePtr< RasterizerState >		m_rasterizerState;
+	ResourcePtr< DepthStencilState >	m_depthStencilState;
 
 protected:
 public:

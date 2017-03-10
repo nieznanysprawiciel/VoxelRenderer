@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\TimeManager.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\TimeManager.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h" />
@@ -202,15 +204,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\..\WorkingDir\Shaders\FullscreenTriangleVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

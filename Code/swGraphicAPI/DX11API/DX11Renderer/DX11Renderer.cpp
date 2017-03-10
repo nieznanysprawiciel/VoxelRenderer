@@ -78,10 +78,13 @@ void	DX11Renderer::Draw				( const DrawCommand& command )
 	if( command.IndexBufer )
 		indexBuffer = DX11( command.IndexBufer )->Get();
 
-	auto layout = DX11( command.Layout )->Get();
+	if( command.Layout )
+		m_localDeviceContext->IASetInputLayout( DX11( command.Layout )->Get() );
+	else
+		m_localDeviceContext->IASetInputLayout( nullptr );
 
 	m_localDeviceContext->IASetPrimitiveTopology( DX11ConstantsMapper::Get( command.Topology ) );
-	m_localDeviceContext->IASetInputLayout( layout );
+	
 
 	DX11Renderer::SetVertexBuffer( command.VertexBuffer, 0 );
 	SetIndexBuffer( command.IndexBufer, 0, command.ExtendedIndex );
@@ -433,7 +436,9 @@ bool    DX11Renderer::SetVertexBuffer   ( BufferObject* buffer, unsigned int off
     else
     {
         //throw new std::runtime_error( "Vertex buffer is nullptr" );
-        assert( !"Vertex buffer is nullptr" );
+        //assert( !"Vertex buffer is nullptr" );
+		unsigned int stride = 0;
+		m_localDeviceContext->IASetVertexBuffers( 0, 1, &vertexBuffer, &stride, &offset );
     }
     return true;
 }

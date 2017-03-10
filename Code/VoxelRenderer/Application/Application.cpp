@@ -71,6 +71,7 @@ void		Application::Render()
 
 	//m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
 	m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
+	//Blit( m_svoRT.Ptr(), m_mainRT.Ptr() );
 }
 
 // ================================ //
@@ -110,7 +111,7 @@ void		Application::InitOctree		()
 
 // ================================ //
 //
-void Application::InitResources()
+void		Application::InitResources()
 {
 	sw::gui::HostWindow* window = m_windows[ 0 ];
 	m_mainRT = window->GetRenderTarget();
@@ -119,12 +120,19 @@ void Application::InitResources()
 	svoRTDescriptor.TextureWidth = m_config->ScreenWidth();
 	svoRTDescriptor.TextureHeight = m_config->ScreenHeight();
 	svoRTDescriptor.TextureType = TextureType::TEXTURE_TYPE_TEXTURE2D;
-	svoRTDescriptor.ColorBuffFormat = ResourceFormat::RESOURCE_FORMAT_B8G8R8A8_UNORM;
+	svoRTDescriptor.ColorBuffFormat = ResourceFormat::RESOURCE_FORMAT_R8G8B8A8_UNORM;
 	svoRTDescriptor.DepthStencilFormat = DepthStencilFormat::DEPTH_STENCIL_FORMAT_D16_UNORM;
-	svoRTDescriptor.Usage = ResourceUsage::RESOURCE_USAGE_DYNAMIC;
+	svoRTDescriptor.Usage = ResourceUsage::RESOURCE_USAGE_DEFAULT;
 
 	m_svoRT = m_resourceManager->CreateRenderTarget( L"::SVO_RenderTarget", svoRTDescriptor );
 	assert( m_svoRT );
+}
+
+// ================================ //
+//
+void		Application::Blit			( RenderTargetObject* svoRenderTarget, RenderTargetObject* mainRT )
+{
+
 }
 
 
