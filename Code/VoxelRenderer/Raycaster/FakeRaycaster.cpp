@@ -7,8 +7,6 @@
 namespace vr
 {
 
-auto LAYOUT_EMPTY_DESC = ResourcesFactory::CreateInputLayoutDescriptor( L"::Empty" );
-
 
 // ================================ //
 //
@@ -25,9 +23,9 @@ void			FakeRaycaster::Init			( IRenderer* renderer, ResourceManager* resourceMan
 	assert( m_vertexShader );
 	assert( m_pixelShader );
 
-	m_blendingState = m_resourceManager->CreateBlendingState( L"::DefaultBlendingState", BlendingInfo() );
-	m_rasterizerState = m_resourceManager->CreateRasterizerState( L"::DefaultRasterizerState", RasterizerStateInfo() );
-	m_depthStencilState = m_resourceManager->CreateDepthStencilState( L"::DefaultDepthStencilState", DepthStencilInfo() );
+	m_blendingState = resourceManager->GetBlendingState( BlendingInfo() );
+	m_rasterizerState = resourceManager->GetRasterizerState( RasterizerStateInfo() );
+	m_depthStencilState = resourceManager->GetDepthStencilState(  DepthStencilInfo() );
 
 	assert( m_blendingState );
 	assert( m_rasterizerState );

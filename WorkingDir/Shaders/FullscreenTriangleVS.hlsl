@@ -18,8 +18,8 @@ VSQuadOut main( uint VertexID : SV_VertexID )
 	Out.position.z = 0.0;
 	Out.position.w = 1.0f;
 
-	Out.texcoord.x = Out.position.x;
-	Out.texcoord.y = Out.position.y;
+	Out.texcoord.x = ( Out.position.x + 1.0 ) / 2.0;
+	Out.texcoord.y = ( Out.position.y + 1.0 ) / 2.0;
 
 	return Out;
 }

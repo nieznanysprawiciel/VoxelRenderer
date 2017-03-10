@@ -14,6 +14,7 @@ namespace vr
 Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
 	:	sw::gui::GUISystem( argc, argv, gui )
 	,	m_camera( new CameraActor())
+	,	m_blitEffect( nullptr )
 {}
 
 
@@ -33,10 +34,10 @@ In this function you should initialize your application logic.
 */
 void		Application::OnInitialized()
 {
+	InitResources();
 	InitCamera();
 	InitRaycaster();
 	InitOctree();
-	InitResources();
 }
 
 /**@brief Function invoked when application is going to close itself.*/
@@ -69,9 +70,9 @@ void		Application::Render()
 	double time = m_timeManager.QueryTimeFromBegin();
 		
 
-	//m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
-	m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
-	//Blit( m_svoRT.Ptr(), m_mainRT.Ptr() );
+	m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
+	//m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
+	m_blitEffect->Blit( m_renderingSystem->GetRenderer(), m_svoRT->GetColorBuffer(), m_mainRT.Ptr() );
 }
 
 // ================================ //
@@ -126,14 +127,18 @@ void		Application::InitResources()
 
 	m_svoRT = m_resourceManager->CreateRenderTarget( L"::SVO_RenderTarget", svoRTDescriptor );
 	assert( m_svoRT );
+
+	auto blendingState = m_resourceManager->CreateBlendingState( L"::DefaultBlendingState", BlendingInfo() );
+	auto rasterizerState = m_resourceManager->CreateRasterizerState( L"::DefaultRasterizerState", RasterizerStateInfo() );
+	auto depthStencilState = m_resourceManager->CreateDepthStencilState( L"::DefaultDepthStencilState", DepthStencilInfo() );
+
+	assert( blendingState );
+	assert( rasterizerState );
+	assert( depthStencilState );
+
+	m_blitEffect = std::unique_ptr< BlitEffect >( new BlitEffect( m_resourceManager ) );
 }
 
-// ================================ //
-//
-void		Application::Blit			( RenderTargetObject* svoRenderTarget, RenderTargetObject* mainRT )
-{
-
-}
 
 
 }	// vr

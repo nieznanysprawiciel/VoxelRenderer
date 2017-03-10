@@ -19,6 +19,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{79e9462c-2e95-4278-b926-d2118347240c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelRenderer\Application\Presentation">
+      <UniqueIdentifier>{0a746ccc-a225-4e43-ada1-1ef80832c358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.cpp">
       <Filter>VoxelRenderer\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.cpp">
+      <Filter>VoxelRenderer\Application\Presentation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,12 +107,18 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.h">
       <Filter>VoxelRenderer\Application</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.h">
+      <Filter>VoxelRenderer\Application\Presentation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\FullscreenTriangleVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\BlitPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

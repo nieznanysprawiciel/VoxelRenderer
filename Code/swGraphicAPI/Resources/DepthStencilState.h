@@ -32,6 +32,7 @@ struct DepthStencilInfo
 	{
 		Compare( EnableDepthTest );
 		Compare( EnableStencilTest );
+		return true;
 	}
 
 #undef Compare

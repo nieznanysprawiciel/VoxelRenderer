@@ -9,7 +9,7 @@
 
 #include "VoxelRenderer/Application/TimeManager.h"
 
-
+#include "Presentation/BlitEffect.h"
 
 namespace vr
 {
@@ -31,6 +31,8 @@ private:
 
 	ResourcePtr< RenderTargetObject >		m_svoRT;
 	ResourcePtr< RenderTargetObject >		m_mainRT;
+
+	BlitEffectUPtr		m_blitEffect;
 
 	TimeManager			m_timeManager;
 
@@ -59,8 +61,6 @@ private:
 	void			InitOctree		();
 	void			InitResources	();
 	///@}
-
-	void			Blit			( RenderTargetObject* svoRenderTarget, RenderTargetObject* mainRT );
 };
 
 
