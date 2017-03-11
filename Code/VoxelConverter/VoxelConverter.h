@@ -18,6 +18,7 @@ public:
 	bool			Write				( const filesystem::Path& outputFilePath, vr::OctreePtr octree );
 
 	bool			Convert				( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath );
+
 };
 
 

@@ -39,7 +39,7 @@ private:
 	Size							m_sizeTotal;		///< Includes size of nested subtrees to faster traversal.
 	Size							m_gridSize;			///< Power of 2.
 
-	std::vector< OctreeNode >		m_nodes;			///< This can be OctreeNode, OctreeFarPointer, or VoxelAttributes.
+	std::vector< OctreeNode >		m_nodes;			///< This can be OctreeNode, OctreeLeaf, OctreeFarPointer, or VoxelAttributes.
 	Size							m_indirectPtrs;		///< Offset to first free indirect pointer.
 
 	std::vector< OctreePtr >		m_subtrees;

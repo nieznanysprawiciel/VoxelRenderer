@@ -4,6 +4,9 @@
     <Filter Include="VoxelConverter">
       <UniqueIdentifier>{4dc16bf8-bf7f-4882-97aa-9d9dfe09491b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelConverter\Octree">
+      <UniqueIdentifier>{7281555a-376a-4b4d-b298-88a99273c241}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
@@ -12,10 +15,22 @@
     <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp">
       <Filter>VoxelConverter</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp">
+      <Filter>VoxelConverter\Octree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h">
       <Filter>VoxelConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h">
+      <Filter>VoxelConverter\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h">
+      <Filter>VoxelConverter\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h">
+      <Filter>VoxelConverter\Octree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

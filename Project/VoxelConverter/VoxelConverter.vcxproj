@@ -152,9 +152,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
+    <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
