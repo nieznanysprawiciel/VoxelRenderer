@@ -29,13 +29,12 @@ void			BlitEffect::Blit		( IRenderer* renderer, TextureObject* source, RenderTar
 	RenderingHelper::SetRenderTarget( renderer, destRT, m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
 
 	SetShaderStateCommand shaderState;
+	RenderingHelper::ClearTextureState( shaderState );
+
 	shaderState.VertexShader = m_blitVS.Ptr();
 	shaderState.PixelShader = m_blitPS.Ptr();
-	
-	for( auto& tex : shaderState.Textures )
-		tex = nullptr;
 
-	shaderState.Textures[ 0 ] = source;
+	RenderingHelper::SetTexture( shaderState, source, 0, (uint8)ShaderType::PixelShader );
 
 	renderer->SetShaderState( shaderState );
 

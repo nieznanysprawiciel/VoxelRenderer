@@ -41,11 +41,10 @@ void			FakeRaycaster::Render		( OctreePtr octree, RenderTargetObject* svoRenderT
 	RenderingHelper::SetRenderTarget( m_renderer, svoRenderTarget, m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
 
 	SetShaderStateCommand shaderState;
+	RenderingHelper::ClearTextureState( shaderState );
+
 	shaderState.VertexShader = m_vertexShader.Ptr();
 	shaderState.PixelShader = m_pixelShader.Ptr();
-	
-	for( auto& tex : shaderState.Textures )
-		tex = nullptr;
 
 	m_renderer->SetShaderState( shaderState );
 

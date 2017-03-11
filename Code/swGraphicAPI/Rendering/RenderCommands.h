@@ -18,6 +18,7 @@ Commands for @ref IRenderer class.
 
 #define MAX_BOUND_RENDER_TARGETS    8
 #define ENGINE_MAX_TEXTURES         8
+static const uint8	sMaxTextures = 8;
 
 
 /**@brief Base class for renderer commands.
@@ -137,8 +138,8 @@ struct SetShaderStateCommand : public RendererCommand
 {
 	VertexShader*		VertexShader;
 	PixelShader*		PixelShader;
-	TextureObject*		Textures[ 8 ];
-	uint8				BindToShader[ 8 ];		///< Use @ref ShaderType flag. @note ShaderType::ComputeShader will be ignored.
+	TextureObject*		Textures[ sMaxTextures ];
+	uint8				BindToShader[ sMaxTextures ];		///< Use @ref ShaderType flag. @note ShaderType::ComputeShader will be ignored.
 };
 
 

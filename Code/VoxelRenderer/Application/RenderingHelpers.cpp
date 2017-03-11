@@ -93,4 +93,26 @@ void					RenderingHelper::DrawBufferLess					( IRenderer* renderer, uint32 numVe
 	renderer->Draw( drawCmd );
 }
 
+// ================================ //
+//
+void					RenderingHelper::SetTexture						( SetShaderStateCommand& command, TextureObject* texture, uint8 bindingPoint, uint8 bindShader )
+{
+	assert( bindingPoint < sMaxTextures );
+	command.Textures[ bindingPoint ] = texture;
+	command.BindToShader[ bindingPoint ] = bindShader;
+}
+
+// ================================ //
+//
+void					RenderingHelper::ClearTextureState				( SetShaderStateCommand& command )
+{
+	// Clear textures.
+	for( auto& tex : command.Textures )
+		tex = nullptr;
+
+	// Clear binding information.
+	for( auto& bind : command.BindToShader )
+		bind = 0;
+}
+
 

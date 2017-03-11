@@ -61,6 +61,13 @@ public:
 
 	/**@brief Draw without using buffer.*/
 	static void					DrawBufferLess				( IRenderer* renderer, uint32 numVerticies, PrimitiveTopology topology );
+
+	/**@brief Set texture in command.
+	@param[in] bindShader Flags @ref ShaderType can be combined with operator|.*/
+	static void					SetTexture					( SetShaderStateCommand& command, TextureObject* texture, uint8 bindingPoint, uint8 bindShader );
+
+	/**@brief Set all textures to nullptr.*/
+	static void					ClearTextureState			( SetShaderStateCommand& command );
 };
 
 
