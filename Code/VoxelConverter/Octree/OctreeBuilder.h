@@ -19,11 +19,12 @@ class OctreeBuilder
 private:
 
 	Size			m_numInitIndirectPtrs;
+	Size			m_maxDirectOffset;
 
 	Size			m_numNodes;
 	Size			m_numAttribs;
 
-	std::unique_ptr< ooc::Octree[] >		m_octree;
+	std::unique_ptr< ooc::OctreeNode[] >	m_octree;
 	std::unique_ptr< ooc::Payload[] >		m_attributes;
 
 	std::vector< OctreeNode >				m_data;
@@ -41,10 +42,24 @@ public:
 
 private:
 
-	Size			ComputeMemory			( Size numNodes, Size numAttributes );
-	void			BuildEmptyStructure		();
-	void			BuildAttributesSegment	();
-	void			BuildNodeHierarchy		();
+	Size				ComputeMemory			( Size numNodes, Size numAttributes );
+	void				BuildEmptyStructure		();
+	void				BuildAttributesSegment	();
+	void				BuildNodeHierarchy		();
+	void				BuildNodeHierarchy		( ooc::OctreeNode& srcNode, Size srcOffset, vr::OctreeNode& dstNode );
+
+	bool				IsLeafNode				( ooc::OctreeNode& srcNode );
+	int8				CountChildren			( ooc::OctreeNode& srcNode );
+	void				SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode& dstNode );
+
+	VoxelAttributes&	AccessAttributes		( uint64 dataOffset );
+	vr::OctreeNode&		AccessNode				( uint32 absolutOffset );
+	Size				AllocateNodes			( uint8 numNodes );
+	uint32				ComputeAttribOffset		( uint64 dataOffset );
+
+	ooc::OctreeNode&	AccessNext				( ooc::OctreeNode& parent, uint8& startIdx );
+
+	Size				ComputeMaxDirectOffset	();
 };
 
 

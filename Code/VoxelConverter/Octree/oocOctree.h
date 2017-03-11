@@ -8,7 +8,7 @@ namespace ooc
 {
 
 /**@brief Source octree node type.*/
-struct Octree
+struct OctreeNode
 {
 	uint64			ChildrenBaseOffset;
 	int8			ChildOffset[ 8 ];

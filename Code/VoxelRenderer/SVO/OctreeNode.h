@@ -45,4 +45,10 @@ struct BlockDescriptor
 	uint32			RootNodeOffset;			///< Offset to root node of nodes hierarchy.
 };
 
+template< typename CastType >
+CastType&		Cast		( OctreeNode& node )
+{
+	return reinterpret_cast< CastType& >( node );
+}
+
 }	// svo

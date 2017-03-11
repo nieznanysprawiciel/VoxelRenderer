@@ -17,6 +17,7 @@ OctreeBuilder::OctreeBuilder()
 	,	m_curNodesOffset( 0 )
 	,	m_curIndirectOffset( 0 )
 	,	m_attributesOffset( 0 )
+	,	m_maxDirectOffset( ComputeMaxDirectOffset() )
 {}
 
 // ================================ //
@@ -26,7 +27,7 @@ OctreePtr			OctreeBuilder::BuildOctree		( OctreeFile& srcOctree )
 	m_numNodes = srcOctree.node_count;
 	m_numAttribs = srcOctree.data_count;
 
-	m_octree = std::unique_ptr< ooc::Octree[] >( new ooc::Octree[ srcOctree.node_count ] );
+	m_octree = std::unique_ptr< ooc::OctreeNode[] >( new ooc::OctreeNode[ srcOctree.node_count ] );
 	m_attributes = std::unique_ptr< ooc::Payload[] >( new ooc::Payload[ srcOctree.data_count ] );
 
 	srcOctree.readNode( (byte*)m_octree.get() );
@@ -34,7 +35,7 @@ OctreePtr			OctreeBuilder::BuildOctree		( OctreeFile& srcOctree )
 
 	BuildEmptyStructure();
 	BuildAttributesSegment();
-
+	BuildNodeHierarchy();
 
 	return nullptr;
 }
@@ -50,7 +51,7 @@ void				OctreeBuilder::BuildEmptyStructure	()
 	memset( m_data.data(), 0, indirectSize );
 	
 	// Fill block descriptor.
-	BlockDescriptor& desc = reinterpret_cast< BlockDescriptor& >( *m_data.data() );
+	BlockDescriptor& desc = Cast< BlockDescriptor& >( *m_data.data() );
 	desc.RootNodeOffset = static_cast< uint32 >( indirectSize / sizeof( vr::OctreeNode ) );
 	desc.AttributesOffset = static_cast< uint32 >( desc.RootNodeOffset + m_numNodes );
 
@@ -66,7 +67,7 @@ void				OctreeBuilder::BuildAttributesSegment()
 	for( Size i = 0; i < m_numAttribs; ++i )
 	{
 		ooc::Payload& payload = m_attributes[ i ];
-		vr::VoxelAttributes& attribute = reinterpret_cast< vr::VoxelAttributes& >( *m_data.data() );
+		vr::VoxelAttributes& attribute = AccessAttributes( i );
 
 		attribute.Normal = payload.Normal;
 		attribute.Color = DirectX::PackedVector::XMCOLOR( payload.Color.x, payload.Color.y, payload.Color.z, 1.0f );
@@ -75,14 +76,155 @@ void				OctreeBuilder::BuildAttributesSegment()
 
 // ================================ //
 //
-void				OctreeBuilder::BuildNodeHierarchy()
+void				OctreeBuilder::BuildNodeHierarchy	()
 {
-
+	auto absolutOffset = m_curNodesOffset++;
+	BuildNodeHierarchy( m_octree[ 0 ], absolutOffset, Cast< vr::OctreeNode& >( m_data[ m_curNodesOffset ] ) );
 }
 
 // ================================ //
 //
-Size				OctreeBuilder::ComputeMemory	( Size numNodes, Size numAttributes )
+void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOffset, vr::OctreeNode& dstNode )
+{
+	auto numChildren = CountChildren( srcNode );
+	if( IsLeafNode( srcNode ) )
+	{
+		vr::OctreeLeaf& leaf = Cast< vr::OctreeLeaf& >( dstNode );
+		leaf.IsLeafNode = true;
+		leaf.AttributesOffset = ComputeAttribOffset( srcNode.DataAddress );
+	}
+	else
+	{
+		dstNode.IsLeafNode = false;
+		SetChildMask( srcNode, dstNode );
+		
+		Size absolutOffset = AllocateNodes( numChildren );
+		Size nodesOffset = absolutOffset - srcOffset;
+
+		if( nodesOffset > m_maxDirectOffset )
+		{
+			// Make indirect pointer.
+			dstNode.IndirectPtr = true;
+			assert( !"Implement me" );
+			//absolutOffset = 
+		}
+		else
+		{
+			dstNode.IndirectPtr = false;
+			dstNode.ChildPackPtr = nodesOffset;
+		}
+
+		uint8 srcChildIdx = 0;
+		for( int i = 0; i < numChildren; ++i )
+		{
+			vr::OctreeNode& child = AccessNode( (uint32)absolutOffset );
+			ooc::OctreeNode& srcChild = AccessNext( srcNode, srcChildIdx );
+
+			BuildNodeHierarchy( srcChild, absolutOffset, dstNode );
+
+			absolutOffset++;
+		}
+	}
+}
+
+// ================================ //
+//
+bool				OctreeBuilder::IsLeafNode			( ooc::OctreeNode& srcNode )
+{
+	bool hasChild = false;
+	for( auto child : srcNode.ChildOffset )
+	{
+		if( child >= 0 )
+			hasChild = true;
+	}
+
+	return !hasChild;
+}
+
+// ================================ //
+//
+int8				OctreeBuilder::CountChildren		( ooc::OctreeNode& srcNode )
+{
+	int8 numChildren = 0;
+	for( auto child : srcNode.ChildOffset )
+	{
+		if( child >= 0 )
+			numChildren++;
+	}
+
+	return numChildren;
+}
+
+// ================================ //
+//
+void				OctreeBuilder::SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode& dstNode )
+{
+	uint8 childMask = 1;
+	for( auto child : srcNode.ChildOffset )
+	{
+		if( child >= 0 )
+			dstNode.ChildMask = dstNode.ChildMask | childMask;
+
+		childMask = childMask << 1;
+	}
+}
+
+// ================================ //
+/// @param[in] dataOffset is index in m_attributes array.
+VoxelAttributes&	OctreeBuilder::AccessAttributes		( uint64 dataOffset )
+{
+	auto offset = ComputeAttribOffset( dataOffset );
+	return Cast< VoxelAttributes& >( m_data[ offset ] );
+}
+
+// ================================ //
+//
+vr::OctreeNode&		OctreeBuilder::AccessNode			( uint32 absolutOffset )
+{
+	return Cast< vr::OctreeNode& >( m_data[ absolutOffset ] );
+}
+
+// ================================ //
+//
+Size				OctreeBuilder::AllocateNodes		( uint8 numNodes )
+{
+	Size firstNodeOffset = m_curNodesOffset;
+	m_curNodesOffset += numNodes * sizeof( vr::OctreeNode );
+	return firstNodeOffset;
+}
+
+// ================================ //
+//
+uint32				OctreeBuilder::ComputeAttribOffset	( uint64 dataOffset )
+{
+	// Data offset indexes m_attributes array. Sizeof( vr::OctreeNode ) is our allocation unit.
+	// sizeof( vr::VoxelAttributes ) / sizeof( vr::OctreeNode ) is num allocations units possesed by VoxelAttributes.
+	auto offset = m_attributesOffset + dataOffset * sizeof( vr::VoxelAttributes ) / sizeof( vr::OctreeNode );
+	assert( offset < std::numeric_limits< uint32 >::max() );
+	return (uint32)offset;
+}
+
+// ================================ //
+//
+ooc::OctreeNode&	OctreeBuilder::AccessNext			( ooc::OctreeNode& parent, uint8& startIdx )
+{
+	for( ; startIdx < 8; ++startIdx )
+	{
+		if( parent.ChildOffset[ startIdx ] >= 0 )
+		{
+			Size offset = parent.ChildrenBaseOffset + parent.ChildOffset[ startIdx ];
+			return m_octree[ offset ];
+		}
+	}
+
+	assert( false );
+	//throw std::runtime_error( "Trying to access node after end of children array." );
+	return ooc::OctreeNode();
+}
+
+// ================================ //
+//
+Size				OctreeBuilder::ComputeMemory		( Size numNodes, Size numAttributes )
 {
 	Size descriptorSize = sizeof( BlockDescriptor );
 	Size indirectTableSize = m_numInitIndirectPtrs * sizeof( vr::OctreeFarPointer );
@@ -90,6 +232,18 @@ Size				OctreeBuilder::ComputeMemory	( Size numNodes, Size numAttributes )
 	Size nodesSize = numNodes * sizeof( vr::OctreeNode );
 
 	return descriptorSize + indirectTableSize + attributesSize + nodesSize;
+}
+
+
+
+// ================================ //
+//
+Size				OctreeBuilder::ComputeMaxDirectOffset()
+{
+	Size ones = std::numeric_limits< Size >::max();
+	Size max = ones & ( ones >> 42 );
+
+	return max;
 }
 
 
