@@ -33,6 +33,7 @@ private:
 	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraNear, 1000.0f );
 
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, RaycasterType, "" );
+	DEFINE_CONFIG_VALUE_DEFAULT( std::string, OctreeFilePath, "" );
 
 public:
 	explicit		Config	( const std::string& filePath );

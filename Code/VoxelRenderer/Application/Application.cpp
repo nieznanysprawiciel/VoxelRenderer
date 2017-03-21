@@ -108,7 +108,16 @@ void		Application::InitRaycaster	()
 // ================================ //
 //
 void		Application::InitOctree		()
-{}
+{
+	m_octree = std::make_shared< Octree >();
+
+	filesystem::Path filePath = m_config->OctreeFilePath();
+	if( filePath.Exists() )
+	{
+		bool result = m_octree->LoadFromFile( filePath );
+		assert( result );
+	}
+}
 
 // ================================ //
 //

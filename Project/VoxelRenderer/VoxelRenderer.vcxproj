@@ -190,6 +190,9 @@
     <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">
       <Project>{9abcbab4-05b4-47c5-b5d8-f201559fd096}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj">
+      <Project>{50cf2c5d-4a13-4d16-8e65-441fe7155333}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\Serialization\Serialization.vcxproj">
       <Project>{561754cb-295d-4d69-8dbc-bc069d1a636a}</Project>
     </ProjectReference>

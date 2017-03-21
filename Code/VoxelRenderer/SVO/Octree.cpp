@@ -51,6 +51,25 @@ bool		Octree::WriteToFile		( const filesystem::Path& outputFilePath )
 //
 bool		Octree::LoadFromFile	( const filesystem::Path& outputFilePath )
 {
+	sw::HCF hcf;
+	if( hcf.LoadFile( outputFilePath, true ) )
+	{
+		// @todo: Check VoxtreeHeader attribute. In this moment it's imposible, because HCF has no API for this.
+
+		sw::Chunk root = hcf.GetRootChunk();
+		if( root.IsValid() )
+		{
+			// @todo HCF should support loading data to memory address given by external code.
+			// We must have two memory buffers at the same time. This can be too much in case of voxels.
+			auto data = root.AccessData();
+			m_nodes.resize( data.DataSize / sizeof( vr::OctreeNode ) );
+
+			memcpy( m_nodes.data(), data.Data, data.DataSize );
+
+			return true;
+		}
+	}
+
 	return false;
 }
 

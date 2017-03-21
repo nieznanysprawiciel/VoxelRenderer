@@ -61,7 +61,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Win32NativeGUI", "..\Code\s
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VoxelConverter", "VoxelConverter\VoxelConverter.vcxproj", "{07E75BAA-5125-442A-9432-FD5131C5B65A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HierarchicalChunkedFormat", "..\..\SWLibraries\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj", "{50CF2C5D-4A13-4D16-8E65-441FE7155333}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HierarchicalChunkedFormat", "..\Code\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj", "{50CF2C5D-4A13-4D16-8E65-441FE7155333}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

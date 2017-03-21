@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <Import Project="..\Paths.props" />
-  
   <PropertyGroup Label="UserMacros">
     <VoxelRendererName>VoxelRenderer</VoxelRendererName>
     <VoxelRendererLibDir>$(LibDir)$(VoxelRendererName)\</VoxelRendererLibDir>
@@ -10,11 +8,14 @@
     <VoxelRendererFileName>$(VoxelRendererName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</VoxelRendererFileName>
     <VoxelRendererBuildDir>$(BuildDir)$(VoxelRendererName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</VoxelRendererBuildDir>
   </PropertyGroup>
-  
   <PropertyGroup>
     <IntDir>$(VoxelRendererBuildDir)</IntDir>
     <TargetName>$(VoxelRendererFileName)</TargetName>
     <OutDir>$(VoxelRendererLibDir)</OutDir>
   </PropertyGroup>
-
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

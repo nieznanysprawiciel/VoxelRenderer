@@ -146,11 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SWLibraries\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj">
-      <Project>{50cf2c5d-4a13-4d16-8e65-441fe7155333}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
@@ -165,6 +160,11 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj">
+      <Project>{50cf2c5d-4a13-4d16-8e65-441fe7155333}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -64,6 +64,13 @@ Config::Config	( const std::string& filePath )
 				deser.Exit();
 			}
 
+			if( deser.EnterObject( "Octree" ) )
+			{
+				m_OctreeFilePath = deser.GetAttribute( "FilePath", m_OctreeFilePath );
+
+				deser.Exit();
+			}
+
 			deser.Exit();
 		}
 	}
@@ -96,6 +103,14 @@ bool			Config::SaveConfig	( const std::string& filePath ) const
 			ser.Exit();
 
 			ser.SetAttribute( "FOV", m_CameraFov );
+		ser.Exit();
+
+		ser.EnterObject( "Raycaster" );
+			ser.SetAttribute( "Type", m_RaycasterType );
+		ser.Exit();
+
+		ser.EnterObject( "Octree" );
+			ser.SetAttribute( "FilePath", m_OctreeFilePath );
 		ser.Exit();
 
 	ser.Exit();
