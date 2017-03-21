@@ -6,9 +6,53 @@
 #include "VoxelRenderer/SVO/OctreeNode.h"
 #include "VoxelRenderer/SVO/VoxelAttributes.h"
 
+#include <fstream>
+
+
 
 namespace vr
 {
+
+
+// ================================ //
+//
+bool				ReadNodes				( OctreeInfo& srcOctree, uint8* data )
+{
+	string nodesFile = srcOctree.base_filename + string( ".octreenodes" );
+	Size size = srcOctree.n_nodes * sizeof( ooc::OctreeNode );
+
+	//std::ifstream fileStream( nodesFile, std::ios_base::binary );
+	FILE* file = fopen( nodesFile.c_str(), "rb" );
+	if( file )
+	{
+		//fileStream.read( (char*)data, size );
+		fread( (char*)data, 1, size, file );
+		fclose( file );
+		return true;
+	}
+	return false;
+}
+
+// ================================ //
+//
+bool				ReadData				( OctreeInfo& srcOctree, uint8* data )
+{
+	string dataFile = srcOctree.base_filename + string( ".octreedata" );
+	Size size = srcOctree.n_data * sizeof( ooc::Payload );
+
+	//std::ifstream fileStream( dataFile, std::ios_base::binary );
+	FILE* file = fopen( dataFile.c_str(), "rb" );
+	if( file )
+	{
+		//fileStream.read( (char*)data, size );
+		fread( (char*)data, 1, size, file );
+		fclose( file );
+		return true;
+	}
+	return false;
+}
+
+
 
 // ================================ //
 //
@@ -22,20 +66,26 @@ OctreeBuilder::OctreeBuilder()
 
 // ================================ //
 //
-OctreePtr			OctreeBuilder::BuildOctree		( OctreeFile& srcOctree )
+OctreePtr			OctreeBuilder::BuildOctree		( OctreeInfo& srcOctree )
 {
-	m_numNodes = srcOctree.node_count;
-	m_numAttribs = srcOctree.data_count;
+	if( srcOctree.filesExist() )
+	{
+		m_numNodes = srcOctree.n_nodes;
+		m_numAttribs = srcOctree.n_data;
 
-	m_octree = std::unique_ptr< ooc::OctreeNode[] >( new ooc::OctreeNode[ srcOctree.node_count ] );
-	m_attributes = std::unique_ptr< ooc::Payload[] >( new ooc::Payload[ srcOctree.data_count ] );
+		m_octree = std::unique_ptr< ooc::OctreeNode[] >( new ooc::OctreeNode[ m_numNodes ] );
+		m_attributes = std::unique_ptr< ooc::Payload[] >( new ooc::Payload[ m_numAttribs ] );
 
-	srcOctree.readNode( (byte*)m_octree.get() );
-	srcOctree.readData( (byte*)m_attributes.get() );
+		ReadNodes( srcOctree, (uint8*)m_octree.get() );
+		ReadData( srcOctree, (uint8*)m_attributes.get() );
 
-	BuildEmptyStructure();
-	BuildAttributesSegment();
-	BuildNodeHierarchy();
+		BuildEmptyStructure();
+		BuildAttributesSegment();
+		BuildNodeHierarchy();
+
+		OctreePtr octree = std::make_shared< Octree >( std::move( m_data ), srcOctree.gridlength, m_curIndirectOffset );
+		return octree;
+	}
 
 	return nullptr;
 }
@@ -79,7 +129,9 @@ void				OctreeBuilder::BuildAttributesSegment()
 void				OctreeBuilder::BuildNodeHierarchy	()
 {
 	auto absolutOffset = m_curNodesOffset++;
-	BuildNodeHierarchy( m_octree[ 0 ], absolutOffset, Cast< vr::OctreeNode& >( m_data[ m_curNodesOffset ] ) );
+	
+	// Note: Last node is root node, not first.
+	BuildNodeHierarchy( m_octree[ m_numNodes - 1 ], absolutOffset, Cast< vr::OctreeNode& >( m_data[ m_curNodesOffset ] ) );
 }
 
 // ================================ //

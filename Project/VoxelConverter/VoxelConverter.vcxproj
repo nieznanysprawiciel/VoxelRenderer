@@ -154,12 +154,17 @@
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -184,6 +184,7 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">

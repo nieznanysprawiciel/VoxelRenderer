@@ -2,6 +2,7 @@
 
 
 #include "swCommonLib/Common/TypesDefinitions.h"
+#include "swCommonLib/System/Path.h"
 
 #include "OctreeNode.h"
 #include "VoxelAttributes.h"
@@ -46,12 +47,21 @@ private:
 
 protected:
 public:
-	explicit		Octree();
-	~Octree() = default;
+	explicit		Octree	();
+	explicit		Octree	( std::vector< OctreeNode >&& data, Size gridSize, Size firstFreeIndirectOffset );
+					~Octree	() = default;
 
 
 	Size			GetSubtreeTotalSize		() { return m_sizeTotal; }
 	Size			GetGridSize				() { return m_gridSize; }
+	Size			GetFirstFreeIndirect	() { return m_indirectPtrs;  }
+
+
+	const std::vector< OctreeNode >&		AccessOctree	() { return m_nodes;  }
+
+public:
+	bool			WriteToFile			( const filesystem::Path& outputFilePath );
+	bool			LoadFromFile		( const filesystem::Path& outputFilePath );
 };
 
 

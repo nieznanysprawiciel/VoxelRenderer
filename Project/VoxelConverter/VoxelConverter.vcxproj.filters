@@ -7,6 +7,9 @@
     <Filter Include="VoxelConverter\Octree">
       <UniqueIdentifier>{7281555a-376a-4b4d-b298-88a99273c241}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelConverter\SVO">
+      <UniqueIdentifier>{f3bb0e66-5aca-4ca0-a9ba-319708e89856}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
@@ -17,6 +20,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp">
       <Filter>VoxelConverter\Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp">
+      <Filter>VoxelConverter\SVO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +37,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h">
       <Filter>VoxelConverter\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h">
+      <Filter>VoxelConverter\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h">
+      <Filter>VoxelConverter\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h">
+      <Filter>VoxelConverter\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h">
+      <Filter>VoxelConverter\SVO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

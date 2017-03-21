@@ -110,6 +110,9 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.h">
       <Filter>VoxelRenderer\Application\Presentation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h">
+      <Filter>VoxelRenderer\SVO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">

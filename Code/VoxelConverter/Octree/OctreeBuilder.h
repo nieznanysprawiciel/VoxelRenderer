@@ -2,7 +2,7 @@
 
 #include "swCommonLib/Common/TypesDefinitions.h"
 
-#include "liboctree/include/octree_io.h"
+#include "ooc_svo_builder/src/svo_builder/octree_io.h"
 
 #include "VoxelConverter/Octree/oocOctree.h"
 #include "VoxelConverter/Octree/oocPayload.h"
@@ -38,7 +38,7 @@ public:
 	explicit		OctreeBuilder		();
 					~OctreeBuilder		() = default;
 
-	OctreePtr		BuildOctree			( OctreeFile& srcOctree );
+	OctreePtr		BuildOctree			( OctreeInfo& srcOctree );
 
 private:
 

@@ -1,9 +1,11 @@
 #include "VoxelConverter.h"
 
 
-#include "liboctree/include/octree_io.h"
+#include "ooc_svo_builder/src/svo_builder/octree_io.h"
 
 #include "Octree/OctreeBuilder.h"
+#include "VoxelRenderer/SVO/VoxtreeHeader.h"
+#include "swCommonLib/HierarchicalChunkedFormat/HCF.h"
 
 
 
@@ -20,7 +22,8 @@ bool			VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const f
 //
 vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 {
-	auto srcOctree = readOctreeFile( inputFilePath.String() );
+	OctreeInfo srcOctree;
+	parseOctreeHeader( inputFilePath.String(), srcOctree );
 
 	vr::OctreeBuilder builder;
 	return builder.BuildOctree( srcOctree );
@@ -30,7 +33,7 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 //
 bool			VoxelConverter::Write		( const filesystem::Path& outputFilePath, vr::OctreePtr octree )
 {
-	return false;
+	return octree->WriteToFile( outputFilePath );
 }
 
 
