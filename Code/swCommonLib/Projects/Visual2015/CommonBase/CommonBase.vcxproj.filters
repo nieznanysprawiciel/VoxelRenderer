@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\..\System\File.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\Semaphore.cpp">
+      <Filter>Common\Multithreading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Common\Converters.h">
@@ -96,6 +99,9 @@
       <Filter>Common\Multithreading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h">
       <Filter>Common\Multithreading</Filter>
     </ClInclude>
   </ItemGroup>

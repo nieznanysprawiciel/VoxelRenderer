@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp" />
     <ClCompile Include="..\..\..\Common\EngineObject.cpp" />
+    <ClCompile Include="..\..\..\Common\Multithreading\Semaphore.cpp" />
     <ClCompile Include="..\..\..\Common\Properties\Properties.cpp" />
     <ClCompile Include="..\..\..\System\Dir.cpp" />
     <ClCompile Include="..\..\..\System\File.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="..\..\..\Common\EngineObject.h" />
     <ClInclude Include="..\..\..\Common\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Common\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h" />
     <ClInclude Include="..\..\..\Common\Nullable.h" />
