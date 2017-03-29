@@ -16,6 +16,9 @@
     <Filter Include="Common\Config">
       <UniqueIdentifier>{9fe33451-06b3-4f57-b44c-6d13c623c1db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Multithreading">
+      <UniqueIdentifier>{d2e3373f-b49e-4611-a93b-e727e7ceeb9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp">
@@ -88,6 +91,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Config\ConfigHelper.h">
       <Filter>Common\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h">
+      <Filter>Common\Multithreading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

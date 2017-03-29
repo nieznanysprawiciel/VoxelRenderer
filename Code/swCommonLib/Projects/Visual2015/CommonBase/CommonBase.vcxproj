@@ -31,6 +31,8 @@
     <ClInclude Include="..\..\..\Common\EngineObject.h" />
     <ClInclude Include="..\..\..\Common\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Common\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h" />
     <ClInclude Include="..\..\..\Common\Nullable.h" />
     <ClInclude Include="..\..\..\Common\ObjectDeleter.h" />
     <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h" />
