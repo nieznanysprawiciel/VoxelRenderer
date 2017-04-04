@@ -22,6 +22,8 @@
     <ClCompile Include="..\..\..\Common\Converters.cpp" />
     <ClCompile Include="..\..\..\Common\EngineObject.cpp" />
     <ClCompile Include="..\..\..\Common\Multithreading\Semaphore.cpp" />
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsBarrier.cpp" />
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsLatch.cpp" />
     <ClCompile Include="..\..\..\Common\Properties\Properties.cpp" />
     <ClCompile Include="..\..\..\System\Dir.cpp" />
     <ClCompile Include="..\..\..\System\File.cpp" />
@@ -35,6 +37,8 @@
     <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsBarrier.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsLatch.h" />
     <ClInclude Include="..\..\..\Common\Nullable.h" />
     <ClInclude Include="..\..\..\Common\ObjectDeleter.h" />
     <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h" />

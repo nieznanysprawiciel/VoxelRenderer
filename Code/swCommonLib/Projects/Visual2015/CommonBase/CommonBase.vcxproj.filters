@@ -39,6 +39,12 @@
     <ClCompile Include="..\..\..\Common\Multithreading\Semaphore.cpp">
       <Filter>Common\Multithreading</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsBarrier.cpp">
+      <Filter>Common\Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsLatch.cpp">
+      <Filter>Common\Multithreading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Common\Converters.h">
@@ -102,6 +108,12 @@
       <Filter>Common\Multithreading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsBarrier.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsLatch.h">
       <Filter>Common\Multithreading</Filter>
     </ClInclude>
   </ItemGroup>

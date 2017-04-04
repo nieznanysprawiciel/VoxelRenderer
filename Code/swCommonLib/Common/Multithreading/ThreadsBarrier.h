@@ -1,14 +1,12 @@
 #pragma once
 /**
-@file Demaphore.h
+@file ThreadsBarrier.h
 @author nieznanysprawiciel
 @copyright File is part of Sleeping Wombat Libraries.
 */
 
-
-
-
 #include "swCommonLib/Common/TypesDefinitions.h"
+
 
 #include <mutex>
 #include <condition_variable>
@@ -19,29 +17,24 @@ namespace sw
 
 
 
-/**@brief Semaphore class.
+/**@brief Can block multiple threads and wait for signal.
+ThreadsBarrier is reusable.
 
-@ingroup Multithreading.*/
-class Semaphore
+@todo Implement*/
+class ThreadsBarrier
 {
 private:
 
 	std::mutex                  m_lock;
 	std::condition_variable     m_condVariable;
-	Size						m_count;
+	const uint16				m_numThreads;
 
+protected:
 public:
-
-	explicit        Semaphore( Size initCount )
-		: m_count( initCount )
-	{}
-
-	void    Down    ();
-	bool    TryDown ();
-	void    Up      ();
+	explicit		ThreadsBarrier		( uint16 numThreads );
+					~ThreadsBarrier		() = default;
 
 };
-
 
 
 }	// sw
