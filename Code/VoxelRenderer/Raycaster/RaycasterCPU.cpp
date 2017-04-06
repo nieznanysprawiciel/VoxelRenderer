@@ -1,5 +1,7 @@
 #include "RaycasterCPU.h"
 
+#include "swCommonLib/Common/Multithreading/ThreadsLatch.h"
+
 
 #include <iostream>
 
@@ -15,9 +17,25 @@ RaycasterCPU::RaycasterCPU()
 	,	m_width( 0 )
 	,	m_renderer( nullptr )
 	,	m_resourceManager( nullptr )
-	,	m_run( false )
 	,	m_end( false )
+	,	m_raycastEndBarrier( std::thread::hardware_concurrency() )
+	,	m_raycastLoopBarrier( std::thread::hardware_concurrency() )
 {}
+
+// ================================ //
+//
+RaycasterCPU::~RaycasterCPU()
+{
+	m_end = true;
+
+	if( m_threadPool.size() != 0 )
+	{
+		m_raycastLoopBarrier.ArriveAndWait();
+
+		for( auto& thread : m_threadPool )
+			thread.join();
+	}
+}
 
 // ================================ //
 //
@@ -33,7 +51,7 @@ void			RaycasterCPU::Init			( IRenderer* renderer, ResourceManager* resourceMana
 void			RaycasterCPU::Render		( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
 	if( m_width != camera->GetWidth() || m_height != camera->GetHeight() )
-		ReallocateRenderBuffer( camera->GetWidth(), camera->GetHeight() );
+		ReallocateRenderBuffer( (uint16)camera->GetWidth(), (uint16)camera->GetHeight() );
 
 	SpawnThreads( octree, camera );
 	UpdateRenderTarget( m_renderBuffer.get(), svoRenderTarget );
@@ -43,33 +61,53 @@ void			RaycasterCPU::Render		( OctreePtr octree, RenderTargetObject* svoRenderTa
 //
 void			RaycasterCPU::SpawnThreads				( OctreePtr octree, CameraActor* camera )
 {
-	// Run threads
-	m_run = true;
-	m_condition.notify_all();
+	// Prepare data for threads
+	for( auto& threadData : m_threadData )
+	{
+		threadData.Octree = octree;
+		threadData.Camera = camera;
+	}
 
-	m_run = false;
+	// Spawn all threads.
+	if( m_threadPool.size() == 0 )
+	{
+		// First loop. Start threads
+		for( unsigned int i = 1; i < GetNumThreads(); ++i )
+		{
+			m_threadPool.push_back( std::thread( &RaycasterCPU::RaycasterThread, this, i ) );
+		}
+	}
+	else
+	{
+		// Start raycasting - notify threads.
+		m_raycastLoopBarrier.ArriveAndWait();
+	}
+
+	// GUI threads works on his part of buffer too.
+	RaycasterThreadImpl( m_threadData[ 0 ] );
 }
 
 // ================================ //
 //
-void			RaycasterCPU::ThreadWait()
+void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 {
-	while( !m_run )
-		m_condition.wait( m_lock );
+	while( !m_end )
+	{
+		RaycasterThreadImpl( m_threadData[ threadNumber ] );
 
-	// Check it to be sure.
-	if( !m_run )
-		std::cout << "Spurious wake up!\n";
+		// Block until next frame.
+		m_raycastLoopBarrier.ArriveAndWait();
+	}
 }
 
 // ================================ //
 //
-void			RaycasterCPU::RaycasterThread			( OctreePtr octree, CameraActor* camera, uint32 startRange, uint32 endRange )
+void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data )
 {
-	ThreadWait();
 
 
-
+	// All threads must end before buffer will be furthr processed.
+	m_raycastEndBarrier.ArriveAndWait();
 }
 
 // ================================ //
@@ -78,7 +116,15 @@ void			RaycasterCPU::PrepareThreads()
 {
 	auto numThreads = std::thread::hardware_concurrency();
 	assert( numThreads );
-	m_threadPool.reserve( numThreads );
+	m_threadPool.reserve( numThreads - 1 );		// Note: GUI thread will work too.
+	m_threadData.resize( numThreads );
+}
+
+// ================================ //
+//
+uint16			RaycasterCPU::GetNumThreads() const
+{
+	return (uint16)m_threadPool.size() + 1;
 }
 
 // ================================ //
@@ -88,7 +134,24 @@ void			RaycasterCPU::ReallocateRenderBuffer	( uint16 newWidth, uint16 newHeight 
 	m_width = newWidth;
 	m_height = newHeight;
 
-	m_renderBuffer = std::unique_ptr< uint32[] >( new uint32[ m_height * m_width ] );
+	auto numThreads = GetNumThreads();
+	auto numPixels = m_height * m_width;
+	auto pixPerThread = numPixels / numThreads;
+
+	m_renderBuffer = std::unique_ptr< uint32[] >( new uint32[ numPixels ] );
+
+	uint32 bufferOffset = 0;
+	for( auto& threadData : m_threadData )
+	{
+		threadData.Buffer = m_renderBuffer.get();
+		threadData.StartRange = bufferOffset;
+		threadData.EndRange = bufferOffset + pixPerThread;
+
+		bufferOffset += pixPerThread;
+	}
+
+	// If number of pixels can't be devided by number of threads, we add remaining pixels to last thread.
+	m_threadData.back().EndRange += numPixels % numThreads;
 }
 
 // ================================ //

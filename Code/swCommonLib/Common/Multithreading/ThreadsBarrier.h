@@ -20,6 +20,8 @@ namespace sw
 /**@brief Can block multiple threads and wait for signal.
 ThreadsBarrier is reusable.
 
+Implementation based on http://stackoverflow.com/questions/24465533/implementing-boostbarrier-in-c11
+
 @todo Implement*/
 class ThreadsBarrier
 {
@@ -27,13 +29,16 @@ private:
 
 	std::mutex                  m_lock;
 	std::condition_variable     m_condVariable;
-	const uint16				m_numThreads;
+	Size						m_generation;
+	const uint32				m_numThreads;
+	uint32						m_remain;
 
 protected:
 public:
 	explicit		ThreadsBarrier		( uint16 numThreads );
 					~ThreadsBarrier		() = default;
 
+	void			ArriveAndWait		();
 };
 
 

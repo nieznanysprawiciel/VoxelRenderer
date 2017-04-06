@@ -25,6 +25,8 @@ void		ThreadsLatch::ArriveAndWait()
 {
 	std::unique_lock< std::mutex > lock( m_lock );
 	
+	m_remain--;
+
 	if( m_remain == 0 )
 	{
 		m_condVariable.notify_all();

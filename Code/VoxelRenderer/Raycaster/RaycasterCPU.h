@@ -3,6 +3,8 @@
 
 #include "IRaycaster.h"
 
+#include "swCommonLib/Common/Multithreading/ThreadsBarrier.h"
+
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -12,6 +14,15 @@
 namespace vr
 {
 
+
+struct ThreadData
+{
+	OctreePtr			Octree;
+	CameraActor*		Camera;
+	uint32*				Buffer;
+	uint32				StartRange;
+	uint32				EndRange;
+};
 
 
 
@@ -28,16 +39,18 @@ private:
 	std::unique_ptr< uint32[] >		m_renderBuffer;
 
 	std::vector< std::thread >		m_threadPool;
-	std::mutex						m_lock;
-	std::condition_variable_any		m_condition;
-	std::atomic< bool >				m_run;
+	std::vector< ThreadData >		m_threadData;
+
+	sw::ThreadsBarrier				m_raycastEndBarrier;
+	sw::ThreadsBarrier				m_raycastLoopBarrier;
+	
 	std::atomic< bool >				m_end;
 
 
 protected:
 public:
 	explicit		RaycasterCPU		();
-					~RaycasterCPU		() = default;
+					~RaycasterCPU		();
 
 
 	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		override;
@@ -48,11 +61,12 @@ private:
 	void			ReallocateRenderBuffer	( uint16 newWidth, uint16 newHeight );
 	void			UpdateRenderTarget		( uint32* buffer, RenderTargetObject* svoRenderTarget );
 	void			SpawnThreads			( OctreePtr octree, CameraActor* camera );
-	void			ThreadWait				();
 
-	void			RaycasterThread			( OctreePtr octree, CameraActor* camera, uint32 startRange, uint32 endRange );
+	void			RaycasterThread			( Size threadNumber );
+	void			RaycasterThreadImpl		( ThreadData& data );
 
 	void			PrepareThreads			();
+	uint16			GetNumThreads			() const;
 };
 
 
