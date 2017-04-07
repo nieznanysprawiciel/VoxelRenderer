@@ -104,7 +104,15 @@ void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 //
 void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data )
 {
+	// For all pixels in range
 
+		// Find starting position
+
+		// Raycast octree
+
+		// Shading
+
+		// Fill pixel
 
 	// All threads must end before buffer will be furthr processed.
 	m_raycastEndBarrier.ArriveAndWait();

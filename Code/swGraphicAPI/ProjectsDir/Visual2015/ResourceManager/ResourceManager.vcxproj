@@ -39,6 +39,7 @@
     <ClInclude Include="..\..\..\Resources\ResourcePtr.h" />
     <ClInclude Include="..\..\..\Resources\ResourcesFactory.h" />
     <ClInclude Include="..\..\..\Resources\SwapChain.h" />
+    <ClInclude Include="..\..\..\Resources\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ResourceManager\ResourceManager.cpp" />
@@ -49,6 +50,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\Resources\MeshResources.cpp" />
+    <ClCompile Include="..\..\..\Resources\Texture.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9F71F0DA-1D72-4E96-93B7-5AC2C9CB6EDE}</ProjectGuid>

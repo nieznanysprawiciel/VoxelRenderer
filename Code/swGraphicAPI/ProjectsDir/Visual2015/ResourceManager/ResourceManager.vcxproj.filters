@@ -75,6 +75,9 @@
     <ClInclude Include="..\..\..\ResourceManager\stdafx.h">
       <Filter>PrecompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Resources\Texture.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\ResourceManager\ResourceManager.cpp">
@@ -85,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\ResourceManager\stdafx.cpp">
       <Filter>PrecompiledHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Resources\Texture.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
