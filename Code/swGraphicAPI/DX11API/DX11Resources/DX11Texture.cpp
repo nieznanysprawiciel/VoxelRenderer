@@ -34,7 +34,6 @@ void DX11Texture::Construct()
 }
 
 
-
 /**@brief Remember to release tex and texView (Call com interface Release method)*/
 DX11Texture::DX11Texture( TextureInfo&& texInfo, ID3D11Texture2D* tex, ID3D11ShaderResourceView* texView )
 	:	m_texture( tex )
@@ -219,4 +218,89 @@ D3D11_TEXTURE2D_DESC			DX11Texture::FillDesc	( const TextureInfo& texInfo )
 
 	return texDesc;
 }
+
+
+// ================================ //
+//
+bool						DX11Texture::UpdateData			( uint8* dataPtr, uint16 mipLevel, uint16 arrayIdx )
+{
+	// Texture must be updatable.
+	if( m_descriptor.Usage == ResourceUsage::RESOURCE_USAGE_STATIC ||
+		m_descriptor.Usage == ResourceUsage::RESOURCE_USAGE_STAGING )
+		return false;
+
+	if( mipLevel > m_descriptor.MipMapLevels ||
+		mipLevel < 1 )
+		return false;
+
+	if( m_descriptor.ArraySize > 1 )
+	{
+		// If texture is textures array, check array index.
+		if( m_descriptor.ArraySize < arrayIdx )
+			return false;
+	}
+	else
+	{
+		// If texture is not an array set array index to first array element.
+		arrayIdx = 1;
+	}
+
+	// mipLevel == 1 have index 0.
+	uint16 subresourceIdx = ( mipLevel - 1 ) + m_descriptor.MipMapLevels * ( arrayIdx - 1 );
+
+	D3D11_MAPPED_SUBRESOURCE updateData;
+	HRESULT result = device_context->Map( m_texture.Get(), subresourceIdx, D3D11_MAP_WRITE_DISCARD, 0, &updateData );
+	if( SUCCEEDED( result ) )
+	{
+		memcpy( updateData.pData, dataPtr, MipLevelSize( mipLevel ) );	
+		device_context->Unmap( m_texture.Get(), subresourceIdx );
+
+		return true;
+	}
+
+	return false;
+}
+
+//====================================================================================//
+//			Internal helpers	
+//====================================================================================//
+
+
+// ================================ //
+//
+uint16			DX11Texture::MipWidth		( uint16 mipLevel ) const
+{
+	if( mipLevel > m_descriptor.MipMapLevels )
+		return 0;
+
+	uint32 mipDivider = 0x1 << ( mipLevel - 1 );	// MipLevel = 1 means original texture level.
+	return m_descriptor.TextureWidth / mipDivider;
+}
+
+// ================================ //
+//
+uint16			DX11Texture::MipHeight		( uint16 mipLevel ) const
+{
+	if( mipLevel > m_descriptor.MipMapLevels )
+		return 0;
+
+	uint32 mipDivider = 0x1 << ( mipLevel - 1 );	// MipLevel = 1 means original texture level.
+	return m_descriptor.TextureWidth / mipDivider;
+}
+
+// ================================ //
+//
+uint32			DX11Texture::MipRowSize		( uint16 mipLevel ) const
+{
+	uint32 bytesPerPix = (uint32)DX11ConstantsMapper::BytesPerPixel( DX11ConstantsMapper::Get( m_descriptor.Format ) );
+	return MipWidth( mipLevel ) * bytesPerPix;
+}
+
+// ================================ //
+//
+uint32			DX11Texture::MipLevelSize	( uint16 mipLevel ) const
+{
+	return MipRowSize( mipLevel ) * MipHeight( mipLevel );
+}
+
 

@@ -138,7 +138,15 @@ public:
 
 	virtual const filesystem::Path&		GetFilePath		() const = 0;		///< Returns name of file, from which this object was created.
 
-	virtual MemoryChunk					CopyData		() const = 0;		///< Copies texture data from graphic card to memory chunk.
+	/**@brief Updates texture data on graphic card.
+	Note that size of dataPtr memory must large be enough to fill requested miplevel and array idx.
+	You can always check @ref GetDescriptor function to get desired info.
+
+	@todo Do something with this when rendering will use event queues.*/
+	virtual bool						UpdateData		( uint8* dataPtr, uint16 mipLevel, uint16 arrayIdx ) = 0;
+
+	/**@brief Copies texture data from graphic card to memory chunk.*/
+	virtual MemoryChunk					CopyData		() const = 0;
 	virtual const TextureInfo&			GetDescriptor	() const = 0;		///< Gets texture descriptor.
 
 	virtual std::string					GetResourceName	() const override { return GetFilePath().String(); }
