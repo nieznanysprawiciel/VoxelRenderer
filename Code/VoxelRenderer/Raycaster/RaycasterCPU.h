@@ -49,6 +49,7 @@ private:
 
 protected:
 public:
+
 	explicit		RaycasterCPU		();
 					~RaycasterCPU		();
 
@@ -58,12 +59,15 @@ public:
 
 
 private:
+
 	void			ReallocateRenderBuffer	( uint16 newWidth, uint16 newHeight );
+	void			ReallocateRenderTexture	( uint16 newWidth, uint16 newHeight );
+
 	void			UpdateRenderTarget		( uint32* buffer, RenderTargetObject* svoRenderTarget );
 	void			SpawnThreads			( OctreePtr octree, CameraActor* camera );
 
 	void			RaycasterThread			( Size threadNumber );
-	void			RaycasterThreadImpl		( ThreadData& data );
+	void			RaycasterThreadImpl		( ThreadData& data, Size threadNumber );
 
 	void			PrepareThreads			();
 	uint16			GetNumThreads			() const;

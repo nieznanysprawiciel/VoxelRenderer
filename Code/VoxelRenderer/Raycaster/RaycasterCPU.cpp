@@ -41,8 +41,9 @@ RaycasterCPU::~RaycasterCPU()
 //
 void			RaycasterCPU::Init			( IRenderer* renderer, ResourceManager* resourceManager )
 {
-	PrepareThreads();
+	m_resourceManager = resourceManager;
 
+	PrepareThreads();
 }
 
 
@@ -84,7 +85,7 @@ void			RaycasterCPU::SpawnThreads				( OctreePtr octree, CameraActor* camera )
 	}
 
 	// GUI threads works on his part of buffer too.
-	RaycasterThreadImpl( m_threadData[ 0 ] );
+	RaycasterThreadImpl( m_threadData[ 0 ], 0 );
 }
 
 // ================================ //
@@ -93,7 +94,7 @@ void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 {
 	while( !m_end )
 	{
-		RaycasterThreadImpl( m_threadData[ threadNumber ] );
+		RaycasterThreadImpl( m_threadData[ threadNumber ], threadNumber );
 
 		// Block until next frame.
 		m_raycastLoopBarrier.ArriveAndWait();
@@ -102,9 +103,23 @@ void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 
 // ================================ //
 //
-void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data )
+void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
-	// For all pixels in range
+	std::vector< uint32 > colors =
+	{ 
+		0xFF0000FF,
+		0xFF32CD32,
+		0xFFBC8F8F,
+		0xFFFFEBCD,
+		0xFFFAA460,
+		0xFFB0C4DE,
+		0xFFFF8C00,
+		0xFF778899
+	};
+
+	// For all pixels in range for this thread.
+	for( uint32 pix = data.StartRange; pix < data.EndRange; ++pix )
+	{
 
 		// Find starting position
 
@@ -113,6 +128,9 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data )
 		// Shading
 
 		// Fill pixel
+			// Fake filling
+		data.Buffer[ pix ] = colors[ threadNumber ];
+	}
 
 	// All threads must end before buffer will be furthr processed.
 	m_raycastEndBarrier.ArriveAndWait();
@@ -132,7 +150,7 @@ void			RaycasterCPU::PrepareThreads()
 //
 uint16			RaycasterCPU::GetNumThreads() const
 {
-	return (uint16)m_threadPool.size() + 1;
+	return (uint16)m_threadData.size();
 }
 
 // ================================ //
@@ -166,7 +184,10 @@ void			RaycasterCPU::ReallocateRenderBuffer	( uint16 newWidth, uint16 newHeight 
 //
 void			RaycasterCPU::UpdateRenderTarget		( uint32* buffer, RenderTargetObject* svoRenderTarget )
 {
-	assert( false );
+	TextureObject* tex = svoRenderTarget->GetColorBuffer();
+	auto result = tex->UpdateData( (uint8*)buffer, 1, 0 );
+
+	assert( result );
 }
 
 

@@ -248,13 +248,22 @@ bool						DX11Texture::UpdateData			( uint8* dataPtr, uint16 mipLevel, uint16 ar
 	// mipLevel == 1 have index 0.
 	uint16 subresourceIdx = ( mipLevel - 1 ) + m_descriptor.MipMapLevels * ( arrayIdx - 1 );
 
-	D3D11_MAPPED_SUBRESOURCE updateData;
-	HRESULT result = device_context->Map( m_texture.Get(), subresourceIdx, D3D11_MAP_WRITE_DISCARD, 0, &updateData );
-	if( SUCCEEDED( result ) )
+	if( m_descriptor.Usage == ResourceUsage::RESOURCE_USAGE_DYNAMIC )
 	{
-		memcpy( updateData.pData, dataPtr, MipLevelSize( mipLevel ) );	
-		device_context->Unmap( m_texture.Get(), subresourceIdx );
+		D3D11_MAPPED_SUBRESOURCE updateData;
+		HRESULT result = device_context->Map( m_texture.Get(), subresourceIdx, D3D11_MAP_WRITE_DISCARD, 0, &updateData );
+		if( SUCCEEDED( result ) )
+		{
+			memcpy( updateData.pData, dataPtr, MipLevelSize( mipLevel ) );
+			device_context->Unmap( m_texture.Get(), subresourceIdx );
 
+			return true;
+		}
+	}
+	else
+	{
+		// ResourceUsage::RESOURCE_USAGE_DEFAULT
+		device_context->UpdateSubresource( m_texture.Get(), subresourceIdx, nullptr, dataPtr, MipRowSize( mipLevel ), 0 );
 		return true;
 	}
 
