@@ -10,6 +10,43 @@ namespace vr
 {
 
 
+
+
+const StepDirection StepXPlus = 0;
+const StepDirection StepYPlus = 1;
+const StepDirection StepZPlus = 2;
+
+const StepDirection StepXMinus = 3;
+const StepDirection StepYMinus = 4;
+const StepDirection StepZMinus = 5;
+
+const uint8 PositiveOUT = 8;
+const uint8 NegativeOUT = 9;
+
+
+/**@brief Transition table for node children.
+
+OctreeNode contains child mask. Every child in octree has it's position in this mask.
+When we traverse from one child to another along one axis, this table gives us next @ref ChildFlag on ray path.
+Note that sometimes we cross node's boundary and we are outside of node.
+
+First index is ChildFlag of node before step. Second index is transition axis { x, y, z, -x, -y, -z }.
+
+Remember that these values are bit shifts to child position in masks not mask itself.*/
+ChildFlag StepTable[ 8 ][ 6 ] =
+{
+	{ 1, PositiveOUT, PositiveOUT, NegativeOUT, 4, 2 },
+	{ PositiveOUT, PositiveOUT, PositiveOUT, 0, 5, 3 },
+	{ 3, PositiveOUT, 0, NegativeOUT, 6, NegativeOUT },
+	{ PositiveOUT, PositiveOUT, 1, 2, 7, NegativeOUT },
+	
+	{ 5, 0, PositiveOUT, NegativeOUT, NegativeOUT, 6 },
+	{ PositiveOUT, 1, PositiveOUT, 4, NegativeOUT, 7 },
+	{ 7, 2, 4, NegativeOUT, NegativeOUT, NegativeOUT },
+	{ PositiveOUT, 3, 5, 6, NegativeOUT, NegativeOUT },
+};
+
+
 using namespace DirectX;
 
 // ================================ //
@@ -138,11 +175,15 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 	{
 		RaycasterContext rayCtx;
 		rayCtx.Octree = data.Octree;
-
+		
 		// Find starting position
 		rayCtx.RayDirection = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
 		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
 		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
+
+		rayCtx.StepXDir = rayCtx.RayDirection.x > 0 ? StepXPlus : StepXMinus;
+		rayCtx.StepYDir = rayCtx.RayDirection.y > 0 ? StepYPlus : StepYMinus;
+		rayCtx.StepZDir = rayCtx.RayDirection.z > 0 ? StepZPlus : StepZMinus;
 
 		// Raycast octree
 		bool run = true;
@@ -152,12 +193,12 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			{
 				if( rayCtx.tMax.x < rayCtx.tMax.z )
 				{
-					run = StepX( rayCtx );
+					run = Step( rayCtx, rayCtx.StepXDir );
 					rayCtx.tMax.x += rayCtx.tDelta.x;
 				}
 				else
 				{
-					run = StepZ( rayCtx );
+					run = Step( rayCtx, rayCtx.StepZDir );
 					rayCtx.tMax.z += rayCtx.tDelta.z;
 				}
 			}
@@ -165,12 +206,12 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			{
 				if( rayCtx.tMax.y < rayCtx.tMax.z )
 				{
-					run = StepY( rayCtx );
+					run = Step( rayCtx, rayCtx.StepYDir );
 					rayCtx.tMax.y += rayCtx.tDelta.y;
 				}
 				else
 				{
-					run = StepZ( rayCtx );
+					run = Step( rayCtx, rayCtx.StepZDir );
 					rayCtx.tMax.z += rayCtx.tDelta.z;
 				}
 			}
@@ -205,8 +246,8 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayPosition		( CameraActor* camera, int 
 	
 	float aspect = cameraData.Width / cameraData.Height;
 
-	float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0;
-	float yFactor = 1.0 - screenY / ( cameraData.Height / 2 );
+	float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0f;
+	float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
 
 	XMVECTOR position = cameraData.GetPosition();
 	position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
@@ -238,31 +279,49 @@ const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& p
 
 // ================================ //
 //
-bool					RaycasterCPU::StepX			( RaycasterContext& raycasterContext )
+bool					RaycasterCPU::Step			( RaycasterContext& raycasterContext, StepDirection stepAxis )
 {
-	return false;
+	ChildFlag curFlag = ComputeNodeFlag( raycasterContext.NodesStack.top(), raycasterContext.Current, raycasterContext.Octree );
+	ChildFlag nextChild = ComputeNextChildFlag( curFlag, stepAxis );
+
+	if( IsRayOutside( nextChild ) )
+	{
+		StepUp( raycasterContext );
+	}
+	else
+	{
+		const OctreeNode& current = SetCurrentNode( nextChild, raycasterContext );
+		
+		// If this is leaf node, then stop raycasting.
+		if( current.IsLeafNode )
+			return false;
+		
+		if( !IsEmpty( current ) )
+		{
+			StepDown( raycasterContext );
+		}
+	}
+
+	return true;
 }
 
 // ================================ //
 //
-bool					RaycasterCPU::StepY			( RaycasterContext& raycasterContext )
-{
-	return false;
-}
+void					RaycasterCPU::StepUp				( RaycasterContext& raycasterContext )
+{}
 
 // ================================ //
 //
-bool					RaycasterCPU::StepZ			( RaycasterContext& raycasterContext )
-{
-	return false;
-}
+void					RaycasterCPU::StepDown				( RaycasterContext& raycasterContext )
+{}
+
 
 // ================================ //
 //
-const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext & raycasterContext ) const
+const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext& raycasterContext ) const
 {
 	uint32 offsetToLeaf = raycasterContext.NodesStack.top();
-	const OctreeNode& node = raycasterContext.Octree->AccessOctree()[ offsetToLeaf ];
+	const OctreeNode& node = raycasterContext.Octree->GetNode( offsetToLeaf );
 
 	assert( node.IsLeafNode );
 
@@ -284,6 +343,83 @@ const VoxelAttributes&	RaycasterCPU::GetLeafAttributes		( const OctreeLeaf& leaf
 const BlockDescriptor&	RaycasterCPU::GetBlockDescriptor	( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const
 {
 	return Cast< const BlockDescriptor& >( raycasterContext.Octree->AccessOctree()[ 0 ] );
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::IsEmpty				( const OctreeNode& node )
+{
+	assert( !node.IsLeafNode );
+	assert( !node.IndirectPtr );
+
+	// If child mask is zero then node is empty.
+	return !node.ChildMask;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::IsRayOutside			( ChildFlag childFlag )
+{
+	return childFlag >= PositiveOUT;
+}
+
+// ================================ //
+//
+ChildFlag				RaycasterCPU::ComputeNextChildFlag	( ChildFlag curFlag, StepDirection stepAxis )
+{
+	return StepTable[ curFlag ][ stepAxis ];
+}
+
+/**@detail
+Children nodes are placed in memory after each other. ChildPackPtr in parent node points to the first existing
+node. To find rest of nodes we must count non empty bits in child mask lying before node, we are looking for.
+This function inverses this process and computes child flag from known offset.
+*/
+ChildFlag				RaycasterCPU::ComputeNodeFlag		( uint32 parent, uint32 current, OctreePtr& octree )
+{
+	const OctreeNode& parentNode = octree->GetNode( parent );
+
+	if( !parentNode.IndirectPtr )
+	{
+		uint32 offset = current - parent;
+		uint8 nodeNum = offset - parentNode.ChildPackPtr;		// Children are placed together.
+
+		return FindNodeFlag( parentNode.ChildMask, nodeNum );
+	}
+	else
+	{
+		assert( !"Implement me" );
+	}
+
+	return ChildFlag();
+}
+
+// ================================ //
+//
+ChildFlag				RaycasterCPU::FindNodeFlag			( uint8 childMask, uint8 nodeNum )
+{
+	uint8 numNodes = 0;
+	uint8 shift = 0;
+	
+	// Count bits until we will find nodeNUm of nodes.
+	while( numNodes < nodeNum )
+	{
+		numNodes += ( childMask >> shift ) & 0x1;
+		shift++;
+	}
+
+	return shift;
+}
+
+// ================================ //
+//
+const OctreeNode&		RaycasterCPU::SetCurrentNode		( ChildFlag newChild, RaycasterContext& raycasterContext )
+{
+	assert( false );
+
+
+	// TODO: insert return statement here
+	return OctreeNode();
 }
 
 //====================================================================================//

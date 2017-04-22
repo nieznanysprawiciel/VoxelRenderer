@@ -25,6 +25,13 @@ Octree::Octree		( std::vector< OctreeNode >&& data, Size gridSize, Size firstFre
 
 // ================================ //
 //
+const OctreeNode&		Octree::GetNode			( uint32 absolutOffset )
+{
+	return m_nodes[ absolutOffset ];
+}
+
+// ================================ //
+//
 bool		Octree::WriteToFile		( const filesystem::Path& outputFilePath )
 {
 	sw::HCF hcf;

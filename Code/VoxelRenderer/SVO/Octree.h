@@ -59,6 +59,8 @@ public:
 
 	const std::vector< OctreeNode >&		AccessOctree	() { return m_nodes;  }
 
+	const OctreeNode&		GetNode		( uint32 absolutOffset );
+
 public:
 	bool			WriteToFile			( const filesystem::Path& outputFilePath );
 	bool			LoadFromFile		( const filesystem::Path& outputFilePath );

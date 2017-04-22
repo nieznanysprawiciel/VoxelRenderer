@@ -18,6 +18,13 @@ namespace vr
 {
 
 
+/**@brief Bit shifts for specific position in child mask in OctreeNode.*/
+typedef uint8 ChildFlag;
+typedef uint8 StepDirection;
+
+
+// ================================ //
+//
 struct ThreadData
 {
 	OctreePtr			Octree;
@@ -28,6 +35,8 @@ struct ThreadData
 };
 
 
+// ================================ //
+//
 struct RaycasterContext
 {
 	OctreePtr						Octree;
@@ -37,11 +46,16 @@ struct RaycasterContext
 	DirectX::XMFLOAT3				tMax;
 	DirectX::XMFLOAT3				tDelta;
 
+	uint8							StepXDir;
+	uint8							StepYDir;
+	uint8							StepZDir;
+
 	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
+	uint32							Current;		///< Current node, we are in.
 };
 
 
-/**@brief */
+/**@brief CPU multithreaded implementation of raycaster.*/
 class RaycasterCPU : public IRaycaster
 {
 private:
@@ -95,14 +109,22 @@ private:
 	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
 
 	// Step along axis and find new node.
-	bool					StepX					( RaycasterContext& raycasterContext );
-	bool					StepY					( RaycasterContext& raycasterContext );
-	bool					StepZ					( RaycasterContext& raycasterContext );
+	bool					Step					( RaycasterContext& raycasterContext, StepDirection stepAxis );
+	void					StepUp					( RaycasterContext& raycasterContext );
+	void					StepDown				( RaycasterContext& raycasterContext );
 
 	// Attributes
 	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;
 	const VoxelAttributes&	GetLeafAttributes		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const;
 	const BlockDescriptor&	GetBlockDescriptor		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const;
+
+
+	bool					IsEmpty					( const OctreeNode& node );
+	bool					IsRayOutside			( ChildFlag childFlag );
+	ChildFlag				ComputeNextChildFlag	( ChildFlag curFlag, StepDirection stepAxis );
+	ChildFlag				ComputeNodeFlag			( uint32 parent, uint32 current, OctreePtr& octree );
+	ChildFlag				FindNodeFlag			( uint8 childMask, uint8 nodeNum );
+	const OctreeNode&		SetCurrentNode			( ChildFlag newChild, RaycasterContext& raycasterContext );
 };
 
 
