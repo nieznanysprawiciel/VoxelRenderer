@@ -290,7 +290,7 @@ bool					RaycasterCPU::Step			( RaycasterContext& raycasterContext, StepDirectio
 	}
 	else
 	{
-		const OctreeNode& current = SetCurrentNode( nextChild, raycasterContext );
+		const OctreeNode& current = SetCurrentNode( raycasterContext.NodesStack.top(), nextChild, raycasterContext );
 		
 		// If this is leaf node, then stop raycasting.
 		if( current.IsLeafNode )
@@ -308,12 +308,21 @@ bool					RaycasterCPU::Step			( RaycasterContext& raycasterContext, StepDirectio
 // ================================ //
 //
 void					RaycasterCPU::StepUp				( RaycasterContext& raycasterContext )
-{}
+{
+	raycasterContext.GridSize *= 2.0f;
+
+
+	assert( !"Implement me" );
+}
 
 // ================================ //
 //
 void					RaycasterCPU::StepDown				( RaycasterContext& raycasterContext )
-{}
+{
+	raycasterContext.GridSize /= 2.0f;
+
+	assert( !"Implement me" );
+}
 
 
 // ================================ //
@@ -411,15 +420,36 @@ ChildFlag				RaycasterCPU::FindNodeFlag			( uint8 childMask, uint8 nodeNum )
 	return shift;
 }
 
+/**@brief Finds new current node and writes his absolut offset value to RaycasterContext.*/
+const OctreeNode&		RaycasterCPU::SetCurrentNode		( uint32 parent, ChildFlag newChild, RaycasterContext& raycasterContext )
+{
+	const OctreeNode& parentNode = raycasterContext.Octree->GetNode( parent );
+
+	uint8 numNodesBefore = CountNodesBefore( newChild, parentNode.ChildMask );
+	uint32 currOffset = parent + parentNode.ChildPackPtr + numNodesBefore;
+
+	raycasterContext.Current = currOffset;
+
+	return raycasterContext.Octree->GetNode( currOffset );
+}
+
 // ================================ //
 //
-const OctreeNode&		RaycasterCPU::SetCurrentNode		( ChildFlag newChild, RaycasterContext& raycasterContext )
+uint8					RaycasterCPU::CountNodesBefore		( ChildFlag childFlag, uint8 childMask )
 {
-	assert( false );
+	uint8 mask = 0xFF;
+	mask = mask << childFlag;
+	mask = ~mask;
 
+	uint8 nodesBefore = childMask & mask;
 
-	// TODO: insert return statement here
-	return OctreeNode();
+	// Count bits set in nodesBefore variable.
+	uint8 numNodesBefore = 0;
+	
+	for( uint8 i = 0; i < 8; i++ )
+		numNodesBefore += ( nodesBefore >> i ) & 0x1;
+
+	return numNodesBefore;
 }
 
 //====================================================================================//
