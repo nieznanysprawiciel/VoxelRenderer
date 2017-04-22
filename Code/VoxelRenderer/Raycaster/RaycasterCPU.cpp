@@ -10,6 +10,8 @@ namespace vr
 {
 
 
+using namespace DirectX;
+
 // ================================ //
 //
 RaycasterCPU::RaycasterCPU()
@@ -103,6 +105,20 @@ void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 
 // ================================ //
 //
+void			RaycasterCPU::PrepareThreads()
+{
+	auto numThreads = std::thread::hardware_concurrency();
+	assert( numThreads );
+	m_threadPool.reserve( numThreads - 1 );		// Note: GUI thread will work too.
+	m_threadData.resize( numThreads );
+}
+
+//====================================================================================//
+//			Raycaster core	
+//====================================================================================//
+
+// ================================ //
+//
 void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
 	std::vector< uint32 > colors =
@@ -120,16 +136,53 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 	// For all pixels in range for this thread.
 	for( uint32 pix = data.StartRange; pix < data.EndRange; ++pix )
 	{
+		RaycasterContext rayCtx;
+		rayCtx.Octree = data.Octree;
 
 		// Find starting position
+		rayCtx.RayDirection = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
+		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
+		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
 
 		// Raycast octree
+		bool run = true;
+		while( run )
+		{
+			if( rayCtx.tMax.x < rayCtx.tMax.y )
+			{
+				if( rayCtx.tMax.x < rayCtx.tMax.z )
+				{
+					run = StepX( rayCtx );
+					rayCtx.tMax.x += rayCtx.tDelta.x;
+				}
+				else
+				{
+					run = StepZ( rayCtx );
+					rayCtx.tMax.z += rayCtx.tDelta.z;
+				}
+			}
+			else
+			{
+				if( rayCtx.tMax.y < rayCtx.tMax.z )
+				{
+					run = StepY( rayCtx );
+					rayCtx.tMax.y += rayCtx.tDelta.y;
+				}
+				else
+				{
+					run = StepZ( rayCtx );
+					rayCtx.tMax.z += rayCtx.tDelta.z;
+				}
+			}
+		}
 
 		// Shading
+		OctreeLeaf leaf = GetResultLeafNode( rayCtx );
+		const VoxelAttributes& attributes = GetLeafAttributes( leaf, rayCtx );
 
 		// Fill pixel
-			// Fake filling
-		data.Buffer[ pix ] = colors[ threadNumber ];
+		//data.Buffer[ pix ] = colors[ threadNumber ];
+		data.Buffer[ pix ] = attributes.Color.c;
 	}
 
 	// All threads must end before buffer will be furthr processed.
@@ -138,20 +191,104 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 // ================================ //
 //
-void			RaycasterCPU::PrepareThreads()
-{
-	auto numThreads = std::thread::hardware_concurrency();
-	assert( numThreads );
-	m_threadPool.reserve( numThreads - 1 );		// Note: GUI thread will work too.
-	m_threadData.resize( numThreads );
-}
-
-// ================================ //
-//
 uint16			RaycasterCPU::GetNumThreads() const
 {
 	return (uint16)m_threadData.size();
 }
+
+// ================================ //
+//
+DirectX::XMFLOAT3		RaycasterCPU::ComputeRayPosition		( CameraActor* camera, int screenX, int screenY )
+{
+	/// @todo perspective camera
+	auto cameraData = camera->GetCameraData();
+	
+	float aspect = cameraData.Width / cameraData.Height;
+
+	float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0;
+	float yFactor = 1.0 - screenY / ( cameraData.Height / 2 );
+
+	XMVECTOR position = cameraData.GetPosition();
+	position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
+	position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
+
+	XMFLOAT3 resultPos;
+	XMStoreFloat3( &resultPos, position );
+	return resultPos;
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int screenX, int screenY )
+{
+	/// @todo perspective camera
+
+	auto cameraData = camera->GetCameraData();
+	return cameraData.Direction;
+}
+
+// ================================ //
+//
+const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext )
+{
+	assert( false );
+
+	return raycasterContext.Octree->AccessOctree()[ 0 ];
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::StepX			( RaycasterContext& raycasterContext )
+{
+	return false;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::StepY			( RaycasterContext& raycasterContext )
+{
+	return false;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::StepZ			( RaycasterContext& raycasterContext )
+{
+	return false;
+}
+
+// ================================ //
+//
+const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext & raycasterContext ) const
+{
+	uint32 offsetToLeaf = raycasterContext.NodesStack.top();
+	const OctreeNode& node = raycasterContext.Octree->AccessOctree()[ offsetToLeaf ];
+
+	assert( node.IsLeafNode );
+
+	return Cast< const OctreeLeaf& >( node );
+}
+
+// ================================ //
+//
+const VoxelAttributes&	RaycasterCPU::GetLeafAttributes		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const
+{
+	const BlockDescriptor& blockDescriptor = GetBlockDescriptor	( leaf, raycasterContext );
+	uint32 attributeOffset = blockDescriptor.AttributesOffset + leaf.AttributesOffset;
+	
+	return Cast< const VoxelAttributes& >( raycasterContext.Octree->AccessOctree()[ attributeOffset ] );
+}
+
+// ================================ //
+//
+const BlockDescriptor&	RaycasterCPU::GetBlockDescriptor	( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const
+{
+	return Cast< const BlockDescriptor& >( raycasterContext.Octree->AccessOctree()[ 0 ] );
+}
+
+//====================================================================================//
+//			Render target manipulation	
+//====================================================================================//
 
 // ================================ //
 //

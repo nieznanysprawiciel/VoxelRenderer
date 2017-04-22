@@ -46,9 +46,15 @@ struct BlockDescriptor
 };
 
 template< typename CastType >
-CastType&		Cast		( OctreeNode& node )
+CastType&			Cast		( OctreeNode& node )
 {
 	return reinterpret_cast< CastType& >( node );
+}
+
+template< typename CastType >
+const CastType&		Cast		( const OctreeNode& node )
+{
+	return reinterpret_cast< const CastType& >( node );
 }
 
 }	// svo

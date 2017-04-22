@@ -10,6 +10,9 @@
 #include <condition_variable>
 #include <atomic>
 
+#include <stack>
+
+
 
 namespace vr
 {
@@ -24,6 +27,18 @@ struct ThreadData
 	uint32				EndRange;
 };
 
+
+struct RaycasterContext
+{
+	OctreePtr						Octree;
+	DirectX::XMFLOAT3				RayDirection;
+	float							GridSize;		///< Grid size on current tree level. It changes during tree traversal.
+
+	DirectX::XMFLOAT3				tMax;
+	DirectX::XMFLOAT3				tDelta;
+
+	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
+};
 
 
 /**@brief */
@@ -71,6 +86,23 @@ private:
 
 	void			PrepareThreads			();
 	uint16			GetNumThreads			() const;
+
+private:
+	
+	// Raycasting core
+	DirectX::XMFLOAT3		ComputeRayPosition		( CameraActor* camera, int screenX, int screenY );
+	DirectX::XMFLOAT3		ComputeRayDirection		( CameraActor* camera, int screenX, int screenY );
+	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
+
+	// Step along axis and find new node.
+	bool					StepX					( RaycasterContext& raycasterContext );
+	bool					StepY					( RaycasterContext& raycasterContext );
+	bool					StepZ					( RaycasterContext& raycasterContext );
+
+	// Attributes
+	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;
+	const VoxelAttributes&	GetLeafAttributes		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const;
+	const BlockDescriptor&	GetBlockDescriptor		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const;
 };
 
 

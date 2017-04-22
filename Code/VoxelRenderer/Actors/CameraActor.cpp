@@ -17,6 +17,8 @@ RTTR_REGISTRATION
 			(	rttr::metadata( MetaDataType::Category, "Camera View" )		)
 		.property( "Height", &CameraActor::GetHeight, &CameraActor::SetHeight )
 			(	rttr::metadata( MetaDataType::Category, "Camera View" )		)
+		.property( "ViewportSize", &CameraActor::GetViewportSize, &CameraActor::SetViewportSize )
+			(	rttr::metadata( MetaDataType::Category, "Camera View" )		)
 		.property( "NearPlane", &CameraActor::GetNearPlane, &CameraActor::SetNearPlane )
 			(	rttr::metadata( MetaDataType::Category, "Camera View" )		)
 		.property( "FarPlane", &CameraActor::GetFarPlane, &CameraActor::SetFarPlane )
@@ -42,6 +44,7 @@ CameraActor::CameraActor()
 	m_nearPlane = 1.0f;
 	m_farPlane = 100000.0f;
 	m_fov = 45.0f;
+	m_viewportSize = 1.0f;
 
 	SetPerspectiveProjectionMatrix( m_fov, m_width, m_height, m_nearPlane, m_farPlane );
 }
@@ -74,15 +77,18 @@ void CameraActor::SetPerspectiveProjectionMatrix		( float angle, float width, fl
 @param[in] aspect Stosunek Szerokoœci do wysokoœci ekranu
 @param[in] nearPlane Bli¿sza p³aszczyzna obcinania
 @param[in] farPlane Dalsza p³aszczyzna obcinania*/
-void CameraActor::SetOrthogonalProjectionMatrix			( float width, float height, float nearPlane, float farPlane )
+void CameraActor::SetOrthogonalProjectionMatrix			( float width, float height, float viewportSize, float nearPlane, float farPlane )
 {
 	m_isPerspective = false;
 	m_height = height;
 	m_width = width;
+	m_viewportSize = viewportSize;
 	m_nearPlane = nearPlane;
 	m_farPlane = farPlane;
 
-	XMMATRIX projMatrix = XMMatrixOrthographicRH( width, height, nearPlane, farPlane );
+	float aspect = width / height;
+
+	XMMATRIX projMatrix = XMMatrixOrthographicRH( aspect * m_viewportSize, m_viewportSize, nearPlane, farPlane );
 	XMStoreFloat4x4( &m_projectionMatrix, projMatrix );
 }
 
@@ -104,6 +110,13 @@ void				CameraActor::SetWidth			( float width )
 void				CameraActor::SetHeight			( float height )
 {
 	m_height = height;
+	UpdateMatrix();
+}
+
+/**@brief Sets viewport size.*/
+void				CameraActor::SetViewportSize	( float size )
+{
+	m_viewportSize = size;
 	UpdateMatrix();
 }
 
@@ -129,7 +142,7 @@ void				CameraActor::SetFov				( float fov )
 }
 
 /**@copydoc CameraData*/
-CameraData CameraActor::GetCameraData()
+CameraData			CameraActor::GetCameraData() const
 {
 	CameraData data;
 	data.IsPerspective = m_isPerspective;
@@ -138,6 +151,7 @@ CameraData CameraActor::GetCameraData()
 	data.Height = m_height;
 	data.NearPlane = m_nearPlane;
 	data.Width = m_width;
+	data.ViewportSize = m_viewportSize;
 	XMStoreFloat4( &data.OrientationQuat, GetOrientation() );
 	XMStoreFloat3( &data.Position, GetPosition() );
 
@@ -163,5 +177,5 @@ void				CameraActor::UpdateMatrix		()
 	if( m_isPerspective )
 		SetPerspectiveProjectionMatrix( m_fov, m_width, m_height, m_nearPlane, m_farPlane );
 	else
-		SetOrthogonalProjectionMatrix( m_width, m_height, m_nearPlane, m_farPlane );
+		SetOrthogonalProjectionMatrix( m_width, m_height, m_viewportSize, m_nearPlane, m_farPlane );
 }
