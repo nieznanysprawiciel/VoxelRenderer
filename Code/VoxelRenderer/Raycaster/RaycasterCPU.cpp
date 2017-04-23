@@ -177,8 +177,10 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		rayCtx.Octree = data.Octree;
 		
 		// Find starting position
-		rayCtx.RayDirection = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
+		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
 		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
+		InitRaycasting( position, direction, rayCtx );
+
 		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
 
 		rayCtx.StepXDir = rayCtx.RayDirection.x > 0 ? StepXPlus : StepXMinus;
@@ -275,6 +277,57 @@ const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& p
 	assert( false );
 
 	return raycasterContext.Octree->AccessOctree()[ 0 ];
+}
+
+// ================================ //
+//
+void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& rayCtx )
+{
+	rayCtx.RayStartPosition = position;
+	rayCtx.RayDirection = direction;
+
+ //   // Get rid of small ray direction components to avoid division by zero.
+
+	//if( fabsf( rayCtx.RayDirection.x ) < epsilon ) rayCtx.RayDirection.x = copysignf( epsilon, rayCtx.RayDirection.x );
+	//if( fabsf( rayCtx.RayDirection.y ) < epsilon ) rayCtx.RayDirection.y = copysignf( epsilon, rayCtx.RayDirection.y );
+	//if( fabsf( rayCtx.RayDirection.z ) < epsilon ) rayCtx.RayDirection.z = copysignf( epsilon, rayCtx.RayDirection.z );
+
+	// Precompute the coefficients of tx(x), ty(y), and tz(z).
+	// The octree is assumed to reside at coordinates [1, 2].
+
+	rayCtx.tCoeff.x = 1.0f / -fabs( rayCtx.RayDirection.x );
+	rayCtx.tCoeff.y = 1.0f / -fabs( rayCtx.RayDirection.y );
+	rayCtx.tCoeff.z = 1.0f / -fabs( rayCtx.RayDirection.z );
+
+	rayCtx.tBias.x = rayCtx.tCoeff.x * rayCtx.RayStartPosition.x;
+	rayCtx.tBias.y = rayCtx.tCoeff.y * rayCtx.RayStartPosition.y;
+	rayCtx.tBias.z = rayCtx.tCoeff.z * rayCtx.RayStartPosition.z;
+
+	// Choose correct child flag.
+    // Select octant mask to mirror the coordinate system so
+    // that ray direction is negative along each axis.
+
+	ChildFlag childFlag = 7;
+	if( rayCtx.RayDirection.x > 0.0f ) childFlag ^= 1, rayCtx.tBias.x = 3.0f * rayCtx.tCoeff.x - rayCtx.tBias.x;
+	if( rayCtx.RayDirection.y > 0.0f ) childFlag ^= 2, rayCtx.tBias.y = 3.0f * rayCtx.tCoeff.y - rayCtx.tBias.y;
+	if( rayCtx.RayDirection.z > 0.0f ) childFlag ^= 4, rayCtx.tBias.z = 3.0f * rayCtx.tCoeff.z - rayCtx.tBias.z;
+
+
+    //// Initialize the active span of t-values.
+    //float t_min = fmaxf(fmaxf(2.0f * tx_coef - tx_bias, 2.0f * ty_coef - ty_bias), 2.0f * tz_coef - tz_bias);
+    //float t_max = fminf(fminf(tx_coef - tx_bias, ty_coef - ty_bias), tz_coef - tz_bias);
+    //float h = t_max;
+    //t_min = fmaxf(t_min, 0.0f);
+    //t_max = fminf(t_max, 1.0f);
+
+	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
+	rayCtx.Scale = rayCtx.Octree->GetMaxDepth();
+	rayCtx.ScaleExp = 0.5f;
+	rayCtx.Position = XMFLOAT3( 1.0f, 1.0f, 1.0f );
+
+	//if( 1.5f * rayCtx.tCoeff.x - rayCtx.tBias.x > t_min ) idx ^= 1, rayCtx.Position.x = 1.5f;
+	//if( 1.5f * rayCtx.tCoeff.y - rayCtx.tBias.y > t_min ) idx ^= 2, rayCtx.Position.y = 1.5f;
+	//if( 1.5f * rayCtx.tCoeff.z - rayCtx.tBias.z > t_min ) idx ^= 4, rayCtx.Position.z = 1.5f;
 }
 
 // ================================ //

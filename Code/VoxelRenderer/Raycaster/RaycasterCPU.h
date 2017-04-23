@@ -41,6 +41,7 @@ struct RaycasterContext
 {
 	OctreePtr						Octree;
 	DirectX::XMFLOAT3				RayDirection;
+	DirectX::XMFLOAT3				RayStartPosition;
 	float							GridSize;		///< Grid size on current tree level. It changes during tree traversal.
 
 	DirectX::XMFLOAT3				tMax;
@@ -50,8 +51,17 @@ struct RaycasterContext
 	uint8							StepYDir;
 	uint8							StepZDir;
 
-	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
+
+	//
+	DirectX::XMFLOAT3				tCoeff;
+	DirectX::XMFLOAT3				tBias;
+	DirectX::XMFLOAT3				Position;
+
 	uint32							Current;		///< Current node, we are in.
+	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
+
+	int								Scale;
+	float							ScaleExp;
 };
 
 
@@ -107,6 +117,7 @@ private:
 	DirectX::XMFLOAT3		ComputeRayPosition		( CameraActor* camera, int screenX, int screenY );
 	DirectX::XMFLOAT3		ComputeRayDirection		( CameraActor* camera, int screenX, int screenY );
 	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
+	void					InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& RaycasterContext );
 
 	// Step along axis and find new node.
 	bool					Step					( RaycasterContext& raycasterContext, StepDirection stepAxis );

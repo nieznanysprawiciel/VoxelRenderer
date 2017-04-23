@@ -39,6 +39,7 @@ private:
 
 	Size							m_sizeTotal;		///< Includes size of nested subtrees to faster traversal.
 	Size							m_gridSize;			///< Power of 2.
+	uint8							m_maxDepth;			///< Maximal levels of octree.
 
 	std::vector< OctreeNode >		m_nodes;			///< This can be OctreeNode, OctreeLeaf, OctreeFarPointer, or VoxelAttributes.
 	Size							m_indirectPtrs;		///< Offset to first free indirect pointer.
@@ -55,11 +56,15 @@ public:
 	Size			GetSubtreeTotalSize		() { return m_sizeTotal; }
 	Size			GetGridSize				() { return m_gridSize; }
 	Size			GetFirstFreeIndirect	() { return m_indirectPtrs;  }
+	uint8			GetMaxDepth				() { return m_maxDepth;  }
 
 
 	const std::vector< OctreeNode >&		AccessOctree	() { return m_nodes;  }
 
-	const OctreeNode&		GetNode		( uint32 absolutOffset );
+	const OctreeNode&		GetNode				( uint32 absolutOffset );
+	uint32					GetRootNodeOffset	();
+	const BlockDescriptor&	GetBlockDescriptor	() const;
+
 
 public:
 	bool			WriteToFile			( const filesystem::Path& outputFilePath );

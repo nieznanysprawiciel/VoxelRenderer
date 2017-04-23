@@ -19,6 +19,7 @@ Octree::Octree		( std::vector< OctreeNode >&& data, Size gridSize, Size firstFre
 	:	m_gridSize( gridSize )
 	,	m_nodes( std::move( data ) )
 	,	m_indirectPtrs( firstFreeIndirectOffset )
+	,	m_maxDepth( 23 )
 {
 	m_sizeTotal = m_nodes.size();
 }
@@ -28,6 +29,20 @@ Octree::Octree		( std::vector< OctreeNode >&& data, Size gridSize, Size firstFre
 const OctreeNode&		Octree::GetNode			( uint32 absolutOffset )
 {
 	return m_nodes[ absolutOffset ];
+}
+
+// ================================ //
+//
+uint32					Octree::GetRootNodeOffset	()
+{
+	const BlockDescriptor& blockDescriptor = GetBlockDescriptor();
+	return blockDescriptor.RootNodeOffset;
+}
+// ================================ //
+//
+const BlockDescriptor&	Octree::GetBlockDescriptor	() const
+{
+	return Cast< const BlockDescriptor& >( m_nodes[ 0 ] );
 }
 
 // ================================ //
