@@ -179,12 +179,41 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		// Find starting position
 		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
 		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
+		
 		InitRaycasting( position, direction, rayCtx );
 
 		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
 
+		// Write proper condition.
+		while( true )
+		{
+			const OctreeNode* childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
 
+			XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
+			float tc_max = Min( corner );
 
+			ChildFlag childShift = rayCtx.ChildIdx ^ rayCtx.OctantMask; // permute child slots based on the mirroring
+
+			if( ExistsChild( childDescriptor, childShift ) && rayCtx.tMin <= rayCtx.tMax )
+			{
+				//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
+				//	break; // at t_min
+
+				float tv_max = fminf( rayCtx.tMax, tc_max );
+				float half = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
+
+				// This line computes intersection with 
+				XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, corner );
+
+				if( rayCtx.tMin <= tv_max )
+				{
+					//if( ( child_masks & 0x0080 ) == 0 )
+					//	break; // at t_min (overridden with tv_min).
+
+					// ...
+				}
+			}
+		}
 
 
 		// Shading
@@ -480,10 +509,17 @@ uint8					RaycasterCPU::CountNodesBefore		( ChildFlag childFlag, uint8 childMask
 //
 DirectX::XMFLOAT3		RaycasterCPU::ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& rayCtx )
 {
+	return ParamLine( coords, rayCtx.tCoeff, rayCtx.tBias );
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT3		RaycasterCPU::ParamLine				( DirectX::XMFLOAT3& coords, DirectX::XMFLOAT3& tCoeff, DirectX::XMFLOAT3& tBias )
+{
 	XMFLOAT3 result;
-	result.x = rayCtx.tCoeff.x * coords.x - rayCtx.tBias.x;
-	result.y = rayCtx.tCoeff.y * coords.y - rayCtx.tBias.y;
-	result.z = rayCtx.tCoeff.z * coords.z - rayCtx.tBias.z;
+	result.x = tCoeff.x * coords.x - tBias.x;
+	result.y = tCoeff.y * coords.y - tBias.y;
+	result.z = tCoeff.z * coords.z - tBias.z;
 
 	return result;
 }
@@ -507,6 +543,20 @@ float					RaycasterCPU::ParamLineY			( float posY, RaycasterContext& rayCtx )
 float					RaycasterCPU::ParamLineZ			( float posZ, RaycasterContext& rayCtx )
 {
 	return rayCtx.tCoeff.z * posZ - rayCtx.tBias.z;
+}
+
+// ================================ //
+//
+float					RaycasterCPU::Min					( DirectX::XMFLOAT3& coords )
+{
+	return fminf( fminf( coords.x, coords.y ), coords.z );
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::ExistsChild			( const OctreeNode* node, ChildFlag childShift )
+{
+	return node->ChildMask & ( 0x1 << childShift );
 }
 
 //====================================================================================//

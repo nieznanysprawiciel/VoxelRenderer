@@ -137,9 +137,13 @@ private:
 	uint8					CountNodesBefore		( ChildFlag childFlag, uint8 childMask );
 
 	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& raycasterContext );
+	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, DirectX::XMFLOAT3& tCoeff, DirectX::XMFLOAT3& tBias );
 	float					ParamLineX				( float posX, RaycasterContext& raycasterContext );
 	float					ParamLineY				( float posY, RaycasterContext& raycasterContext );
 	float					ParamLineZ				( float posZ, RaycasterContext& raycasterContext );
+
+	float					Min						( DirectX::XMFLOAT3& coords );
+	bool					ExistsChild				( const OctreeNode* node, ChildFlag childShift );
 };
 
 
