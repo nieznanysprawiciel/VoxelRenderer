@@ -44,20 +44,17 @@ struct RaycasterContext
 	DirectX::XMFLOAT3				RayStartPosition;
 	float							GridSize;		///< Grid size on current tree level. It changes during tree traversal.
 
-	DirectX::XMFLOAT3				tMax;
-	DirectX::XMFLOAT3				tDelta;
-
-	uint8							StepXDir;
-	uint8							StepYDir;
-	uint8							StepZDir;
-
 
 	//
 	DirectX::XMFLOAT3				tCoeff;
 	DirectX::XMFLOAT3				tBias;
 	DirectX::XMFLOAT3				Position;
+	float							tMax;
+	float							tMin;
 
 	uint32							Current;		///< Current node, we are in.
+	ChildFlag						OctantMask;		///< Child bit flipping.
+	ChildFlag						ChildIdx;		///< Child in children mask.
 	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
 
 	int								Scale;
@@ -138,6 +135,11 @@ private:
 	const OctreeNode&		SetCurrentNode			( uint32 parent, ChildFlag newChild, RaycasterContext& raycasterContext );
 
 	uint8					CountNodesBefore		( ChildFlag childFlag, uint8 childMask );
+
+	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& raycasterContext );
+	float					ParamLineX				( float posX, RaycasterContext& raycasterContext );
+	float					ParamLineY				( float posY, RaycasterContext& raycasterContext );
+	float					ParamLineZ				( float posZ, RaycasterContext& raycasterContext );
 };
 
 

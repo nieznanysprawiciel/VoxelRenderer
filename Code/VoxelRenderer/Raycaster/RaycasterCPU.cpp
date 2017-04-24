@@ -183,41 +183,9 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
 
-		rayCtx.StepXDir = rayCtx.RayDirection.x > 0 ? StepXPlus : StepXMinus;
-		rayCtx.StepYDir = rayCtx.RayDirection.y > 0 ? StepYPlus : StepYMinus;
-		rayCtx.StepZDir = rayCtx.RayDirection.z > 0 ? StepZPlus : StepZMinus;
 
-		// Raycast octree
-		bool run = true;
-		while( run )
-		{
-			if( rayCtx.tMax.x < rayCtx.tMax.y )
-			{
-				if( rayCtx.tMax.x < rayCtx.tMax.z )
-				{
-					run = Step( rayCtx, rayCtx.StepXDir );
-					rayCtx.tMax.x += rayCtx.tDelta.x;
-				}
-				else
-				{
-					run = Step( rayCtx, rayCtx.StepZDir );
-					rayCtx.tMax.z += rayCtx.tDelta.z;
-				}
-			}
-			else
-			{
-				if( rayCtx.tMax.y < rayCtx.tMax.z )
-				{
-					run = Step( rayCtx, rayCtx.StepYDir );
-					rayCtx.tMax.y += rayCtx.tDelta.y;
-				}
-				else
-				{
-					run = Step( rayCtx, rayCtx.StepZDir );
-					rayCtx.tMax.z += rayCtx.tDelta.z;
-				}
-			}
-		}
+
+
 
 		// Shading
 		OctreeLeaf leaf = GetResultLeafNode( rayCtx );
@@ -283,14 +251,16 @@ const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& p
 //
 void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& rayCtx )
 {
+	const float epsilon = exp2f( -rayCtx.Octree->GetMaxDepth() );
+
 	rayCtx.RayStartPosition = position;
 	rayCtx.RayDirection = direction;
 
- //   // Get rid of small ray direction components to avoid division by zero.
+    // Get rid of small ray direction components to avoid division by zero.
 
-	//if( fabsf( rayCtx.RayDirection.x ) < epsilon ) rayCtx.RayDirection.x = copysignf( epsilon, rayCtx.RayDirection.x );
-	//if( fabsf( rayCtx.RayDirection.y ) < epsilon ) rayCtx.RayDirection.y = copysignf( epsilon, rayCtx.RayDirection.y );
-	//if( fabsf( rayCtx.RayDirection.z ) < epsilon ) rayCtx.RayDirection.z = copysignf( epsilon, rayCtx.RayDirection.z );
+	if( fabsf( rayCtx.RayDirection.x ) < epsilon ) rayCtx.RayDirection.x = copysignf( epsilon, rayCtx.RayDirection.x );
+	if( fabsf( rayCtx.RayDirection.y ) < epsilon ) rayCtx.RayDirection.y = copysignf( epsilon, rayCtx.RayDirection.y );
+	if( fabsf( rayCtx.RayDirection.z ) < epsilon ) rayCtx.RayDirection.z = copysignf( epsilon, rayCtx.RayDirection.z );
 
 	// Precompute the coefficients of tx(x), ty(y), and tz(z).
 	// The octree is assumed to reside at coordinates [1, 2].
@@ -307,27 +277,28 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
     // Select octant mask to mirror the coordinate system so
     // that ray direction is negative along each axis.
 
-	ChildFlag childFlag = 7;
-	if( rayCtx.RayDirection.x > 0.0f ) childFlag ^= 1, rayCtx.tBias.x = 3.0f * rayCtx.tCoeff.x - rayCtx.tBias.x;
-	if( rayCtx.RayDirection.y > 0.0f ) childFlag ^= 2, rayCtx.tBias.y = 3.0f * rayCtx.tCoeff.y - rayCtx.tBias.y;
-	if( rayCtx.RayDirection.z > 0.0f ) childFlag ^= 4, rayCtx.tBias.z = 3.0f * rayCtx.tCoeff.z - rayCtx.tBias.z;
+	rayCtx.OctantMask = 7;
+	if( rayCtx.RayDirection.x > 0.0f ) rayCtx.OctantMask ^= 1, rayCtx.tBias.x = ParamLineX( 3.0f, rayCtx );
+	if( rayCtx.RayDirection.y > 0.0f ) rayCtx.OctantMask ^= 2, rayCtx.tBias.y = ParamLineY( 3.0f, rayCtx );
+	if( rayCtx.RayDirection.z > 0.0f ) rayCtx.OctantMask ^= 4, rayCtx.tBias.z = ParamLineZ( 3.0f, rayCtx );
 
 
-    //// Initialize the active span of t-values.
-    //float t_min = fmaxf(fmaxf(2.0f * tx_coef - tx_bias, 2.0f * ty_coef - ty_bias), 2.0f * tz_coef - tz_bias);
-    //float t_max = fminf(fminf(tx_coef - tx_bias, ty_coef - ty_bias), tz_coef - tz_bias);
-    //float h = t_max;
-    //t_min = fmaxf(t_min, 0.0f);
-    //t_max = fminf(t_max, 1.0f);
+	// Initialize the active span of t-values.
+	rayCtx.tMin = fmaxf( fmaxf( ParamLineX( 2.0f, rayCtx ), ParamLineZ( 2.0f, rayCtx ) ), ParamLineZ( 2.0f, rayCtx ) );
+	rayCtx.tMax = fminf( fminf( ParamLineX( 1.0f, rayCtx ), ParamLineZ( 1.0f, rayCtx ) ), ParamLineZ( 1.0f, rayCtx ) );
+	float h = rayCtx.tMax;
+	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
+	rayCtx.tMax = fminf( rayCtx.tMax, 1.0f );
 
 	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
 	rayCtx.Scale = rayCtx.Octree->GetMaxDepth();
 	rayCtx.ScaleExp = 0.5f;
+	rayCtx.ChildIdx = 0;
 	rayCtx.Position = XMFLOAT3( 1.0f, 1.0f, 1.0f );
 
-	//if( 1.5f * rayCtx.tCoeff.x - rayCtx.tBias.x > t_min ) idx ^= 1, rayCtx.Position.x = 1.5f;
-	//if( 1.5f * rayCtx.tCoeff.y - rayCtx.tBias.y > t_min ) idx ^= 2, rayCtx.Position.y = 1.5f;
-	//if( 1.5f * rayCtx.tCoeff.z - rayCtx.tBias.z > t_min ) idx ^= 4, rayCtx.Position.z = 1.5f;
+	if( 1.5f * rayCtx.tCoeff.x - rayCtx.tBias.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
+	if( 1.5f * rayCtx.tCoeff.y - rayCtx.tBias.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
+	if( 1.5f * rayCtx.tCoeff.z - rayCtx.tBias.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
 }
 
 // ================================ //
@@ -503,6 +474,39 @@ uint8					RaycasterCPU::CountNodesBefore		( ChildFlag childFlag, uint8 childMask
 		numNodesBefore += ( nodesBefore >> i ) & 0x1;
 
 	return numNodesBefore;
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT3		RaycasterCPU::ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& rayCtx )
+{
+	XMFLOAT3 result;
+	result.x = rayCtx.tCoeff.x * coords.x - rayCtx.tBias.x;
+	result.y = rayCtx.tCoeff.y * coords.y - rayCtx.tBias.y;
+	result.z = rayCtx.tCoeff.z * coords.z - rayCtx.tBias.z;
+
+	return result;
+}
+
+// ================================ //
+//
+float					RaycasterCPU::ParamLineX			( float posX, RaycasterContext& rayCtx )
+{
+	return rayCtx.tCoeff.x * posX - rayCtx.tBias.x;
+}
+
+// ================================ //
+//
+float					RaycasterCPU::ParamLineY			( float posY, RaycasterContext& rayCtx )
+{
+	return rayCtx.tCoeff.y * posY - rayCtx.tBias.y;
+}
+
+// ================================ //
+//
+float					RaycasterCPU::ParamLineZ			( float posZ, RaycasterContext& rayCtx )
+{
+	return rayCtx.tCoeff.z * posZ - rayCtx.tBias.z;
 }
 
 //====================================================================================//
