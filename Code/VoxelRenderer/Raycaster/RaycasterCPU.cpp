@@ -24,6 +24,21 @@ const uint8 PositiveOUT = 8;
 const uint8 NegativeOUT = 9;
 
 
+// ================================ //
+//
+uint32			FloatAsInt		( float number )
+{
+	return reinterpret_cast< uint32& >( number );
+}
+
+// ================================ //
+//
+float			IntAsFloat		( int number )
+{
+	return reinterpret_cast< float& >( number );
+}
+
+
 /**@brief Transition table for node children.
 
 OctreeNode contains child mask. Every child in octree has it's position in this mask.
@@ -175,19 +190,23 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 	{
 		RaycasterContext rayCtx;
 		rayCtx.Octree = data.Octree;
+		rayCtx.NodesStack.resize( rayCtx.Octree->GetMaxDepth() + 1 );
 		
 		// Find starting position
 		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
 		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
 		
 		InitRaycasting( position, direction, rayCtx );
+		
+		float h = rayCtx.tMax;
+		const OctreeNode* childDescriptor = nullptr;
 
-		const OctreeNode& startNode = FindStartingNode( position, rayCtx.RayDirection, rayCtx );
 
 		// Write proper condition.
 		while( true )
 		{
-			const OctreeNode* childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
+			if( !childDescriptor )
+				childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
 
 			XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
 			float tc_max = Min( corner );
@@ -210,9 +229,94 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 					//if( ( child_masks & 0x0080 ) == 0 )
 					//	break; // at t_min (overridden with tv_min).
 
-					// ...
+					if( tc_max < h )
+						PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
+
+					h = tc_max;
+
+					// Find child descriptor corresponding to the current voxel.
+					uint32 childOffset = 0;
+					if( IsIndirectPointer( childDescriptor ) ) // far
+					{
+						childOffset = GetIndirectPtr( rayCtx, childDescriptor );
+					}
+					else
+					{
+						childOffset = rayCtx.Current + childDescriptor->ChildPackPtr;
+					}
+
+					childOffset += CountNodesBefore( childShift, childDescriptor->ChildMask );
+					rayCtx.Current = childOffset;
+
+
+					// Select child voxel that the ray enters first.
+					rayCtx.ChildIdx = 0;
+					rayCtx.Scale--;
+					rayCtx.ScaleExp = half;
+
+					if( tCenter.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x += rayCtx.ScaleExp;
+					if( tCenter.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y += rayCtx.ScaleExp;
+					if( tCenter.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z += rayCtx.ScaleExp;
+
+					// Update active t-span and invalidate cached child descriptor.
+
+					rayCtx.tMax = tv_max;
+					childDescriptor = nullptr;
+					continue;
+
 				}
 			}
+
+			// ADVANCE
+			// Step along the ray.
+
+			int step_mask = 0;
+			if( corner.x <= tc_max ) step_mask ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
+			if( corner.y <= tc_max ) step_mask ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
+			if( corner.z <= tc_max ) step_mask ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
+
+			// Update active t-span and flip bits of the child slot index.
+
+			rayCtx.tMin = tc_max;
+			rayCtx.ChildIdx ^= step_mask;
+
+			// Proceed with pop if the bit flips disagree with the ray direction.
+
+			if( ( rayCtx.ChildIdx & step_mask ) != 0 )
+			{
+				// POP
+				// Find the highest differing bit between the two positions.
+
+				unsigned int differing_bits = 0;
+				if( ( step_mask & 1 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.x ) ^ FloatAsInt( rayCtx.Position.x + rayCtx.ScaleExp );
+				if( ( step_mask & 2 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.y ) ^ FloatAsInt( rayCtx.Position.y + rayCtx.ScaleExp );
+				if( ( step_mask & 4 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.z ) ^ FloatAsInt( rayCtx.Position.z + rayCtx.ScaleExp );
+				rayCtx.Scale = ( FloatAsInt( (float)differing_bits ) >> 23 ) - 127; // position of the highest bit
+				rayCtx.ScaleExp = IntAsFloat( ( rayCtx.Scale - rayCtx.Octree->GetMaxDepth() + 127 ) << 23 ); // exp2f(scale - s_max)
+
+				// Restore parent voxel from the stack.
+
+				auto stackElement = ReadStack( rayCtx, rayCtx.Scale );
+				rayCtx.Current = stackElement.Node;
+				rayCtx.tMax = stackElement.tMax;
+				
+
+				// Round cube position and extract child slot index.
+
+				int shx = FloatAsInt( rayCtx.Position.x ) >> rayCtx.Scale;
+				int shy = FloatAsInt( rayCtx.Position.y ) >> rayCtx.Scale;
+				int shz = FloatAsInt( rayCtx.Position.z ) >> rayCtx.Scale;
+				rayCtx.Position.x = IntAsFloat( shx << rayCtx.Scale );
+				rayCtx.Position.y = IntAsFloat( shy << rayCtx.Scale );
+				rayCtx.Position.z = IntAsFloat( shz << rayCtx.Scale );
+				rayCtx.ChildIdx  = ( shx & 1 ) | ( ( shy & 1 ) << 1 ) | ( ( shz & 1 ) << 2 );
+
+				// Prevent same parent from being stored again and invalidate cached child descriptor.
+
+				h = 0.0f;
+				childDescriptor = nullptr;
+			}
+
 		}
 
 
@@ -280,7 +384,7 @@ const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& p
 //
 void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& rayCtx )
 {
-	const float epsilon = exp2f( -rayCtx.Octree->GetMaxDepth() );
+	const float epsilon = exp2f( -(float)rayCtx.Octree->GetMaxDepth() );
 
 	rayCtx.RayStartPosition = position;
 	rayCtx.RayDirection = direction;
@@ -330,59 +434,12 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	if( 1.5f * rayCtx.tCoeff.z - rayCtx.tBias.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
 }
 
-// ================================ //
-//
-bool					RaycasterCPU::Step			( RaycasterContext& raycasterContext, StepDirection stepAxis )
-{
-	ChildFlag curFlag = ComputeNodeFlag( raycasterContext.NodesStack.top(), raycasterContext.Current, raycasterContext.Octree );
-	ChildFlag nextChild = ComputeNextChildFlag( curFlag, stepAxis );
-
-	if( IsRayOutside( nextChild ) )
-	{
-		StepUp( raycasterContext );
-	}
-	else
-	{
-		const OctreeNode& current = SetCurrentNode( raycasterContext.NodesStack.top(), nextChild, raycasterContext );
-		
-		// If this is leaf node, then stop raycasting.
-		if( current.IsLeafNode )
-			return false;
-		
-		if( !IsEmpty( current ) )
-		{
-			StepDown( raycasterContext );
-		}
-	}
-
-	return true;
-}
-
-// ================================ //
-//
-void					RaycasterCPU::StepUp				( RaycasterContext& raycasterContext )
-{
-	raycasterContext.GridSize *= 2.0f;
-
-
-	assert( !"Implement me" );
-}
-
-// ================================ //
-//
-void					RaycasterCPU::StepDown				( RaycasterContext& raycasterContext )
-{
-	raycasterContext.GridSize /= 2.0f;
-
-	assert( !"Implement me" );
-}
-
 
 // ================================ //
 //
 const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext& raycasterContext ) const
 {
-	uint32 offsetToLeaf = raycasterContext.NodesStack.top();
+	uint32 offsetToLeaf = raycasterContext.NodesStack[ raycasterContext.Scale ].Node;
 	const OctreeNode& node = raycasterContext.Octree->GetNode( offsetToLeaf );
 
 	assert( node.IsLeafNode );
@@ -556,7 +613,38 @@ float					RaycasterCPU::Min					( DirectX::XMFLOAT3& coords )
 //
 bool					RaycasterCPU::ExistsChild			( const OctreeNode* node, ChildFlag childShift )
 {
-	return node->ChildMask & ( 0x1 << childShift );
+	return ( node->ChildMask & ( 0x1 << childShift ) ) != 0;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::IsIndirectPointer		( const OctreeNode* node )
+{
+	return node->IndirectPtr;
+}
+
+// ================================ //
+//
+uint32					RaycasterCPU::GetIndirectPtr		( RaycasterContext& rayCtx, const OctreeNode* node )
+{
+	uint32 firstIndirect = (uint32)rayCtx.Octree->GetFirstFreeIndirect();
+	return node->ChildPackPtr + firstIndirect;
+}
+
+// ================================ //
+//
+void					RaycasterCPU::PushOnStack			( RaycasterContext& rayCtx, uint32 idx, uint32 node, float tMax )
+{
+	auto& stack = rayCtx.NodesStack;
+	stack[ idx ] = StackElement( node, tMax );
+}
+
+// ================================ //
+//
+StackElement			RaycasterCPU::ReadStack				( RaycasterContext& rayCtx, uint32 idx )
+{
+	auto& stack = rayCtx.NodesStack;
+	return stack[ idx ];
 }
 
 //====================================================================================//

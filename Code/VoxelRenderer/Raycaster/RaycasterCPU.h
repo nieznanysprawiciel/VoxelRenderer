@@ -37,6 +37,27 @@ struct ThreadData
 
 // ================================ //
 //
+struct StackElement
+{
+	uint32		Node;
+	float		tMax;
+
+// ================================ //
+//
+	StackElement()
+		:	Node( 0 )
+		,	tMax( 0 )
+	{}
+
+	StackElement( uint32 node, float tMax )
+		:	Node( node )
+		,	tMax( tMax )
+	{}
+};
+
+
+// ================================ //
+//
 struct RaycasterContext
 {
 	OctreePtr						Octree;
@@ -55,7 +76,7 @@ struct RaycasterContext
 	uint32							Current;		///< Current node, we are in.
 	ChildFlag						OctantMask;		///< Child bit flipping.
 	ChildFlag						ChildIdx;		///< Child in children mask.
-	std::stack< uint32 >			NodesStack;		///< Absolut offsets from beginning of array.
+	std::vector< StackElement >		NodesStack;		///< Absolut offsets from beginning of array.
 
 	int								Scale;
 	float							ScaleExp;
@@ -116,11 +137,6 @@ private:
 	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
 	void					InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& RaycasterContext );
 
-	// Step along axis and find new node.
-	bool					Step					( RaycasterContext& raycasterContext, StepDirection stepAxis );
-	void					StepUp					( RaycasterContext& raycasterContext );
-	void					StepDown				( RaycasterContext& raycasterContext );
-
 	// Attributes
 	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;
 	const VoxelAttributes&	GetLeafAttributes		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const;
@@ -144,6 +160,11 @@ private:
 
 	float					Min						( DirectX::XMFLOAT3& coords );
 	bool					ExistsChild				( const OctreeNode* node, ChildFlag childShift );
+	bool					IsIndirectPointer		( const OctreeNode* node );
+	uint32					GetIndirectPtr			( RaycasterContext& rayCtx, const OctreeNode* node );
+
+	void					PushOnStack				( RaycasterContext& rayCtx, uint32 idx, uint32 node, float tMax );
+	StackElement			ReadStack				( RaycasterContext& rayCtx, uint32 idx );
 };
 
 
