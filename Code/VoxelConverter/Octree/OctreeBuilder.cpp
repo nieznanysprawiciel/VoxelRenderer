@@ -241,7 +241,7 @@ vr::OctreeNode&		OctreeBuilder::AccessNode			( uint32 absolutOffset )
 Size				OctreeBuilder::AllocateNodes		( uint8 numNodes )
 {
 	Size firstNodeOffset = m_curNodesOffset;
-	m_curNodesOffset += numNodes * sizeof( vr::OctreeNode );
+	m_curNodesOffset += numNodes;
 	return firstNodeOffset;
 }
 

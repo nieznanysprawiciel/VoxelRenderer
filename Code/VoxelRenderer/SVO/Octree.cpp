@@ -11,6 +11,9 @@ namespace vr
 // ================================ //
 //
 Octree::Octree()
+	:	m_gridSize( 1024 )
+	,	m_indirectPtrs( 0 )
+	,	m_maxDepth( 23 )
 {}
 
 // ================================ //
