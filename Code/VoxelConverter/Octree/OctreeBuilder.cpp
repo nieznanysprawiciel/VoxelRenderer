@@ -26,7 +26,7 @@ bool				ReadNodes				( OctreeInfo& srcOctree, uint8* data )
 	if( file )
 	{
 		//fileStream.read( (char*)data, size );
-		fread( (char*)data, 1, size, file );
+		Size read = fread( (char*)data, 1, size, file );
 		fclose( file );
 		return true;
 	}
@@ -45,7 +45,7 @@ bool				ReadData				( OctreeInfo& srcOctree, uint8* data )
 	if( file )
 	{
 		//fileStream.read( (char*)data, size );
-		fread( (char*)data, 1, size, file );
+		Size read = fread( (char*)data, 1, size, file );
 		fclose( file );
 		return true;
 	}
@@ -131,7 +131,7 @@ void				OctreeBuilder::BuildNodeHierarchy	()
 	auto absolutOffset = m_curNodesOffset++;
 	
 	// Note: Last node is root node, not first.
-	BuildNodeHierarchy( m_octree[ m_numNodes - 1 ], absolutOffset, Cast< vr::OctreeNode& >( m_data[ m_curNodesOffset ] ) );
+	BuildNodeHierarchy( m_octree[ m_numNodes - 1 ], absolutOffset, Cast< vr::OctreeNode& >( m_data[ absolutOffset ] ) );
 }
 
 // ================================ //
@@ -172,7 +172,7 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 			vr::OctreeNode& child = AccessNode( (uint32)absolutOffset );
 			ooc::OctreeNode& srcChild = AccessNext( srcNode, srcChildIdx );
 
-			BuildNodeHierarchy( srcChild, absolutOffset, dstNode );
+			BuildNodeHierarchy( srcChild, absolutOffset, child );
 
 			absolutOffset++;
 		}
