@@ -13,6 +13,12 @@
     <Filter Include="System">
       <UniqueIdentifier>{18dd7ec4-67fd-4084-a086-f45872537055}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Config">
+      <UniqueIdentifier>{9fe33451-06b3-4f57-b44c-6d13c623c1db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Multithreading">
+      <UniqueIdentifier>{d2e3373f-b49e-4611-a93b-e727e7ceeb9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp">
@@ -29,6 +35,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\System\File.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\Semaphore.cpp">
+      <Filter>Common\Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsBarrier.cpp">
+      <Filter>Common\Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Multithreading\ThreadsLatch.cpp">
+      <Filter>Common\Multithreading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +97,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\System\Path.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Config\ConfigHelper.h">
+      <Filter>Common\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsBarrier.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\ThreadsLatch.h">
+      <Filter>Common\Multithreading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

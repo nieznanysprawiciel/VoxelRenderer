@@ -23,6 +23,7 @@ Chunk can consist of nested chunks or it can contain data.
 @ingroup HierarchicalChunkedFormat*/
 class Chunk
 {
+	FRIEND_CLASS_TESTER( HCF );
 private:
 
 	ChunkReprPtr		m_chunkPtr;

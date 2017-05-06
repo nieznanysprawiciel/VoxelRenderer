@@ -26,11 +26,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Tests\TestHCF\TestHCF.cpp" />
+    <ClCompile Include="..\..\..\..\Tests\TestHCF\TestStreamPosition.cpp" />
     <ClCompile Include="..\..\..\..\Tests\TestHCF\TestWriteFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Tests\TestHCF\stdafx.h" />
     <ClInclude Include="..\..\..\..\Tests\TestHCF\targetver.h" />
+    <ClInclude Include="..\..\..\..\Tests\TestHCF\TesterClasses\TestAttribs.h" />
+    <ClInclude Include="..\..\..\..\Tests\TestHCF\TesterClasses\TesterHCF.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj">

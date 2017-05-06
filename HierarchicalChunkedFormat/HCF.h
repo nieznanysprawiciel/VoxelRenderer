@@ -33,6 +33,7 @@ class ImplHCF;
 @ingroup HierarchicalChunkedFormat*/
 class HCF
 {
+	FRIEND_CLASS_TESTER( HCF );
 public:
 
 	enum WriteMode : uint8
@@ -41,8 +42,9 @@ public:
 		Indirect
 	};
 
-	const static bool		READ_ONLY		= true;
-	const static bool		READ_WRITE		= false;
+	const static bool		READ_ONLY				= true;
+	const static bool		READ_WRITE				= false;
+	const static Size		UserDefinedAttributes	= 0xFFFFFFFFFFFF0000;
 
 private:
 	ImplHCF			m_impl;

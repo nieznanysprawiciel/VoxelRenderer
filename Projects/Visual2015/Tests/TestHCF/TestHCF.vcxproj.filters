@@ -7,6 +7,9 @@
     <Filter Include="PrecompiledHeader">
       <UniqueIdentifier>{7d514d91-4bd2-4ff5-88c4-b1ea4962242a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test\TesterClasses">
+      <UniqueIdentifier>{574dee79-86bb-48b1-bebd-42c7120e6b43}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Tests\TestHCF\TestHCF.cpp">
@@ -18,6 +21,9 @@
     <ClCompile Include="..\..\..\..\Tests\TestHCF\stdafx.cpp">
       <Filter>PrecompiledHeader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\TestHCF\TestStreamPosition.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Tests\TestHCF\targetver.h">
@@ -25,6 +31,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Tests\TestHCF\stdafx.h">
       <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Tests\TestHCF\TesterClasses\TesterHCF.h">
+      <Filter>Test\TesterClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Tests\TestHCF\TesterClasses\TestAttribs.h">
+      <Filter>Test\TesterClasses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

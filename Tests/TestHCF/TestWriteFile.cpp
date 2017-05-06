@@ -3,6 +3,8 @@
 
 #include "swCommonLib/External/Catch/catch.hpp"
 
+#include "TesterClasses/TestAttribs.h"
+#include "TesterClasses/TesterHCF.h"
 
 #include <numeric>
 
@@ -39,6 +41,9 @@ typedef int DataElementType;
 
 
 
+
+// ================================ //
+//
 TEST_CASE( "HCF - Simple write test" )
 {
 	std::vector< DataElementType > writeData( DataElementsCount );
@@ -103,6 +108,8 @@ TEST_CASE( "HCF - Simple write test" )
 }
 
 
+// ================================ //
+//
 TEST_CASE( "HCF - Simple load test" )
 {
 	// Comparision data.
@@ -176,5 +183,63 @@ TEST_CASE( "HCF - Simple load test" )
 	}
 
 	CHECK( numChunks == 2 );
+}
+
+// ================================ //
+//
+TEST_CASE( "HCF - Root chunk write test" )
+{
+	std::vector< DataElementType > writeData( DataElementsCount );
+	std::iota( writeData.begin(), writeData.end(), 1 );
+
+	sw::HCF hcf;
+	bool openResult = hcf.OpenFile( "HCF/WriteToRoot.hcf", HCF::WriteMode::DirectToFile );
+	REQUIRE( openResult );
+
+
+	VoxtreeHeader header;
+	header.VoxtreeVersion.Major = 1;
+	header.VoxtreeVersion.Minor = 0;
+	header.GridSize = 1024;
+	header.FreeIndirectOffset = 3;
+
+	Attribute attrib = hcf.AddAttribute( header );
+	CHECK( CLASS_TESTER( HCF )::ValidateStreamPos( &hcf, attrib ) );
+
+	sw::Chunk root = hcf.CreateRootChunk();
+	root.Fill( (sw::DataPtr)writeData.data(), writeData.size() * sizeof( DataElementType ) );
+
+	CHECK( CLASS_TESTER( HCF )::ValidateStreamPos( &hcf, root ) );
+
+	bool result = hcf.WriteFile( "HCF/WriteToRoot.hcf" );
+	CHECK( result );
+
+//====================================================================================//
+//			Load	
+//====================================================================================//
+
+	sw::HCF loadHCF;
+	openResult = loadHCF.LoadFile( "HCF/WriteToRoot.hcf", sw::HCF::READ_ONLY );
+	REQUIRE( openResult );
+
+	root = loadHCF.GetRootChunk();
+	REQUIRE( root.IsValid() );
+
+	DataPack data = root.AccessData();
+		
+	// Check content.
+	REQUIRE( data.Data );
+	CHECK( data.DataSize == DataElementsCount * sizeof( DataElementType ) );
+
+	// Compare loaded data with reference
+	bool equal = true;
+	DataElementType* typedData = (DataElementType*)data.Data;
+		
+	for( size_t i = 0; i < DataElementsCount; i++ )
+	{
+		if( writeData[ i ] != typedData[ i ] )
+			equal = false;
+	}
+	CHECK( equal );
 }
 
