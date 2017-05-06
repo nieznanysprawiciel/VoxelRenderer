@@ -63,6 +63,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VoxelConverter", "VoxelConv
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HierarchicalChunkedFormat", "..\Code\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj", "{50CF2C5D-4A13-4D16-8E65-441FE7155333}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestHCF", "..\Code\swCommonLib\Projects\Visual2015\Tests\TestHCF\TestHCF.vcxproj", "{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -239,6 +241,14 @@ Global
 		{50CF2C5D-4A13-4D16-8E65-441FE7155333}.Release|x64.Build.0 = Release|x64
 		{50CF2C5D-4A13-4D16-8E65-441FE7155333}.Release|x86.ActiveCfg = Release|Win32
 		{50CF2C5D-4A13-4D16-8E65-441FE7155333}.Release|x86.Build.0 = Release|Win32
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Debug|x64.ActiveCfg = Debug|x64
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Debug|x64.Build.0 = Debug|x64
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Debug|x86.ActiveCfg = Debug|Win32
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Debug|x86.Build.0 = Debug|Win32
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Release|x64.ActiveCfg = Release|x64
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Release|x64.Build.0 = Release|x64
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Release|x86.ActiveCfg = Release|Win32
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -271,5 +281,6 @@ Global
 		{80818BD9-AA06-4F52-8CF2-4A9401BFC59E} = {20734CE1-5FB7-48DC-9377-DD64CC667BA8}
 		{267292A0-C262-43E7-AFB1-1F63439FD465} = {80818BD9-AA06-4F52-8CF2-4A9401BFC59E}
 		{50CF2C5D-4A13-4D16-8E65-441FE7155333} = {5264A6C4-7E1A-4695-BAEE-E3634AA308C9}
+		{CC1DC1E6-26BB-43D3-A156-4C60DC92DDB5} = {236BB984-A2C6-4873-9160-8D6FE7DB0B34}
 	EndGlobalSection
 EndGlobal

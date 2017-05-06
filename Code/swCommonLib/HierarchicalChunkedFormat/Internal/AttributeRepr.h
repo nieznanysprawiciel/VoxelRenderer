@@ -5,6 +5,7 @@
 @copyright File is part of Sleeping Wombat Libraries.
 */
 
+#include "swCommonLib/Common/TypesDefinitions.h"
 #include "swCommonLib/HierarchicalChunkedFormat/Headers/AttributeHeader.h"
 
 namespace sw
@@ -21,6 +22,8 @@ class ImplHCF;
 /**@brief */
 class AttributeRepr
 {
+	FRIEND_CLASS_TESTER( HCF );
+	FRIEND_CLASS_TESTER( AttributeRepr );
 private:
 	ImplHCF*			m_hcf;
 

@@ -8,6 +8,8 @@
 #include "swCommonLib/HierarchicalChunkedFormat/Internal/ImplHCF.h"
 #include "ChunkRepr.h"
 
+#include <assert.h>
+
 
 namespace sw
 {
@@ -21,6 +23,9 @@ ChunkRepr::ChunkRepr( ImplHCF* hcf, ChunkReprPtr& parent )
 {
 	if( m_hcf->m_directWrite )
 		m_absolutOffset = m_hcf->ReserveMemory( sizeof( ChunkHeader ) );
+	
+	// Reserve space for header and move write pointer.
+	UpdateHeader();
 }
 
 // ================================ //
@@ -161,7 +166,15 @@ bool			ChunkRepr::Fill				( const DataPtr data, Size dataSize )
 			if( !file )
 				throw std::runtime_error( "No file opened for writing." );
 
-			fwrite( (void*)data, dataSize, 1, file );
+			//// Validate position in stream.
+			//Size streamPos = ftell( file );
+			//assert( m_header.DataOffset + m_absolutOffset == streamPos );
+
+			Size written = fwrite( (void*)data, 1, dataSize, file );
+			
+			// @todo What to do in this case. Should we revert to previous state? Do some error handling.
+			assert( written == dataSize );
+
 			UpdateHeader();
 
 			return true;
@@ -358,7 +371,12 @@ DataUPack		ChunkRepr::LoadData()
 		//Size revertOffset = m_hcf->ReserveMemory( 0 );	// Remember current read pointer
 
 		fseek( file, (long)m_absolutOffset + m_header.DataOffset, SEEK_SET );
-		fread( dstPtr, dataPack.DataSize, 1, file );
+		Size readBytes = fread( dstPtr, 1, dataPack.DataSize, file );
+
+		// @todo What to do in this case. Should we revert to previous state? Do some error handling.
+		if( readBytes != dataPack.DataSize )
+			return DataUPack();
+		
 		//fseek( file, (long)revertOffset, SEEK_SET );		// Set previous file position.
 
 		return std::move( dataPack );

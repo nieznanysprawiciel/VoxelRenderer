@@ -33,6 +33,7 @@ class ImplHCF;
 @ingroup HierarchicalChunkedFormat*/
 class HCF
 {
+	FRIEND_CLASS_TESTER( HCF );
 public:
 
 	enum WriteMode : uint8

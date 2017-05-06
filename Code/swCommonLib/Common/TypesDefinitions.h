@@ -85,3 +85,6 @@ UPtr< PtrType >		MakeOPtr		( Args... args )
 #define DEFINE_WPTR_TYPE( type )		typedef std::weak_ptr< type > type ## WPtr;
 #define DEFINE_OPTR_TYPE( type )		typedef OPtr< type > type ## OPtr;
 
+
+#define CLASS_TESTER( type )			__ ## type ## __Tester
+#define FRIEND_CLASS_TESTER( type )		friend class CLASS_TESTER( type );

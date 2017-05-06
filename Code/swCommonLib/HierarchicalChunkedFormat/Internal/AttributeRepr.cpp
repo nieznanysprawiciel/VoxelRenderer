@@ -40,10 +40,11 @@ void		AttributeRepr::FillAttribute		( const DataPtr data, Size dataSize )
 		if( !file )
 			throw std::runtime_error( "No file opened for writing." );
 
-		m_absolutOffset = m_hcf->ReserveMemory( sizeof( AttributeHeader ) + dataSize );
+		m_header.AttribSize = sizeof( AttributeHeader ) + dataSize;
+		m_absolutOffset = m_hcf->ReserveMemory( m_header.AttribSize );
 
 		fwrite( (void*)&AccessHeader(), sizeof( AttributeHeader ), 1, file );
-		fwrite( data, dataSize, 1, file );
+		fwrite( data, 1, dataSize, file );
 	}
 	else
 	{

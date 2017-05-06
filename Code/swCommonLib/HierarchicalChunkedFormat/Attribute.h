@@ -20,6 +20,7 @@ DEFINE_PTR_TYPE( AttributeRepr );
 @ingroup HierarchicalChunkedFormat*/
 class Attribute
 {
+	FRIEND_CLASS_TESTER( HCF );
 private:
 
 	AttributeReprPtr		m_attribPtr;

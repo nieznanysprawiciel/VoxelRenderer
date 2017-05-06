@@ -5,6 +5,8 @@
 @copyright File is part of Sleeping Wombat Libraries.
 */
 
+#include "swCommonLib/Common/TypesDefinitions.h"
+
 #include "swCommonLib/HierarchicalChunkedFormat/Headers/ChunkHeader.h"
 #include "swCommonLib/HierarchicalChunkedFormat/Chunk.h"
 #include "swCommonLib/HierarchicalChunkedFormat/Internal/AttributeRepr.h"
@@ -24,6 +26,8 @@ class ImplHCF;
 /**@brief */
 class ChunkRepr : public std::enable_shared_from_this< ChunkRepr >
 {
+	FRIEND_CLASS_TESTER( HCF );
+	FRIEND_CLASS_TESTER( ChunkRepr );
 private:
 	ImplHCF*		m_hcf;
 

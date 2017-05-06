@@ -27,6 +27,8 @@ namespace sw
 /**@brief */
 class ImplHCF
 {
+	FRIEND_CLASS_TESTER( HCF );
+	FRIEND_CLASS_TESTER( ImplHCF );
 private:
 
 	FileHeader			m_header;

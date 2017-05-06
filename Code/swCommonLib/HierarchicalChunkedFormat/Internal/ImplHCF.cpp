@@ -89,6 +89,8 @@ bool			ImplHCF::WriteFile	( const filesystem::Path& filePath )
 		fseek( m_file, (long)0, SEEK_SET );
 		fwrite( (void*)&m_header, sizeof( FileHeader ), 1, m_file );
 
+		fclose( m_file );
+
 		return true;
 	}
 	else
@@ -182,7 +184,7 @@ Attribute		ImplHCF::AddAttribute	( AttributeReprPtr& list, AttributeType type, c
 //
 Size			ImplHCF::ComputeWholeSize	( Attribute attrib )
 {
-	return attrib.GetSize() + sizeof( AttributeHeader );
+	return attrib.GetSize();
 }
 
 
