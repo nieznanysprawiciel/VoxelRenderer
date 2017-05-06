@@ -171,6 +171,7 @@ void			RaycasterCPU::PrepareThreads()
 
 // ================================ //
 //
+// Based on: https://research.nvidia.com/publication/efficient-sparse-voxel-octrees
 void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
 	std::vector< uint32 > colors =
@@ -208,6 +209,10 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			if( !childDescriptor )
 				childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
 
+			// Terminate.
+			if( IsLeaf( childDescriptor ) )
+				break;
+
 			XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
 			float tc_max = Min( corner );
 
@@ -215,6 +220,7 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 			if( ExistsChild( childDescriptor, childShift ) && rayCtx.tMin <= rayCtx.tMax )
 			{
+				//// Terminate if the voxel is small enough.
 				//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
 				//	break; // at t_min
 
@@ -226,6 +232,7 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 				if( rayCtx.tMin <= tv_max )
 				{
+					//// Terminate if the corresponding bit in the non-leaf mask is not set.
 					//if( ( child_masks & 0x0080 ) == 0 )
 					//	break; // at t_min (overridden with tv_min).
 
@@ -439,8 +446,7 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 //
 const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext& raycasterContext ) const
 {
-	uint32 offsetToLeaf = raycasterContext.NodesStack[ raycasterContext.Scale ].Node;
-	const OctreeNode& node = raycasterContext.Octree->GetNode( offsetToLeaf );
+	const OctreeNode& node = raycasterContext.Octree->GetNode( raycasterContext.Current );
 
 	assert( node.IsLeafNode );
 
@@ -614,6 +620,13 @@ float					RaycasterCPU::Min					( DirectX::XMFLOAT3& coords )
 bool					RaycasterCPU::ExistsChild			( const OctreeNode* node, ChildFlag childShift )
 {
 	return ( node->ChildMask & ( 0x1 << childShift ) ) != 0;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::IsLeaf				( const OctreeNode* node )
+{
+	return node->IsLeafNode;
 }
 
 // ================================ //

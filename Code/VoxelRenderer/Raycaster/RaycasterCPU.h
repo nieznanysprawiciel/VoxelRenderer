@@ -160,6 +160,7 @@ private:
 
 	float					Min						( DirectX::XMFLOAT3& coords );
 	bool					ExistsChild				( const OctreeNode* node, ChildFlag childShift );
+	bool					IsLeaf					( const OctreeNode* node );
 	bool					IsIndirectPointer		( const OctreeNode* node );
 	uint32					GetIndirectPtr			( RaycasterContext& rayCtx, const OctreeNode* node );
 
