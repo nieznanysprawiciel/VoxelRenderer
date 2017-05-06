@@ -3,10 +3,18 @@
 #include <string>
 
 
+/**@defgroup Helpers
+@ingroup CommonLibrary
+@brief Helper objects for different purposes.*/
+
+
 enum class NullableInit
 {		Valid	};
 
 
+
+/**@brief Returns value or error.
+@ingroup Helpers*/
 template< typename ResultType >
 struct Nullable
 {

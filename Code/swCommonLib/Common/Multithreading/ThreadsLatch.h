@@ -19,7 +19,9 @@ namespace sw
 
 
 /**@brief Can block multiple threads and wait for signal.
-ThreadsLatch is not reusable. Use ThreadsBarrier instead.*/
+ThreadsLatch is not reusable. Use ThreadsBarrier instead.
+
+@ingroup Helpers*/
 class ThreadsLatch
 {
 private:

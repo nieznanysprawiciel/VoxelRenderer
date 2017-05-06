@@ -21,7 +21,8 @@ namespace sw
 
 /**@brief Semaphore class.
 
-@ingroup Multithreading.*/
+@ingroup Multithreading.
+@ingroup Helpers*/
 class Semaphore
 {
 private:

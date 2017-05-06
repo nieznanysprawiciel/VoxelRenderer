@@ -22,7 +22,8 @@ ThreadsBarrier is reusable.
 
 Implementation based on http://stackoverflow.com/questions/24465533/implementing-boostbarrier-in-c11
 
-@todo Implement*/
+@todo Implement
+@ingroup Helpers*/
 class ThreadsBarrier
 {
 private:

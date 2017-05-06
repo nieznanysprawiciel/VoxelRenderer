@@ -9,10 +9,6 @@ typedef std::mutex SpinLock;
 
 #else
 
-/**
-@defgroup Multithreading Helpers for multithreading
-@ingroup CommonLibrary
-*/
 
 /**
 @brief Klasa s³u¿¹ca jako mutex z aktywnym oczekiwaniem.
@@ -25,6 +21,8 @@ Mo¿liwe jest u¿ywanie klasy we wspó³pracy z mechanizmami takimi jak std::lock_gu
 
 Ze wzglêdu na to, ¿e Visual Studio nie potrafi kompilowaæ asemblera pod architekturê ARM,
 na razie klasa nadaje siê do u¿ytku jedynie pod procesorami x86.
+
+@ingroup Helpers
 */
 class SpinLock
 {

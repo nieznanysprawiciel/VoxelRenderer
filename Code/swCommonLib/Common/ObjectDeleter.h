@@ -10,9 +10,11 @@ które maj¹ prywatne destruktory.
 template <class TYPE> class ResourceContainer;
 
 
+
+
 /**
-@defgroup DeletingObjects Private Deleter
-@ingroup CommonLibrary
+@ingroup Helpers
+
 @brief You can specify classes that can delete objects with private constructors.
 
 Niektóre obiekty s¹ zadeklarowane z prywatnym (chronionym) destruktorem, w celu uniemo¿liwienia
@@ -29,15 +31,6 @@ Dziêki temu obiekty, które maj¹ byæ kasowane, nie musz¹ siê przyjaŸniæ bezpoœred
 Wystarczy, ¿e zadeklaruj¹ przyjaŸñ z obiektem ObjectDeleter. Taka przyjaŸñ jest niegroŸna, poniewa¿
 klasa ta nie s³u¿y do niczego innego ni¿ kasowanie obiektów, wiêc jesteœmy pewni, ¿e zmiany wprowadzone
 w klasie deklaruj¹cej przyjaŸñ nie bêd¹ psu³y ca³ego kodu aplikacji.
-*/
-
-
-/**
-@ingroup DeletingObjects
-@brief Szablon klasy klucza dla obiektów ObjectDeleter.
-
-
-@copydetails DeletingObjects
 */
 template<typename class_type> class ObjectDeleterKey
 {
