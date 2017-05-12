@@ -12,7 +12,8 @@ namespace sw {
 namespace gui
 {
 
-/**@brief */
+/**@brief 
+@ingroup Brushes*/
 class RadialGradient : public GradientBrush
 {
 	RTTR_ENABLE( GradientBrush );

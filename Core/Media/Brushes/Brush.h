@@ -9,12 +9,17 @@
 #include "swCommonLib/Common/EngineObject.h"
 
 
+/**@defgroup Brushes Brushes
+@brief Brushes.
+@ingroup Media*/
+
 
 namespace sw {
 namespace gui
 {
 
-/**@brief Brush base class.*/
+/**@brief Brush base class.
+@ingroup Brushes*/
 class Brush : public EngineObject
 {
 	RTTR_ENABLE( EngineObject );

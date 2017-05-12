@@ -38,7 +38,7 @@ PROJECT_NAME           = "Sleeping Wombat GUI"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 1.010
+PROJECT_NUMBER         = 0.100
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -419,7 +419,7 @@ LOOKUP_CACHE_SIZE      = 0
 # normally produced when WARNINGS is set to YES.
 # The default value is: NO.
 
-EXTRACT_ALL            = NO
+EXTRACT_ALL            = YES
 
 # If the EXTRACT_PRIVATE tag is set to YES, all private members of a class will
 # be included in the documentation.
@@ -768,7 +768,10 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = 
+INPUT                  = ../swInputLibrary \
+                         . \
+                         ../swGraphicAPI \
+                         ../swCommonLib
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -845,7 +848,9 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = ProjectDir/ \
-                         Old/
+                         Old/ \
+                         ../swCommonLib/External \
+                         ../swCommonLib/Reflection
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

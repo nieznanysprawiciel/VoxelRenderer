@@ -5,6 +5,8 @@
 #include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
 #include "swGraphicAPI/ResourceManager/ResourceManager.h"
 
+#include "swInputLibrary/InputCore/Helpers/InputDispatcher.h"
+
 #include "CommonTypes/CommonTypes.h"
 
 
@@ -12,19 +14,27 @@
 #include <iostream>
 
 
+
+RTTR_REGISTRATION
+{
+	rttr::registration::class_< sw::gui::HostWindow >( "sw::gui::HostWindow" );
+}
+
+
+
 namespace sw {
 namespace gui
 {
 
-// One pointer at least, but I don't know how much it needs in reality
-#define STD_MAP_OVERHEAD_PER_ELEMENT 8
 
 
-
-HostWindow::HostWindow( INativeWindow* nativeWindow, IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi )
-	: m_input( input )
-	, m_nativeWindow( nativeWindow )
-	, m_resourceManager( resourceManager )
+// ================================ //
+//
+HostWindow::HostWindow( INativeWindow* nativeWindow, input::IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi )
+	:	m_input( input )
+	,	m_nativeWindow( nativeWindow )
+	,	m_resourceManager( resourceManager )
+	,	m_hostLogic( this )
 {
 	// Create RenderTarget and SwapChain
 	SwapChainInitData init;
@@ -41,6 +51,8 @@ HostWindow::HostWindow( INativeWindow* nativeWindow, IInput* input, ResourceMana
 	resourceManager->AddRenderTarget( m_renderTarget.Ptr(), Convert::FromString< std::wstring >( "::" + m_nativeWindow->GetTitle(), L"" ) );
 }
 
+// ================================ //
+//
 HostWindow::~HostWindow()
 {
 	m_swapChain->DeleteObjectReference();
@@ -57,18 +69,7 @@ HostWindow::~HostWindow()
 Size				HostWindow::GetMemorySize		()
 {
 	Size size = sizeof( HostWindow );
-
-	size += m_mousePath.capacity() * sizeof( IControl* );
-	size += m_focusPath.capacity() * sizeof( IControl* );
-	size += m_invalidated.capacity() * sizeof( IControl* );
-	size += m_controlTree.capacity() * sizeof( TopLevelControl* );
-
-	size += m_controlsNames.size() * ( sizeof( std::pair< IControl*, std::string > ) + STD_MAP_OVERHEAD_PER_ELEMENT );
-
-	//size += m_nativeWindow->MemorySize();
-
-	for( auto control : m_controlTree )
-		size += control->MemorySize();
+	size += m_hostLogic.GetMemorySize();
 
 	return size;
 }
@@ -82,26 +83,21 @@ EngineObject*&		HostWindow::DataContext			()
 }
 
 /**@brief Removes control from GUI system.*/
-void				HostWindow::RemoveControl		( IControl* control )
+void				HostWindow::RemoveControl		( UIElement* control )
 {
-
+	m_hostLogic.RemoveControl( control );
 }
 
 /**@brief Allows control to register it's name.*/
-void				HostWindow::RegisterControlName	( IControl* control, const std::string& name )
+void				HostWindow::RegisterControlName	( const UIElement* control, const std::string& name )
 {
-	assert( m_controlsNames.find( control ) == m_controlsNames.end() );
-	m_controlsNames[ control ] = name;
+	m_hostLogic.RegisterControlName( control, name );
 }
 
 /**@brief Gets name of registered control.*/
-const std::string& HostWindow::GetControlName		( IControl* control )
+const std::string&	HostWindow::GetControlName		( const UIElement* control ) const
 {
-	auto iter = m_controlsNames.find( control );
-	if( iter != m_controlsNames.end() )
-		return iter->second;
-	else
-		return EMPTY_STRING;
+	return m_hostLogic.GetControlName( control );
 }
 
 // ================================ //
@@ -125,23 +121,141 @@ INativeWindow*		HostWindow::GetNativeWindow		()
 	return m_nativeWindow;
 }
 
+// ================================ //
+//
+HostWindow*			HostWindow::GetHost				() const
+{
+	return const_cast< HostWindow* >( this );
+}
+
 //====================================================================================//
-//				GUI system interaction
+//				GUI system interaction. Redirects to HostLogic.
 //====================================================================================//
 
 // ================================ //
 //
 void				HostWindow::LostFocus			()
 {
+	// @todo Debug. Remove in future.
 	std::cout << "Window [" + m_nativeWindow->GetTitle() + "] lost focus." << std::endl;
+
+	m_hostLogic.LostFocus();
 }
 
 // ================================ //
 //
 void				HostWindow::GotFocus			()
 {
+	// @todo Debug. Remove in future.
 	std::cout << "Window [" + m_nativeWindow->GetTitle() + "] got focus." << std::endl;
+
+	m_hostLogic.GotFocus();
 }
+
+// ================================ //
+//
+void				HostWindow::OnResized			( uint16 newWidth, uint16 newHeight )
+{
+	m_hostLogic.OnResized( newWidth, newHeight );
+}
+
+// ================================ //
+//
+void				HostWindow::OnMaximized			()
+{
+	m_hostLogic.OnMaximized();
+}
+
+// ================================ //
+//
+void				HostWindow::OnMinimized			()
+{
+	m_hostLogic.OnMinimized();
+}
+
+// ================================ //
+//
+void				HostWindow::HandleInput			()
+{
+	input::InputDispatcher dispatcher( m_input );
+
+	while( !dispatcher.NoEventsLeft() )
+	{
+		auto dispatched = dispatcher.NextEvent();
+		switch( dispatched.Event.Type )
+		{
+			case input::DeviceEventType::KeyboardEvent:
+				m_hostLogic.HandleKeyInput( dispatched.Event, dispatched.ProducerDevice );
+				break;
+			case input::DeviceEventType::CharacterEvent:
+				m_hostLogic.HandleCharInput( dispatched.Event, dispatched.ProducerDevice );
+				break;
+			case input::DeviceEventType::ButtonEvent:
+				m_hostLogic.HandleMouseButtonInput( dispatched.Event, dispatched.ProducerDevice );
+				break;
+			case input::DeviceEventType::AxisEvent:
+				m_hostLogic.HandleMouseWheelInput( dispatched.Event, dispatched.ProducerDevice );
+				break;
+			case input::DeviceEventType::CursorEvent:
+				m_hostLogic.HandleMouseMoveInput( dispatched.Event, dispatched.ProducerDevice );
+				break;
+
+		}
+	}
+}
+
+
+//====================================================================================//
+//			Implement pure virtuals - temporary implementation	
+//====================================================================================//
+
+
+// ================================ //
+//
+bool				HostWindow::HitTest				( const Position& point )
+{
+	return false;
+}
+
+// ================================ //
+//
+void				HostWindow::OnRender			( DrawingContext& context )
+{}
+
+// ================================ //
+//
+Size2D				HostWindow::Measure				( Size2D availableSize )
+{
+	return Size2D();
+}
+
+// ================================ //
+//
+void				HostWindow::Arrange				( Rect & finalRect )
+{}
+
+// ================================ //
+//
+Size				HostWindow::GetNumChildren		() const
+{
+	return Size();
+}
+
+// ================================ //
+//
+UIElement*			HostWindow::GetUIChild			( Size idx ) const
+{
+	return nullptr;
+}
+
+// ================================ //
+//
+bool				HostWindow::AddChild			( UIElementOPtr&& child )
+{
+	return false;
+}
+
+
 
 }	// gui
 }	// sw

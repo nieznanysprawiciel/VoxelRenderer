@@ -11,6 +11,11 @@
 #include "swGraphicAPI/ResourceManager/ResourceManager.h"
 
 
+
+/**@defgroup RenderingSystem Rendering System
+@ingroup GUICore*/
+
+
 DEFINE_OPTR_TYPE( IRenderer );
 
 namespace sw {
@@ -18,7 +23,9 @@ namespace gui
 {
 
 
-/**@brief GUI rendering system.*/
+/**@brief GUI rendering system.
+
+@ingroup RenderingSystem*/
 class RenderingSystem
 {
 private:

@@ -152,19 +152,26 @@
     <ClInclude Include="..\..\..\Core\Media\Brushes\LinearGradient.h" />
     <ClInclude Include="..\..\..\Core\Media\Brushes\RadialGradient.h" />
     <ClInclude Include="..\..\..\Core\Media\Brushes\SolidColorBrush.h" />
+    <ClInclude Include="..\..\..\Core\Media\Media.h" />
+    <ClInclude Include="..\..\..\Core\System\CommonTypes\AccessKey.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\CommonTypes.h" />
     <ClInclude Include="..\..\..\Core\System\CommonTypes\Thickness.h" />
     <ClInclude Include="..\..\..\Core\System\DataBinding\DependencyObject.h" />
     <ClInclude Include="..\..\..\Core\System\Events\DelegateContainer.h" />
-    <ClInclude Include="..\..\..\Core\System\Events\EventsManager.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\EventHandlers.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\EventProxy.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\EventsSystem.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\KeyEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\IEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\InputEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\MouseButtonEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\MouseEventArgs.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\Input\MouseMoveEventArgs.h" />
     <ClInclude Include="..\..\..\Core\System\Events\Input\MouseWheelEventArgs.h" />
+    <ClInclude Include="..\..\..\Core\System\Events\RegisteredEvent.h" />
     <ClInclude Include="..\..\..\Core\System\GUISystem.h" />
+    <ClInclude Include="..\..\..\Core\System\HostLogic.h" />
     <ClInclude Include="..\..\..\Core\System\HostWindow.h" />
     <ClInclude Include="..\..\..\Core\System\Rendering\DrawingContext.h" />
     <ClInclude Include="..\..\..\Core\System\Rendering\RenderingSystem.h" />
@@ -181,7 +188,8 @@
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp" />
     <ClCompile Include="..\..\..\Core\Controls\UIElement.cpp" />
     <ClCompile Include="..\..\..\Core\System\DataBinding\DependencyObject.cpp" />
-    <ClCompile Include="..\..\..\Core\System\Events\EventsManager.cpp" />
+    <ClCompile Include="..\..\..\Core\System\Events\EventHandlers.cpp" />
+    <ClCompile Include="..\..\..\Core\System\Events\EventsSystem.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyboardEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\KeyEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\IEventArgs.cpp" />
@@ -190,6 +198,7 @@
     <ClCompile Include="..\..\..\Core\System\Events\Input\MouseEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\Events\Input\MouseWheelEventArgs.cpp" />
     <ClCompile Include="..\..\..\Core\System\GUISystem.cpp" />
+    <ClCompile Include="..\..\..\Core\System\HostLogic.cpp" />
     <ClCompile Include="..\..\..\Core\System\HostWindow.cpp" />
     <ClCompile Include="..\..\..\Core\System\Initializers.cpp" />
     <ClCompile Include="..\..\..\Core\System\Rendering\RenderingSystem.cpp" />
@@ -198,6 +207,9 @@
     <ProjectReference Include="..\..\..\..\swGraphicAPI\ProjectsDir\Visual2015\ResourceManager\ResourceManager.vcxproj">
       <Project>{9f71f0da-1d72-4e96-93b7-5ac2c9cb6ede}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Core\System\Events\EventsSystem.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

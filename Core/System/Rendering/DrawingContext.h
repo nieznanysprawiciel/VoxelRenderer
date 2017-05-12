@@ -16,7 +16,9 @@ namespace gui
 
 /**@brief Context passed to rendering functions.
 
-This context provides methods for rendering basic primitives like ellipses, rectangles, lines.*/
+This context provides methods for rendering basic primitives like ellipses, rectangles, lines.
+
+@ingroup RenderingSystem*/
 class DrawingContext
 {
 private:

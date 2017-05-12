@@ -1,10 +1,16 @@
 #pragma once
+/**
+@file HostWindow.h
+@author nieznanysprawiciel
+@copyright File is part of Sleeping Wombat Libraries.
+*/
+
 
 #include "swGUI/Native/INativeWindow.h"
-#include "swGUI/Core/Controls/IControl.h"
+#include "HostLogic.h"
 #include "swGUI/Core/Controls/TopLevelControl.h"
 
-#include "swInputLibrary/IInput.h"
+#include "swInputLibrary/InputCore/IInput.h"
 
 #include <vector>
 #include <map>
@@ -19,58 +25,48 @@ namespace gui
 
 /**@brief Root class for controls hierarchy, contains native window.
 
-@ingroup EngineGUI
+This class connects native window and gui windows. GUI system logic is redirected to HostLogic class.
+HostWindow is responsible for rendering and presenting content on native window by using render target and swap chain.
 
-Children of this class must inherit from TopLevelControl. This means that top level classes must be
-Windows, ContextMenus, PopupMenus or others similar.*/
-class HostWindow
+@ingroup GUICore
+@ingroup ControlsFramework*/
+class HostWindow : public UIElement
 {
+	RTTR_ENABLE( UIElement );
+	friend class HostWindowTester;
 private:
 
 	INativeWindow*				m_nativeWindow;
-	IInput*						m_input;
+	input::IInput*				m_input;
 	ResourceManager*			m_resourceManager;
-
-	EngineObject*				m_dataContext;
-
-	std::vector< IControl* >	m_mousePath;		///< Controls hierarchy that captured mouse in this frame.
-	std::vector< IControl* >	m_focusPath;		///< Controls hierarchy that have focus in this frame.
-	std::vector< IControl* >	m_invalidated;		///< Controls which needs to be redrawn in this frame.
-
-	std::vector< TopLevelControl* >		m_controlTree;	///< Top level controls.
 
 	ResourcePtr< RenderTargetObject >	m_renderTarget;
 	ResourcePtr< SwapChain >			m_swapChain;
 
-	///@name Controls info
-	///@{
-
-	/// Map containing windows names. Most controls don't have name, so it's better to store
-	/// them separatly, to lower memory consumption.
-	std::map< IControl*, std::string >	m_controlsNames;
-
-	///@}
+	HostLogic					m_hostLogic;
 
 protected:
 public:
-	explicit		HostWindow	( INativeWindow* nativeWindow, IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi );
-	~HostWindow	();
+	explicit		HostWindow	( INativeWindow* nativeWindow, input::IInput* input, ResourceManager* resourceManager, IGraphicAPIInitializer* graphicApi );
+	virtual			~HostWindow	();
 
 
 	Size				GetMemorySize		();
 
 
 	EngineObject*&		DataContext			();
-	void				RemoveControl		( IControl* control );
+	void				RemoveControl		( UIElement* control );
 
-	void				RegisterControlName	( IControl* control, const std::string& name );
-	const std::string&	GetControlName		( IControl* control );
+	void				RegisterControlName	( const UIElement* control, const std::string& name );
+	const std::string&	GetControlName		( const UIElement* control ) const;
 
 
 	ResourcePtr< RenderTargetObject >	GetRenderTarget		();
 	ResourcePtr< SwapChain >			GetSwapChain		();
 
 	INativeWindow*						GetNativeWindow		();
+
+	virtual HostWindow*					GetHost				() const override;
 
 public:
 	///@name GUI system interaction
@@ -81,9 +77,25 @@ public:
 	void				OnResized		( uint16 newWidth, uint16 newHeight );
 	void				OnMaximized		();
 	void				OnMinimized		();
+
+	void				HandleInput		();
 	///@}
 
+
+	// Inherited via UIElement
+	virtual bool		HitTest			( const Position& point )		override;
+	virtual void		OnRender		( DrawingContext& context )		override;
+	virtual Size2D		Measure			( Size2D availableSize )		override;
+	virtual void		Arrange			( Rect& finalRect )				override;
+	virtual Size		GetNumChildren	() const						override;
+	virtual UIElement*	GetUIChild		( Size idx ) const				override;
+	virtual bool		AddChild		( UIElementOPtr&& child )		override;
+
+
 };
+
+DEFINE_OPTR_TYPE( HostWindow );
+DEFINE_PTR_TYPE( HostWindow );
 
 
 }	// gui

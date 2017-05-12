@@ -3,11 +3,12 @@
 
 #include "swGUI/Native/INativeGUI.h"
 
-
-class WinApiInputProxy;
-
 #include <Windows.h>
 #undef CreateWindow
+#undef XBUTTON1
+#undef XBUTTON2
+
+
 
 //struct tagMSG;
 //typedef tagMSG MSG;
@@ -20,29 +21,44 @@ class WinApiInputProxy;
 
 
 
+namespace sw {
+namespace input
+{
+class WinApiInputProxy;
+
+}}	// sw::input
+
+
+
+
+/**@defgroup Win32APINativeGUI WinAPI native GUI
+@brief Native GUI basedon windows API.
+@ingroup NativeGUI*/
+
 
 namespace sw {
 namespace gui
 {
 
 
-/**@brief */
+/**@brief 
+@ingroup Win32APINativeGUI*/
 class WinAPIGUI : public INativeGUI
 {
 private:
-	WinApiInputProxy*		m_input;
-	NativeGUIInitData		m_initData;
+	sw::input::WinApiInputProxy*	m_input;
+	NativeGUIInitData				m_initData;
 
 protected:
 public:
-	explicit			WinAPIGUI();
-	~WinAPIGUI() = default;
+	explicit			WinAPIGUI	();
+	virtual				~WinAPIGUI	() = default;
 
 
 // Inherited via INativeGUI
 	virtual bool				MainLoop		( bool blockingMode )							override;
 	virtual bool				Init			( const NativeGUIInitData& initData )			override;
-	virtual IInput*				UseNativeInput	()												override;
+	virtual sw::input::IInput*	UseNativeInput	()												override;
 	virtual INativeWindow*		CreateWindow	( NativeWindowDescriptor& descriptor )			override;
 
 	static WinAPIGUI*			Create			();

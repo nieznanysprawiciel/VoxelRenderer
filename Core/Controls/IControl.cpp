@@ -42,12 +42,12 @@ HostWindow*			IControl::GetHost()
 	return topLevel->GetHostWindow();
 }
 
-/**@brief Gets name of control if it was set. Otherwise it returns empty string.*/
-const std::string&	IControl::GetName()
-{
-	auto host = GetHost();
-	return host->GetControlName( this );
-}
+///**@brief Gets name of control if it was set. Otherwise it returns empty string.*/
+//const std::string&	IControl::GetName()
+//{
+//	auto host = GetHost();
+//	return host->GetControlName( this );
+//}
 
 }	// gui
 }	// sw

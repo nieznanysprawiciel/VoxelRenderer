@@ -4,6 +4,8 @@
 #include "swCommonLib/Common/TypesDefinitions.h"
 
 
+#include "swInputLibrary/InputCore/InputDeviceEvent.h"
+
 #include <iostream>
 #include <iomanip>
 
@@ -54,5 +56,12 @@ void			PrintSizeofs()
 	std::cout << std::endl << "Other:" << std::endl;
 	std::cout << std::setw( NameSize ) << "Objects name" << "Sizeof" << std::endl;
 	
+	PrintSizeofType< sw::input::DeviceEvent >( std::cout );
+	PrintSizeofType< sw::input::AxisEvent >( std::cout );
+	PrintSizeofType< sw::input::ButtonEvent >( std::cout );
+	PrintSizeofType< sw::input::CursorEvent >( std::cout );
+	PrintSizeofType< sw::input::KeyEvent>( std::cout );
+
+
 	std::cout << std::setw( NameSize ) << "std::enable_shared_from_this additional size" << ( sizeof( VirtualEmptyClass ) - sizeof( VirtualEmptyClass* ) ) << std::endl;
 }

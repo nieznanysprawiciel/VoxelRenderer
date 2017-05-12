@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Mock">
+      <UniqueIdentifier>{78e4aa8b-3011-4edd-bd77-5049b3da77e9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Native\MockNativeGUI\MockGUI.cpp">
+      <Filter>Mock</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Native\MockNativeGUI\MockWindow.cpp">
+      <Filter>Mock</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Native\MockNativeGUI\MockGUI.h">
+      <Filter>Mock</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Native\MockNativeGUI\MockWindow.h">
+      <Filter>Mock</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

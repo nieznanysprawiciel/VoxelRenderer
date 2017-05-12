@@ -9,7 +9,8 @@ namespace sw {
 namespace gui
 {
 
-/**@brief */
+/**@brief 
+@ingroup Brushes*/
 class GradientBrush : public Brush
 {
 private:
