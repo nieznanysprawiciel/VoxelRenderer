@@ -22,15 +22,25 @@
     <ClCompile Include="..\..\..\DirectInput\DirectInputModule.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Device.h" />
     <ClInclude Include="..\..\..\DirectInput\DirectInputModule.h" />
     <ClInclude Include="..\..\..\DirectInput\IncludeDirectInput.h" />
     <ClInclude Include="..\..\..\Factory.h" />
     <ClInclude Include="..\..\..\IInput.h" />
+    <ClInclude Include="..\..\..\InputDeviceEvent.h" />
     <ClInclude Include="..\..\..\InputDeviceInfo.h" />
+    <ClInclude Include="..\..\..\JoystickDevice.h" />
     <ClInclude Include="..\..\..\JoystickState.h" />
+    <ClInclude Include="..\..\..\KeyboardDevice.h" />
     <ClInclude Include="..\..\..\KeyboardState.h" />
     <ClInclude Include="..\..\..\KeyState.h" />
+    <ClInclude Include="..\..\..\MouseDevice.h" />
     <ClInclude Include="..\..\..\MouseState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InputCore\InputCore.vcxproj">
+      <Project>{ebc3abf4-e788-4242-a949-d366fc128b0e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D1075B79-925A-436F-8C53-09BD4D5787E4}</ProjectGuid>

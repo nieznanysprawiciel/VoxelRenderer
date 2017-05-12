@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="..\Paths.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <InputCoreName>InputCore</InputCoreName>
+    <InputCoreLibDir>$(LibDir)$(InputCoreName)\</InputCoreLibDir>
+    <InputCoreSourceDir>$(SourceDir)$(InputCoreName)\</InputCoreSourceDir>
+    <InputCoreFileName>$(InputCoreName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</InputCoreFileName>
+    <InputCoreBuildDir>$(BuildDir)$(InputCoreName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</InputCoreBuildDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <IntDir>$(InputCoreBuildDir)</IntDir>
+    <TargetName>$(InputCoreFileName)</TargetName>
+    <OutDir>$(InputCoreLibDir)</OutDir>
+  </PropertyGroup>
+
+</Project>

@@ -1,45 +1,34 @@
 #pragma once
 /**
-@file KeyboardState.h
+@file InputDeviceEvent.h
 @author nieznanysprawiciel
-@copyright Plik jest czêœci¹ silnika graficznego SWEngine.
+@copyright File is part of Sleeping Wombat Libraries.
 */
 
-
-#include "InputDeviceInfo.h"
+#include "swCommonLib/Common/TypesDefinitions.h"
 #include "KeyState.h"
 
 
-#define KEYBOARD_STATE_KEYS_NUMBER 256
 
-class KeyboardState
+
+namespace sw {
+namespace input
 {
-private:
 
-	InputDeviceInfo		m_info;
-	KeyState			m_keyboardState[ KEYBOARD_STATE_KEYS_NUMBER ];
 
-public:
-	explicit KeyboardState();
-	~KeyboardState();
+typedef uint16 Timestamp;
 
-	const KeyState*				GetKeyboardState() const		{ return m_keyboardState; }
-	const InputDeviceInfo&		GetInfo			() const		{ return m_info; }
 
-	///@name Funkcje do ustawiania stanu (tylko dla dzieci IInput)
-	///@{
-	KeyState*					KeysState		()				{ return m_keyboardState; }
-	void						RemoveEvents	();
-	///@}
+struct Keyboard
+{
 
-public:
-	/**@brief Fizyczne numery przycisków na klawiaturze.
-	Nale¿y ich u¿ywaæ w strukturze InputMapping.
+	/**@brief Physical keys numbers.
+	Numbers are the same as in DirectInput.
 
-	Numery pokrywaj¹ siê w ca³oœci z definicj¹ z DirectInputa.*/
-	enum PHYSICAL_KEYS
+	@ingroup Input*/
+	enum PhysicalKeys : uint8
 	{
-		  KEY_NONE			  = 0x00
+		KEY_NONE			  = 0x00
 		, KEY_ESCAPE          = 0x01
 		, KEY_1               = 0x02
 		, KEY_2               = 0x03
@@ -186,8 +175,8 @@ public:
 		, KEY_MEDIASELECT     = 0xED    /* Media Select */
 
 		/*
-		 *  Alternate names for keys, to facilitate transition from DOS.
-		 */
+			*  Alternate names for keys, to facilitate transition from DOS.
+			*/
 		, KEY_BACKSPACE       = KEY_BACK            /* backspace */
 		, KEY_NUMPADSTAR      = KEY_MULTIPLY        /* * on numeric keypad */
 		, KEY_LALT            = KEY_LMENU           /* left Alt */
@@ -212,21 +201,192 @@ public:
 };
 
 
-
-/**@brief */
-inline			KeyboardState::KeyboardState()
+struct Mouse
 {
-	for( auto& val : m_keyboardState )
-		val = 0;
-}
 
-/**@brief */
-inline			KeyboardState::~KeyboardState()
-{ }
+/**@brief Physical buttons.
 
-/**@brief Czyœci tablicê z eventów o wciœniêciu klawiszy, ale podtrzymuje stan przycisków.*/
-inline void		KeyboardState::RemoveEvents	()
+Enums form BUTTON0 to BUTTON2 are buttons right, left and modle.
+There'ra aliases for them: LEFT_BUTTON, RIGHT_BUTTON, MIDDLE_BUTTON, XBUTTON1, XBUTTON2.
+
+Next numbers means rest of buttons which can exist on mouse device.
+
+@ingroup Input*/
+	enum PhysicalButtons : int8
+	{
+		BUTTON0 = 0,
+		BUTTON1 = 1,
+		BUTTON2 = 2,
+		BUTTON3 = 3,
+		BUTTON4 = 4,
+		BUTTON5 = 5,
+		BUTTON6 = 6,
+		BUTTON7 = 7,
+
+		LEFT_BUTTON = BUTTON0,
+		RIGHT_BUTTON = BUTTON1,
+		MIDDLE_BUTTON = BUTTON2,
+		XBUTTON1 = BUTTON3,
+		XBUTTON2 = BUTTON4,
+
+		NONE = 8,
+	};
+
+	/**@brief Physical axes of mouse.
+	@ingroup Input*/
+	enum PhysicalAxes : int8
+	{
+		X_AXIS = 0,
+		Y_AXIS = 1,
+		Z_AXIS = 2,
+		W_AXIS = 3,
+		WHEEL = Z_AXIS
+	};
+
+};
+
+
+/**@brief Input device event types.
+@ingroup Input*/
+enum class DeviceEventType : uint8
 {
-	for( int i = 0; i < KEYBOARD_STATE_KEYS_NUMBER; ++i )
-		m_keyboardState[ i ].HoldState();
-}
+	KeyboardEvent,
+	CharacterEvent,
+	ButtonEvent,
+	AxisEvent,
+	CursorEvent,
+
+	InvalidEvent
+};
+
+/**@brief Input device types.
+@ingroup Input*/
+enum class DeviceType : uint8
+{
+	Keyboard,
+	Mouse,
+	Joystick
+};
+
+	
+/**@brief Keyboard key change event.
+@ingroup Input*/
+struct KeyEvent
+{
+	KeyState					State;			///< Only up or down state.
+	Keyboard::PhysicalKeys		Key;
+};
+
+/**@brief Keyboard event after translation to character.
+@ingroup Input*/
+struct CharacterEvent
+{
+	wchar_t			Character;
+};
+
+/**@brief Mouse button Change event.
+@ingroup Input*/
+struct ButtonEvent
+{
+	KeyState					State;			///< Only up or down state.
+	Mouse::PhysicalButtons		Button;
+};
+
+/**@brief Mouse or joystick axis value changed event.
+@ingroup Input*/
+struct AxisEvent
+{
+	float						Delta;			///< Axis delta.
+	Mouse::PhysicalAxes			Axis;
+};
+
+/**@brief Cursor position changed event.
+@ingroup Input*/
+struct CursorEvent
+{
+	short				OffsetX;
+	short				OffsetY;
+};
+
+/**@brief KeyStates changed events.
+@ingroup Input*/
+struct DeviceEvent
+{
+	union
+	{
+		KeyEvent		Key;
+		CharacterEvent	Character;
+		ButtonEvent		Button;
+		AxisEvent		Axis;
+		CursorEvent		Cursor;
+	};
+
+	DeviceEventType		Type;
+	Timestamp			LogicalTime;	///< You can compare this counter with counters in other devices, to compare events order.
+										///< This doesn't work between frames.
+
+
+// ================================ //
+//
+	DeviceEvent()
+	{
+		Type = DeviceEventType::InvalidEvent;
+		LogicalTime = std::numeric_limits< Timestamp >::max();
+	}
+
+	DeviceEvent( KeyEvent evt, Timestamp timestamp )
+	{
+		Type = DeviceEventType::KeyboardEvent;
+		Key = evt;
+		LogicalTime = timestamp;
+	}
+
+	DeviceEvent( CharacterEvent evt, Timestamp timestamp )
+	{
+		Type = DeviceEventType::CharacterEvent;
+		Character = evt;
+		LogicalTime = timestamp;
+	}
+
+	DeviceEvent( ButtonEvent evt, Timestamp timestamp )
+	{
+		Type = DeviceEventType::ButtonEvent;
+		Button = evt;
+		LogicalTime = timestamp;
+	}
+
+	DeviceEvent( AxisEvent evt, Timestamp timestamp )
+	{
+		Type = DeviceEventType::AxisEvent;
+		Axis = evt;
+		LogicalTime = timestamp;
+	}
+
+	DeviceEvent( CursorEvent evt, Timestamp timestamp )
+	{
+		Type = DeviceEventType::CursorEvent;
+		Cursor = evt;
+		LogicalTime = timestamp;
+	}
+
+	DeviceEvent( const DeviceEvent& second )
+	{
+		memcpy( this, &second, sizeof( DeviceEvent ) );
+	}
+
+	void operator=( const DeviceEvent& second )
+	{
+		memcpy( this, &second, sizeof( DeviceEvent ) );
+	}
+};
+
+
+
+
+
+
+
+}	// input
+}	// sw
+
+

@@ -36,6 +36,21 @@
     <ClInclude Include="..\..\..\DirectInput\IncludeDirectInput.h">
       <Filter>DirectInput</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\KeyboardDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputDeviceEvent.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MouseDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\JoystickDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Device.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\DirectInput\DirectInputModule.cpp">

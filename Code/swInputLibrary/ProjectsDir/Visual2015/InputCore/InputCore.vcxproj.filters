@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="InputCore">
+      <UniqueIdentifier>{5ee55bfe-c5ba-46a5-8b1c-962631df3f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputCore\Debugging">
+      <UniqueIdentifier>{06286a69-d980-4588-97f0-fa1f7281dc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputCore\Helpers">
+      <UniqueIdentifier>{9cf28505-57ac-4933-85d3-ea9c7416cf4b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\InputCore\Device.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\Factory.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\IInput.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\InputDeviceEvent.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\InputDeviceInfo.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\JoystickDevice.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\JoystickState.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\KeyboardDevice.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\KeyboardState.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\KeyState.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\MouseDevice.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\MouseState.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\Debugging\DebugInput.h">
+      <Filter>InputCore\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\Debugging\EventCapture.h">
+      <Filter>InputCore\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\EventQueue.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\Helpers\InputDispatcher.h">
+      <Filter>InputCore\Helpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\InputCore\Debugging\DebugInput.cpp">
+      <Filter>InputCore\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\InputCore\Debugging\EventCapture.cpp">
+      <Filter>InputCore\Debugging</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
