@@ -33,6 +33,18 @@
     <ClInclude Include="..\..\..\MouseState.h">
       <Filter>InputLibrary</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\InputDeviceEvent.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\JoystickDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\KeyboardDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MouseDevice.h">
+      <Filter>InputLibrary</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\InputWPF\WPFInputProxy.cpp">

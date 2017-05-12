@@ -7,47 +7,80 @@
 #include "WPFInputProxy.h"
 
 
+
+
+namespace sw {
+namespace input
+{
+
+
+
+
 /**@brief */
 WPFInputProxy::WPFInputProxy()
-	:	m_lastX( 0.0 )
-	,	m_lastY( 0.0 )
-{ }
+	:	m_lastX( 0 )
+	,	m_lastY( 0 )
+	,	m_eventNum( 0 )
+{}
 
 /**@brief */
 WPFInputProxy::~WPFInputProxy()
-{ }
+{}
 
 /**@brief */
-bool WPFInputProxy::Init( const InputInitInfo & initInfo )
+bool			WPFInputProxy::Init( const InputInitInfo & initInfo )
 {
-	m_keyboards.push_back( new KeyboardState() );
-	m_mouses.push_back( new MouseState() );
-	m_joysticks.push_back( new JoystickState() );
+	m_keyboards.push_back( KeyboardDeviceOPtr( new KeyboardDevice() ) );
+	m_mouses.push_back( MouseDeviceOPtr( new MouseDevice() ) );
+	m_joysticks.push_back( JoystickDeviceOPtr( new JoystickDevice() ) );
+
+	m_keyboardsStates.push_back( &m_keyboards[ 0 ]->GetState() );
+	m_mousesStates.push_back( &m_mouses[ 0 ]->GetState() );
+	m_joysticksStates.push_back( &m_joysticks[ 0 ]->GetState() );
 
 	return true;
 }
 
 
 /**@copydoc IInput::GetKeyboardStates*/
-const std::vector< KeyboardState* >&	WPFInputProxy::GetKeyboardStates	()
+const std::vector< const KeyboardState* >&	WPFInputProxy::GetKeyboardStates	() const
+{
+	return m_keyboardsStates;
+}
+
+/**@copydoc IInput::GetMouseStates*/
+const std::vector< const MouseState* >&		WPFInputProxy::GetMouseStates	() const
+{
+	return m_mousesStates;
+}
+
+/**@copydoc IInput::GetJoystickStates*/
+const std::vector< const JoystickState* >&	WPFInputProxy::GetJoystickStates	() const
+{
+	return m_joysticksStates;
+}
+
+/**@copydoc IInput::GetKeyboardDevice*/
+std::vector< KeyboardDeviceOPtr >&		WPFInputProxy::GetKeyboardDevice()
 {
 	return m_keyboards;
 }
 
-/**@copydoc IInput::GetMouseStates*/
-const std::vector< MouseState* >&		WPFInputProxy::GetMouseStates		()
+/**@copydoc IInput::GetMouseDevice*/
+std::vector< MouseDeviceOPtr >&			WPFInputProxy::GetMouseDevice()
 {
 	return m_mouses;
 }
 
-/**@copydoc IInput::GetJoystickStates*/
-const std::vector< JoystickState* >&	WPFInputProxy::GetJoystickStates	()
+/**@copydoc IInput::GetJoystickDevice*/
+std::vector< JoystickDeviceOPtr >&		WPFInputProxy::GetJoystickDevice()
 {
 	return m_joysticks;
 }
 
+
 /**@brief */
-std::vector< const InputDeviceInfo* >	WPFInputProxy::GetDevicesInfo		()
+std::vector< const InputDeviceInfo* >	WPFInputProxy::GetDevicesInfo		() const
 {
 	std::vector< const InputDeviceInfo* > infos;
 	for( auto& device : m_keyboards )
@@ -67,21 +100,25 @@ WPF dostarcza tylko informacjê o po³o¿eniu myszy wzglêdem okna podgl¹du renderow
 trzeba sobie stworzyæ samemu.*/
 void WPFInputProxy::Update( float timeInterval )
 {
-	auto& mouse = m_mouses[ 0 ];
-	auto axes = mouse->GetAxesState();
+	m_eventNum = 0;
 
-	axes[ MouseState::PHYSICAL_AXES::X_AXIS ] = static_cast< float >( mouse->GetPositionX() - m_lastX );
-	axes[ MouseState::PHYSICAL_AXES::Y_AXIS ] = static_cast< float >( mouse->GetPositionY() - m_lastY );
+	//auto& mouse = m_mouses[ 0 ];
+	//auto axes = mouse->GetAxesState();
 
-	m_lastX = mouse->GetPositionX();
-	m_lastY = mouse->GetPositionY();
+	//axes[ Mouse::PhysicalAxes::X_AXIS ] = static_cast<float>( mouse->GetPositionX() - m_lastX );
+	//axes[ Mouse::PhysicalAxes::Y_AXIS ] = static_cast<float>( mouse->GetPositionY() - m_lastY );
+
+	//m_lastX = mouse->GetPositionX();
+	//m_lastY = mouse->GetPositionY();
 }
 
 /**@copydoc IInput::UpdateDevices
 
 Urz¹dzenie jest zawsze aktualne.*/
 bool WPFInputProxy::UpdateDevices()
-{	return true;	}
+{
+	return true;
+}
 
 //====================================================================================//
 //			WPF API	
@@ -102,193 +139,193 @@ namespace System.Windows.Input
 		XButton2 = 4
 	}
 }*/
-MouseState::PHYSICAL_BUTTONS MOUSE_BUTTONS_MAPPING[ NUM_WPF_MOUSE_BUTTONS ] =
+Mouse::PhysicalButtons MOUSE_BUTTONS_MAPPING[ NUM_WPF_MOUSE_BUTTONS ] =
 {
-	MouseState::PHYSICAL_BUTTONS::LEFT_BUTTON,
-	MouseState::PHYSICAL_BUTTONS::MIDDLE_BUTTON,
-	MouseState::PHYSICAL_BUTTONS::RIGHT_BUTTON,
-	MouseState::PHYSICAL_BUTTONS::BUTTON3,
-	MouseState::PHYSICAL_BUTTONS::BUTTON4
+	Mouse::PhysicalButtons::LEFT_BUTTON,
+	Mouse::PhysicalButtons::MIDDLE_BUTTON,
+	Mouse::PhysicalButtons::RIGHT_BUTTON,
+	Mouse::PhysicalButtons::BUTTON3,
+	Mouse::PhysicalButtons::BUTTON4
 };
 
 #define NUM_WPF_KEYBOARD_BUTTONS 173
 
 /**@brief Tablica mapowania przycisków klawiatury WPFa na wartoœci silnikowe.*/
-KeyboardState::PHYSICAL_KEYS KEYBOARD_BUTTONS_MAPPING[ NUM_WPF_KEYBOARD_BUTTONS ] =
+Keyboard::PhysicalKeys KEYBOARD_BUTTONS_MAPPING[ NUM_WPF_KEYBOARD_BUTTONS ] =
 {
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Cancel
-	KeyboardState::PHYSICAL_KEYS::KEY_BACK,
-	KeyboardState::PHYSICAL_KEYS::KEY_TAB,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///LineFeed
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Clear
-	KeyboardState::PHYSICAL_KEYS::KEY_RETURN,
-	KeyboardState::PHYSICAL_KEYS::KEY_PAUSE,
-	KeyboardState::PHYSICAL_KEYS::KEY_CAPSLOCK,
-	KeyboardState::PHYSICAL_KEYS::KEY_KANA,		///KanaMode
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///JunjaMode
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///FinalMode
-	KeyboardState::PHYSICAL_KEYS::KEY_KANJI,
-	KeyboardState::PHYSICAL_KEYS::KEY_ESCAPE,
-	KeyboardState::PHYSICAL_KEYS::KEY_CONVERT,
-	KeyboardState::PHYSICAL_KEYS::KEY_NOCONVERT,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///ImeAccept
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///ImeModeChange
-	KeyboardState::PHYSICAL_KEYS::KEY_SPACE,
-	KeyboardState::PHYSICAL_KEYS::KEY_PGUP,
-	KeyboardState::PHYSICAL_KEYS::KEY_PGDN,
-	KeyboardState::PHYSICAL_KEYS::KEY_END,
-	KeyboardState::PHYSICAL_KEYS::KEY_HOME,
-	KeyboardState::PHYSICAL_KEYS::KEY_LEFT,
-	KeyboardState::PHYSICAL_KEYS::KEY_UP,
-	KeyboardState::PHYSICAL_KEYS::KEY_RIGHT,
-	KeyboardState::PHYSICAL_KEYS::KEY_DOWN,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Select
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Print
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Execute
-	KeyboardState::PHYSICAL_KEYS::KEY_SYSRQ,	///PrintScreen
-	KeyboardState::PHYSICAL_KEYS::KEY_INSERT,
-	KeyboardState::PHYSICAL_KEYS::KEY_DELETE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Help
-	KeyboardState::PHYSICAL_KEYS::KEY_0,
-	KeyboardState::PHYSICAL_KEYS::KEY_1,
-	KeyboardState::PHYSICAL_KEYS::KEY_2,
-	KeyboardState::PHYSICAL_KEYS::KEY_3,
-	KeyboardState::PHYSICAL_KEYS::KEY_4,
-	KeyboardState::PHYSICAL_KEYS::KEY_5,
-	KeyboardState::PHYSICAL_KEYS::KEY_6,
-	KeyboardState::PHYSICAL_KEYS::KEY_7,
-	KeyboardState::PHYSICAL_KEYS::KEY_8,
-	KeyboardState::PHYSICAL_KEYS::KEY_9,
-	KeyboardState::PHYSICAL_KEYS::KEY_A,
-	KeyboardState::PHYSICAL_KEYS::KEY_B,
-	KeyboardState::PHYSICAL_KEYS::KEY_C,
-	KeyboardState::PHYSICAL_KEYS::KEY_D,
-	KeyboardState::PHYSICAL_KEYS::KEY_E,
-	KeyboardState::PHYSICAL_KEYS::KEY_F,
-	KeyboardState::PHYSICAL_KEYS::KEY_G,
-	KeyboardState::PHYSICAL_KEYS::KEY_H,
-	KeyboardState::PHYSICAL_KEYS::KEY_I,
-	KeyboardState::PHYSICAL_KEYS::KEY_J,
-	KeyboardState::PHYSICAL_KEYS::KEY_K,
-	KeyboardState::PHYSICAL_KEYS::KEY_L,
-	KeyboardState::PHYSICAL_KEYS::KEY_M,
-	KeyboardState::PHYSICAL_KEYS::KEY_N,
-	KeyboardState::PHYSICAL_KEYS::KEY_O,
-	KeyboardState::PHYSICAL_KEYS::KEY_P,
-	KeyboardState::PHYSICAL_KEYS::KEY_Q,
-	KeyboardState::PHYSICAL_KEYS::KEY_R,
-	KeyboardState::PHYSICAL_KEYS::KEY_S,
-	KeyboardState::PHYSICAL_KEYS::KEY_T,
-	KeyboardState::PHYSICAL_KEYS::KEY_U,
-	KeyboardState::PHYSICAL_KEYS::KEY_V,
-	KeyboardState::PHYSICAL_KEYS::KEY_W,
-	KeyboardState::PHYSICAL_KEYS::KEY_X,
-	KeyboardState::PHYSICAL_KEYS::KEY_Y,
-	KeyboardState::PHYSICAL_KEYS::KEY_Z,
-	KeyboardState::PHYSICAL_KEYS::KEY_LWIN,
-	KeyboardState::PHYSICAL_KEYS::KEY_RWIN,
-	KeyboardState::PHYSICAL_KEYS::KEY_APPS,
-	KeyboardState::PHYSICAL_KEYS::KEY_SLEEP,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD0,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD1,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD2,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD3,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD4,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD5,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD6,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD7,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD8,
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMPAD9,
-	KeyboardState::PHYSICAL_KEYS::KEY_MULTIPLY,
-	KeyboardState::PHYSICAL_KEYS::KEY_ADD,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Separator
-	KeyboardState::PHYSICAL_KEYS::KEY_SUBTRACT,
-	KeyboardState::PHYSICAL_KEYS::KEY_DECIMAL,
-	KeyboardState::PHYSICAL_KEYS::KEY_DIVIDE,
-	KeyboardState::PHYSICAL_KEYS::KEY_F1,
-	KeyboardState::PHYSICAL_KEYS::KEY_F2,
-	KeyboardState::PHYSICAL_KEYS::KEY_F3,
-	KeyboardState::PHYSICAL_KEYS::KEY_F4,
-	KeyboardState::PHYSICAL_KEYS::KEY_F5,
-	KeyboardState::PHYSICAL_KEYS::KEY_F6,
-	KeyboardState::PHYSICAL_KEYS::KEY_F7,
-	KeyboardState::PHYSICAL_KEYS::KEY_F8,
-	KeyboardState::PHYSICAL_KEYS::KEY_F9,
-	KeyboardState::PHYSICAL_KEYS::KEY_F10,
-	KeyboardState::PHYSICAL_KEYS::KEY_F11,
-	KeyboardState::PHYSICAL_KEYS::KEY_F12,
-	KeyboardState::PHYSICAL_KEYS::KEY_F13,
-	KeyboardState::PHYSICAL_KEYS::KEY_F14,
-	KeyboardState::PHYSICAL_KEYS::KEY_F15,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///F16
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///F24
-	KeyboardState::PHYSICAL_KEYS::KEY_NUMLOCK,
-	KeyboardState::PHYSICAL_KEYS::KEY_SCROLL,
-	KeyboardState::PHYSICAL_KEYS::KEY_LSHIFT,
-	KeyboardState::PHYSICAL_KEYS::KEY_RSHIFT,
-	KeyboardState::PHYSICAL_KEYS::KEY_LCONTROL,
-	KeyboardState::PHYSICAL_KEYS::KEY_RCONTROL,
-	KeyboardState::PHYSICAL_KEYS::KEY_LALT,
-	KeyboardState::PHYSICAL_KEYS::KEY_RALT,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserBack
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserForward
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserRefresh
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserStop
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserSearch
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserFavorites
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///BrowserHome
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///VolumeMute
-	KeyboardState::PHYSICAL_KEYS::KEY_VOLUMEDOWN,
-	KeyboardState::PHYSICAL_KEYS::KEY_VOLUMEUP,
-	KeyboardState::PHYSICAL_KEYS::KEY_NEXTTRACK,
-	KeyboardState::PHYSICAL_KEYS::KEY_PREVTRACK,
-	KeyboardState::PHYSICAL_KEYS::KEY_MEDIASTOP,
-	KeyboardState::PHYSICAL_KEYS::KEY_PLAYPAUSE,
-	KeyboardState::PHYSICAL_KEYS::KEY_MAIL,
-	KeyboardState::PHYSICAL_KEYS::KEY_MEDIASELECT,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///LaunchApplication1
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///LaunchApplication2
-	KeyboardState::PHYSICAL_KEYS::KEY_SEMICOLON,
-	KeyboardState::PHYSICAL_KEYS::KEY_ADD,		///OEM Plus
-	KeyboardState::PHYSICAL_KEYS::KEY_COMMA,
-	KeyboardState::PHYSICAL_KEYS::KEY_SUBTRACT,
-	KeyboardState::PHYSICAL_KEYS::KEY_PERIOD,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM Question
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM tilde
-	KeyboardState::PHYSICAL_KEYS::KEY_ABNT_C1,
-	KeyboardState::PHYSICAL_KEYS::KEY_ABNT_C2,
-	KeyboardState::PHYSICAL_KEYS::KEY_LBRACKET,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM pipe
-	KeyboardState::PHYSICAL_KEYS::KEY_RBRACKET,
-	KeyboardState::PHYSICAL_KEYS::KEY_APOSTROPHE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM8
-	KeyboardState::PHYSICAL_KEYS::KEY_BACKSLASH,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///Ime Processed
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///System
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM Attn
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM finish
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM Copy
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM Auto
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM Enlv
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM back tab
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,		///OEM attn
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE,
-	KeyboardState::PHYSICAL_KEYS::KEY_NONE
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,		///Cancel
+	Keyboard::PhysicalKeys::KEY_BACK,
+	Keyboard::PhysicalKeys::KEY_TAB,
+	Keyboard::PhysicalKeys::KEY_NONE,		///LineFeed
+	Keyboard::PhysicalKeys::KEY_NONE,		///Clear
+	Keyboard::PhysicalKeys::KEY_RETURN,
+	Keyboard::PhysicalKeys::KEY_PAUSE,
+	Keyboard::PhysicalKeys::KEY_CAPSLOCK,
+	Keyboard::PhysicalKeys::KEY_KANA,		///KanaMode
+	Keyboard::PhysicalKeys::KEY_NONE,		///JunjaMode
+	Keyboard::PhysicalKeys::KEY_NONE,		///FinalMode
+	Keyboard::PhysicalKeys::KEY_KANJI,
+	Keyboard::PhysicalKeys::KEY_ESCAPE,
+	Keyboard::PhysicalKeys::KEY_CONVERT,
+	Keyboard::PhysicalKeys::KEY_NOCONVERT,
+	Keyboard::PhysicalKeys::KEY_NONE,		///ImeAccept
+	Keyboard::PhysicalKeys::KEY_NONE,		///ImeModeChange
+	Keyboard::PhysicalKeys::KEY_SPACE,
+	Keyboard::PhysicalKeys::KEY_PGUP,
+	Keyboard::PhysicalKeys::KEY_PGDN,
+	Keyboard::PhysicalKeys::KEY_END,
+	Keyboard::PhysicalKeys::KEY_HOME,
+	Keyboard::PhysicalKeys::KEY_LEFT,
+	Keyboard::PhysicalKeys::KEY_UP,
+	Keyboard::PhysicalKeys::KEY_RIGHT,
+	Keyboard::PhysicalKeys::KEY_DOWN,
+	Keyboard::PhysicalKeys::KEY_NONE,		///Select
+	Keyboard::PhysicalKeys::KEY_NONE,		///Print
+	Keyboard::PhysicalKeys::KEY_NONE,		///Execute
+	Keyboard::PhysicalKeys::KEY_SYSRQ,	///PrintScreen
+	Keyboard::PhysicalKeys::KEY_INSERT,
+	Keyboard::PhysicalKeys::KEY_DELETE,
+	Keyboard::PhysicalKeys::KEY_NONE,		///Help
+	Keyboard::PhysicalKeys::KEY_0,
+	Keyboard::PhysicalKeys::KEY_1,
+	Keyboard::PhysicalKeys::KEY_2,
+	Keyboard::PhysicalKeys::KEY_3,
+	Keyboard::PhysicalKeys::KEY_4,
+	Keyboard::PhysicalKeys::KEY_5,
+	Keyboard::PhysicalKeys::KEY_6,
+	Keyboard::PhysicalKeys::KEY_7,
+	Keyboard::PhysicalKeys::KEY_8,
+	Keyboard::PhysicalKeys::KEY_9,
+	Keyboard::PhysicalKeys::KEY_A,
+	Keyboard::PhysicalKeys::KEY_B,
+	Keyboard::PhysicalKeys::KEY_C,
+	Keyboard::PhysicalKeys::KEY_D,
+	Keyboard::PhysicalKeys::KEY_E,
+	Keyboard::PhysicalKeys::KEY_F,
+	Keyboard::PhysicalKeys::KEY_G,
+	Keyboard::PhysicalKeys::KEY_H,
+	Keyboard::PhysicalKeys::KEY_I,
+	Keyboard::PhysicalKeys::KEY_J,
+	Keyboard::PhysicalKeys::KEY_K,
+	Keyboard::PhysicalKeys::KEY_L,
+	Keyboard::PhysicalKeys::KEY_M,
+	Keyboard::PhysicalKeys::KEY_N,
+	Keyboard::PhysicalKeys::KEY_O,
+	Keyboard::PhysicalKeys::KEY_P,
+	Keyboard::PhysicalKeys::KEY_Q,
+	Keyboard::PhysicalKeys::KEY_R,
+	Keyboard::PhysicalKeys::KEY_S,
+	Keyboard::PhysicalKeys::KEY_T,
+	Keyboard::PhysicalKeys::KEY_U,
+	Keyboard::PhysicalKeys::KEY_V,
+	Keyboard::PhysicalKeys::KEY_W,
+	Keyboard::PhysicalKeys::KEY_X,
+	Keyboard::PhysicalKeys::KEY_Y,
+	Keyboard::PhysicalKeys::KEY_Z,
+	Keyboard::PhysicalKeys::KEY_LWIN,
+	Keyboard::PhysicalKeys::KEY_RWIN,
+	Keyboard::PhysicalKeys::KEY_APPS,
+	Keyboard::PhysicalKeys::KEY_SLEEP,
+	Keyboard::PhysicalKeys::KEY_NUMPAD0,
+	Keyboard::PhysicalKeys::KEY_NUMPAD1,
+	Keyboard::PhysicalKeys::KEY_NUMPAD2,
+	Keyboard::PhysicalKeys::KEY_NUMPAD3,
+	Keyboard::PhysicalKeys::KEY_NUMPAD4,
+	Keyboard::PhysicalKeys::KEY_NUMPAD5,
+	Keyboard::PhysicalKeys::KEY_NUMPAD6,
+	Keyboard::PhysicalKeys::KEY_NUMPAD7,
+	Keyboard::PhysicalKeys::KEY_NUMPAD8,
+	Keyboard::PhysicalKeys::KEY_NUMPAD9,
+	Keyboard::PhysicalKeys::KEY_MULTIPLY,
+	Keyboard::PhysicalKeys::KEY_ADD,
+	Keyboard::PhysicalKeys::KEY_NONE,		///Separator
+	Keyboard::PhysicalKeys::KEY_SUBTRACT,
+	Keyboard::PhysicalKeys::KEY_DECIMAL,
+	Keyboard::PhysicalKeys::KEY_DIVIDE,
+	Keyboard::PhysicalKeys::KEY_F1,
+	Keyboard::PhysicalKeys::KEY_F2,
+	Keyboard::PhysicalKeys::KEY_F3,
+	Keyboard::PhysicalKeys::KEY_F4,
+	Keyboard::PhysicalKeys::KEY_F5,
+	Keyboard::PhysicalKeys::KEY_F6,
+	Keyboard::PhysicalKeys::KEY_F7,
+	Keyboard::PhysicalKeys::KEY_F8,
+	Keyboard::PhysicalKeys::KEY_F9,
+	Keyboard::PhysicalKeys::KEY_F10,
+	Keyboard::PhysicalKeys::KEY_F11,
+	Keyboard::PhysicalKeys::KEY_F12,
+	Keyboard::PhysicalKeys::KEY_F13,
+	Keyboard::PhysicalKeys::KEY_F14,
+	Keyboard::PhysicalKeys::KEY_F15,
+	Keyboard::PhysicalKeys::KEY_NONE,		///F16
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,		///F24
+	Keyboard::PhysicalKeys::KEY_NUMLOCK,
+	Keyboard::PhysicalKeys::KEY_SCROLL,
+	Keyboard::PhysicalKeys::KEY_LSHIFT,
+	Keyboard::PhysicalKeys::KEY_RSHIFT,
+	Keyboard::PhysicalKeys::KEY_LCONTROL,
+	Keyboard::PhysicalKeys::KEY_RCONTROL,
+	Keyboard::PhysicalKeys::KEY_LALT,
+	Keyboard::PhysicalKeys::KEY_RALT,
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserBack
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserForward
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserRefresh
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserStop
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserSearch
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserFavorites
+	Keyboard::PhysicalKeys::KEY_NONE,		///BrowserHome
+	Keyboard::PhysicalKeys::KEY_NONE,		///VolumeMute
+	Keyboard::PhysicalKeys::KEY_VOLUMEDOWN,
+	Keyboard::PhysicalKeys::KEY_VOLUMEUP,
+	Keyboard::PhysicalKeys::KEY_NEXTTRACK,
+	Keyboard::PhysicalKeys::KEY_PREVTRACK,
+	Keyboard::PhysicalKeys::KEY_MEDIASTOP,
+	Keyboard::PhysicalKeys::KEY_PLAYPAUSE,
+	Keyboard::PhysicalKeys::KEY_MAIL,
+	Keyboard::PhysicalKeys::KEY_MEDIASELECT,
+	Keyboard::PhysicalKeys::KEY_NONE,		///LaunchApplication1
+	Keyboard::PhysicalKeys::KEY_NONE,		///LaunchApplication2
+	Keyboard::PhysicalKeys::KEY_SEMICOLON,
+	Keyboard::PhysicalKeys::KEY_ADD,		///OEM Plus
+	Keyboard::PhysicalKeys::KEY_COMMA,
+	Keyboard::PhysicalKeys::KEY_SUBTRACT,
+	Keyboard::PhysicalKeys::KEY_PERIOD,
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM Question
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM tilde
+	Keyboard::PhysicalKeys::KEY_ABNT_C1,
+	Keyboard::PhysicalKeys::KEY_ABNT_C2,
+	Keyboard::PhysicalKeys::KEY_LBRACKET,
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM pipe
+	Keyboard::PhysicalKeys::KEY_RBRACKET,
+	Keyboard::PhysicalKeys::KEY_APOSTROPHE,
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM8
+	Keyboard::PhysicalKeys::KEY_BACKSLASH,
+	Keyboard::PhysicalKeys::KEY_NONE,		///Ime Processed
+	Keyboard::PhysicalKeys::KEY_NONE,		///System
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM Attn
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM finish
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM Copy
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM Auto
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM Enlv
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM back tab
+	Keyboard::PhysicalKeys::KEY_NONE,		///OEM attn
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE,
+	Keyboard::PhysicalKeys::KEY_NONE
 };
 
 
@@ -297,65 +334,120 @@ KeyboardState::PHYSICAL_KEYS KEYBOARD_BUTTONS_MAPPING[ NUM_WPF_KEYBOARD_BUTTONS 
 Wpf mo¿e wygenerowaæ eventy o kolejnych wciœniêciach kiedy u¿ytkownik wciœn¹³
 i przytrzyma³ przez jakiœ czas klawisz. W takiej sytuacji te eventy s¹ równie¿
 dostêpne.*/
-void WPFInputProxy::KeyboardChange( int keyId, bool pressed )
+void			WPFInputProxy::KeyboardChange		( int keyId, bool pressed )
 {
-	auto& keyboard = m_keyboards[ 0 ];
-	auto state = keyboard->KeysState();
+	//auto& keyboard = m_keyboards[ 0 ];
+	//auto state = keyboard->KeysState();
 
-	// Nie u¿ywamy przeci¹¿onego operatora=, poniewa¿ wtedy nie moglibyœmy wy³apywaæ
-	// wielokrotnych wciœnieæ (keystrokes??)
-	if( pressed )
-		state[ KEYBOARD_BUTTONS_MAPPING[ keyId ] ].Press();
-	else
-		state[ KEYBOARD_BUTTONS_MAPPING[ keyId ] ].UnPress();
+	//// Nie u¿ywamy przeci¹¿onego operatora=, poniewa¿ wtedy nie moglibyœmy wy³apywaæ
+	//// wielokrotnych wciœnieæ (keystrokes??)
+	//if( pressed )
+	//	state[ KEYBOARD_BUTTONS_MAPPING[ keyId ] ].Press();
+	//else
+	//	state[ KEYBOARD_BUTTONS_MAPPING[ keyId ] ].UnPress();
+
+	KeyEvent keyEvent;
+	keyEvent.Key = KEYBOARD_BUTTONS_MAPPING[ keyId ];
+	keyEvent.State = pressed;
+
+	m_keyboards[ 0 ]->AddEvent( DeviceEvent( keyEvent, m_eventNum++ ) );
 }
 
 /**@brief Ustawia nowy stan przycisku myszy.
 
 @todo W przysz³oœci mo¿e trzeba bêdzie dodaæ informacjê o zmienie stanu.
 Móg³by to byæ np któryæ bit ustawiony na 1 czy coœ.*/
-void WPFInputProxy::MouseButtonChange( int button, bool pressed )
+void			WPFInputProxy::MouseButtonChange		( int button, bool pressed )
 {
-	auto& mouse = m_mouses[ 0 ];
-	auto buttonsState = mouse->GetButtonsState();
-	if( pressed )
-		buttonsState[ MOUSE_BUTTONS_MAPPING[ button ] ].Press();
-	else
-		buttonsState[ MOUSE_BUTTONS_MAPPING[ button ] ].UnPress();
+	//auto& mouse = m_mouses[ 0 ];
+	//auto buttonsState = mouse->GetButtonsState();
+	//if( pressed )
+	//	buttonsState[ MOUSE_BUTTONS_MAPPING[ button ] ].Press();
+	//else
+	//	buttonsState[ MOUSE_BUTTONS_MAPPING[ button ] ].UnPress();
+
+	ButtonEvent mouseButtonEvt;
+	mouseButtonEvt.Button = MOUSE_BUTTONS_MAPPING[ button ];
+	mouseButtonEvt.State = pressed;
+
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( mouseButtonEvt, m_eventNum++ )  );
 }
 
 /**@brief Ustawia now¹ pozycjê myszy.*/
-void WPFInputProxy::MousePositionChange( double X, double Y )
+void			WPFInputProxy::MousePositionChange		( double X, double Y )
 {
-	auto& mouse = m_mouses[ 0 ];
-	mouse->SetPosition( (short)X, (short)Y );
+	//auto& mouse = m_mouses[ 0 ];
+	//mouse->SetPosition( (short)X, (short)Y );
+
+	auto& mouse = m_mousesStates[ 0 ];
+	
+	CursorEvent cursorEvent;
+	cursorEvent.OffsetX = (uint16)X - m_lastX;
+	cursorEvent.OffsetY = (uint16)Y - m_lastY;
+
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( cursorEvent, m_eventNum++ ) );
+
+	m_lastX = (uint16)X;
+	m_lastY = (uint16)Y;
+
+	// Change in mouse position is translated into axis change.
+	// Theoretically it's the same event but better give it a new number.
+	AxisEvent cursorAxisX;
+	cursorAxisX.Delta = cursorEvent.OffsetX;
+	cursorAxisX.Axis = Mouse::PhysicalAxes::X_AXIS;
+
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( cursorAxisX, m_eventNum++ ) );
+
+	AxisEvent cursorAxisY;
+	cursorAxisY.Delta = cursorEvent.OffsetY;
+	cursorAxisY.Axis = Mouse::PhysicalAxes::Y_AXIS;
+
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( cursorAxisY, m_eventNum++ ) );
 }
 
 /**@brief Ustawia przesuniêcie kó³ka myszy.*/
-void WPFInputProxy::MouseWheelChange( double delta )
+void			WPFInputProxy::MouseWheelChange			( double delta )
 {
-	auto& mouse = m_mouses[ 0 ];
-	mouse->GetAxesState()[ MouseState::PHYSICAL_AXES::WHEEL ] = (float)delta;
+	//auto& mouse = m_mouses[ 0 ];
+	//mouse->GetAxesState()[ Mouse::PhysicalAxes::WHEEL ] = (float)delta;
+
+	AxisEvent wheel;
+	wheel.Delta = (float)delta;
+	wheel.Axis = Mouse::PhysicalAxes::WHEEL;
+
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( wheel, m_eventNum++ ) );
 }
 
 /**@brief Poniewa¿ okno straci³o focus to czyœcimy stan przycisków i myszy.
 
 @todo Dokoñczyæ*/
-void WPFInputProxy::LostFocus()
+void			WPFInputProxy::LostFocus()
 {
 
 }
 
 /**@brief Funkcja powinna zostaæ wywo³ana po zakoñczeniu przetwarzania inputu przez aplikacjê.*/
-void WPFInputProxy::PostUpdate()
+void			WPFInputProxy::PostUpdate()
 {
-	MouseWheelChange( 0.0 );
+	//MouseWheelChange( 0.0 );
 
-	for( auto& keyboard : m_keyboards )
-		keyboard->RemoveEvents();
+	auto& mouse = m_mouses[ 0 ];
+	
+	// Zero wheel.
+	AxisEvent wheel;
+	wheel.Delta = (float)-mouse->GetState().GetAxesState()[ Mouse::PhysicalAxes::WHEEL ];
+	wheel.Axis = Mouse::PhysicalAxes::WHEEL;
 
-	for( auto& mouse : m_mouses )
-		mouse->RemoveEvents();
+	m_mouses[ 0 ]->AddEvent( DeviceEvent( wheel, m_eventNum++ ) );
+
+	//for( auto& keyboard : m_keyboards )
+	//	keyboard->RemoveEvents();
+
+	//for( auto& mouse : m_mouses )
+	//	mouse->RemoveEvents();
 }
 
 
+
+}	// input
+}	// sw

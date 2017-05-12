@@ -6,21 +6,44 @@
 */
 
 
-#include "swInputLibrary/IInput.h"
+#include "swInputLibrary/InputCore/IInput.h"
+
+#include "swInputLibrary/InputCore/MouseDevice.h"
+#include "swInputLibrary/InputCore/KeyboardDevice.h"
+#include "swInputLibrary/InputCore/JoystickDevice.h"
+
+
 #include <Windows.h>
 
 
-/**@brief Klasa do przekierowywania do silnika wejœcia pobranego z WPFa.*/
+
+namespace sw {
+namespace input
+{
+
+/**@defgroup WinAPIInput
+@ingroup Input*/
+
+
+/**@brief Klasa do przekierowywania do silnika wejœcia pobranego z WPFa.
+
+@ingroup WinAPIInput*/
 class WinApiInputProxy : public IInput
 {
 private:
 
-	std::vector< KeyboardState* >	m_keyboards;	///< Uzywany jest tylko pierwszy element tablicy.
-	std::vector< MouseState* >		m_mouses;		///< Uzywany jest tylko pierwszy element tablicy.
-	std::vector< JoystickState* >	m_joysticks;	///< Uzywany jest tylko pierwszy element tablicy.
+	std::vector< const KeyboardState* >		m_keyboardsStates;	///< Copy of device state in m_keyboards.
+	std::vector< const MouseState* >		m_mousesStates;		///< Copy of device state in m_mouses.
+	std::vector< const JoystickState* >		m_joysticksStates;	///< Copy of device state in m_joysticks.
 
-	double			m_lastX;
-	double			m_lastY;
+	std::vector< KeyboardDeviceOPtr >	m_keyboards;	///< Only first element is in use now.
+	std::vector< MouseDeviceOPtr >		m_mouses;		///< Only first element is in use now.
+	std::vector< JoystickDeviceOPtr >	m_joysticks;	///< Only first element is in use now.
+
+	uint16			m_lastX;
+	uint16			m_lastY;
+
+	Timestamp		m_eventNum;							///< Number of event in current frame.
 
 public:
 	WinApiInputProxy();
@@ -28,11 +51,15 @@ public:
 
 	virtual bool									Init				( const InputInitInfo& initInfo ) override;
 
-	virtual const std::vector< KeyboardState* >&	GetKeyboardStates	() override;
-	virtual const std::vector< MouseState* >&		GetMouseStates		() override;
-	virtual const std::vector< JoystickState* >&	GetJoystickStates	() override;
+	virtual const std::vector< const KeyboardState* >&	GetKeyboardStates	() const override;
+	virtual const std::vector< const MouseState* >&		GetMouseStates		() const override;
+	virtual const std::vector< const JoystickState* >&	GetJoystickStates	() const override;
 
-	virtual std::vector< const InputDeviceInfo* >	GetDevicesInfo		() override;
+	virtual std::vector< KeyboardDeviceOPtr >&		GetKeyboardDevice	() override;
+	virtual std::vector< MouseDeviceOPtr >&			GetMouseDevice		() override;
+	virtual std::vector< JoystickDeviceOPtr >&		GetJoystickDevice	() override;
+
+	virtual std::vector< const InputDeviceInfo* >	GetDevicesInfo		() const override;
 
 	virtual void									Update				( float timeInterval ) override;
 	virtual bool									UpdateDevices		() override;
@@ -41,6 +68,7 @@ public:
 	///@name WinaAPI API
 	///@{
 	void				KeyboardChange				( int keyId, bool pressed );
+	void				KeyboardCharacter			( wchar_t character );
 	void				MouseButtonChange			( int button, bool pressed );
 	void				MousePositionChange			( short X, short Y );
 	void				MouseWheelChange			( double delta );
@@ -50,4 +78,9 @@ public:
 	void				HandleEvent					( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam );
 	///@}
 };
+
+
+
+}	// input
+}	// sw
 

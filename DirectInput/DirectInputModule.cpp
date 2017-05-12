@@ -1,11 +1,17 @@
 #include "DirectInputModule.h"
 #include "swCommonLib/Common/TypesDefinitions.h"
 
-#include "swInputLibrary/Factory.h"
+#include "swInputLibrary/InputCore/Factory.h"
 
 #include "swCommonLib/Common/MemoryLeaks.h"
 
 #include <assert.h>
+
+
+namespace sw {
+namespace input
+{
+
 
 
 #define DIRECT_INPUT_OK				DI_OK
@@ -23,9 +29,7 @@ DirectInputModule::DirectInputModule()
 
 /**@brief */
 DirectInputModule::~DirectInputModule()
-{
-	ClearInputStates();
-}
+{}
 
 /**@brief */
 bool									DirectInputModule::Init				( const InputInitInfo& initInfo )
@@ -62,36 +66,57 @@ bool									DirectInputModule::Init				( const InputInitInfo& initInfo )
 	m_keyboardInput->Acquire();
 	m_mouseInput->Acquire();
 
-	m_keyboards.push_back( new KeyboardState() );
-	m_mouses.push_back( new MouseState() );
-	m_joysticks.push_back( new JoystickState() );
+	m_keyboards.push_back( KeyboardDeviceOPtr( new KeyboardDevice() ) );
+	m_mouses.push_back( MouseDeviceOPtr( new MouseDevice() ) );
+	m_joysticks.push_back( JoystickDeviceOPtr( new JoystickDevice() ) );
+
+	m_keyboardsStates.push_back( &m_keyboards[ 0 ]->GetState() );
+	m_mousesStates.push_back( &m_mouses[ 0 ]->GetState() );
+	m_joysticksStates.push_back( &m_joysticks[ 0 ]->GetState() );
+
 
 	return true;
 }
 
 
-
-
 /**@copydoc IInput::GetKeyboardStates*/
-const std::vector< KeyboardState* >&	DirectInputModule::GetKeyboardStates	()
+const std::vector< const KeyboardState* >&	DirectInputModule::GetKeyboardStates	() const
+{
+	return m_keyboardsStates;
+}
+
+/**@copydoc IInput::GetMouseStates*/
+const std::vector< const MouseState* >&		DirectInputModule::GetMouseStates	() const
+{
+	return m_mousesStates;
+}
+
+/**@copydoc IInput::GetJoystickStates*/
+const std::vector< const JoystickState* >&	DirectInputModule::GetJoystickStates	() const
+{
+	return m_joysticksStates;
+}
+
+/**@copydoc IInput::GetKeyboardDevice*/
+std::vector< KeyboardDeviceOPtr >&		DirectInputModule::GetKeyboardDevice()
 {
 	return m_keyboards;
 }
 
-/**@copydoc IInput::GetMouseStates*/
-const std::vector< MouseState* >&		DirectInputModule::GetMouseStates		()
+/**@copydoc IInput::GetMouseDevice*/
+std::vector< MouseDeviceOPtr >&			DirectInputModule::GetMouseDevice()
 {
 	return m_mouses;
 }
 
-/**@copydoc IInput::GetJoystickStates*/
-const std::vector< JoystickState* >&	DirectInputModule::GetJoystickStates	()
+/**@copydoc IInput::GetJoystickDevice*/
+std::vector< JoystickDeviceOPtr >&		DirectInputModule::GetJoystickDevice()
 {
 	return m_joysticks;
 }
 
 /**@brief */
-std::vector< const InputDeviceInfo* >	DirectInputModule::GetDevicesInfo		()
+std::vector< const InputDeviceInfo* >	DirectInputModule::GetDevicesInfo		() const
 {
 	std::vector< const InputDeviceInfo* > infos;
 	for( auto& device : m_keyboards )
@@ -114,16 +139,19 @@ void									DirectInputModule::Update				( float timeInterval )
 	// Myszka
 	bool result;
 	POINT pos;
-	
-	result = GetCursorPos( &pos ) !=0;
-	result = result && ScreenToClient( m_windowHandle, &pos ) !=0;
+
+	result = GetCursorPos( &pos ) != 0;
+	result = result && ScreenToClient( m_windowHandle, &pos ) != 0;
 	assert( result );
 
-	for( Size i = 0; i < m_mouses.size(); ++i )
-	{
-		UpdateMouse( (int)i );
-		m_mouses[ i ]->SetPosition( (short)pos.x, (short)pos.y );
-	}
+	//for( Size i = 0; i < m_mouses.size(); ++i )
+	//{
+	//	UpdateMouse( (int)i );
+	//	m_mouses[ i ]->SetPosition( (short)pos.x, (short)pos.y );
+	//}
+
+	assert( false );
+	///@todo Repair
 
 	// Joystick
 	for( Size i = 0; i < m_joysticks.size(); ++i )
@@ -131,35 +159,41 @@ void									DirectInputModule::Update				( float timeInterval )
 }
 
 /**@brief */
-void DirectInputModule::UpdateKeyboard( int idx )
+void				DirectInputModule::UpdateKeyboard( int idx )
 {
-	char newState[ KEYBOARD_STATE_KEYS_NUMBER ];
-	m_keyboardInput->GetDeviceState( KEYBOARD_STATE_KEYS_NUMBER, newState );
+	//char newState[ KEYBOARD_STATE_KEYS_NUMBER ];
+	//m_keyboardInput->GetDeviceState( KEYBOARD_STATE_KEYS_NUMBER, newState );
 
-	auto prevState = m_keyboards[ idx ]->KeysState();
-	for( int i = 0; i < KEYBOARD_STATE_KEYS_NUMBER; ++i )
-		prevState[ i ] = newState[ i ] != 0;
+	//auto prevState = m_keyboards[ idx ]->KeysState();
+	//for( int i = 0; i < KEYBOARD_STATE_KEYS_NUMBER; ++i )
+	//	prevState[ i ] = newState[ i ] != 0;
+
+	assert( false );
+	///@todo Repair
 }
 
 /**@brief */
-void DirectInputModule::UpdateMouse( int idx )
+void				DirectInputModule::UpdateMouse( int idx )
 {
-	DIMOUSESTATE2	mouseStruct;
-	m_mouseInput->GetDeviceState( sizeof( mouseStruct ), &mouseStruct );
-	
-	auto mouseAxes = m_mouses[ idx ]->GetAxesState();
-	mouseAxes[ 0 ] = static_cast< float >( mouseStruct.lX );
-	mouseAxes[ 1 ] = static_cast< float >( mouseStruct.lY );
-	mouseAxes[ 2 ] = static_cast< float >( mouseStruct.lZ );
+	//DIMOUSESTATE2	mouseStruct;
+	//m_mouseInput->GetDeviceState( sizeof( mouseStruct ), &mouseStruct );
 
-	auto mouseButtons = m_mouses[ idx ]->GetButtonsState();
-	for( int i = 0; i < 8; ++i )
-		mouseButtons[ i ] = mouseStruct.rgbButtons[ i ] != 0;
+	//auto mouseAxes = m_mouses[ idx ]->GetAxesState();
+	//mouseAxes[ 0 ] = static_cast<float>( mouseStruct.lX );
+	//mouseAxes[ 1 ] = static_cast<float>( mouseStruct.lY );
+	//mouseAxes[ 2 ] = static_cast<float>( mouseStruct.lZ );
+
+	//auto mouseButtons = m_mouses[ idx ]->GetButtonsState();
+	//for( int i = 0; i < 8; ++i )
+	//	mouseButtons[ i ] = mouseStruct.rgbButtons[ i ] != 0;
+
+	assert( false );
+	///@todo Repair
 }
 
 /**@brief */
-void DirectInputModule::UpdateJoystick( int idx )
-{ }
+void				DirectInputModule::UpdateJoystick( int idx )
+{}
 
 
 /**@brief */
@@ -172,32 +206,21 @@ bool									DirectInputModule::UpdateDevices()
 /**@brief Zwalania zasoby DirectInputa.*/
 void DirectInputModule::CleanDirectInput()
 {
-	if ( m_directInput != nullptr )
+	if( m_directInput != nullptr )
 	{
-		if ( m_keyboardInput != nullptr )
+		if( m_keyboardInput != nullptr )
 		{
 			m_keyboardInput->Unacquire();
 			m_keyboardInput->Release();
 		}
 
-		if ( m_mouseInput != nullptr)
+		if( m_mouseInput != nullptr )
 		{
 			m_mouseInput->Unacquire();
 			m_mouseInput->Release();
 		}
 		m_directInput->Release();
 	}
-}
-
-/**@brief */
-void			DirectInputModule::ClearInputStates	()
-{
-	for( auto state : m_keyboards )
-		delete state;
-	for( auto state : m_mouses )
-		delete state;
-	for( auto state : m_joysticks )
-		delete state;
 }
 
 //====================================================================================//
@@ -208,3 +231,8 @@ IInput*			InputFactory::CreateDirectInput		()
 {
 	return new DirectInputModule();
 }
+
+
+}	// input
+}	// sw
+
