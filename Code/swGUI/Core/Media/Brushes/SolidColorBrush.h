@@ -7,7 +7,8 @@ namespace sw {
 namespace gui
 {
 
-/**@brief */
+/**@brief 
+@ingroup Brushes*/
 class SolidColorBrush : public Brush
 {
 	RTTR_ENABLE( Brush );

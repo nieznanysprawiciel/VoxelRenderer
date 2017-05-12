@@ -120,9 +120,6 @@
     <ClInclude Include="..\..\..\Core\System\Events\DelegateContainer.h">
       <Filter>Core\System\Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Core\System\Events\EventsManager.h">
-      <Filter>Core\System\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Core\Media\Brushes\Brush.h">
       <Filter>Core\Media\Brushes</Filter>
     </ClInclude>
@@ -140,6 +137,30 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Core\Media\Brushes\RadialGradient.h">
       <Filter>Core\Media\Brushes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\EventProxy.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\EventsSystem.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\EventHandlers.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\RegisteredEvent.h">
+      <Filter>Core\System\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\CommonTypes\AccessKey.h">
+      <Filter>Core\System\CommonTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\Media\Media.h">
+      <Filter>Core\Media</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\HostLogic.h">
+      <Filter>Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Events\Input\MouseMoveEventArgs.h">
+      <Filter>Core\System\Events\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -200,8 +221,19 @@
     <ClCompile Include="..\..\..\Core\System\Rendering\RenderingSystem.cpp">
       <Filter>Core\System\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Core\System\Events\EventsManager.cpp">
+    <ClCompile Include="..\..\..\Core\System\Events\EventsSystem.cpp">
       <Filter>Core\System\Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\Events\EventHandlers.cpp">
+      <Filter>Core\System\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\HostLogic.cpp">
+      <Filter>Core\System</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Core\System\Events\EventsSystem.inl">
+      <Filter>Core\System\Events</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -8,7 +8,8 @@ namespace sw {
 namespace gui
 {
 
-/**@brief */
+/**@brief 
+@ingroup Brushes*/
 class ImageBrush : public Brush
 {
 	RTTR_ENABLE( Brush );

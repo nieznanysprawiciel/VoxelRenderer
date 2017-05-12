@@ -3,6 +3,19 @@
 
 #include "Sizeofs/Sizeofs.h"
 
+#include <iostream>
+
+
+using namespace sw::gui;
+
+// ================================ //
+//
+void		MouseMoveEventReceived			( UIElement* sender, MouseMoveEventArgs* e )
+{
+	std::cout	<< "MouseMove Window [" << sender->GetHost()->GetNativeWindow()->GetTitle()
+				<< "] Position [" << e->WindowPosX << ", " << e->WindowPosY << "], Delta [" 
+				<< e->MouseDeltaX << ", " << e->MouseDeltaY << "]" << std::endl;
+}
 
 
 // ================================ //
@@ -30,7 +43,9 @@ void		Application::OnInitialized()
 	// In this function sizeofs basic classes are printed. Test purposes only.
 	PrintSizeofs();
 
-	CreateNativeHostWindow( 500, 500, "Additional window" );
+	HostWindow* window = CreateNativeHostWindow( 500, 500, "Additional window" );
+	window->PreviewMouseMove() += MouseMoveEventHandler( &MouseMoveEventReceived );
+	m_windows[ 0 ]->PreviewMouseMove() += MouseMoveEventHandler( &MouseMoveEventReceived );
 }
 
 /**@brief Function invoked when application is going to close itself.*/

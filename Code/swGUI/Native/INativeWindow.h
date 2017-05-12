@@ -12,7 +12,8 @@ namespace gui
 {
 
 
-
+/**@brief Dedcriptor used to create native GUI window.
+@ingroup NativeGUI*/
 struct NativeWindowDescriptor
 {
 	WindowHandler			ParentHandle;
@@ -63,11 +64,13 @@ struct NativeWindowDescriptor
 };
 
 
-/**@brief Klasa bazowa kontenera dla natywnego okna danego systemu.
+/**@brief Interface for native window sing OS specific ffunctions.
 
 Natywne okno powinno udostêpniaæ przynajmniej swój render target i swapchain.
 Ponadto mo¿e zawieraæ funkcje do obs³ugi prawdziwego okna, ale nie jest to konieczne.
-GUI nie musi samo obs³ugiwaæ prawdziwych okien, mo¿e mieæ je dostarczone przez aplikacjê.*/
+GUI nie musi samo obs³ugiwaæ prawdziwych okien, mo¿e mieæ je dostarczone przez aplikacjê.
+
+@ingroup NativeGUI*/
 class INativeWindow
 {
 private:

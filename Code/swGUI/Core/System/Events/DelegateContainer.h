@@ -6,10 +6,10 @@
 */
 
 
-
-#include "EventsManager.h"
+#include "swCommonLib/Common/TypesDefinitions.h"
 #include "swCommonLib/External/FastDelegate/FastDelegate.h"
 
+#include "RegisteredEvent.h"
 
 #include <vector>
 
@@ -20,8 +20,15 @@ namespace sw {
 namespace gui
 {
 
+
+
 class DelegatesContainerBase;
+struct IEventArgs;
+class UIElement;
 DEFINE_OPTR_TYPE( DelegatesContainerBase );
+
+template< typename EventArgType >
+using EventDelegate = fastdelegate::FastDelegate2< UIElement*, EventArgType* >;
 
 
 /**@brief Base class for delegates containers.
@@ -37,7 +44,11 @@ This class is designed to minimize memory footprint in Control classes. That's w
 consecutive containers. Since there're only few delegates used at the same time, there's no sense to expose
 DelegatesContainer for each event.
 
-This class owns next delegates container and is responsible for releasing memory.*/
+This class owns next delegates container and is responsible for releasing memory.
+
+@todo Consider extracting intrusive list as separate class.
+
+@ingroup EventSystemImpl*/
 class DelegatesContainerBase
 {
 private:
@@ -47,7 +58,7 @@ private:
 
 protected:
 public:
-	explicit		DelegatesContainerBase		( EventType type );
+	explicit		DelegatesContainerBase		( EventType eventID );
 	virtual			~DelegatesContainerBase		() = default;
 
 
@@ -57,10 +68,18 @@ public:
 
 	/**@brief Gets next element on linked list.*/
 	DelegatesContainerBase*		GetNextContainer	()		{ return m_next.get(); }
+	
 	/**@brief Adds container on the end of list.*/
 	void						AddContainer		( DelegatesContainerBaseOPtr&& container );
+	
 	/**@brief Removed element following this object.*/
 	void						RemoveNext			();
+
+	/**@brief Steal list following this */
+	DelegatesContainerBaseOPtr	StealRestOfList		();
+
+	/**@brief Invokes delegates functions.*/
+	virtual void				CallDelegates		( UIElement* sender, IEventArgs* arguments ) = 0;
 };
 
 
@@ -73,7 +92,7 @@ class DelegatesContainer : public DelegatesContainerBase
 {
 public:
 
-	typedef fastdelegate::FastDelegate1< EventArgType > DelegateType;
+	typedef EventDelegate< EventArgType > DelegateType;
 
 private:
 
@@ -85,11 +104,15 @@ public:
 	virtual			~DelegatesContainer		() = default;
 
 
-	inline void			operator+=		( DelegateType delgate );
-	void				AddDelegate		( DelegateType delgate );
-	bool				RemoveDelegate	( DelegateType delgate );
+	inline void			operator+=		( DelegateType delegate );
+	void				AddDelegate		( DelegateType delegate );
+	bool				RemoveDelegate	( DelegateType delegate );
 
-	bool				Exists			( DelegateType delgate );
+	bool				Exists			( DelegateType delegate );
+	bool				IsEmpty			() const;
+
+	
+	virtual void		CallDelegates	( UIElement* sender, IEventArgs* arguments ) override;
 };
 
 
@@ -99,8 +122,8 @@ public:
 
 // ================================ //
 //
-DelegatesContainerBase::DelegatesContainerBase	( EventType type )
-	:	m_eventType( type )
+inline DelegatesContainerBase::DelegatesContainerBase	( EventType eventID )
+	:	m_eventType( eventID )
 	,	m_next( nullptr )
 {}
 
@@ -125,6 +148,13 @@ inline void				DelegatesContainerBase::RemoveNext		()
 	m_next = std::move( m_next->m_next );
 }
 
+// ================================ //
+//
+inline DelegatesContainerBaseOPtr	DelegatesContainerBase::StealRestOfList()
+{
+	return std::move( m_next );
+}
+
 
 
 //====================================================================================//
@@ -134,23 +164,23 @@ inline void				DelegatesContainerBase::RemoveNext		()
 
 // ================================ //
 //
-template< typename DelegateType >
-inline					DelegatesContainer< DelegateType >::DelegatesContainer	( EventType type )
+template< typename EventArgType >
+inline					DelegatesContainer< EventArgType >::DelegatesContainer	( EventType type )
 	:	DelegatesContainerBase( type )
 {}
 
 // ================================ //
 //
-template< typename DelegateType >
-inline void				DelegatesContainer< DelegateType >::operator+=		( DelegateType delgate )
+template< typename EventArgType >
+inline void				DelegatesContainer< EventArgType >::operator+=		( typename DelegatesContainer< EventArgType >::DelegateType delegate )
 {
 	AddDelegate( delegate );
 }
 
 // ================================ //
 //
-template< typename DelegateType >
-inline void				DelegatesContainer< DelegateType >::AddDelegate		( DelegateType delgate )
+template< typename EventArgType >
+inline void				DelegatesContainer< EventArgType >::AddDelegate		( typename DelegatesContainer< EventArgType >::DelegateType delegate )
 {
 	if( !Exists( delegate ) )
 		m_delegates.push_back( delegate );
@@ -158,20 +188,28 @@ inline void				DelegatesContainer< DelegateType >::AddDelegate		( DelegateType d
 
 // ================================ //
 //
-template< typename DelegateType >
-inline bool				DelegatesContainer< DelegateType >::RemoveDelegate	( DelegateType delgate )
+template< typename EventArgType >
+inline bool				DelegatesContainer< EventArgType >::RemoveDelegate	( typename DelegatesContainer< EventArgType >::DelegateType delegate )
 {
-	for( auto iter = m_delegates.begin(); iter != m_delegates.end(); iter++ )
+	bool removed = false;
+	for( auto iter = m_delegates.begin(); iter != m_delegates.end(); )
 	{
 		if( *iter == delegate )
+		{
 			iter = m_delegates.erase( iter );
+			removed = true;
+		}
+		else
+			iter++;
 	}
+
+	return removed;
 }
 
 // ================================ //
 //
-template< typename DelegateType >
-inline bool				DelegatesContainer< DelegateType >::Exists			( DelegateType delgate )
+template< typename EventArgType >
+inline bool				DelegatesContainer< EventArgType >::Exists			( typename DelegatesContainer< EventArgType >::DelegateType delegate )
 {
 	for( auto& exisitingDelegate : m_delegates )
 	{
@@ -179,6 +217,25 @@ inline bool				DelegatesContainer< DelegateType >::Exists			( DelegateType delga
 			return true;
 	}
 	return false;
+}
+
+// ================================ //
+//
+template< typename EventArgType >
+inline bool				DelegatesContainer< EventArgType >::IsEmpty() const
+{
+	return m_delegates.empty();
+}
+
+// ================================ //
+//
+template< typename EventArgType >
+inline void				DelegatesContainer< EventArgType >::CallDelegates	( UIElement* sender, IEventArgs* arguments )
+{
+	// @todo What should be done if event will be marked as handled ??
+	EventArgType* typedArgs = static_cast< EventArgType* >( arguments );
+	for( auto& delegateFun : m_delegates )
+		delegateFun( sender, typedArgs );
 }
 
 }	// gui

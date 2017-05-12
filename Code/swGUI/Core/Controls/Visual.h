@@ -9,6 +9,7 @@
 
 #include "swGUI/Core/System/DataBinding/DependencyObject.h"
 #include "swGUI/Core/System/CommonTypes/CommonTypes.h"
+#include "swGUI/Core/System/CommonTypes/AccessKey.h"
 
 #include "swGUI/Core/System/Rendering/DrawingContext.h"
 
@@ -24,11 +25,12 @@ Provides interfaces and base implementation of:
 - HitTesting
 - Rendering
 
-This classs correpsonds to WPF Visual class.*/
+This classs correpsonds to WPF Visual class.
+@ingroup ControlsFramework*/
 class Visual : public DependencyObject
 {
-	RTTR_ENABLE( DependencyObject )
-		RTTR_REGISTRATION_FRIEND
+	RTTR_ENABLE( DependencyObject );
+	RTTR_REGISTRATION_FRIEND;
 private:
 
 	Position		m_position;		///< Control position. (@todo Relative to parent ???)

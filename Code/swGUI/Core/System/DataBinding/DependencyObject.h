@@ -8,17 +8,25 @@
 #include "swCommonLib/Common/EngineObject.h"
 
 
+/**@defgroup DataBindingSystem Data Binding
+
+@ingroup GUICore*/
+
+
 namespace sw {
 namespace gui
 {
 
 /**@brief Support for data binding.
 
-It should correpsond WPF DependencyObject.*/
+It should correpsond WPF DependencyObject.
+
+@ingroup DataBindingSystem
+@ingroup ControlsFramework*/
 class DependencyObject : public EngineObject
 {
-	RTTR_ENABLE( EngineObject )
-		RTTR_REGISTRATION_FRIEND
+	RTTR_ENABLE( EngineObject );
+	RTTR_REGISTRATION_FRIEND
 private:
 protected:
 

@@ -47,13 +47,13 @@ const wchar_t*	WinAPIGUI::GetWindowClassName()
 
 // ================================ //
 //
-IInput*			WinAPIGUI::UseNativeInput()
+sw::input::IInput*		WinAPIGUI::UseNativeInput()
 {
-	InputInitInfo init;
+	sw::input::InputInitInfo init;
 	init.AppInstance = GetModuleHandle( nullptr );
 	init.WndHandle = nullptr;
 
-	m_input = new WinApiInputProxy();
+	m_input = new sw::input::WinApiInputProxy();
 	if( !m_input->Init( init ) )
 	{
 		assert( !"Initialziation failed" );

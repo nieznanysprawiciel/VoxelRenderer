@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{8d368669-ee03-47a5-80c9-294e93bafa39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestGUISystem">
+      <UniqueIdentifier>{47ebe612-bf6c-4392-b037-13742779c680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FrameworkHelpers">
+      <UniqueIdentifier>{b2a42e9d-5b31-4fc2-befd-26daaa6191bd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\TestEventRouting.cpp">
+      <Filter>TestGUISystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\TestRegistration.cpp">
+      <Filter>TestGUISystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\Classes\TestUIElementClass.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\main.cpp" />
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\FrameworkHelpers\HostWindowTester.cpp">
+      <Filter>FrameworkHelpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Tests\TestGUISystem\TestKeyEvents.cpp">
+      <Filter>TestGUISystem</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMouseEvents.cpp">
+      <Filter>TestGUISystem</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Tests\TestGUISystem\Classes\TestUIElementClass.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Tests\TestGUISystem\FrameworkHelpers\HostWindowTester.h">
+      <Filter>FrameworkHelpers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
