@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\ActorBase.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraActor.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraController.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\ActorBase.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraActor.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraController.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
