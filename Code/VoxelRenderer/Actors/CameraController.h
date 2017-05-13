@@ -47,3 +47,5 @@ public:
 	DirectX::XMVECTOR	RightVector				( DynamicActor* actor );
 };
 
+DEFINE_OPTR_TYPE( SpectatorCameraController );
+

@@ -22,10 +22,10 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 	,	m_verticalAngle( 0.0f )
 	,	m_horizontalAngle( 0.0f )
 {
-	m_moveSpeed = 1000.0;
-	m_buttonRotSpeed = 1.0;
-	m_axisRotSpeed = 120.0;
-	m_zoomSpeed = 100.0;
+	m_moveSpeed = 0.10f;
+	m_buttonRotSpeed = 1.0f;
+	m_axisRotSpeed = 120.0f;
+	m_zoomSpeed = 100.0f;
 }
 
 /**@brief */
@@ -119,7 +119,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 W trybie debug funkcja zatrzymuje siê na assercie.*/
 void SpectatorCameraController::ControlObjectPost( DynamicActor* actor, IControllersState* globalState )
 {
-	assert( !"This is only pre controlled class." );
+	//assert( !"This is only pre controlled class." );
 }
 
 // ================================ //

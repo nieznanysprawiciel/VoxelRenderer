@@ -3,7 +3,7 @@
 #include "VoxelRenderer/Raycaster/RaycasterCPU.h"
 #include "VoxelRenderer/Raycaster/FakeRaycaster.h"
 
-
+#include "VoxelRenderer/Actors/CameraController.h"
 
 namespace vr
 {
@@ -59,7 +59,10 @@ void		Application::OnIdle()
 // ================================ //
 //
 void		Application::Update()
-{}
+{
+	m_camera->GetController()->ControlObjectPre( m_camera, nullptr );
+	m_camera->GetController()->ControlObjectPost( m_camera, nullptr );
+}
 
 
 // ================================ //
@@ -85,6 +88,9 @@ void		Application::InitCamera		()
 	m_camera->SetNearPlane( m_config->CameraNear() );
 	m_camera->SetFarPlane( m_config->CameraFar() );
 	m_camera->Teleport( DirectX::XMLoadFloat3( &m_config->CameraPosition() ) );
+
+	SpectatorCameraController* controller = new SpectatorCameraController( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
+	m_camera->SetController( controller );
 
 	//m_camera->SetDirection( DirectX::XMLoadFloat3( &m_config->CameraDirection() ) );
 }
