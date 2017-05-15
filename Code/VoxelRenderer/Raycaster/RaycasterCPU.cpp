@@ -199,7 +199,6 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		
 		InitRaycasting( position, direction, rayCtx );
 		
-		float h = rayCtx.tMax;
 		const OctreeNode* childDescriptor = nullptr;
 
 
@@ -236,10 +235,10 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 					//if( ( child_masks & 0x0080 ) == 0 )
 					//	break; // at t_min (overridden with tv_min).
 
-					if( tc_max < h )
+					if( tc_max < rayCtx.h )
 						PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
 
-					h = tc_max;
+					rayCtx.h = tc_max;
 
 					// Find child descriptor corresponding to the current voxel.
 					uint32 childOffset = 0;
@@ -320,7 +319,7 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 				// Prevent same parent from being stored again and invalidate cached child descriptor.
 
-				h = 0.0f;
+				rayCtx.h = 0.0f;
 				childDescriptor = nullptr;
 			}
 
@@ -424,14 +423,14 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 
 
 	// Initialize the active span of t-values.
-	rayCtx.tMin = fmaxf( fmaxf( ParamLineX( 2.0f, rayCtx ), ParamLineZ( 2.0f, rayCtx ) ), ParamLineZ( 2.0f, rayCtx ) );
-	rayCtx.tMax = fminf( fminf( ParamLineX( 1.0f, rayCtx ), ParamLineZ( 1.0f, rayCtx ) ), ParamLineZ( 1.0f, rayCtx ) );
-	float h = rayCtx.tMax;
+	rayCtx.tMin = fmaxf( fmaxf( ParamLineX( 2.0f, rayCtx ), ParamLineY( 2.0f, rayCtx ) ), ParamLineZ( 2.0f, rayCtx ) );
+	rayCtx.tMax = fminf( fminf( ParamLineX( 1.0f, rayCtx ), ParamLineY( 1.0f, rayCtx ) ), ParamLineZ( 1.0f, rayCtx ) );
+	rayCtx.h = rayCtx.tMax;
 	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
 	rayCtx.tMax = fminf( rayCtx.tMax, 1.0f );
 
 	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
-	rayCtx.Scale = rayCtx.Octree->GetMaxDepth();
+	rayCtx.Scale = rayCtx.Octree->GetMaxDepth() - 1;
 	rayCtx.ScaleExp = 0.5f;
 	rayCtx.ChildIdx = 0;
 	rayCtx.Position = XMFLOAT3( 1.0f, 1.0f, 1.0f );

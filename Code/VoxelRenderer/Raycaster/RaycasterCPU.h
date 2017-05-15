@@ -72,6 +72,7 @@ struct RaycasterContext
 	DirectX::XMFLOAT3				Position;
 	float							tMax;
 	float							tMin;
+	float							h;
 
 	uint32							Current;		///< Current node, we are in.
 	ChildFlag						OctantMask;		///< Child bit flipping.

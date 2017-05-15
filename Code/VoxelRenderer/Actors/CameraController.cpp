@@ -104,7 +104,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	}
 
 	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( RightVector( actor ), m_verticalAngle );
-	XMVECTOR horizontalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 0.0, 1.0, 0.0, 0.0 ), m_verticalAngle );
+	XMVECTOR horizontalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 0.0, 1.0, 0.0, 0.0 ), m_horizontalAngle );
 
 	actor->TeleportOrientation( XMQuaternionMultiply( verticalRotationQuat, horizontalRotationQuat ) );
 
