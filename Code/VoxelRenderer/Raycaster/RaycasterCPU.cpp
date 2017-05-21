@@ -159,7 +159,7 @@ void			RaycasterCPU::RaycasterThread			( Size threadNumber )
 //
 void			RaycasterCPU::PrepareThreads()
 {
-	auto numThreads = std::thread::hardware_concurrency();
+	auto numThreads = GetNumThreads();
 	assert( numThreads );
 	m_threadPool.reserve( numThreads - 1 );		// Note: GUI thread will work too.
 	m_threadData.resize( numThreads );
@@ -343,7 +343,11 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 //
 uint16			RaycasterCPU::GetNumThreads() const
 {
-	return (uint16)m_threadData.size();
+#ifdef _DEBUG
+	return 1;
+#else
+	return (uint16)std::thread::hardware_concurrency();
+#endif // DEBUG
 }
 
 // ================================ //
