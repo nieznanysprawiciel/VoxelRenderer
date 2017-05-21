@@ -100,7 +100,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 
 		float xAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::X_AXIS ];
 		if( xAxis != 0.0f )
-			m_horizontalAngle *= xAxis * m_axisRotSpeed;
+			m_horizontalAngle += xAxis * m_axisRotSpeed;
 	}
 
 	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( RightVector( actor ), m_verticalAngle );
