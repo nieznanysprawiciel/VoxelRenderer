@@ -3,10 +3,10 @@
   <Import Project="..\Paths.props" />
   <PropertyGroup Label="UserMacros">
     <VoxelRendererName>VoxelRenderer</VoxelRendererName>
-    <VoxelRendererLibDir>$(LibDir)$(VoxelRendererName)\</VoxelRendererLibDir>
+    <VoxelRendererLibDir>$(LibDir)$(VoxelRendererName)\$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</VoxelRendererLibDir>
     <VoxelRendererSourceDir>$(SourceDir)$(VoxelRendererName)\</VoxelRendererSourceDir>
-    <VoxelRendererFileName>$(VoxelRendererName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)</VoxelRendererFileName>
-    <VoxelRendererBuildDir>$(BuildDir)$(VoxelRendererName)_$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</VoxelRendererBuildDir>
+    <VoxelRendererFileName>$(VoxelRendererName)</VoxelRendererFileName>
+    <VoxelRendererBuildDir>$(BuildDir)$(VoxelRendererName)$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</VoxelRendererBuildDir>
   </PropertyGroup>
   <PropertyGroup>
     <IntDir>$(VoxelRendererBuildDir)</IntDir>
