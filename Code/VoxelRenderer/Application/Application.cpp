@@ -89,10 +89,21 @@ void		Application::InitCamera		()
 	m_camera->SetFarPlane( m_config->CameraFar() );
 	m_camera->Teleport( DirectX::XMLoadFloat3( &m_config->CameraPosition() ) );
 
+
+	DirectX::XMVECTOR defaultOrient = DirectX::XMVectorSet( 0.0, 0.0, -1.0, 0.0 );
+	DirectX::XMVECTOR direction = DirectX::XMLoadFloat3( &m_config->CameraDirection() );
+	direction = DirectX::XMVector3Normalize( direction );
+
+	DirectX::XMVECTOR rotationAxis = DirectX::XMVector3Normalize( DirectX::XMVector3Cross( defaultOrient, direction ) );
+	DirectX::XMVECTOR angle = DirectX::XMVector3AngleBetweenNormals( defaultOrient, direction );
+
+	DirectX::XMVECTOR newOrientation = DirectX::XMQuaternionNormalize( DirectX::XMQuaternionRotationNormal( rotationAxis, DirectX::XMVectorGetX( angle ) ) );
+
+	m_camera->TeleportOrientation( newOrientation );
+
+
 	SpectatorCameraController* controller = new SpectatorCameraController( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
 	m_camera->SetController( controller );
-
-	//m_camera->SetDirection( DirectX::XMLoadFloat3( &m_config->CameraDirection() ) );
 }
 
 // ================================ //

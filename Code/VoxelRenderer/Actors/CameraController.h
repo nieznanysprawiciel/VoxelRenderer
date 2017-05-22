@@ -32,6 +32,7 @@ private:
 
 public:
 	explicit SpectatorCameraController			( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard );
+	explicit SpectatorCameraController			( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard, float horAngle, float vertAngle );
 	virtual ~SpectatorCameraController			();
 
 	virtual void		ControlObjectPre		( DynamicActor* actor, IControllersState* globalState );

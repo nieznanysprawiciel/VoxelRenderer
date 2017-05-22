@@ -28,6 +28,18 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 	m_zoomSpeed = 100.0f;
 }
 
+SpectatorCameraController::SpectatorCameraController( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard, float horAngle, float vertAngle )
+	:	m_mouse( mouse )
+	,	m_keyboard( keyboard )
+	,	m_verticalAngle( vertAngle )
+	,	m_horizontalAngle( horAngle )
+{
+	m_moveSpeed = 0.10f;
+	m_buttonRotSpeed = 1.0f;
+	m_axisRotSpeed = 120.0f;
+	m_zoomSpeed = 100.0f;
+}
+
 /**@brief */
 SpectatorCameraController::~SpectatorCameraController()
 {}
@@ -103,7 +115,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 			m_horizontalAngle += xAxis * m_axisRotSpeed;
 	}
 
-	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( RightVector( actor ), m_verticalAngle );
+	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 1.0, 0.0, 0.0, 0.0 ), m_verticalAngle );
 	XMVECTOR horizontalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 0.0, 1.0, 0.0, 0.0 ), m_horizontalAngle );
 
 	actor->TeleportOrientation( XMQuaternionMultiply( verticalRotationQuat, horizontalRotationQuat ) );
@@ -125,7 +137,16 @@ void SpectatorCameraController::ControlObjectPost( DynamicActor* actor, IControl
 // ================================ //
 //
 void	SpectatorCameraController::Initialize		( DynamicActor* actor )
-{}
+{
+	XMVECTOR reference = XMVectorSet( 0.0, 0.0, -1.0, 0.0 );
+	XMMATRIX rotationMat = XMMatrixRotationQuaternion( actor->GetOrientation() );
+
+	XMVECTOR direction = XMVector3Transform( reference, rotationMat );
+
+	XMVECTOR xzDirection = XMVector3Normalize( XMVectorSetY( direction, 0.0f ) );
+	m_horizontalAngle = XMVectorGetX( XMVector3AngleBetweenNormals( xzDirection, reference ) );
+	m_verticalAngle = XMVectorGetX( XMVector3AngleBetweenNormals( xzDirection, direction ) );
+}
 
 //====================================================================================//
 //			Helpers	
