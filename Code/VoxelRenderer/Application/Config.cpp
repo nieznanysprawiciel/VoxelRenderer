@@ -26,6 +26,7 @@ Config::Config	( const std::string& filePath )
 			{
 				m_ScreenHeight	= deser.GetAttribute( "Height", m_ScreenHeight );
 				m_ScreenWidth	= deser.GetAttribute( "Width", m_ScreenWidth );
+				m_ViewportSize	= deser.GetAttribute( "ViewportSize", m_ViewportSize );
 
 				deser.Exit();
 			}

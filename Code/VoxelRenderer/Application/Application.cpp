@@ -84,6 +84,7 @@ void		Application::InitCamera		()
 {
 	m_camera->SetWidth( m_config->ScreenWidth() );
 	m_camera->SetHeight( m_config->ScreenHeight() );
+	m_camera->SetViewportSize( m_config->ViewportSize() );
 	m_camera->SetFov( m_config->CameraFov() );
 	m_camera->SetNearPlane( m_config->CameraNear() );
 	m_camera->SetFarPlane( m_config->CameraFar() );

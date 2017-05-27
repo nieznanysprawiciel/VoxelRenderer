@@ -143,7 +143,7 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 	{
 		vr::OctreeLeaf& leaf = Cast< vr::OctreeLeaf& >( dstNode );
 		leaf.IsLeafNode = true;
-		leaf.AttributesOffset = ComputeAttribOffset( srcNode.DataAddress );
+		leaf.AttributesOffset = ComputeAttribOffset( srcNode.DataAddress ) - m_attributesOffset;
 	}
 	else
 	{

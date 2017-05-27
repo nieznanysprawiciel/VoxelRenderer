@@ -25,6 +25,7 @@ class Config
 private:
 	DEFINE_CONFIG_VALUE_DEFAULT( uint16, ScreenWidth, 1024 );
 	DEFINE_CONFIG_VALUE_DEFAULT( uint16, ScreenHeight, 768 );
+	DEFINE_CONFIG_VALUE_DEFAULT( float, ViewportSize, 1.0f );
 
 	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraPosition );
 	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, CameraDirection );

@@ -330,14 +330,18 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 		}
 
-
 		// Shading
-		OctreeLeaf leaf = GetResultLeafNode( rayCtx );
-		const VoxelAttributes& attributes = GetLeafAttributes( leaf, rayCtx );
+		if( rayCtx.Scale >= rayCtx.Octree->GetMaxDepth() )
+			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 0.0, 0.0, 0.0, 0.0 );
+		else
+		{
+			OctreeLeaf leaf = GetResultLeafNode( rayCtx );
+			const VoxelAttributes& attributes = GetLeafAttributes( leaf, rayCtx );
 
-		// Fill pixel
-		//data.Buffer[ pix ] = colors[ threadNumber ];
-		data.Buffer[ pix ] = attributes.Color.c;
+			// Fill pixel
+			//data.Buffer[ pix ] = colors[ threadNumber ];
+			data.Buffer[ pix ] = attributes.Color.c;
+		}
 	}
 
 	// All threads must end before buffer will be furthr processed.
