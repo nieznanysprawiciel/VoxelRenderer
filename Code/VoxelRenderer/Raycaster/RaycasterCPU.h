@@ -164,9 +164,12 @@ private:
 	bool					IsLeaf					( const OctreeNode* node );
 	bool					IsIndirectPointer		( const OctreeNode* node );
 	uint32					GetIndirectPtr			( RaycasterContext& rayCtx, const OctreeNode* node );
+	uint32					ComputeChildOffset		( RaycasterContext& rayCtx, const OctreeNode* node, ChildFlag childShift );
 
 	void					PushOnStack				( RaycasterContext& rayCtx, uint32 idx, uint32 node, float tMax );
 	StackElement			ReadStack				( RaycasterContext& rayCtx, uint32 idx );
+
+	static uint32			FindNewHierarchyLevel	( DirectX::XMFLOAT3& position, float scaleExp, ChildFlag childIdxChange );
 };
 
 

@@ -38,6 +38,26 @@ float			IntAsFloat		( int number )
 	return reinterpret_cast< float& >( number );
 }
 
+// ================================ //
+//
+int				HighestBitPos	( int diffs )
+{
+	// Note: Conversion to float normalizes this float. We can read position of highest bit from exponent.
+	// So we shift this float by 23 bits and subtract 127 (exponent bias).
+	return ( FloatAsInt( (float)diffs ) >> 23 ) - 127;
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT3	operator-( DirectX::XMFLOAT3& float3 )
+{
+	DirectX::XMFLOAT3 result;
+	result.x = -float3.x;
+	result.y = -float3.y;
+	result.z = -float3.z;
+	return result;
+}
+
 
 /**@brief Transition table for node children.
 
@@ -203,7 +223,7 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 
 
 		// Write proper condition.
-		while( true )
+		while( rayCtx.Scale < rayCtx.Octree->GetMaxDepth() )
 		{
 			if( !childDescriptor )
 				childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
@@ -212,8 +232,9 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			if( IsLeaf( childDescriptor ) )
 				break;
 
+			// Compute t-value in which ray leaves current voxel.
 			XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
-			float tc_max = Min( corner );
+			float tLeave = Min( corner );
 
 			ChildFlag childShift = rayCtx.ChildIdx ^ rayCtx.OctantMask; // permute child slots based on the mirroring
 
@@ -223,11 +244,11 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 				//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
 				//	break; // at t_min
 
-				float tv_max = fminf( rayCtx.tMax, tc_max );
+				float tv_max = fminf( rayCtx.tMax, tLeave );
 				float half = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
 
-				// This line computes intersection with 
-				XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, corner );
+				// This line computes intersection with center of current voxel.
+				XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, -corner );
 
 				if( rayCtx.tMin <= tv_max )
 				{
@@ -235,24 +256,12 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 					//if( ( child_masks & 0x0080 ) == 0 )
 					//	break; // at t_min (overridden with tv_min).
 
-					if( tc_max < rayCtx.h )
+					// This is Push optimization in reference code. Uncomment if want.
+					//if( tc_max < rayCtx.h )
 						PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
 
-					rayCtx.h = tc_max;
-
-					// Find child descriptor corresponding to the current voxel.
-					uint32 childOffset = 0;
-					if( IsIndirectPointer( childDescriptor ) ) // far
-					{
-						childOffset = GetIndirectPtr( rayCtx, childDescriptor );
-					}
-					else
-					{
-						childOffset = rayCtx.Current + childDescriptor->ChildPackPtr;
-					}
-
-					childOffset += CountNodesBefore( childShift, childDescriptor->ChildMask );
-					rayCtx.Current = childOffset;
+					rayCtx.h = tLeave;
+					rayCtx.Current = ComputeChildOffset( rayCtx, childDescriptor, childShift );
 
 
 					// Select child voxel that the ray enters first.
@@ -276,28 +285,24 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			// ADVANCE
 			// Step along the ray.
 
-			int step_mask = 0;
-			if( corner.x <= tc_max ) step_mask ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
-			if( corner.y <= tc_max ) step_mask ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
-			if( corner.z <= tc_max ) step_mask ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
+			ChildFlag childIdxChange = 0;
+			if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
+			if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
+			if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
 
 			// Update active t-span and flip bits of the child slot index.
 
-			rayCtx.tMin = tc_max;
-			rayCtx.ChildIdx ^= step_mask;
+			rayCtx.tMin = tLeave;
+			rayCtx.ChildIdx ^= childIdxChange;
 
 			// Proceed with pop if the bit flips disagree with the ray direction.
 
-			if( ( rayCtx.ChildIdx & step_mask ) != 0 )
+			if( ( rayCtx.ChildIdx & childIdxChange ) != 0 )
 			{
 				// POP
 				// Find the highest differing bit between the two positions.
 
-				unsigned int differing_bits = 0;
-				if( ( step_mask & 1 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.x ) ^ FloatAsInt( rayCtx.Position.x + rayCtx.ScaleExp );
-				if( ( step_mask & 2 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.y ) ^ FloatAsInt( rayCtx.Position.y + rayCtx.ScaleExp );
-				if( ( step_mask & 4 ) != 0 ) differing_bits |= FloatAsInt( rayCtx.Position.z ) ^ FloatAsInt( rayCtx.Position.z + rayCtx.ScaleExp );
-				rayCtx.Scale = ( FloatAsInt( (float)differing_bits ) >> 23 ) - 127; // position of the highest bit
+				rayCtx.Scale = FindNewHierarchyLevel( rayCtx.Position, rayCtx.ScaleExp, childIdxChange );
 				rayCtx.ScaleExp = IntAsFloat( ( rayCtx.Scale - rayCtx.Octree->GetMaxDepth() + 127 ) << 23 ); // exp2f(scale - s_max)
 
 				// Restore parent voxel from the stack.
@@ -439,9 +444,10 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	rayCtx.ChildIdx = 0;
 	rayCtx.Position = XMFLOAT3( 1.0f, 1.0f, 1.0f );
 
-	if( 1.5f * rayCtx.tCoeff.x - rayCtx.tBias.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
-	if( 1.5f * rayCtx.tCoeff.y - rayCtx.tBias.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
-	if( 1.5f * rayCtx.tCoeff.z - rayCtx.tBias.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
+	// We must decide in which voxel we are in first step. Check which half of voxel is intersected along each axis.
+	if( ParamLineX( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
+	if( ParamLineY( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
+	if( ParamLineZ( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
 }
 
 
@@ -649,6 +655,25 @@ uint32					RaycasterCPU::GetIndirectPtr		( RaycasterContext& rayCtx, const Octre
 
 // ================================ //
 //
+uint32					RaycasterCPU::ComputeChildOffset	( RaycasterContext& rayCtx, const OctreeNode* node, ChildFlag childShift )
+{
+	// Find child descriptor corresponding to the current voxel.
+	uint32 childOffset = 0;
+	if( IsIndirectPointer( node ) ) // far
+	{
+		childOffset = GetIndirectPtr( rayCtx, node );
+	}
+	else
+	{
+		childOffset = rayCtx.Current + node->ChildPackPtr;
+	}
+
+	childOffset += CountNodesBefore( childShift, node->ChildMask );
+	return childOffset;
+}
+
+// ================================ //
+//
 void					RaycasterCPU::PushOnStack			( RaycasterContext& rayCtx, uint32 idx, uint32 node, float tMax )
 {
 	auto& stack = rayCtx.NodesStack;
@@ -661,6 +686,24 @@ StackElement			RaycasterCPU::ReadStack				( RaycasterContext& rayCtx, uint32 idx
 {
 	auto& stack = rayCtx.NodesStack;
 	return stack[ idx ];
+}
+
+// ================================ //
+//
+uint32					RaycasterCPU::FindNewHierarchyLevel	( DirectX::XMFLOAT3& position, float scaleExp, ChildFlag childIdxChange )
+{
+	// During tree traversal, ray can stay inside the same voxel and step to neighbor child or it can leave voxel.
+	// In second case we must go up in the voxels hierarchy (sometimes even few levels up).
+	// This function finds, how many octree levels we must leave.
+	// This code checks differing bits in float representation of position before step and after.
+	// Remember that positions can be only negatives powers of 1.
+	// The highest bit will say how much we must go upside.
+	uint32 differingBits = 0;
+	if( ( childIdxChange & 1 ) != 0 ) differingBits |= FloatAsInt( position.x ) ^ FloatAsInt( position.x + scaleExp );
+	if( ( childIdxChange & 2 ) != 0 ) differingBits |= FloatAsInt( position.y ) ^ FloatAsInt( position.y + scaleExp );
+	if( ( childIdxChange & 4 ) != 0 ) differingBits |= FloatAsInt( position.z ) ^ FloatAsInt( position.z + scaleExp );
+
+	return HighestBitPos( differingBits );
 }
 
 //====================================================================================//
