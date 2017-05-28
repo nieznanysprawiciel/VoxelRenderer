@@ -221,6 +221,13 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		
 		const OctreeNode* childDescriptor = nullptr;
 
+		// Debug
+		if( rayCtx.tMin > rayCtx.tMax )
+		{
+			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 1.0, 0.0, 0.0, 0.0 ).c;
+			continue;
+		}
+
 
 		// Write proper condition.
 		while( rayCtx.Scale < rayCtx.Octree->GetMaxDepth() )
@@ -439,8 +446,10 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	rayCtx.tMin = fmaxf( fmaxf( ParamLineX( 2.0f, rayCtx ), ParamLineY( 2.0f, rayCtx ) ), ParamLineZ( 2.0f, rayCtx ) );
 	rayCtx.tMax = fminf( fminf( ParamLineX( 1.0f, rayCtx ), ParamLineY( 1.0f, rayCtx ) ), ParamLineZ( 1.0f, rayCtx ) );
 	rayCtx.h = rayCtx.tMax;
-	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
-	rayCtx.tMax = fminf( rayCtx.tMax, 1.0f );
+
+	// Enable culling.
+	//rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
+	//rayCtx.tMax = fminf( rayCtx.tMax, 1.0f );
 
 	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
 	rayCtx.Scale = rayCtx.Octree->GetMaxDepth() - 1;

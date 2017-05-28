@@ -23,7 +23,7 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 	,	m_horizontalAngle( 0.0f )
 {
 	m_moveSpeed = 0.10f;
-	m_buttonRotSpeed = 1.0f;
+	m_buttonRotSpeed = 0.01f;
 	m_axisRotSpeed = 0.01f;
 	m_zoomSpeed = 100.0f;
 }
@@ -35,7 +35,7 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 	,	m_horizontalAngle( horAngle )
 {
 	m_moveSpeed = 0.10f;
-	m_buttonRotSpeed = 1.0f;
+	m_buttonRotSpeed = 0.01f;
 	m_axisRotSpeed = 0.01f;
 	m_zoomSpeed = 100.0f;
 }
@@ -54,12 +54,12 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	if( m_keyboard[ Keyboard::PhysicalKeys::KEY_Q ].IsPressed() &&
 		!m_keyboard[ Keyboard::PhysicalKeys::KEY_E ].IsPressed() )
 	{
-		m_horizontalAngle += -m_buttonRotSpeed;
+		m_horizontalAngle += m_buttonRotSpeed;
 	}
 	else if( m_keyboard[ Keyboard::PhysicalKeys::KEY_E ].IsPressed() &&
 		!m_keyboard[ Keyboard::PhysicalKeys::KEY_Q ].IsPressed() )
 	{
-		m_horizontalAngle += m_buttonRotSpeed;
+		m_horizontalAngle += -m_buttonRotSpeed;
 	}
 
 
@@ -112,7 +112,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 
 		float xAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::X_AXIS ];
 		if( xAxis != 0.0f )
-			m_horizontalAngle += xAxis * m_axisRotSpeed;
+			m_horizontalAngle += -xAxis * m_axisRotSpeed;
 	}
 
 	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 1.0, 0.0, 0.0, 0.0 ), m_verticalAngle );
