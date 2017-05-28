@@ -351,6 +351,7 @@ void			WinApiInputProxy::HandleEvent			( HWND hWnd, UINT message, WPARAM wParam,
 		}
 		case WM_KEYDOWN:
 			KeyboardChange( (int)wParam, true );
+			break;
 		case WM_KEYUP:
 			KeyboardChange( (int)wParam, false );
 			break;
