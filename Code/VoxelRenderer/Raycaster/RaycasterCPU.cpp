@@ -359,6 +359,7 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 //
 uint16			RaycasterCPU::GetNumThreads() const
 {
+	//return (uint16)std::thread::hardware_concurrency();
 #ifdef _DEBUG
 	return 1;
 #else
@@ -411,7 +412,7 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int
 		position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
 		position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
 
-		auto d = cameraData.Width / ( 2 * tan( cameraData.Fov ) );
+		auto d = cameraData.Width / ( 2 * tan( XMConvertToRadians( cameraData.Fov / 2.0f ) ) );
 		XMVECTOR cameraAxis = XMVector3Normalize( cameraData.GetDirection() ) * XMVectorReplicate( d );
 		XMVECTOR rayDir = XMVector3Normalize( cameraAxis + position );
 

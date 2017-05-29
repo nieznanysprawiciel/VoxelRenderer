@@ -24,7 +24,7 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 {
 	m_moveSpeed = 0.10f;
 	m_buttonRotSpeed = 0.01f;
-	m_axisRotSpeed = 0.01f;
+	m_axisRotSpeed = 0.0001f;
 	m_zoomSpeed = 100.0f;
 }
 
@@ -36,7 +36,7 @@ SpectatorCameraController::SpectatorCameraController( const sw::input::MouseStat
 {
 	m_moveSpeed = 0.10f;
 	m_buttonRotSpeed = 0.01f;
-	m_axisRotSpeed = 0.01f;
+	m_axisRotSpeed = 0.0001f;
 	m_zoomSpeed = 100.0f;
 }
 
