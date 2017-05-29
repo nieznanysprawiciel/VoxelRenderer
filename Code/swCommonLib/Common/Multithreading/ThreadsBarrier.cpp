@@ -38,7 +38,7 @@ void		ThreadsBarrier::ArriveAndWait()
 	}
 	else
 	{
-		while( curGeneration != m_generation )
+		while( curGeneration == m_generation )
 			m_condVariable.wait( lock );
 	}
 }
