@@ -54,6 +54,7 @@ Config::Config	( const std::string& filePath )
 				m_CameraFov = (float)deser.GetAttribute( "FOV", m_CameraDirection.x );
 				m_CameraNear = (float)deser.GetAttribute( "NearPlane", m_CameraNear );
 				m_CameraFar = (float)deser.GetAttribute( "FarPlane", m_CameraFar );
+				m_IsPerspective = deser.GetAttribute( "IsPerspective", m_IsPerspective );
 
 				deser.Exit();
 			}

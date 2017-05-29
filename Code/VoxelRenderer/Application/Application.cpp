@@ -82,6 +82,7 @@ void		Application::Render()
 //
 void		Application::InitCamera		()
 {
+	m_camera->SetPerspective( m_config->IsPerspective() );
 	m_camera->SetWidth( m_config->ScreenWidth() );
 	m_camera->SetHeight( m_config->ScreenHeight() );
 	m_camera->SetViewportSize( m_config->ViewportSize() );

@@ -370,31 +370,59 @@ uint16			RaycasterCPU::GetNumThreads() const
 //
 DirectX::XMFLOAT3		RaycasterCPU::ComputeRayPosition		( CameraActor* camera, int screenX, int screenY )
 {
-	/// @todo perspective camera
 	auto cameraData = camera->GetCameraData();
-	
-	float aspect = cameraData.Width / cameraData.Height;
 
-	float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0f;
-	float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
+	if( cameraData.IsPerspective )
+	{
+		return cameraData.Position;
+	}
+	else
+	{
+		float aspect = cameraData.Width / cameraData.Height;
 
-	XMVECTOR position = cameraData.GetPosition();
-	position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
-	position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
+		float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0f;
+		float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
 
-	XMFLOAT3 resultPos;
-	XMStoreFloat3( &resultPos, position );
-	return resultPos;
+		XMVECTOR position = cameraData.GetPosition();
+		position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
+		position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
+
+		XMFLOAT3 resultPos;
+		XMStoreFloat3( &resultPos, position );	
+		return resultPos;
+	}
 }
 
 // ================================ //
 //
 DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int screenX, int screenY )
 {
-	/// @todo perspective camera
-
+	
 	auto cameraData = camera->GetCameraData();
-	return cameraData.Direction;
+	if( cameraData.IsPerspective )
+	{
+		/// @todo perspective camera
+		float aspect = cameraData.Width / cameraData.Height;
+
+		float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0f;
+		float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
+
+		XMVECTOR position = cameraData.GetPosition();
+		position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
+		position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
+
+		auto d = cameraData.Width / ( 2 * tan( cameraData.Fov ) );
+		XMVECTOR cameraAxis = XMVector3Normalize( cameraData.GetDirection() ) * XMVectorReplicate( d );
+		XMVECTOR rayDir = XMVector3Normalize( cameraAxis + position );
+
+		XMFLOAT3 resultDir;
+		XMStoreFloat3( &resultDir, rayDir );
+		return resultDir;
+	}
+	else
+	{
+		return cameraData.Direction;
+	}
 }
 
 // ================================ //
@@ -448,8 +476,8 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	rayCtx.h = rayCtx.tMax;
 
 	// Enable culling.
-	//rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
-	//rayCtx.tMax = fminf( rayCtx.tMax, 1.0f );
+	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
+	rayCtx.tMax = fminf( rayCtx.tMax, 10000.0f );
 
 	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
 	rayCtx.Scale = rayCtx.Octree->GetMaxDepth() - 1;
