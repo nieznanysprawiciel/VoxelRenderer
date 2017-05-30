@@ -601,7 +601,7 @@ float					RaycasterCPU::Min					( DirectX::XMFLOAT3& coords )
 //
 bool					RaycasterCPU::ExistsChild			( const OctreeNode* node, ChildFlag childShift )
 {
-	return ( node->ChildMask & ( 0x1 << childShift ) ) != 0;
+	return ( node->ChildMask & ( 0x80 >> childShift ) ) != 0;
 }
 
 // ================================ //
