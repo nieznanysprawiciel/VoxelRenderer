@@ -50,14 +50,16 @@ private:
 
 	bool				IsLeafNode				( ooc::OctreeNode& srcNode );
 	int8				CountChildren			( ooc::OctreeNode& srcNode );
+	uint8				InverseCoords			( uint8 childShift );
 	void				SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode& dstNode );
 
 	VoxelAttributes&	AccessAttributes		( uint64 dataOffset );
 	vr::OctreeNode&		AccessNode				( uint32 absolutOffset );
+	ooc::OctreeNode&	AccessNode				( ooc::OctreeNode& parent, uint8 index );
 	Size				AllocateNodes			( uint8 numNodes );
 	uint32				ComputeAttribOffset		( uint64 dataOffset );
 
-	ooc::OctreeNode&	AccessNext				( ooc::OctreeNode& parent, uint8& startIdx );
+	ooc::OctreeNode&	AccessNext				( ooc::OctreeNode& parent, int8& startIdx );
 
 	Size				ComputeMaxDirectOffset	();
 };

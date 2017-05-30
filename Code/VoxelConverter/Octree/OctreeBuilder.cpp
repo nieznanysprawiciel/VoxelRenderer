@@ -166,15 +166,25 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 			dstNode.ChildPackPtr = nodesOffset;
 		}
 
-		uint8 srcChildIdx = 0;
-		for( int i = 0; i < numChildren; ++i )
+
+		const uint8 childMask = dstNode.ChildMask;
+		const uint8 one = 1 << 7;
+		uint8 childShift = 7;
+
+		for( int i = 0; i < 8; ++i )
 		{
-			vr::OctreeNode& child = AccessNode( (uint32)absolutOffset );
-			ooc::OctreeNode& srcChild = AccessNext( srcNode, srcChildIdx );
+			// If child exists.
+			if( childMask & ( one >> childShift ) )
+			{
+				vr::OctreeNode& child = AccessNode( (uint32)absolutOffset );
+				ooc::OctreeNode& srcChild = AccessNode( srcNode, InverseCoords( childShift ) );
 
-			BuildNodeHierarchy( srcChild, absolutOffset, child );
+				BuildNodeHierarchy( srcChild, absolutOffset, child );
 
-			absolutOffset++;
+				absolutOffset++;
+			}
+
+			childShift--;
 		}
 	}
 }
@@ -209,15 +219,27 @@ int8				OctreeBuilder::CountChildren		( ooc::OctreeNode& srcNode )
 
 // ================================ //
 //
+uint8				OctreeBuilder::InverseCoords		( uint8 childShift )
+{
+	// Negate bits and mask everything except last 3 bits.
+	return ~childShift & 0x7;
+}
+
+// ================================ //
+//
 void				OctreeBuilder::SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode& dstNode )
 {
-	uint8 childMask = 1;
-	for( auto child : srcNode.ChildOffset )
-	{
-		if( child >= 0 )
-			dstNode.ChildMask = dstNode.ChildMask | childMask;
+	dstNode.ChildMask = 0;
+	uint8 one = 1 << 7;	// Set highest bit to 1.
 
-		childMask = childMask << 1;
+	for( uint8 i = 0; i < 8; ++i )
+	{
+		if( srcNode.ChildOffset[ i ] >= 0 )
+		{
+			// We use oposite coordinates system in raycaster.
+			uint8 childShift = InverseCoords( i );
+			dstNode.ChildMask |= one >> childShift;
+		}
 	}
 }
 
@@ -234,6 +256,21 @@ VoxelAttributes&	OctreeBuilder::AccessAttributes		( uint64 dataOffset )
 vr::OctreeNode&		OctreeBuilder::AccessNode			( uint32 absolutOffset )
 {
 	return Cast< vr::OctreeNode& >( m_data[ absolutOffset ] );
+}
+
+// ================================ //
+//
+ooc::OctreeNode&	OctreeBuilder::AccessNode			( ooc::OctreeNode& parent, uint8 index )
+{
+	if( parent.ChildOffset[ index ] >= 0 )
+	{
+		Size offset = parent.ChildrenBaseOffset + parent.ChildOffset[ index ];
+		return m_octree[ offset ];
+	}
+
+	assert( false );
+	//throw std::runtime_error( "Trying to access node after end of children array." );
+	return ooc::OctreeNode();
 }
 
 // ================================ //
@@ -258,9 +295,9 @@ uint32				OctreeBuilder::ComputeAttribOffset	( uint64 dataOffset )
 
 // ================================ //
 //
-ooc::OctreeNode&	OctreeBuilder::AccessNext			( ooc::OctreeNode& parent, uint8& startIdx )
+ooc::OctreeNode&	OctreeBuilder::AccessNext			( ooc::OctreeNode& parent, int8& startIdx )
 {
-	for( ; startIdx < 8; ++startIdx )
+	for( ; startIdx >= 0; --startIdx )
 	{
 		if( parent.ChildOffset[ startIdx ] >= 0 )
 		{
