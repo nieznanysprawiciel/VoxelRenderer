@@ -145,13 +145,7 @@ private:
 
 
 	bool					IsEmpty					( const OctreeNode& node );
-	bool					IsRayOutside			( ChildFlag childFlag );
-	ChildFlag				ComputeNextChildFlag	( ChildFlag curFlag, StepDirection stepAxis );
-	ChildFlag				ComputeNodeFlag			( uint32 parent, uint32 current, OctreePtr& octree );
-	ChildFlag				FindNodeFlag			( uint8 childMask, uint8 nodeNum );
-	const OctreeNode&		SetCurrentNode			( uint32 parent, ChildFlag newChild, RaycasterContext& raycasterContext );
-
-	uint8					CountNodesBefore		( ChildFlag childFlag, uint8 childMask );
+	uint8					CountNodesBefore		( ChildFlag childShift, uint8 childMask );
 
 	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& raycasterContext );
 	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, DirectX::XMFLOAT3& tCoeff, DirectX::XMFLOAT3& tBias );

@@ -532,88 +532,19 @@ bool					RaycasterCPU::IsEmpty				( const OctreeNode& node )
 	return !node.ChildMask;
 }
 
-// ================================ //
-//
-bool					RaycasterCPU::IsRayOutside			( ChildFlag childFlag )
-{
-	return childFlag >= PositiveOUT;
-}
 
 // ================================ //
 //
-ChildFlag				RaycasterCPU::ComputeNextChildFlag	( ChildFlag curFlag, StepDirection stepAxis )
+uint8					RaycasterCPU::CountNodesBefore		( ChildFlag childShift, uint8 childMask )
 {
-	return StepTable[ curFlag ][ stepAxis ];
-}
-
-/**@detail
-Children nodes are placed in memory after each other. ChildPackPtr in parent node points to the first existing
-node. To find rest of nodes we must count non empty bits in child mask lying before node, we are looking for.
-This function inverses this process and computes child flag from known offset.
-*/
-ChildFlag				RaycasterCPU::ComputeNodeFlag		( uint32 parent, uint32 current, OctreePtr& octree )
-{
-	const OctreeNode& parentNode = octree->GetNode( parent );
-
-	if( !parentNode.IndirectPtr )
-	{
-		uint32 offset = current - parent;
-		uint8 nodeNum = offset - parentNode.ChildPackPtr;		// Children are placed together.
-
-		return FindNodeFlag( parentNode.ChildMask, nodeNum );
-	}
-	else
-	{
-		assert( !"Implement me" );
-	}
-
-	return ChildFlag();
-}
-
-// ================================ //
-//
-ChildFlag				RaycasterCPU::FindNodeFlag			( uint8 childMask, uint8 nodeNum )
-{
-	uint8 numNodes = 0;
-	uint8 shift = 0;
-	
-	// Count bits until we will find nodeNUm of nodes.
-	while( numNodes < nodeNum )
-	{
-		numNodes += ( childMask >> shift ) & 0x1;
-		shift++;
-	}
-
-	return shift;
-}
-
-/**@brief Finds new current node and writes his absolut offset value to RaycasterContext.*/
-const OctreeNode&		RaycasterCPU::SetCurrentNode		( uint32 parent, ChildFlag newChild, RaycasterContext& raycasterContext )
-{
-	const OctreeNode& parentNode = raycasterContext.Octree->GetNode( parent );
-
-	uint8 numNodesBefore = CountNodesBefore( newChild, parentNode.ChildMask );
-	uint32 currOffset = parent + parentNode.ChildPackPtr + numNodesBefore;
-
-	raycasterContext.Current = currOffset;
-
-	return raycasterContext.Octree->GetNode( currOffset );
-}
-
-// ================================ //
-//
-uint8					RaycasterCPU::CountNodesBefore		( ChildFlag childFlag, uint8 childMask )
-{
-	uint8 mask = 0xFF;
-	mask = mask << childFlag;
-	mask = ~mask;
-
-	uint8 nodesBefore = childMask & mask;
+	// childShift represents index of child voxel in childMask counting from highest bit.
+	uint8 mask = 0x7F;											// Selects all bits except first in childMask.
+	uint8 nodesBefore = ( childMask << childShift ) & mask;		// Shift all children bits in such way that our current xhild will be on first place.
 
 	// Count bits set in nodesBefore variable.
 	uint8 numNodesBefore = 0;
 	
-	for( uint8 i = 0; i < 8; i++ )
+	for( uint8 i = 0; i < 7; i++ )
 		numNodesBefore += ( nodesBefore >> i ) & 0x1;
 
 	return numNodesBefore;
