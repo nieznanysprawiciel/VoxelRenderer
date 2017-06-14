@@ -200,7 +200,7 @@ bool				OctreeBuilder::IsLeafNode			( ooc::OctreeNode& srcNode )
 			hasChild = true;
 	}
 
-	return !hasChild;
+	return !hasChild && srcNode.DataAddress != 0;
 }
 
 // ================================ //

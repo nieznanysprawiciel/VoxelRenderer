@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraController.cpp">
       <Filter>VoxelRenderer\Actors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.cpp">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraController.h">
       <Filter>VoxelRenderer\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

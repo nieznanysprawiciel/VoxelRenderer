@@ -87,7 +87,7 @@ struct RaycasterContext
 /**@brief CPU multithreaded implementation of raycaster.*/
 class RaycasterCPU : public IRaycaster
 {
-private:
+protected:
 	IRenderer*				m_renderer;
 	ResourceManager*		m_resourceManager;
 
@@ -125,12 +125,12 @@ private:
 	void			SpawnThreads			( OctreePtr octree, CameraActor* camera );
 
 	void			RaycasterThread			( Size threadNumber );
-	void			RaycasterThreadImpl		( ThreadData& data, Size threadNumber );
+	virtual void	RaycasterThreadImpl		( ThreadData& data, Size threadNumber );
 
 	void			PrepareThreads			();
 	uint16			GetNumThreads			() const;
 
-private:
+protected:
 	
 	// Raycasting core
 	DirectX::XMFLOAT3		ComputeRayPosition		( CameraActor* camera, int screenX, int screenY );
