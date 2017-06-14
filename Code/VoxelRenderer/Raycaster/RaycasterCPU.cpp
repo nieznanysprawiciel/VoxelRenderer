@@ -214,8 +214,8 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		rayCtx.NodesStack.resize( rayCtx.Octree->GetMaxDepth() + 1 );
 		
 		// Find starting position
-		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, pix / m_width );
-		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, pix / m_width );
+		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, m_height - pix / m_width );
+		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, m_height - pix / m_width );
 		
 		InitRaycasting( position, direction, rayCtx );
 		

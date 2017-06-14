@@ -36,7 +36,7 @@ void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threa
 		rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
 		rayCtx.ChildIdx = 0;
 
-		uint32 yPix = pix / m_width;
+		uint32 yPix = m_height - pix / m_width;
 		uint32 xPix = pix % m_width;
 
 		// This is screen area where's nothing to print.

@@ -108,7 +108,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	{
 		float yAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::Y_AXIS ];
 		if( yAxis != 0.0f )
-			m_verticalAngle += yAxis * m_axisRotSpeed;
+			m_verticalAngle += -yAxis * m_axisRotSpeed;
 
 		float xAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::X_AXIS ];
 		if( xAxis != 0.0f )
