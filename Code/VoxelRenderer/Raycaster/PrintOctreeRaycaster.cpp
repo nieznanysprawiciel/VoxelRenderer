@@ -39,8 +39,8 @@ void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threa
 			continue;
 		}
 
-		uint32 voxelCoordX = ( xPix - rectOffsetX ) / gridSize;
-		uint32 voxelCoordY = ( yPix - rectOffsetY ) / gridSize;
+		uint32 voxelCoordX = ( xPix - rectOffsetX ) / voxelSize;
+		uint32 voxelCoordY = ( yPix - rectOffsetY ) / voxelSize;
 		uint32 voxelCoordZ = viewDepth;
 
 		bool fill = IsFilledVoxel( rayCtx, octreeLevel, voxelCoordX, voxelCoordY, voxelCoordZ );
