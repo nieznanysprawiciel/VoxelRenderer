@@ -9,6 +9,8 @@
 #include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
 #include "swGraphicAPI/Rendering/IRenderer.h"
 
+#include "swInputLibrary/InputCore/KeyboardState.h"
+#include "swInputLibrary/InputCore/MouseState.h"
 
 namespace vr
 {
@@ -24,6 +26,8 @@ public:
 
 	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
 	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )							= 0;
+
+	virtual void	ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )	= 0;
 };
 
 DEFINE_UPTR_TYPE( IRaycaster );

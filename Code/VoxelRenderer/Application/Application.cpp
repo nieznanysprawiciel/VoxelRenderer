@@ -72,7 +72,8 @@ void		Application::Render()
 {
 	m_timeManager.onStartRenderFrame();
 	double time = m_timeManager.QueryTimeFromBegin();
-		
+	
+	m_raycaster->ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
 
 	m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
 	//m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );

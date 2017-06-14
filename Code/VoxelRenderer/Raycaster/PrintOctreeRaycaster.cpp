@@ -6,13 +6,20 @@
 namespace vr
 {
 
+// ================================ //
+//
+PrintOctreeRaycaster::PrintOctreeRaycaster()
+	:	m_octreeLevel( 2 )
+	,	m_octreeDepth( 0 )
+{}
+
 
 // ================================ //
 //
 void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
-	uint32 octreeLevel = 2;
-	uint32 viewDepth = 0;
+	uint32 octreeLevel = m_octreeLevel;
+	uint32 viewDepth = m_octreeDepth;
 
 	uint32 gridSize = (uint32)pow( 2, octreeLevel );
 	uint32 rectSize = std::min( m_width, m_height );
@@ -84,6 +91,25 @@ bool			PrintOctreeRaycaster::IsFilledVoxel				( RaycasterContext& rayCtx, uint32
 
 	return true;
 }
+
+// ================================ //
+//
+void			PrintOctreeRaycaster::ProcessInput				( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )
+{
+	if( keyboard[ sw::input::Keyboard::KEY_UP ].IsKeyDownEvent() )
+		m_octreeDepth = std::max( ++m_octreeDepth, 0 );
+
+	if( keyboard[ sw::input::Keyboard::KEY_DOWN ].IsKeyDownEvent() )
+		m_octreeDepth = std::max( --m_octreeDepth, 0 );
+
+	if( keyboard[ sw::input::Keyboard::KEY_LEFT ].IsKeyDownEvent() )
+		m_octreeLevel = std::max( ++m_octreeLevel, 0 );
+
+	if( keyboard[ sw::input::Keyboard::KEY_RIGHT ].IsKeyDownEvent() )
+		m_octreeLevel = std::max( --m_octreeLevel, 0 );
+}
+
+
 
 }	// vr
 

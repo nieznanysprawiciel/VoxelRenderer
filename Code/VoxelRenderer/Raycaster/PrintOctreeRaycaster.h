@@ -13,14 +13,18 @@ For debug purposes.*/
 class PrintOctreeRaycaster : public RaycasterCPU
 {
 private:
+
+	int32			m_octreeLevel;
+	int32			m_octreeDepth;
+
 protected:
 public:
-	explicit		PrintOctreeRaycaster		() = default;
-	~PrintOctreeRaycaster	() = default;
+	explicit		PrintOctreeRaycaster		();
+	virtual 		~PrintOctreeRaycaster		() = default;
 
 
 	virtual void	RaycasterThreadImpl		( ThreadData& data, Size threadNumber );
-
+	virtual void	ProcessInput			( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )	override;
 
 private:
 
