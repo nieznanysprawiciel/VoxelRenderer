@@ -12,13 +12,13 @@ namespace vr
 void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
 	uint32 octreeLevel = 2;
-	uint32 viewDepth = 2;
+	uint32 viewDepth = 0;
 
 	uint32 gridSize = (uint32)pow( 2, octreeLevel );
 	uint32 rectSize = std::min( m_width, m_height );
 	uint32 rectOffsetX = m_width > m_height ? ( m_width - rectSize ) / 2 : 0;
 	uint32 rectOffsetY = m_width < m_height ? ( m_height - rectSize ) / 2 : 0;
-	uint32 voxelSize = rectSize / octreeLevel;
+	uint32 voxelPixSize = rectSize / gridSize;
 
 	// For all pixels in range for this thread.
 	for( uint32 pix = data.StartRange; pix < data.EndRange; ++pix )
@@ -35,12 +35,12 @@ void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threa
 		// This is screen area where's nothing to print.
 		if( xPix < rectOffsetX || yPix < rectOffsetY || xPix > m_width - rectOffsetX || yPix > m_height - rectOffsetY )
 		{
-			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 0.0, 0.8, 1.0, 0.0 );
+			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 0.0f, 0.8f, 1.0f, 0.0f );
 			continue;
 		}
 
-		uint32 voxelCoordX = ( xPix - rectOffsetX ) / voxelSize;
-		uint32 voxelCoordY = ( yPix - rectOffsetY ) / voxelSize;
+		uint32 voxelCoordX = ( xPix - rectOffsetX ) / voxelPixSize;
+		uint32 voxelCoordY = ( yPix - rectOffsetY ) / voxelPixSize;
 		uint32 voxelCoordZ = viewDepth;
 
 		bool fill = IsFilledVoxel( rayCtx, octreeLevel, voxelCoordX, voxelCoordY, voxelCoordZ );
