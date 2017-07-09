@@ -137,6 +137,7 @@ protected:
 	DirectX::XMFLOAT3		ComputeRayDirection		( CameraActor* camera, int screenX, int screenY );
 	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
 	void					InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& RaycasterContext );
+	void					CastRay					( RaycasterContext& rayCtx );
 
 	// Attributes
 	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;

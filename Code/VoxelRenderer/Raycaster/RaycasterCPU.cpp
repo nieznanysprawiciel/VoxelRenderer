@@ -219,8 +219,6 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		
 		InitRaycasting( position, direction, rayCtx );
 		
-		const OctreeNode* childDescriptor = nullptr;
-
 		// Debug
 		if( rayCtx.tMin > rayCtx.tMax )
 		{
@@ -228,114 +226,8 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			continue;
 		}
 
+		CastRay( rayCtx );
 
-		// Write proper condition.
-		while( rayCtx.Scale < rayCtx.Octree->GetMaxDepth() )
-		{
-			if( !childDescriptor )
-				childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
-
-			// Terminate.
-			if( IsLeaf( childDescriptor ) )
-				break;
-
-			// Compute t-value in which ray leaves current voxel.
-			XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
-			float tLeave = Min( corner );
-
-			ChildFlag childShift = rayCtx.ChildIdx ^ rayCtx.OctantMask; // permute child slots based on the mirroring
-
-			if( ExistsChild( childDescriptor, childShift ) && rayCtx.tMin <= rayCtx.tMax )
-			{
-				//// Terminate if the voxel is small enough.
-				//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
-				//	break; // at t_min
-
-				float tv_max = fminf( rayCtx.tMax, tLeave );
-				float half = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
-
-				// This line computes intersection with center of current voxel.
-				XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, -corner );
-
-				if( rayCtx.tMin <= tv_max )
-				{
-					//// Terminate if the corresponding bit in the non-leaf mask is not set.
-					//if( ( child_masks & 0x0080 ) == 0 )
-					//	break; // at t_min (overridden with tv_min).
-
-					// This is Push optimization in reference code. Uncomment if want.
-					//if( tc_max < rayCtx.h )
-						PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
-
-					rayCtx.h = tLeave;
-					rayCtx.Current = ComputeChildOffset( rayCtx, childDescriptor, childShift );
-
-
-					// Select child voxel that the ray enters first.
-					rayCtx.ChildIdx = 0;
-					rayCtx.Scale--;
-					rayCtx.ScaleExp = half;
-
-					if( tCenter.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x += rayCtx.ScaleExp;
-					if( tCenter.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y += rayCtx.ScaleExp;
-					if( tCenter.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z += rayCtx.ScaleExp;
-
-					// Update active t-span and invalidate cached child descriptor.
-
-					rayCtx.tMax = tv_max;
-					childDescriptor = nullptr;
-					continue;
-
-				}
-			}
-
-			// ADVANCE
-			// Step along the ray.
-
-			ChildFlag childIdxChange = 0;
-			if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
-			if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
-			if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
-
-			// Update active t-span and flip bits of the child slot index.
-
-			rayCtx.tMin = tLeave;
-			rayCtx.ChildIdx ^= childIdxChange;
-
-			// Proceed with pop if the bit flips disagree with the ray direction.
-
-			if( ( rayCtx.ChildIdx & childIdxChange ) != 0 )
-			{
-				// POP
-				// Find the highest differing bit between the two positions.
-
-				rayCtx.Scale = FindNewHierarchyLevel( rayCtx.Position, rayCtx.ScaleExp, childIdxChange );
-				rayCtx.ScaleExp = IntAsFloat( ( rayCtx.Scale - rayCtx.Octree->GetMaxDepth() + 127 ) << 23 ); // exp2f(scale - s_max)
-
-				// Restore parent voxel from the stack.
-
-				auto stackElement = ReadStack( rayCtx, rayCtx.Scale );
-				rayCtx.Current = stackElement.Node;
-				rayCtx.tMax = stackElement.tMax;
-				
-
-				// Round cube position and extract child slot index.
-
-				int shx = FloatAsInt( rayCtx.Position.x ) >> rayCtx.Scale;
-				int shy = FloatAsInt( rayCtx.Position.y ) >> rayCtx.Scale;
-				int shz = FloatAsInt( rayCtx.Position.z ) >> rayCtx.Scale;
-				rayCtx.Position.x = IntAsFloat( shx << rayCtx.Scale );
-				rayCtx.Position.y = IntAsFloat( shy << rayCtx.Scale );
-				rayCtx.Position.z = IntAsFloat( shz << rayCtx.Scale );
-				rayCtx.ChildIdx  = ( shx & 1 ) | ( ( shy & 1 ) << 1 ) | ( ( shz & 1 ) << 2 );
-
-				// Prevent same parent from being stored again and invalidate cached child descriptor.
-
-				rayCtx.h = 0.0f;
-				childDescriptor = nullptr;
-			}
-
-		}
 
 		// Shading
 		if( rayCtx.Scale >= rayCtx.Octree->GetMaxDepth() )
@@ -490,6 +382,122 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	if( ParamLineX( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
 	if( ParamLineY( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
 	if( ParamLineZ( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
+}
+
+// ================================ //
+//
+void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
+{
+	const OctreeNode* childDescriptor = nullptr;
+
+
+	// Write proper condition.
+	while( rayCtx.Scale < rayCtx.Octree->GetMaxDepth() )
+	{
+		if( !childDescriptor )
+			childDescriptor = &rayCtx.Octree->GetNode( rayCtx.Current );
+
+		// Terminate.
+		if( IsLeaf( childDescriptor ) )
+			break;
+
+		// Compute t-value in which ray leaves current voxel.
+		XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
+		float tLeave = Min( corner );
+
+		ChildFlag childShift = rayCtx.ChildIdx ^ rayCtx.OctantMask; // permute child slots based on the mirroring
+
+		if( ExistsChild( childDescriptor, childShift ) && rayCtx.tMin <= rayCtx.tMax )
+		{
+			//// Terminate if the voxel is small enough.
+			//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
+			//	break; // at t_min
+
+			float tv_max = fminf( rayCtx.tMax, tLeave );
+			float half = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
+
+			// This line computes intersection with center of current voxel.
+			XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, -corner );
+
+			if( rayCtx.tMin <= tv_max )
+			{
+				//// Terminate if the corresponding bit in the non-leaf mask is not set.
+				//if( ( child_masks & 0x0080 ) == 0 )
+				//	break; // at t_min (overridden with tv_min).
+
+				// This is Push optimization in reference code. Uncomment if want.
+				//if( tc_max < rayCtx.h )
+					PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
+
+				rayCtx.h = tLeave;
+				rayCtx.Current = ComputeChildOffset( rayCtx, childDescriptor, childShift );
+
+
+				// Select child voxel that the ray enters first.
+				rayCtx.ChildIdx = 0;
+				rayCtx.Scale--;
+				rayCtx.ScaleExp = half;
+
+				if( tCenter.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x += rayCtx.ScaleExp;
+				if( tCenter.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y += rayCtx.ScaleExp;
+				if( tCenter.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z += rayCtx.ScaleExp;
+
+				// Update active t-span and invalidate cached child descriptor.
+
+				rayCtx.tMax = tv_max;
+				childDescriptor = nullptr;
+				continue;
+
+			}
+		}
+
+		// ADVANCE
+		// Step along the ray.
+
+		ChildFlag childIdxChange = 0;
+		if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
+		if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
+		if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
+
+		// Update active t-span and flip bits of the child slot index.
+
+		rayCtx.tMin = tLeave;
+		rayCtx.ChildIdx ^= childIdxChange;
+
+		// Proceed with pop if the bit flips disagree with the ray direction.
+
+		if( ( rayCtx.ChildIdx & childIdxChange ) != 0 )
+		{
+			// POP
+			// Find the highest differing bit between the two positions.
+
+			rayCtx.Scale = FindNewHierarchyLevel( rayCtx.Position, rayCtx.ScaleExp, childIdxChange );
+			rayCtx.ScaleExp = IntAsFloat( ( rayCtx.Scale - rayCtx.Octree->GetMaxDepth() + 127 ) << 23 ); // exp2f(scale - s_max)
+
+			// Restore parent voxel from the stack.
+
+			auto stackElement = ReadStack( rayCtx, rayCtx.Scale );
+			rayCtx.Current = stackElement.Node;
+			rayCtx.tMax = stackElement.tMax;
+				
+
+			// Round cube position and extract child slot index.
+
+			int shx = FloatAsInt( rayCtx.Position.x ) >> rayCtx.Scale;
+			int shy = FloatAsInt( rayCtx.Position.y ) >> rayCtx.Scale;
+			int shz = FloatAsInt( rayCtx.Position.z ) >> rayCtx.Scale;
+			rayCtx.Position.x = IntAsFloat( shx << rayCtx.Scale );
+			rayCtx.Position.y = IntAsFloat( shy << rayCtx.Scale );
+			rayCtx.Position.z = IntAsFloat( shz << rayCtx.Scale );
+			rayCtx.ChildIdx  = ( shx & 1 ) | ( ( shy & 1 ) << 1 ) | ( ( shz & 1 ) << 2 );
+
+			// Prevent same parent from being stored again and invalidate cached child descriptor.
+
+			rayCtx.h = 0.0f;
+			childDescriptor = nullptr;
+		}
+
+	}
 }
 
 
