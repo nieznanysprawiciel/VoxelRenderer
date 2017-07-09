@@ -58,6 +58,8 @@ void			PrintOctreeRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threa
 			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 0.0, 0.0, 0.0, 0.0 );
 	}
 
+	// All threads must end before buffer will be furthr processed.
+	m_raycastEndBarrier.ArriveAndWait();
 }
 
 // ================================ //

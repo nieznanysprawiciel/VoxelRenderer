@@ -3,6 +3,7 @@
 #include "VoxelRenderer/Raycaster/RaycasterCPU.h"
 #include "VoxelRenderer/Raycaster/FakeRaycaster.h"
 #include "VoxelRenderer/Raycaster/PrintOctreeRaycaster.h"
+#include "VoxelRenderer/Raycaster/DepthRaycaster.h"
 
 #include "VoxelRenderer/Actors/CameraController.h"
 
@@ -121,6 +122,8 @@ void		Application::InitRaycaster	()
 		m_raycaster = MakeUPtr< FakeRaycaster >();
 	else if( raycasterType == "PrintOctree" )
 		m_raycaster = MakeUPtr< PrintOctreeRaycaster >();
+	else if( raycasterType == "DepthRaycaster" )
+		m_raycaster = MakeUPtr< DepthRaycaster >();
 	else
 	{
 		/// Error !

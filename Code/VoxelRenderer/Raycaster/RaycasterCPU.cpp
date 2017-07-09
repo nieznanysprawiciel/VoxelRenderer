@@ -194,18 +194,6 @@ void			RaycasterCPU::PrepareThreads()
 // Based on: https://research.nvidia.com/publication/efficient-sparse-voxel-octrees
 void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber )
 {
-	std::vector< uint32 > colors =
-	{ 
-		0xFF0000FF,
-		0xFF32CD32,
-		0xFFBC8F8F,
-		0xFFFFEBCD,
-		0xFFFAA460,
-		0xFFB0C4DE,
-		0xFFFF8C00,
-		0xFF778899
-	};
-
 	// For all pixels in range for this thread.
 	for( uint32 pix = data.StartRange; pix < data.EndRange; ++pix )
 	{
@@ -371,6 +359,7 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	// Enable culling.
 	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
 	rayCtx.tMax = fminf( rayCtx.tMax, 10000.0f );
+	rayCtx.tCubeMin = rayCtx.tMin;
 
 	rayCtx.Current = rayCtx.Octree->GetRootNodeOffset();
 	rayCtx.Scale = rayCtx.Octree->GetMaxDepth() - 1;
@@ -399,7 +388,10 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 
 		// Terminate.
 		if( IsLeaf( childDescriptor ) )
+		{
+			rayCtx.Depth = rayCtx.tMin - rayCtx.tCubeMin;
 			break;
+		}
 
 		// Compute t-value in which ray leaves current voxel.
 		XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
