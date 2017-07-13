@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.cpp">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\NormalsRaycaster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -129,6 +130,9 @@
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\NormalsRaycaster.h">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
   </ItemGroup>

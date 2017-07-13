@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\TimeManager.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\NormalsRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\IRaycaster.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\NormalsRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
