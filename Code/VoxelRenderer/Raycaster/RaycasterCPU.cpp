@@ -388,10 +388,7 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 
 		// Terminate.
 		if( IsLeaf( childDescriptor ) )
-		{
-			rayCtx.Depth = rayCtx.tMin - rayCtx.tCubeMin;
 			break;
-		}
 
 		// Compute t-value in which ray leaves current voxel.
 		XMFLOAT3 corner = ParamLine( rayCtx.Position, rayCtx );
@@ -490,6 +487,16 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 		}
 
 	}
+
+	if( rayCtx.Scale >= rayCtx.Octree->GetMaxDepth() )
+		rayCtx.tMin = 2.0f;
+
+	rayCtx.Depth = rayCtx.tMin - rayCtx.tCubeMin;
+
+	if( ( rayCtx.OctantMask & 1 ) == 0 ) rayCtx.Position.x = 3.0f - rayCtx.ScaleExp - rayCtx.Position.x;
+	if( ( rayCtx.OctantMask & 2 ) == 0 ) rayCtx.Position.y = 3.0f - rayCtx.ScaleExp - rayCtx.Position.y;
+	if( ( rayCtx.OctantMask & 4 ) == 0 ) rayCtx.Position.z = 3.0f - rayCtx.ScaleExp - rayCtx.Position.z;
+
 }
 
 

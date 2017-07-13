@@ -14,8 +14,9 @@ class DepthRaycaster : public RaycasterCPU
 {
 private:
 
-	int32			m_octreeLevel;
-	int32			m_octreeDepth;
+	float			m_nearClip;
+	float			m_farClip;
+	float			m_moveFactor;
 
 protected:
 public:
