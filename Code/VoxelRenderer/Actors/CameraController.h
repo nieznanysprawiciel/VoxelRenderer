@@ -46,6 +46,10 @@ public:
 	DirectX::XMVECTOR	BackwardVector			( DynamicActor* actor );
 	DirectX::XMVECTOR	LeftVector				( DynamicActor* actor );
 	DirectX::XMVECTOR	RightVector				( DynamicActor* actor );
+
+private:
+
+	void				InitDefaultSpeed		();
 };
 
 DEFINE_OPTR_TYPE( SpectatorCameraController );

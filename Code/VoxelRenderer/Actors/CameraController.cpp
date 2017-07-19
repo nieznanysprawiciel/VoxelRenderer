@@ -3,6 +3,8 @@
 #include "DynamicActor.h"
 
 
+#include <iostream>
+
 
 RTTR_REGISTRATION
 {
@@ -15,29 +17,26 @@ using namespace sw::input;
 
 
 
-/**@brief */
+// ================================ //
+//
 SpectatorCameraController::SpectatorCameraController( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )
 	:	m_mouse( mouse )
 	,	m_keyboard( keyboard )
 	,	m_verticalAngle( 0.0f )
 	,	m_horizontalAngle( 0.0f )
 {
-	m_moveSpeed = 1.0f;
-	m_buttonRotSpeed = 0.01f;
-	m_axisRotSpeed = 0.0001f;
-	m_zoomSpeed = 0.01f;
+	InitDefaultSpeed();
 }
 
+// ================================ //
+//
 SpectatorCameraController::SpectatorCameraController( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard, float horAngle, float vertAngle )
 	:	m_mouse( mouse )
 	,	m_keyboard( keyboard )
 	,	m_verticalAngle( vertAngle )
 	,	m_horizontalAngle( horAngle )
 {
-	m_moveSpeed = 1.0f;
-	m_buttonRotSpeed = 0.01f;
-	m_axisRotSpeed = 0.0001f;
-	m_zoomSpeed = 0.01f;
+	InitDefaultSpeed();
 }
 
 /**@brief */
@@ -45,6 +44,15 @@ SpectatorCameraController::~SpectatorCameraController()
 {}
 
 
+// ================================ //
+//
+void		SpectatorCameraController::InitDefaultSpeed()
+{
+	m_moveSpeed = 0.1f;
+	m_buttonRotSpeed = 0.01f;
+	m_axisRotSpeed = 0.01f;
+	m_zoomSpeed = 0.01f;
+}
 
 
 /*Funkcja g³ówna odpowiedzialna za sterowanie ruchem obiektu.*/
@@ -124,6 +132,12 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	XMVECTOR translation = forward + left + up;
 	actor->Teleport( actor->GetPosition() + translation );
 
+	if( XMVector3Equal( translation, XMVectorSet( 0.0, 0.0, 0.0, 0.0 ) ) )
+	{
+		XMFLOAT3 pos;
+		XMStoreFloat3( &pos, actor->GetPosition() );
+		std::cout << "\rCamera position: ( " << pos.x << ", " << pos.y << ", " << pos.z << " )";
+	}
 }
 
 /**@brief Funkcja nic nie robi.
@@ -183,3 +197,4 @@ DirectX::XMVECTOR			SpectatorCameraController::RightVector		( DynamicActor* acto
 	XMVECTOR orientation = actor->GetOrientation();
 	return XMVector3Rotate( versor, orientation );
 }
+

@@ -282,19 +282,13 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int
 	auto cameraData = camera->GetCameraData();
 	if( cameraData.IsPerspective )
 	{
-		/// @todo perspective camera
-		float aspect = cameraData.Width / cameraData.Height;
-
-		float xFactor = screenX / ( cameraData.Width / 2 ) - 1.0f;
-		float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
-
-		XMVECTOR position = cameraData.GetPosition();
-		position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
-		position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
-
 		auto d = cameraData.Width / ( 2 * tan( XMConvertToRadians( cameraData.Fov / 2.0f ) ) );
-		XMVECTOR cameraAxis = XMVector3Normalize( cameraData.GetDirection() ) * XMVectorReplicate( d );
-		XMVECTOR rayDir = XMVector3Normalize( cameraAxis + position );
+		XMVECTOR cameraAxis = cameraData.GetDirection() * XMVectorReplicate( d );
+
+		cameraAxis = XMVectorScale( cameraData.GetUpVector(), cameraData.Height / 2 - screenY ) + cameraAxis;
+		cameraAxis = XMVectorScale( cameraData.GetRightVector(), screenX - cameraData.Width / 2 ) + cameraAxis;
+
+		XMVECTOR rayDir = XMVector3Normalize( cameraAxis );
 
 		XMFLOAT3 resultDir;
 		XMStoreFloat3( &resultDir, rayDir );

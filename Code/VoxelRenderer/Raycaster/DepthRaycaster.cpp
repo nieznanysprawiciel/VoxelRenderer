@@ -55,7 +55,9 @@ void			DepthRaycaster::RaycasterThreadImpl		( ThreadData& data, Size threadNumbe
 		auto rayLength = DirectX::XMVectorSubtract( DirectX::XMLoadFloat3( &rayCtx.RayStartPosition ), DirectX::XMLoadFloat3( &rayCtx.Position ) );
 		auto length = DirectX::XMVectorGetW( DirectX::XMVector3Length( rayLength ) );
 
-		float colorValue = rayCtx.Depth;	//depth;		// Move to range [0.0, 1.0]
+		depth = rayCtx.Depth;	// 1.0f - ( rayCtx.Depth > 1.0f ? rayCtx.Depth : 1.0f );
+
+		float colorValue = depth;		// Move to range [0.0, 1.0]
 		data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( colorValue, colorValue, colorValue, 1.0f );
 	}
 
