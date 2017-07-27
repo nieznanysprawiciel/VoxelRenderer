@@ -623,8 +623,8 @@ bool					RaycasterCPU::IsIndirectPointer		( const OctreeNode* node )
 //
 uint32					RaycasterCPU::GetIndirectPtr		( RaycasterContext& rayCtx, const OctreeNode* node )
 {
-	uint32 firstIndirect = (uint32)rayCtx.Octree->GetFirstFreeIndirect();
-	return node->ChildPackPtr + firstIndirect;
+	const vr::OctreeFarPointer& farPointer = Cast< const vr::OctreeFarPointer& >( rayCtx.Octree->GetNode( node->ChildPackPtr ) );
+	return farPointer.Offset;
 }
 
 // ================================ //
