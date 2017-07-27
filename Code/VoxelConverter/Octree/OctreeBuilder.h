@@ -56,7 +56,9 @@ private:
 	VoxelAttributes&	AccessAttributes		( uint64 dataOffset );
 	vr::OctreeNode&		AccessNode				( uint32 absolutOffset );
 	ooc::OctreeNode&	AccessNode				( ooc::OctreeNode& parent, uint8 index );
+	OctreeFarPointer&	AccessFarPtr			( uint32 absolutOffset );
 	Size				AllocateNodes			( uint8 numNodes );
+	uint32				AllocateIndirect		();
 	uint32				ComputeAttribOffset		( uint64 dataOffset );
 
 	ooc::OctreeNode&	AccessNext				( ooc::OctreeNode& parent, int8& startIdx );

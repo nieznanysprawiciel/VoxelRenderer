@@ -156,9 +156,13 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 		if( nodesOffset > m_maxDirectOffset )
 		{
 			// Make indirect pointer.
+			auto farPtrOffset = AllocateIndirect();
+
+			OctreeFarPointer& farPointer = AccessFarPtr( farPtrOffset );
+			farPointer.Offset = (uint32)absolutOffset;
+
 			dstNode.IndirectPtr = true;
-			assert( !"Implement me" );
-			//absolutOffset = 
+			dstNode.ChildPackPtr = farPtrOffset;
 		}
 		else
 		{
@@ -269,8 +273,15 @@ ooc::OctreeNode&	OctreeBuilder::AccessNode			( ooc::OctreeNode& parent, uint8 in
 	}
 
 	assert( false );
-	//throw std::runtime_error( "Trying to access node after end of children array." );
+	throw std::runtime_error( "Trying to access node after end of children array." );
 	return ooc::OctreeNode();
+}
+
+// ================================ //
+//
+OctreeFarPointer&	OctreeBuilder::AccessFarPtr		( uint32 absolutOffset )
+{
+	return Cast< vr::OctreeFarPointer& >( m_data[ absolutOffset ] );
 }
 
 // ================================ //
@@ -280,6 +291,18 @@ Size				OctreeBuilder::AllocateNodes		( uint8 numNodes )
 	Size firstNodeOffset = m_curNodesOffset;
 	m_curNodesOffset += numNodes;
 	return firstNodeOffset;
+}
+
+// ================================ //
+//
+uint32				OctreeBuilder::AllocateIndirect		()
+{
+	if( m_curIndirectOffset == m_numInitIndirectPtrs + sizeof( BlockDescriptor ) / sizeof( vr::OctreeNode ) )
+		throw std::runtime_error( "To many indirect pointers" );
+
+	auto absolutOffset = m_curIndirectOffset;
+	m_curIndirectOffset += sizeof( vr::OctreeFarPointer ) / sizeof( vr::OctreeNode );
+	return (uint32)absolutOffset;
 }
 
 // ================================ //
@@ -307,7 +330,7 @@ ooc::OctreeNode&	OctreeBuilder::AccessNext			( ooc::OctreeNode& parent, int8& st
 	}
 
 	assert( false );
-	//throw std::runtime_error( "Trying to access node after end of children array." );
+	throw std::runtime_error( "Trying to access node after end of children array." );
 	return ooc::OctreeNode();
 }
 
