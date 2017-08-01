@@ -65,6 +65,7 @@ struct RaycasterContext
 	DirectX::XMFLOAT3				RayStartPosition;
 	float							GridSize;		///< Grid size on current tree level. It changes during tree traversal.
 
+	const OctreeNode*				ChildDescriptor;
 
 	//
 	DirectX::XMFLOAT3				tCoeff;
@@ -141,6 +142,9 @@ protected:
 	void					CastRay					( RaycasterContext& rayCtx );
 
 	ChildFlag				AdvanceStep				( RaycasterContext& rayCtx, const DirectX::XMFLOAT3& corner, float tLeave );
+	void					PopStep					( RaycasterContext& rayCtx, ChildFlag childIdxChange );
+	void					PushStep				( RaycasterContext& rayCtx, const DirectX::XMFLOAT3& corner, float tVoxelMax, ChildFlag childShift );
+
 
 	// Attributes
 	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;
