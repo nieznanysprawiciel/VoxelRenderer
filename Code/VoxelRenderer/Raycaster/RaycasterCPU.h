@@ -72,7 +72,6 @@ struct RaycasterContext
 	DirectX::XMFLOAT3				Position;
 	float							tMax;
 	float							tMin;
-	float							h;
 
 	uint32							Current;		///< Current node, we are in.
 	ChildFlag						OctantMask;		///< Child bit flipping.
@@ -138,9 +137,10 @@ protected:
 	// Raycasting core
 	DirectX::XMFLOAT3		ComputeRayPosition		( CameraActor* camera, int screenX, int screenY );
 	DirectX::XMFLOAT3		ComputeRayDirection		( CameraActor* camera, int screenX, int screenY );
-	const OctreeNode&		FindStartingNode		( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext );
 	void					InitRaycasting			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& RaycasterContext );
 	void					CastRay					( RaycasterContext& rayCtx );
+
+	ChildFlag				AdvanceStep				( RaycasterContext& rayCtx, const DirectX::XMFLOAT3& corner, float tLeave );
 
 	// Attributes
 	const OctreeLeaf&		GetResultLeafNode		( RaycasterContext& raycasterContext ) const;

@@ -59,28 +59,6 @@ DirectX::XMFLOAT3	operator-( DirectX::XMFLOAT3& float3 )
 }
 
 
-/**@brief Transition table for node children.
-
-OctreeNode contains child mask. Every child in octree has it's position in this mask.
-When we traverse from one child to another along one axis, this table gives us next @ref ChildFlag on ray path.
-Note that sometimes we cross node's boundary and we are outside of node.
-
-First index is ChildFlag of node before step. Second index is transition axis { x, y, z, -x, -y, -z }.
-
-Remember that these values are bit shifts to child position in masks not mask itself.*/
-ChildFlag StepTable[ 8 ][ 6 ] =
-{
-	{ 1, PositiveOUT, PositiveOUT, NegativeOUT, 4, 2 },
-	{ PositiveOUT, PositiveOUT, PositiveOUT, 0, 5, 3 },
-	{ 3, PositiveOUT, 0, NegativeOUT, 6, NegativeOUT },
-	{ PositiveOUT, PositiveOUT, 1, 2, 7, NegativeOUT },
-	
-	{ 5, 0, PositiveOUT, NegativeOUT, NegativeOUT, 6 },
-	{ PositiveOUT, 1, PositiveOUT, 4, NegativeOUT, 7 },
-	{ 7, 2, 4, NegativeOUT, NegativeOUT, NegativeOUT },
-	{ PositiveOUT, 3, 5, 6, NegativeOUT, NegativeOUT },
-};
-
 
 using namespace DirectX;
 
@@ -300,14 +278,6 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int
 	}
 }
 
-// ================================ //
-//
-const OctreeNode&		RaycasterCPU::FindStartingNode			( const DirectX::XMFLOAT3& position, const DirectX::XMFLOAT3& direction, RaycasterContext& raycasterContext )
-{
-	assert( false );
-
-	return raycasterContext.Octree->AccessOctree()[ 0 ];
-}
 
 // ================================ //
 //
@@ -348,7 +318,6 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 	// Initialize the active span of t-values.
 	rayCtx.tMin = fmaxf( fmaxf( ParamLineX( 2.0f, rayCtx ), ParamLineY( 2.0f, rayCtx ) ), ParamLineZ( 2.0f, rayCtx ) );
 	rayCtx.tMax = fminf( fminf( ParamLineX( 1.0f, rayCtx ), ParamLineY( 1.0f, rayCtx ) ), ParamLineZ( 1.0f, rayCtx ) );
-	rayCtx.h = rayCtx.tMax;
 
 	// Enable culling.
 	rayCtx.tMin = fmaxf( rayCtx.tMin, 0.0f );
@@ -392,27 +361,16 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 
 		if( ExistsChild( childDescriptor, childShift ) && rayCtx.tMin <= rayCtx.tMax )
 		{
-			//// Terminate if the voxel is small enough.
-			//if (tc_max * ray.dir_sz + ray_orig_sz >= scale_exp2)
-			//	break; // at t_min
-
-			float tv_max = fminf( rayCtx.tMax, tLeave );
+			float tVoxelMax = fminf( rayCtx.tMax, tLeave );
 			float half = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
 
 			// This line computes intersection with center of current voxel.
 			XMFLOAT3 tCenter = ParamLine( XMFLOAT3( half, half, half ), rayCtx.tCoeff, -corner );
 
-			if( rayCtx.tMin <= tv_max )
+			if( rayCtx.tMin <= tVoxelMax )
 			{
-				//// Terminate if the corresponding bit in the non-leaf mask is not set.
-				//if( ( child_masks & 0x0080 ) == 0 )
-				//	break; // at t_min (overridden with tv_min).
+				PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
 
-				// This is Push optimization in reference code. Uncomment if want.
-				//if( tc_max < rayCtx.h )
-					PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
-
-				rayCtx.h = tLeave;
 				rayCtx.Current = ComputeChildOffset( rayCtx, childDescriptor, childShift );
 
 
@@ -427,28 +385,16 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 
 				// Update active t-span and invalidate cached child descriptor.
 
-				rayCtx.tMax = tv_max;
+				rayCtx.tMax = tVoxelMax;
 				childDescriptor = nullptr;
 				continue;
 
 			}
 		}
 
-		// ADVANCE
-		// Step along the ray.
-
-		ChildFlag childIdxChange = 0;
-		if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
-		if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
-		if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
-
-		// Update active t-span and flip bits of the child slot index.
-
-		rayCtx.tMin = tLeave;
-		rayCtx.ChildIdx ^= childIdxChange;
+		ChildFlag childIdxChange = AdvanceStep( rayCtx, corner, tLeave );
 
 		// Proceed with pop if the bit flips disagree with the ray direction.
-
 		if( ( rayCtx.ChildIdx & childIdxChange ) != 0 )
 		{
 			// POP
@@ -475,8 +421,6 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 			rayCtx.ChildIdx  = ( shx & 1 ) | ( ( shy & 1 ) << 1 ) | ( ( shz & 1 ) << 2 );
 
 			// Prevent same parent from being stored again and invalidate cached child descriptor.
-
-			rayCtx.h = 0.0f;
 			childDescriptor = nullptr;
 		}
 
@@ -491,6 +435,26 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 	if( ( rayCtx.OctantMask & 2 ) == 0 ) rayCtx.Position.y = 3.0f - rayCtx.ScaleExp - rayCtx.Position.y;
 	if( ( rayCtx.OctantMask & 4 ) == 0 ) rayCtx.Position.z = 3.0f - rayCtx.ScaleExp - rayCtx.Position.z;
 
+}
+
+// ================================ //
+//
+ChildFlag				RaycasterCPU::AdvanceStep			( RaycasterContext& rayCtx, const DirectX::XMFLOAT3& corner, float tLeave )
+{
+	// ADVANCE
+	// Step along the ray.
+
+	ChildFlag childIdxChange = 0;
+	if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
+	if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
+	if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
+
+	// Update active t-span and flip bits of the child slot index.
+
+	rayCtx.tMin = tLeave;
+	rayCtx.ChildIdx ^= childIdxChange;
+
+	return childIdxChange;
 }
 
 
