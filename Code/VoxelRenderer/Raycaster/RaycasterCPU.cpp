@@ -182,16 +182,9 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 		// Find starting position
 		DirectX::XMFLOAT3 direction = ComputeRayDirection( data.Camera, pix % m_width, m_height - pix / m_width );
 		DirectX::XMFLOAT3 position = ComputeRayPosition( data.Camera, pix % m_width, m_height - pix / m_width );
-		
-		InitRaycasting( position, direction, rayCtx );
-		
-		// Debug
-		if( rayCtx.tMin > rayCtx.tMax )
-		{
-			data.Buffer[ pix ] = DirectX::PackedVector::XMCOLOR( 1.0, 0.0, 0.0, 0.0 ).c;
-			continue;
-		}
 
+
+		InitRaycasting( position, direction, rayCtx );
 		CastRay( rayCtx );
 
 
@@ -204,7 +197,6 @@ void			RaycasterCPU::RaycasterThreadImpl		( ThreadData& data, Size threadNumber 
 			const VoxelAttributes& attributes = GetLeafAttributes( leaf, rayCtx );
 
 			// Fill pixel
-			//data.Buffer[ pix ] = colors[ threadNumber ];
 			data.Buffer[ pix ] = attributes.Color.c;
 		}
 	}
@@ -224,6 +216,10 @@ uint16			RaycasterCPU::GetNumThreads() const
 	return (uint16)std::thread::hardware_concurrency();
 #endif // DEBUG
 }
+
+//====================================================================================//
+//			Raycasting functions	
+//====================================================================================//
 
 // ================================ //
 //
