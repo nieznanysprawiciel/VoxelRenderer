@@ -343,7 +343,6 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 	rayCtx.ChildDescriptor = nullptr;
 
 
-	// Write proper condition.
 	while( rayCtx.Scale < rayCtx.Octree->GetMaxDepth() )
 	{
 		if( !rayCtx.ChildDescriptor )
@@ -372,8 +371,7 @@ void					RaycasterCPU::CastRay				( RaycasterContext& rayCtx )
 
 		ChildFlag childIdxChange = AdvanceStep( rayCtx, corner, tLeave );
 
-		// Proceed with pop if the bit flips disagree with the ray direction.
-		if( ( rayCtx.ChildIdx & childIdxChange ) != 0 )
+		if( IsRayOutside( rayCtx.ChildIdx, childIdxChange ) )
 			PopStep( rayCtx, childIdxChange );
 	}
 
@@ -507,6 +505,14 @@ bool					RaycasterCPU::IsEmpty				( const OctreeNode& node )
 
 	// If child mask is zero then node is empty.
 	return !node.ChildMask;
+}
+
+// ================================ //
+//
+bool					RaycasterCPU::IsRayOutside			( ChildFlag childIdx, ChildFlag childIdxChange )
+{
+	// If the bit flips disagree with the ray direction, ray is outside of current voxel.
+	return ( childIdx & childIdxChange ) != 0;
 }
 
 

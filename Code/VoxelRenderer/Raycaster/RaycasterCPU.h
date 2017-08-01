@@ -153,6 +153,7 @@ protected:
 
 
 	bool					IsEmpty					( const OctreeNode& node );
+	bool					IsRayOutside			( ChildFlag childIdx, ChildFlag childIdxChange );
 	uint8					CountNodesBefore		( ChildFlag childShift, uint8 childMask );
 
 	DirectX::XMFLOAT3		ParamLine				( DirectX::XMFLOAT3& coords, RaycasterContext& raycasterContext );
