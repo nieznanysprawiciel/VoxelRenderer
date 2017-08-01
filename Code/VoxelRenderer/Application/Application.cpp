@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "VoxelRenderer/Raycaster/RaycasterCPU.h"
+#include "VoxelRenderer/Raycaster/RaycasterGPU.h"
 #include "VoxelRenderer/Raycaster/FakeRaycaster.h"
 #include "VoxelRenderer/Raycaster/PrintOctreeRaycaster.h"
 #include "VoxelRenderer/Raycaster/DepthRaycaster.h"
@@ -119,6 +120,8 @@ void		Application::InitRaycaster	()
 	std::string raycasterType = m_config->RaycasterType();
 	if( raycasterType == "CPU Raycaster" )
 		m_raycaster = MakeUPtr< RaycasterCPU >();
+	else if( raycasterType == "GPU Raycaster" )
+		m_raycaster = MakeUPtr< RaycasterGPU >();
 	else if( raycasterType == "FakeRaycaster" )
 		m_raycaster = MakeUPtr< FakeRaycaster >();
 	else if( raycasterType == "PrintOctree" )
