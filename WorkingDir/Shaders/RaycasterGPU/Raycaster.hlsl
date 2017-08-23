@@ -2,7 +2,7 @@
 #include "Camera.hlsl"
 
 
-void		InitRaycasting			( float3 position, float3 direction, inout RaycasterContext rayCtx );
+void		InitRaycasting			( float3 position, float3 direction, out RaycasterContext rayCtx );
 float4		Raycasting				( CameraData input );
 float4		CastRay					( RaycasterContext rayCtx );
 
@@ -41,7 +41,7 @@ float				ParamLineZ			( float posZ, RaycasterContext rayCtx )
 
 // ================================ //
 //
-void				InitRaycasting		( float3 position, float3 direction, inout RaycasterContext rayCtx )
+void				InitRaycasting		( float3 position, float3 direction, out RaycasterContext rayCtx )
 {
 	const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
 
@@ -94,6 +94,12 @@ void				InitRaycasting		( float3 position, float3 direction, inout RaycasterCont
 	if( ParamLineX( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
 	if( ParamLineY( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
 	if( ParamLineZ( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
+
+	for( int i = 0; i < CAST_STACK_DEPTH; ++i )
+	{
+		rayCtx.NodesStack[ i ].Node = 0;
+		rayCtx.NodesStack[ i ].tMax = 0.0f;
+	}
 }
 
 //====================================================================================//
@@ -122,5 +128,6 @@ float4				Raycasting				( CameraData input )
 
 float4 main() : SV_TARGET
 {
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+	CameraData input;
+	return Raycasting( input );
 }
