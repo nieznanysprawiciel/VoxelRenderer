@@ -22,6 +22,9 @@
     <Filter Include="VoxelRenderer\Application\Presentation">
       <UniqueIdentifier>{0a746ccc-a225-4e43-ada1-1ef80832c358}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\RaycasterGPU">
+      <UniqueIdentifier>{7a7d7cf6-6901-4085-aac7-faf02add4fec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -153,6 +156,15 @@
     </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\BlitPS.hlsl">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\Raycaster.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\Declarations.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\Camera.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -17,8 +17,11 @@ typedef uint8 ChildFlag;
 class RaycasterGPU : public IRaycaster
 {
 protected:
+
 	IRenderer*				m_renderer;
 	ResourceManager*		m_resourceManager;
+
+	OctreePtr				m_lastOctree;
 
 public:
 
@@ -28,6 +31,10 @@ public:
 	virtual void			Init			( IRenderer* renderer, ResourceManager* resourceManager )								override;
 	virtual void			ProcessInput	( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )		override;
 
+
+private:
+
+	void					UpdateOctree	( OctreePtr octree );
 };
 
 
