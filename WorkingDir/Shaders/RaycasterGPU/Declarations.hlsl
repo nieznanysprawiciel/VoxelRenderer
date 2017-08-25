@@ -6,6 +6,10 @@
 #define CAST_STACK_DEPTH        23
 #define ROOT_OFFSET				514
 
+typedef uint ChildFlag;
+typedef uint OctreeNode;
+typedef uint OctreeLeaf;
+
 
 struct StackElement
 {
@@ -16,7 +20,7 @@ struct StackElement
 
 struct RaycasterContext
 {
-	//const OctreeNode*				ChildDescriptor;
+	OctreeNode						ChildDescriptor;
 
 	float3							RayDirection;
 	float3							RayStartPosition;
@@ -28,8 +32,8 @@ struct RaycasterContext
 	float							tMin;
 
 	uint							Current;		///< Current node, we are in.
-	uint							OctantMask;		///< Child bit flipping.
-	uint							ChildIdx;		///< Child in children mask.
+	ChildFlag						OctantMask;		///< Child bit flipping.
+	ChildFlag						ChildIdx;		///< Child in children mask.
 	
 	int								Scale;
 	float							ScaleExp;
