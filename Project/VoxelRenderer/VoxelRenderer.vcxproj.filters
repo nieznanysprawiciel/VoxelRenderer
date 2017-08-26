@@ -166,5 +166,8 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\Camera.hlsl">
       <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\SimpleColor.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

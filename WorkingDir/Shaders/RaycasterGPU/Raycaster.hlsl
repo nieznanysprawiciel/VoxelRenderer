@@ -3,27 +3,24 @@
 
 
 void		InitRaycasting			( float3 position, float3 direction, out RaycasterContext rayCtx );
-float4		Raycasting				( CameraData input );
 
-float4		CastRay					( RaycasterContext rayCtx );
+RaycasterResult		Raycasting		( CameraData input );
+RaycasterResult		CastRay			( RaycasterContext rayCtx );
+
+
 ChildFlag	AdvanceStep				( RaycasterContext rayCtx, float3 corner, float tLeave );
 void		PopStep					( RaycasterContext rayCtx, ChildFlag childIdxChange );
 void		PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift );
 
-bool					IsEmpty					( OctreeNode node );
-bool					IsRayOutside			( ChildFlag childIdx, ChildFlag childIdxChange );
-uint					CountNodesBefore		( ChildFlag childShift, uint childMask );
+uint		FindNewHierarchyLevel	( inout float3 position, float scaleExp, ChildFlag childIdxChange );
+uint		ComputeChildOffset		( RaycasterContext rayCtx, OctreeNode node, ChildFlag childShift );
+
+bool		IsEmpty					( OctreeNode node );
+bool		IsRayOutside			( ChildFlag childIdx, ChildFlag childIdxChange );
+uint		CountNodesBefore		( ChildFlag childShift, uint childMask );
 
 
-uint		GetNode					( uint idx );
 
-
-// ================================ //
-//
-ChildFlag			ChildMask		( OctreeNode node )
-{
-	return node & 0xFF;
-}
 
 
 // ================================ //
@@ -96,6 +93,15 @@ bool				IsIndirectPointer	( OctreeNode node )
 	return node & ( 0x1 << 30 );
 }
 
+// ================================ //
+//
+int					HighestBitPos		( int diffs )
+{
+	// Note: Conversion to float normalizes this float. We can read position of highest bit from exponent.
+	// So we shift this float by 23 bits and subtract 127 (exponent bias).
+	return ( asuint( (float)diffs ) >> 23 ) - 127;
+}
+
 
 // ================================ //
 //
@@ -163,7 +169,7 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 
 // ================================ //
 //
-float4		CastRay				( RaycasterContext rayCtx )
+RaycasterResult		CastRay				( RaycasterContext rayCtx )
 {
 	while( rayCtx.Scale < CAST_STACK_DEPTH )
 	{
@@ -200,12 +206,96 @@ float4		CastRay				( RaycasterContext rayCtx )
 	if( rayCtx.Scale >= CAST_STACK_DEPTH )
 		rayCtx.tMin = 2.0f;
 
-	//rayCtx.Depth = rayCtx.tMin - rayCtx.tCubeMin;
-
 	if( ( rayCtx.OctantMask & 1 ) == 0 ) rayCtx.Position.x = 3.0f - rayCtx.ScaleExp - rayCtx.Position.x;
 	if( ( rayCtx.OctantMask & 2 ) == 0 ) rayCtx.Position.y = 3.0f - rayCtx.ScaleExp - rayCtx.Position.y;
 	if( ( rayCtx.OctantMask & 4 ) == 0 ) rayCtx.Position.z = 3.0f - rayCtx.ScaleExp - rayCtx.Position.z;
 
+	RaycasterResult result;
+	result.Depth = 0.0;		//rayCtx.tMin - rayCtx.tCubeMin;;
+	result.VoxelIdx = rayCtx.Current;
+
+	return result;
+}
+
+// ================================ //
+//
+ChildFlag		AdvanceStep			( RaycasterContext rayCtx, float3 corner, float tLeave )
+{
+	// ADVANCE
+	// Step along the ray.
+
+	// Check which voxel boundaries we crossed and set proper flag. Advance position by current voxel size.
+	ChildFlag childIdxChange = 0;
+	if( corner.x <= tLeave ) childIdxChange ^= 1, rayCtx.Position.x -= rayCtx.ScaleExp;
+	if( corner.y <= tLeave ) childIdxChange ^= 2, rayCtx.Position.y -= rayCtx.ScaleExp;
+	if( corner.z <= tLeave ) childIdxChange ^= 4, rayCtx.Position.z -= rayCtx.ScaleExp;
+
+	// Update active t-span and flip bits of the child slot index.
+
+	rayCtx.tMin = tLeave;
+	rayCtx.ChildIdx ^= childIdxChange;
+
+	return childIdxChange;
+}
+
+// ================================ //
+//
+void			PopStep				( RaycasterContext rayCtx, ChildFlag childIdxChange )
+{
+	// POP
+	// Find the highest differing bit between the two positions.
+
+	rayCtx.Scale = FindNewHierarchyLevel( rayCtx.Position, rayCtx.ScaleExp, childIdxChange );
+	rayCtx.ScaleExp = asfloat( ( rayCtx.Scale - CAST_STACK_DEPTH + 127 ) << 23 ); // exp2f(scale - s_max)
+
+	// Restore parent voxel from the stack.
+
+	StackElement stackElement = ReadStack( rayCtx, rayCtx.Scale );
+	rayCtx.Current = stackElement.Node;
+	rayCtx.tMax = stackElement.tMax;
+				
+
+	// Round cube position and extract child slot index.
+
+	int shx = asuint( rayCtx.Position.x ) >> rayCtx.Scale;
+	int shy = asuint( rayCtx.Position.y ) >> rayCtx.Scale;
+	int shz = asuint( rayCtx.Position.z ) >> rayCtx.Scale;
+	rayCtx.Position.x = asfloat( shx << rayCtx.Scale );
+	rayCtx.Position.y = asfloat( shy << rayCtx.Scale );
+	rayCtx.Position.z = asfloat( shz << rayCtx.Scale );
+	rayCtx.ChildIdx  = ( shx & 1 ) | ( ( shy & 1 ) << 1 ) | ( ( shz & 1 ) << 2 );
+
+	// Prevent same parent from being stored again and invalidate cached child descriptor.
+	rayCtx.ChildDescriptor = 0;
+}
+
+// ================================ //
+//
+void			PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift )
+{
+	float halfVoxel = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
+
+	// This line computes intersection with center of current voxel. Write full equation to see why this works.
+	float3 tCenter = ParamLine( float3( halfVoxel, halfVoxel, halfVoxel ), rayCtx.tCoeff, -corner );
+
+	PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
+
+	rayCtx.Current = ComputeChildOffset( rayCtx, rayCtx.ChildDescriptor, childShift );
+
+
+	// Select child voxel that the ray enters first.
+	rayCtx.ChildIdx = 0;
+	rayCtx.Scale--;
+	rayCtx.ScaleExp = halfVoxel;
+
+	if( tCenter.x > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x += rayCtx.ScaleExp;
+	if( tCenter.y > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y += rayCtx.ScaleExp;
+	if( tCenter.z > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z += rayCtx.ScaleExp;
+
+	// Update active t-span and invalidate cached child descriptor.
+
+	rayCtx.tMax = tVoxelMax;
+	rayCtx.ChildDescriptor = 0;
 }
 
 //====================================================================================//
@@ -215,7 +305,7 @@ float4		CastRay				( RaycasterContext rayCtx )
 
 // ================================ //
 //
-float4				Raycasting				( CameraData input )
+RaycasterResult				Raycasting				( CameraData input )
 {
 	RaycasterContext rayCtx;
 
@@ -232,28 +322,7 @@ float4				Raycasting				( CameraData input )
 }
 
 
-float4 main() : SV_TARGET
-{
-	CameraData input;
-	return Raycasting( input );
-}
 
-
-// ================================ //
-//
-uint		GetNode				( uint idx )
-{
-	return 0;
-}
-
-
-// ================================ //
-//
-bool		IsEmpty				( OctreeNode node )
-{
-	// If child mask is zero then node is empty.
-	return !ChildMask( node );
-}
 
 // ================================ //
 //
@@ -274,3 +343,42 @@ uint		CountNodesBefore	( ChildFlag childShift, uint childMask )
 
 	return countbits( nodesBefore );
 }
+
+
+// ================================ //
+//
+uint		FindNewHierarchyLevel	( inout float3 position, float scaleExp, ChildFlag childIdxChange )
+{
+	// During tree traversal, ray can stay inside the same voxel and step to neighbor child or it can leave voxel.
+	// In second case we must go up in the voxels hierarchy (sometimes even few levels up).
+	// This function finds, how many octree levels we must leave.
+	// This code checks differing bits in float representation of position before step and after.
+	// Remember that positions can be only negatives powers of 1.
+	// The highest bit will say how much we must go upside.
+	uint differingBits = 0;
+	if( ( childIdxChange & 1 ) != 0 ) differingBits |= asuint( position.x ) ^ asuint( position.x + scaleExp );
+	if( ( childIdxChange & 2 ) != 0 ) differingBits |= asuint( position.y ) ^ asuint( position.y + scaleExp );
+	if( ( childIdxChange & 4 ) != 0 ) differingBits |= asuint( position.z ) ^ asuint( position.z + scaleExp );
+
+	return HighestBitPos( differingBits );
+}
+
+// ================================ //
+//
+uint		ComputeChildOffset		( RaycasterContext rayCtx, OctreeNode node, ChildFlag childShift )
+{
+	// Find child descriptor corresponding to the current voxel.
+	uint childOffset = 0;
+	if( IsIndirectPointer( node ) ) // far
+	{
+		childOffset = GetIndirectPtr( rayCtx, node );
+	}
+	else
+	{
+		childOffset = rayCtx.Current + ChildPtrPack( node );
+	}
+
+	childOffset += CountNodesBefore( childShift, ChildMask( node ) );
+	return childOffset;
+}
+
