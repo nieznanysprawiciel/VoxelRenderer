@@ -4,8 +4,11 @@
 #include "Declarations.hlsl"
 
 
-float3		ComputeRayPosition		( CameraData cameraData, int screenX, int screenY );
-float3		ComputeRayDirection		( CameraData cameraData, int screenX, int screenY );
+
+cbuffer CameraConstants : register( b0 )
+{
+	CameraData		CameraInput;
+}
 
 
 // ================================ //

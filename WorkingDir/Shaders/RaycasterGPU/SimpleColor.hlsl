@@ -2,10 +2,9 @@
 
 
 
-float4 main() : SV_TARGET
+float4 main( float4 screenSpace : SV_Position ) : SV_TARGET
 {
-	CameraData input;
-	RaycasterResult result = Raycasting( input );
+	RaycasterResult result = Raycasting( screenSpace, CameraInput );
 
 	if( result.VoxelIdx != 0 )
 	{

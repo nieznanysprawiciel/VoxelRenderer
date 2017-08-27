@@ -4,7 +4,7 @@
 
 void		InitRaycasting			( float3 position, float3 direction, out RaycasterContext rayCtx );
 
-RaycasterResult		Raycasting		( CameraData input );
+RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput );
 RaycasterResult		CastRay			( RaycasterContext rayCtx );
 
 
@@ -305,22 +305,22 @@ void			PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, Ch
 
 // ================================ //
 //
-RaycasterResult				Raycasting				( CameraData input )
+RaycasterResult				Raycasting				( float4 screenSpace, CameraData cameraInput )
 {
 	RaycasterContext rayCtx;
 
-	int pix = 0;	/// Compute pixel number
-	float width = 1000;
-	float height = 1000;
-
-	float3 direction = ComputeRayDirection( input, pix % width, height - pix / height );
-	float3 position = ComputeRayPosition( input, pix % width, height - pix / height );
+	float3 direction = ComputeRayDirection( cameraInput, screenSpace.x, screenSpace.y );
+	float3 position = ComputeRayPosition( cameraInput, screenSpace.x, screenSpace.y );
 
 	InitRaycasting( position, direction, rayCtx );
 	return CastRay( rayCtx );
 
 }
 
+
+//====================================================================================//
+//			Other helper functions	
+//====================================================================================//
 
 
 

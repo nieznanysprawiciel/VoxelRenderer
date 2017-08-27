@@ -6,6 +6,10 @@
 #define CAST_STACK_DEPTH        23
 #define ROOT_OFFSET				514
 
+
+ByteAddressBuffer Octree;
+
+
 typedef uint ChildFlag;
 typedef uint OctreeNode;
 typedef uint OctreeLeaf;
@@ -68,25 +72,16 @@ struct RaycasterContext
 struct CameraData
 {
 	float3				Position;
-	float3				Direction;
-	float3				UpVector;
-	float3				RightVector;
 	float				Fov;
+	float3				Direction;
 	float				Width;
+	float3				UpVector;
 	float				Height;
+	float3				RightVector;
 	float				ViewportSize;
 	float				NearPlane;
 	float				FarPlane;
 	bool				IsPerspective;
-};
-
-
-// ================================ //
-//
-struct Input
-{
-	float3			RayDirection;
-	float3			RayPosition;
 };
 
 
@@ -137,16 +132,14 @@ uint				ChildPtrPack	( OctreeNode node )
 //
 uint				GetNode			( uint idx )
 {
-	return 0;
+	return Octree.Load( idx );
 }
 
 // ================================ //
 //
 uint				GetIndirectPtr	( RaycasterContext rayCtx, OctreeNode node )
 {
-	//const vr::OctreeFarPointer& farPointer = Cast< const vr::OctreeFarPointer& >( rayCtx.Octree->GetNode( node->ChildPackPtr ) );
-	//return farPointer.Offset;
-	return 0;
+	return GetNode( ChildPtrPack( node ) );
 }
 
 // ================================ //
@@ -170,9 +163,11 @@ BlockDescriptor		GetBlockDescriptor		( OctreeLeaf leaf )
 {
 	BlockDescriptor blockDescriptor;
 
+	// In future we could support multiple descriptors, each on start of new block.
+	uint2 desc = Octree.Load2( 0 );
 
-	blockDescriptor.AttributesOffset = 0;
-	blockDescriptor.RootNodeOffset = ROOT_OFFSET;
+	blockDescriptor.AttributesOffset = desc.x;
+	blockDescriptor.RootNodeOffset = desc.y;
 	return blockDescriptor;
 }
 
@@ -187,9 +182,19 @@ uint				AttributesOffset		( OctreeLeaf leaf )
 //
 VoxelAttributes		GetAttributes			( uint attributeOffset )
 {
+	float4 attribute = Octree.Load4( attributeOffset );
+	uint colorPacked = asuint( attribute.w );
+	
+	uint4 color;
+	color.x = ( colorPacked & 0xFF000000 ) >> 24;
+	color.y = ( colorPacked & 0xFF0000 ) >> 16;
+	color.z = ( colorPacked & 0xFF00 ) >> 8;
+	color.w = ( colorPacked & 0xFF );
+
+
 	VoxelAttributes attributes;
-	attributes.Color = uint4( 255, 255, 255, 255 );
-	attributes.Normal = float3( 1.0, 0.0, 0.0 );
+	attributes.Color = color;
+	attributes.Normal = float3( attribute.x, attribute.y, attribute.z );
 	return attributes;
 }
 
