@@ -419,6 +419,23 @@ ResourcePtr<BufferObject>	ResourceManager::CreateConstantsBuffer		( const std::w
 	return ResourcePtr<BufferObject>( constBuff );
 }
 
+// ================================ //
+//
+ResourcePtr< BufferObject >		ResourceManager::CreateTextureBuffer	( const std::wstring& name, const TextureBufferInitData& data )
+{
+	BufferObject* constBuff = m_textureBuffers.get( name );
+	if ( constBuff )	// Je¿eli znaleŸliœmy bufor, to zwracamy nullptr
+		return ResourcePtr<BufferObject>();
+	
+	
+	constBuff = ResourcesFactory::CreateBufferFromMemory( name, data.Data, data.CreateBufferInfo() );
+	if ( !constBuff )		// Bufor móg³ siê nie stworzyæ, a nie chcemy dodawaæ nullptra do ResourceManagera
+		return nullptr;
+
+	m_textureBuffers.UnsafeAdd( name, constBuff );	// Dodaliœmy bufor
+	return ResourcePtr<BufferObject>( constBuff );
+}
+
 /**@brief Created BlendingState object.
 
 @return If object named name exist, returns nullptr.*/

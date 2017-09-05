@@ -6,6 +6,7 @@
 #include "swGraphicAPI/DX11API/stdafx.h"
 
 #include "DX11Buffer.h"
+#include "DX11Texture.h"
 #include "DX11Initializer/DX11ConstantsMapper.h"
 
 #include "swCommonLib/Common/Converters.h"
@@ -19,8 +20,9 @@ RTTR_REGISTRATION
 }
 
 
-
-DX11Buffer::DX11Buffer( const std::wstring& name, const BufferInfo& descriptor, ID3D11Buffer* buff )
+// ================================ //
+//
+DX11Buffer::DX11Buffer( const std::wstring& name, const BufferInfo& descriptor, ComPtr< ID3D11Buffer > buff )
 	:	BufferObject( descriptor.ElementSize, descriptor.NumElements ), m_buffer( buff )
 	,	m_descriptor( descriptor )
 {
@@ -29,10 +31,12 @@ DX11Buffer::DX11Buffer( const std::wstring& name, const BufferInfo& descriptor, 
 	if( IsDebugLayerEnabled() )
 	{	
 		std::string nameStr = Convert::ToString< std::wstring >( name );
-		SetDebugName( m_buffer, nameStr );
+		SetDebugName( m_buffer.Get(), nameStr );
 	}
 }
 
+// ================================ //
+//
 DX11Buffer::~DX11Buffer()
 {
 	if( m_buffer )
@@ -49,6 +53,9 @@ DX11Buffer::~DX11Buffer()
 @return WskaŸnik na DX11Buffer w przypadku powodzenia lub nullptr, je¿eli coœ pójdzie nie tak.*/
 DX11Buffer*		DX11Buffer::CreateFromMemory	( const std::wstring& name, const uint8* data, const BufferInfo& bufferInfo )
 {
+	if( !ValidateInitData( bufferInfo ) )
+		return nullptr;
+
 	ResourceBinding bindFlag;
 	if( bufferInfo.BufferType == BufferType::VertexBuffer )
 		bindFlag = ResourceBinding::BIND_RESOURCE_VERTEX_BUFFER;
@@ -56,6 +63,8 @@ DX11Buffer*		DX11Buffer::CreateFromMemory	( const std::wstring& name, const uint
 		bindFlag = ResourceBinding::BIND_RESOURCE_INDEX_BUFFER;
 	else if( bufferInfo.BufferType == BufferType::ConstantBuffer )
 		bindFlag = ResourceBinding::BIND_RESOURCE_CONSTANT_BUFFER;
+	else if( bufferInfo.BufferType == BufferType::TextureBuffer )
+		bindFlag = ResourceBinding::BIND_RESOURCE_SHADER_RESOURCE;
 
 	// Wype³niamy deskryptor bufora
 	D3D11_BUFFER_DESC bufferDesc;
@@ -63,6 +72,7 @@ DX11Buffer*		DX11Buffer::CreateFromMemory	( const std::wstring& name, const uint
 	bufferDesc.Usage = DX11ConstantsMapper::Get( bufferInfo.Usage );
 	bufferDesc.BindFlags = DX11ConstantsMapper::Get( bindFlag );
 	bufferDesc.ByteWidth = bufferInfo.NumElements * bufferInfo.ElementSize;
+	bufferDesc.CPUAccessFlags = bufferInfo.AllowRaw ? D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS : 0;
 
 	D3D11_SUBRESOURCE_DATA* initDataPtr = nullptr;
 	D3D11_SUBRESOURCE_DATA initData;
@@ -97,7 +107,7 @@ D3D11_USAGE_STAGING lub D3D11_USAGE_DEFAULT. Trzeba sprawdziæ flagi i robiæ kopi
 @attention Funkcja nie nadaje siê do wykonania wielow¹tkowego. U¿ywa DeviceContextu do kopiowania danych
 w zwi¹zku z czym wymaga synchronizacji z innymi funkcjami renderuj¹cymi.
 */
-MemoryChunk DX11Buffer::CopyData()
+MemoryChunk		DX11Buffer::CopyData()
 {
 	// Trzeba stworzyæ nowy bufor
 	D3D11_BUFFER_DESC bufferDesc;
@@ -114,7 +124,7 @@ MemoryChunk DX11Buffer::CopyData()
 		return MemoryChunk();
 
 	// Kopiowanie zawartoœci miêdzy buforami
-	device_context->CopyResource( newBuffer, m_buffer );
+	device_context->CopyResource( newBuffer, m_buffer.Get() );
 
 	D3D11_MAPPED_SUBRESOURCE data;
 	result = device_context->Map( newBuffer, 0, D3D11_MAP::D3D11_MAP_READ, 0, &data );
@@ -128,4 +138,46 @@ MemoryChunk DX11Buffer::CopyData()
 	newBuffer->Release();
 
 	return std::move( memoryChunk );
+}
+
+// ================================ //
+//
+TextureObject*	DX11Buffer::CreateRawShaderView		() const
+{
+	if( m_descriptor.AllowRaw )
+	{
+		D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
+		viewDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
+		viewDesc.Format = DXGI_FORMAT_R32G32B32A32_TYPELESS;
+		viewDesc.BufferEx.FirstElement = 0;
+		viewDesc.BufferEx.NumElements = m_descriptor.NumElements;
+		viewDesc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
+
+		ComPtr< ID3D11ShaderResourceView > view;
+
+		auto result = device->CreateShaderResourceView( m_buffer.Get(), &viewDesc, view.GetAddressOf() );
+		if( FAILED( result ) )
+			return nullptr;
+
+		TextureInfo texDesc;
+		texDesc.Usage = m_descriptor.Usage;
+		texDesc.TextureType = TextureType::TEXTURE_TYPE_BUFFER;
+		texDesc.Format = ResourceFormat::RESOURCE_FORMAT_R32_TYPELESS;
+		texDesc.TextureHeight = 1;
+		texDesc.TextureWidth = m_descriptor.ElementSize * m_descriptor.NumElements / 4;		// Width is number of bytes.
+		texDesc.FilePath = m_descriptor.Name;
+
+		return new DX11Texture( std::move( texDesc ), m_buffer, view );
+	}
+
+	return nullptr;
+}
+
+// ================================ //
+//
+bool			DX11Buffer::ValidateInitData		( const BufferInfo& descriptor )
+{
+	if( descriptor.AllowRaw && descriptor.BufferType == BufferType::ConstantBuffer )
+		return false;
+	return false;
 }

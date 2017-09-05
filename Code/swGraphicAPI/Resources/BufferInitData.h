@@ -16,7 +16,10 @@ struct BufferInitData
 	uint32			ElementSize;
 	rttr::type		DataType;		///< [Optional] Type of single element in buffer.
 	ResourceUsage	Usage;
+	bool			AllowRaw : 1;	///< Allows bind buffer as raw buffer to pipeline.
 
+// ================================ //
+//
 	BufferInitData()
 		:	DataType( rttr::type::get_by_name( "" ) )	// Set invalid type.
 	{
@@ -24,6 +27,7 @@ struct BufferInitData
 		NumElements = 1;
 		ElementSize = 0;
 		Data = nullptr;
+		AllowRaw = false;
 	}
 };
 
@@ -35,6 +39,12 @@ struct ConstantBufferInitData : public BufferInitData
 };
 
 
+/**@brief Constant buffer initialization data.*/
+struct TextureBufferInitData : public BufferInitData
+{
+	BufferInfo		CreateBufferInfo() const;
+};
+
 
 /**@brief Vertex buffer initialization data.*/
 struct VertexBufferInitData : public BufferInitData
@@ -42,6 +52,8 @@ struct VertexBufferInitData : public BufferInitData
 	ResourcePtr< ShaderInputLayout >	VertexLayout;		///< [Optional] Layout of single vertex in buffer. You can add this layout to enable additional information in editor. Otherwise set to nullptr.
 	PrimitiveTopology					Topology;			///< [Optional] Topology of verticies. @note Vertex buffer not always have topology. If you use index buffer, vertex buffer topology has no meaning. In this case it is set to PointList.
 
+// ================================ //
+//
 	VertexBufferInitData()
 	{
 		Topology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_POINTLIST;
@@ -50,12 +62,14 @@ struct VertexBufferInitData : public BufferInitData
 	BufferInfo		CreateBufferInfo() const;
 };
 
-/**@brief  Index buffer initialization data.*/
+/**@brief Index buffer initialization data.*/
 struct IndexBufferInitData : public BufferInitData
 {
 	PrimitiveTopology					Topology;			///< [Optional] Topology of verticies. @note Index buffer topology override vertex buffer topology.
 	bool								Use4BytesIndex;		///< Index buffer consists of 4 bytes instead of 2 bytes indicies.
 
+// ================================ //
+//
 	IndexBufferInitData()
 	{
 		Topology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_POINTLIST;
@@ -78,9 +92,27 @@ inline BufferInfo		ConstantBufferInitData::CreateBufferInfo() const
 	info.Topology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_POINTLIST;
 	info.Usage = Usage;
 	info.Use4BytesIndex = false;
+	info.AllowRaw = AllowRaw;
 
 	// Constant buffers must be 16 bytes aligned.
 	assert( ElementSize % 16 == 0 );
+
+	return info;
+}
+
+// ================================ //
+//
+inline BufferInfo		TextureBufferInitData::CreateBufferInfo() const
+{
+	BufferInfo info;
+	info.BufferType = BufferType::TextureBuffer;
+	info.ElementSize = ElementSize;
+	info.NumElements = NumElements;
+	info.DataType = DataType;
+	info.Topology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_POINTLIST;
+	info.Usage = Usage;
+	info.Use4BytesIndex = false;
+	info.AllowRaw = AllowRaw;
 
 	return info;
 }
@@ -97,6 +129,7 @@ inline BufferInfo		VertexBufferInitData::CreateBufferInfo() const
 	info.Topology = Topology;
 	info.Usage = Usage;
 	info.Use4BytesIndex = false;
+	info.AllowRaw = AllowRaw;
 	info.VertexLayout = VertexLayout;
 
 	return info;
@@ -114,6 +147,7 @@ inline BufferInfo		IndexBufferInitData::CreateBufferInfo() const
 	info.Topology = Topology;
 	info.Usage = Usage;
 	info.Use4BytesIndex = Use4BytesIndex;
+	info.AllowRaw = AllowRaw;
 
 	return info;
 }

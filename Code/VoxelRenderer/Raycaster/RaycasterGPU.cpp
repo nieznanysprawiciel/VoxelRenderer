@@ -44,6 +44,9 @@ void				RaycasterGPU::ProcessInput		( const sw::input::MouseState& mouse, const 
 void				RaycasterGPU::UpdateOctree		( OctreePtr octree )
 {
 	assert( !"Implement me" );
+
+	//m_resourceManager->
+
 }
 
 }	// vr

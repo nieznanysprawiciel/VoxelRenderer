@@ -39,6 +39,7 @@ protected:
 	ResourceContainer< BufferObject >			m_vertexBuffer;		///< Vertex buffers.
 	ResourceContainer< BufferObject >			m_indexBuffer;		///< Index buffers.
 	ResourceContainer< BufferObject >			m_constantBuffer;	///< Shader constant buffers.
+	ResourceContainer< BufferObject >			m_textureBuffers;	///< Shader resource buffers.
 	ResourceContainer< ShaderInputLayout >		m_vertexLayout;		///< Vertex layouts.
 	// UWAGA! m_fileModel musi byæ na koñcu. Jego destruktor kasuje odwo³ania do obiektów powy¿ej. Podobnie RenderTargetObject odwo³uje siê do tekstur.
 	// Musz¹ one w tym czasie istnieæ, a destruktory s¹ wywo³ywane w kolejnoœci odwrotnej do zadeklarowanej w klasie.
@@ -99,6 +100,7 @@ public:
 	ResourcePtr< BufferObject >		CreateIndexBuffer			( const std::wstring& name, const IndexBufferInitData& data );
 	ResourcePtr< BufferObject >		CreateConstantsBuffer		( const std::wstring& name, const void* buffer, unsigned int size );
 	ResourcePtr< BufferObject >		CreateConstantsBuffer		( const std::wstring& name, const ConstantBufferInitData& data );
+	ResourcePtr< BufferObject >		CreateTextureBuffer			( const std::wstring& name, const TextureBufferInitData& data );
 
 	ResourcePtr< BlendingState >	CreateBlendingState			( const std::wstring& name, const BlendingInfo& info );
 	ResourcePtr< RasterizerState >	CreateRasterizerState		( const std::wstring& name, const RasterizerStateInfo& info );

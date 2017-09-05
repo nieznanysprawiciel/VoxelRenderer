@@ -33,26 +33,16 @@ void DX11Texture::Construct()
 	}
 }
 
-
-/**@brief Remember to release tex and texView (Call com interface Release method)*/
-DX11Texture::DX11Texture( TextureInfo&& texInfo, ID3D11Texture2D* tex, ID3D11ShaderResourceView* texView )
-	:	m_texture( tex )
-	,	m_textureView( texView )
-	,	m_descriptor( std::move( texInfo ) )
-{
-	Construct();
-}
-
-
 // ================================ //
 //
-DX11Texture::DX11Texture( TextureInfo&& texInfo, ComPtr< ID3D11Texture2D > tex, ComPtr< ID3D11ShaderResourceView > texView )
+DX11Texture::DX11Texture( TextureInfo&& texInfo, ComPtr< ID3D11Resource > tex, ComPtr< ID3D11ShaderResourceView > texView )
 	:	m_texture( tex )
 	,	m_textureView( texView )
 	,	m_descriptor( std::move( texInfo ) )
 {
 	Construct();
 }
+
 
 // ================================ //
 //
