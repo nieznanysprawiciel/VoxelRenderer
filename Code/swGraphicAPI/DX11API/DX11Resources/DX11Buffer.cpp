@@ -38,11 +38,7 @@ DX11Buffer::DX11Buffer( const std::wstring& name, const BufferInfo& descriptor, 
 // ================================ //
 //
 DX11Buffer::~DX11Buffer()
-{
-	if( m_buffer )
-		m_buffer->Release();
-	m_buffer = nullptr;
-}
+{}
 
 
 /**@brief Tworzy bufor wierzcho³ków, indeksów lub sta³ych o podanych parametrach.
