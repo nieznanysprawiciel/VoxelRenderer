@@ -23,6 +23,17 @@ protected:
 
 	OctreePtr				m_lastOctree;
 
+	ResourcePtr< BufferObject >		m_cameraBuffer;
+	ResourcePtr< BufferObject >		m_octreeBuffer;
+	ResourcePtr< TextureObject >	m_octreeTexBuff;
+
+	ResourcePtr< VertexShader >		m_vertexShader;
+	ResourcePtr< PixelShader >		m_pixelShader;
+
+	ResourcePtr< BlendingState >		m_blendingState;
+	ResourcePtr< RasterizerState >		m_rasterizerState;
+	ResourcePtr< DepthStencilState >	m_depthStencilState;
+
 public:
 
 
@@ -35,6 +46,7 @@ public:
 private:
 
 	void					UpdateOctree	( OctreePtr octree );
+	void					UpdateCamera	( CameraActor* camera );
 };
 
 
