@@ -68,7 +68,7 @@ DX11Buffer*		DX11Buffer::CreateFromMemory	( const std::wstring& name, const uint
 	bufferDesc.Usage = DX11ConstantsMapper::Get( bufferInfo.Usage );
 	bufferDesc.BindFlags = DX11ConstantsMapper::Get( bindFlag );
 	bufferDesc.ByteWidth = bufferInfo.NumElements * bufferInfo.ElementSize;
-	bufferDesc.CPUAccessFlags = bufferInfo.AllowRaw ? D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS : 0;
+	bufferDesc.MiscFlags = bufferInfo.AllowRaw ? D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS : 0;
 
 	D3D11_SUBRESOURCE_DATA* initDataPtr = nullptr;
 	D3D11_SUBRESOURCE_DATA initData;
@@ -144,14 +144,14 @@ TextureObject*	DX11Buffer::CreateRawShaderView		() const
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc;
 		viewDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFEREX;
-		viewDesc.Format = DXGI_FORMAT_R32G32B32A32_TYPELESS;
+		viewDesc.Format = DX11ConstantsMapper::Get( ResourceFormat::RESOURCE_FORMAT_R32_TYPELESS );
 		viewDesc.BufferEx.FirstElement = 0;
 		viewDesc.BufferEx.NumElements = m_descriptor.NumElements;
 		viewDesc.BufferEx.Flags = D3D11_BUFFEREX_SRV_FLAG_RAW;
 
 		ComPtr< ID3D11ShaderResourceView > view;
 
-		auto result = device->CreateShaderResourceView( m_buffer.Get(), &viewDesc, view.GetAddressOf() );
+		auto result = device->CreateShaderResourceView( m_buffer.Get(), &viewDesc, &view );
 		if( FAILED( result ) )
 			return nullptr;
 
@@ -175,5 +175,5 @@ bool			DX11Buffer::ValidateInitData		( const BufferInfo& descriptor )
 {
 	if( descriptor.AllowRaw && descriptor.BufferType == BufferType::ConstantBuffer )
 		return false;
-	return false;
+	return true;
 }
