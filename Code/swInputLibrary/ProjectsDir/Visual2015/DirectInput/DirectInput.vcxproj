@@ -22,20 +22,21 @@
     <ClCompile Include="..\..\..\DirectInput\DirectInputModule.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Device.h" />
     <ClInclude Include="..\..\..\DirectInput\DirectInputModule.h" />
     <ClInclude Include="..\..\..\DirectInput\IncludeDirectInput.h" />
-    <ClInclude Include="..\..\..\Factory.h" />
-    <ClInclude Include="..\..\..\IInput.h" />
-    <ClInclude Include="..\..\..\InputDeviceEvent.h" />
-    <ClInclude Include="..\..\..\InputDeviceInfo.h" />
-    <ClInclude Include="..\..\..\JoystickDevice.h" />
-    <ClInclude Include="..\..\..\JoystickState.h" />
-    <ClInclude Include="..\..\..\KeyboardDevice.h" />
-    <ClInclude Include="..\..\..\KeyboardState.h" />
-    <ClInclude Include="..\..\..\KeyState.h" />
-    <ClInclude Include="..\..\..\MouseDevice.h" />
-    <ClInclude Include="..\..\..\MouseState.h" />
+    <ClInclude Include="..\..\..\InputCore\Device.h" />
+    <ClInclude Include="..\..\..\InputCore\EventQueue.h" />
+    <ClInclude Include="..\..\..\InputCore\Factory.h" />
+    <ClInclude Include="..\..\..\InputCore\IInput.h" />
+    <ClInclude Include="..\..\..\InputCore\InputDeviceEvent.h" />
+    <ClInclude Include="..\..\..\InputCore\InputDeviceInfo.h" />
+    <ClInclude Include="..\..\..\InputCore\JoystickDevice.h" />
+    <ClInclude Include="..\..\..\InputCore\JoystickState.h" />
+    <ClInclude Include="..\..\..\InputCore\KeyboardDevice.h" />
+    <ClInclude Include="..\..\..\InputCore\KeyboardState.h" />
+    <ClInclude Include="..\..\..\InputCore\KeyState.h" />
+    <ClInclude Include="..\..\..\InputCore\MouseDevice.h" />
+    <ClInclude Include="..\..\..\InputCore\MouseState.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InputCore\InputCore.vcxproj">
