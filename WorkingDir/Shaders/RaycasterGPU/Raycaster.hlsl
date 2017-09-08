@@ -162,8 +162,11 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 
 	for( int i = 0; i < CAST_STACK_DEPTH; ++i )
 	{
-		rayCtx.NodesStack[ i ].Node = 0;
-		rayCtx.NodesStack[ i ].tMax = 0.0f;
+		StackElement element;
+		element.Node = 0;
+		element.tMax = 0.0f;
+
+		rayCtx.NodesStack[ i ] = element;
 	}
 }
 

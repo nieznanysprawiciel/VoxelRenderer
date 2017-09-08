@@ -7,12 +7,15 @@
 #define ROOT_OFFSET				514
 
 
-ByteAddressBuffer Octree;
+
+ByteAddressBuffer Octree : register( t0 );
 
 
 typedef uint ChildFlag;
 typedef uint OctreeNode;
 typedef uint OctreeLeaf;
+
+#define OCTREE_NODE_SIZE		4
 
 
 
@@ -132,7 +135,8 @@ uint				ChildPtrPack	( OctreeNode node )
 //
 uint				GetNode			( uint idx )
 {
-	return Octree.Load( idx );
+	// Note: We address buffer in bytes and pointers are stored as multiple of OctreeNode size.
+	return Octree.Load( idx * OCTREE_NODE_SIZE );
 }
 
 // ================================ //
@@ -182,7 +186,8 @@ uint				AttributesOffset		( OctreeLeaf leaf )
 //
 VoxelAttributes		GetAttributes			( uint attributeOffset )
 {
-	float4 attribute = Octree.Load4( attributeOffset );
+	// Note: We address buffer in bytes and pointers are stored as multiple of OctreeNode size.
+	float4 attribute = Octree.Load4( attributeOffset * OCTREE_NODE_SIZE );
 	uint colorPacked = asuint( attribute.w );
 	
 	uint4 color;
