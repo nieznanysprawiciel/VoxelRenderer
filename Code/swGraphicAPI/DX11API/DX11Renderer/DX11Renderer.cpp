@@ -130,6 +130,9 @@ void	DX11Renderer::DrawInstanced		( const DrawInstancedCommand& command )
 //
 void	DX11Renderer::SetRenderTarget	( const SetRenderTargetCommand& command )
 {
+	// Prevent from binding texture to both pipeline and render target.
+	ClearTextures();
+
 	SetRenderTarget( command.RenderTargets, command.DepthStencil );
 
 	assert( command.RenderTargets[ 0 ] );
@@ -174,6 +177,9 @@ void	DX11Renderer::SetRenderTarget	( const SetRenderTargetCommand& command )
 //
 void	DX11Renderer::SetRenderTarget	( const SetRenderTargetExCommand& command )
 {
+	// Prevent from binding texture to both pipeline and render target.
+	ClearTextures();
+
 	SetRenderTarget( command.RenderTargets, command.DepthStencil );
 
 	if( command.NumViews > MAX_BOUND_RENDER_TARGETS )
@@ -518,5 +524,20 @@ void	DX11Renderer::SetTextures		( TextureObject* const texturesArray[ MAX_BOUND_
 	device_context->GSSetShaderResources( 0, ENGINE_MAX_TEXTURES, texturesGeom );
 	device_context->HSSetShaderResources( 0, ENGINE_MAX_TEXTURES, texturesEval );
 	device_context->DSSetShaderResources( 0, ENGINE_MAX_TEXTURES, texturesDomain );
+}
+
+// ================================ //
+//
+void	DX11Renderer::ClearTextures()
+{
+	TextureObject* const texturesArray[ MAX_BOUND_RENDER_TARGETS ] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	uint8 shaderTypes[ MAX_BOUND_RENDER_TARGETS ];
+
+	for( int i = 0; i < MAX_BOUND_RENDER_TARGETS; ++i )
+	{
+		shaderTypes[ i ] = 0x1F;
+	}
+
+	SetTextures( texturesArray, shaderTypes );
 }
 
