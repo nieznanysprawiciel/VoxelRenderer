@@ -34,11 +34,14 @@ public:
 
 	/**@brief Set render target.
 	Ignores buffers and sets them to nullptr.*/
-	void					SetRenderTarget				( RenderTargetObject* target,	RasterizerState* rasterizerState, BlendingState* blendingState, DepthStencilState* depthStencilState );
+	void					SetRenderTarget				( RenderTargetObject* target, RasterizerState* rasterizerState, BlendingState* blendingState, DepthStencilState* depthStencilState );
 
 	/**@brief Updates buffer with data.*/
 	template< typename BufferDataType >
 	inline void				UpdateBuffer				( BufferObject* buffer, BufferDataType& data );
+
+	/**@brief Binds buffer.*/
+	void					BindBuffer					( BufferObject* buffer, uint8 slot, uint8 shaderFlag );
 
 	/**@brief Draw without using buffer.*/
 	void					DrawBufferLess				( uint32 numVerticies, PrimitiveTopology topology );
@@ -53,11 +56,14 @@ public:
 
 	/**@brief Set render target.
 	Ignores buffers and sets them to nullptr.*/
-	static void					SetRenderTarget				( IRenderer* renderer, RenderTargetObject* target,	RasterizerState* rasterizerState, BlendingState* blendingState, DepthStencilState* depthStencilState );
+	static void					SetRenderTarget				( IRenderer* renderer, RenderTargetObject* target, RasterizerState* rasterizerState, BlendingState* blendingState, DepthStencilState* depthStencilState );
 
 	/**@brief Updates buffer with data.*/
 	template< typename BufferDataType >
 	static inline void			UpdateBuffer				( IRenderer* renderer, BufferObject* buffer, BufferDataType& data );
+
+	/**@brief Binds buffer.*/
+	static void					BindBuffer					( IRenderer* renderer, BufferObject* buffer, uint8 slot, uint8 shaderFlag );
 
 	/**@brief Draw without using buffer.*/
 	static void					DrawBufferLess				( IRenderer* renderer, uint32 numVerticies, PrimitiveTopology topology );

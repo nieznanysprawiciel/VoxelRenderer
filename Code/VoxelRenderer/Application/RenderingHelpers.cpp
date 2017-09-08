@@ -33,6 +33,13 @@ void					RenderingHelper::SetRenderTarget				( RenderTargetObject* target,
 
 // ================================ //
 //
+void					RenderingHelper::BindBuffer						( BufferObject* buffer, uint8 slot, uint8 shaderFlag )
+{
+	BindBuffer( m_renderer, buffer, slot, shaderFlag );
+}
+
+// ================================ //
+//
 void					RenderingHelper::DrawBufferLess					( uint32 numVerticies, PrimitiveTopology topology )
 {
 	DrawBufferLess( m_renderer, numVerticies, topology );
@@ -74,6 +81,18 @@ void					RenderingHelper::SetRenderTarget				( IRenderer* renderer,
 	setRT.RasterizerState = rasterizerState;
 
 	renderer->SetRenderTarget( setRT );
+}
+
+// ================================ //
+//
+void					RenderingHelper::BindBuffer						( IRenderer* renderer, BufferObject* buffer, uint8 slot, uint8 shaderFlag )
+{
+	BindBufferCommand command;
+	command.BindToShader = shaderFlag;
+	command.Buffer = buffer;
+	command.BufferSlot = slot;
+
+	renderer->BindBuffer( command );
 }
 
 // ================================ //

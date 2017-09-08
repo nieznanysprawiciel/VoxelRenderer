@@ -64,6 +64,8 @@ void				RaycasterGPU::Render			( OctreePtr octree, RenderTargetObject* svoRender
 
 	m_renderer->SetShaderState( shaderState );
 
+	RenderingHelper::BindBuffer( m_renderer, m_cameraBuffer.Ptr(), 0, (uint8)ShaderType::PixelShader );
+
 	RenderingHelper::DrawBufferLess( m_renderer, 3, PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 }
 
