@@ -470,7 +470,7 @@ const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext& raycaste
 {
 	const OctreeNode& node = raycasterContext.Octree->GetNode( raycasterContext.Current );
 
-	assert( node.IsLeafNode );
+	assert( node.IsLeafNode() );
 
 	return Cast< const OctreeLeaf& >( node );
 }
@@ -480,7 +480,7 @@ const OctreeLeaf&		RaycasterCPU::GetResultLeafNode		( RaycasterContext& raycaste
 const VoxelAttributes&	RaycasterCPU::GetLeafAttributes		( const OctreeLeaf& leaf, RaycasterContext& raycasterContext ) const
 {
 	const BlockDescriptor& blockDescriptor = GetBlockDescriptor	( leaf, raycasterContext );
-	uint32 attributeOffset = blockDescriptor.AttributesOffset + leaf.AttributesOffset;
+	uint32 attributeOffset = blockDescriptor.AttributesOffset + leaf.AttributesOffset();
 	
 	return Cast< const VoxelAttributes& >( raycasterContext.Octree->AccessOctree()[ attributeOffset ] );
 }
@@ -496,11 +496,11 @@ const BlockDescriptor&	RaycasterCPU::GetBlockDescriptor	( const OctreeLeaf& leaf
 //
 bool					RaycasterCPU::IsEmpty				( const OctreeNode& node )
 {
-	assert( !node.IsLeafNode );
-	assert( !node.IndirectPtr );
+	assert( !node.IsLeafNode() );
+	assert( !node.IsIndirectPtr() );
 
 	// If child mask is zero then node is empty.
-	return !node.ChildMask;
+	return !node.ChildMask();
 }
 
 // ================================ //
@@ -580,28 +580,28 @@ float					RaycasterCPU::Min					( DirectX::XMFLOAT3& coords )
 //
 bool					RaycasterCPU::ExistsChild			( const OctreeNode* node, ChildFlag childShift )
 {
-	return ( node->ChildMask & ( 0x80 >> childShift ) ) != 0;
+	return ( node->ChildMask() & ( 0x80 >> childShift ) ) != 0;
 }
 
 // ================================ //
 //
 bool					RaycasterCPU::IsLeaf				( const OctreeNode* node )
 {
-	return node->IsLeafNode;
+	return node->IsLeafNode();
 }
 
 // ================================ //
 //
 bool					RaycasterCPU::IsIndirectPointer		( const OctreeNode* node )
 {
-	return node->IndirectPtr;
+	return node->IsIndirectPtr();
 }
 
 // ================================ //
 //
 uint32					RaycasterCPU::GetIndirectPtr		( RaycasterContext& rayCtx, const OctreeNode* node )
 {
-	const vr::OctreeFarPointer& farPointer = Cast< const vr::OctreeFarPointer& >( rayCtx.Octree->GetNode( node->ChildPackPtr ) );
+	const vr::OctreeFarPointer& farPointer = Cast< const vr::OctreeFarPointer& >( rayCtx.Octree->GetNode( node->ChildPackPtr() ) );
 	return farPointer.Offset;
 }
 
@@ -617,10 +617,10 @@ uint32					RaycasterCPU::ComputeChildOffset	( RaycasterContext& rayCtx, const Oc
 	}
 	else
 	{
-		childOffset = rayCtx.Current + node->ChildPackPtr;
+		childOffset = rayCtx.Current + node->ChildPackPtr();
 	}
 
-	childOffset += CountNodesBefore( childShift, node->ChildMask );
+	childOffset += CountNodesBefore( childShift, node->ChildMask() );
 	return childOffset;
 }
 

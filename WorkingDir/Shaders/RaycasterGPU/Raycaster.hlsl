@@ -149,7 +149,9 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 	rayCtx.tMax = min( rayCtx.tMax, 10000.0f );
 	//rayCtx.tCubeMin = rayCtx.tMin;
 
-	rayCtx.Current = ROOT_OFFSET;
+	BlockDescriptor blockDesc = GetBlockDescriptor( 0 );
+
+	rayCtx.Current = blockDesc.RootNodeOffset;
 	rayCtx.Scale = CAST_STACK_DEPTH - 1;
 	rayCtx.ScaleExp = 0.5f;
 	rayCtx.ChildIdx = 0;
@@ -378,7 +380,7 @@ uint		ComputeChildOffset		( RaycasterContext rayCtx, OctreeNode node, ChildFlag 
 	}
 	else
 	{
-		childOffset = rayCtx.Current + ChildPtrPack( node );
+		childOffset = rayCtx.Current + ChildPackPtr( node );
 	}
 
 	childOffset += CountNodesBefore( childShift, ChildMask( node ) );

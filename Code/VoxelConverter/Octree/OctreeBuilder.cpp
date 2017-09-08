@@ -142,12 +142,12 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 	if( IsLeafNode( srcNode ) )
 	{
 		vr::OctreeLeaf& leaf = Cast< vr::OctreeLeaf& >( dstNode );
-		leaf.IsLeafNode = true;
-		leaf.AttributesOffset = ComputeAttribOffset( srcNode.DataAddress ) - m_attributesOffset;
+		leaf.SetIsLeafNode( true );
+		leaf.SetAttributeOffset( ComputeAttribOffset( srcNode.DataAddress ) - (uint32)m_attributesOffset );
 	}
 	else
 	{
-		dstNode.IsLeafNode = false;
+		dstNode.SetIsLeafNode( false );
 		SetChildMask( srcNode, dstNode );
 		
 		Size absolutOffset = AllocateNodes( numChildren );
@@ -161,17 +161,17 @@ void				OctreeBuilder::BuildNodeHierarchy	( ooc::OctreeNode& srcNode, Size srcOf
 			OctreeFarPointer& farPointer = AccessFarPtr( farPtrOffset );
 			farPointer.Offset = (uint32)absolutOffset;
 
-			dstNode.IndirectPtr = true;
-			dstNode.ChildPackPtr = farPtrOffset;
+			dstNode.SetIsIndirectPtr( true );
+			dstNode.SetChildPackPtr( farPtrOffset );
 		}
 		else
 		{
-			dstNode.IndirectPtr = false;
-			dstNode.ChildPackPtr = nodesOffset;
+			dstNode.SetIsIndirectPtr( false );
+			dstNode.SetChildPackPtr( (uint32)nodesOffset );
 		}
 
 
-		const uint8 childMask = dstNode.ChildMask;
+		const uint8 childMask = dstNode.ChildMask();
 		const uint8 one = 1 << 7;
 		uint8 childShift = 7;
 
@@ -233,7 +233,7 @@ uint8				OctreeBuilder::InverseCoords		( uint8 childShift )
 //
 void				OctreeBuilder::SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode& dstNode )
 {
-	dstNode.ChildMask = 0;
+	dstNode.SetChildMask( 0 );
 	uint8 one = 1 << 7;	// Set highest bit to 1.
 
 	for( uint8 i = 0; i < 8; ++i )
@@ -242,7 +242,7 @@ void				OctreeBuilder::SetChildMask			( ooc::OctreeNode& srcNode, vr::OctreeNode
 		{
 			// We use oposite coordinates system in raycaster.
 			uint8 childShift = InverseCoords( i );
-			dstNode.ChildMask |= one >> childShift;
+			dstNode.SetChildMask( dstNode.ChildMask() | ( one >> childShift ) );
 		}
 	}
 }

@@ -4,7 +4,6 @@
 
 
 #define CAST_STACK_DEPTH        23
-#define ROOT_OFFSET				514
 
 
 
@@ -125,10 +124,10 @@ ChildFlag			ChildMask		( OctreeNode node )
 
 // ================================ //
 //
-uint				ChildPtrPack	( OctreeNode node )
+uint				ChildPackPtr	( OctreeNode node )
 {
 	const uint mask = 0x3FFFFF00;
-	return node & mask;
+	return ( node & mask ) >> 8;
 }
 
 // ================================ //
@@ -143,7 +142,7 @@ uint				GetNode			( uint idx )
 //
 uint				GetIndirectPtr	( RaycasterContext rayCtx, OctreeNode node )
 {
-	return GetNode( ChildPtrPack( node ) );
+	return GetNode( ChildPackPtr( node ) );
 }
 
 // ================================ //
@@ -179,7 +178,7 @@ BlockDescriptor		GetBlockDescriptor		( OctreeLeaf leaf )
 //
 uint				AttributesOffset		( OctreeLeaf leaf )
 {
-	return leaf & ( 0x1 << 31 );
+	return leaf & 0x7FFFFFFF;
 }
 
 // ================================ //
