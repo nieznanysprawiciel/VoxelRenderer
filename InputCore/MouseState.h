@@ -103,6 +103,9 @@ inline void			MouseState::RemoveEvents	()
 {
 	for( int i = 0; i < MOUSE_STATE_MAX_NUM_BUTTONS; ++i )
 		m_buttons[ i ].HoldState();
+
+	m_axes[ Mouse::PhysicalAxes::X_AXIS ] = 0.0f;
+	m_axes[ Mouse::PhysicalAxes::Y_AXIS ] = 0.0f;
 }
 
 // ================================ //

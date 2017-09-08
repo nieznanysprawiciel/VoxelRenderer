@@ -4,7 +4,7 @@
     <Filter Include="WinApiInputProxy">
       <UniqueIdentifier>{9b3f34d2-a4b5-4816-ac08-1e3d731c5918}</UniqueIdentifier>
     </Filter>
-    <Filter Include="InputLibrary">
+    <Filter Include="InputCore">
       <UniqueIdentifier>{f512c45c-202f-4876-8f4b-88b4b6fbc2f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -12,38 +12,44 @@
     <ClInclude Include="..\..\..\InputWinApi\WinApiInputProxy.h">
       <Filter>WinApiInputProxy</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Factory.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\Device.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\IInput.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\EventQueue.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\InputDeviceInfo.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\Factory.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\JoystickState.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\IInput.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\KeyboardState.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\InputDeviceEvent.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\KeyState.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\InputDeviceInfo.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\MouseState.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\JoystickDevice.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\InputDeviceEvent.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\JoystickState.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\JoystickDevice.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\KeyboardDevice.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\KeyboardDevice.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\KeyboardState.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\MouseDevice.h">
-      <Filter>InputLibrary</Filter>
+    <ClInclude Include="..\..\..\InputCore\KeyState.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\MouseDevice.h">
+      <Filter>InputCore</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\InputCore\MouseState.h">
+      <Filter>InputCore</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

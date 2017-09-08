@@ -350,19 +350,39 @@ void			WinApiInputProxy::HandleEvent			( HWND hWnd, UINT message, WPARAM wParam,
 			break;
 		}
 		case WM_KEYDOWN:
-		{
-			if( wParam <= VK_XBUTTON2 )
-				MouseButtonChange( (int)wParam, true );
 			KeyboardChange( (int)wParam, true );
-
+			break;
+		case WM_KEYUP:
+			KeyboardChange( (int)wParam, false );
+			break;
+		case WM_RBUTTONDOWN:
+			MouseButtonChange( (int)VK_RBUTTON, true );
+			break;
+		case WM_LBUTTONDOWN:
+			MouseButtonChange( (int)VK_LBUTTON, true );
+			break;
+		case WM_MBUTTONDOWN:
+			MouseButtonChange( (int)VK_MBUTTON, true );
+			break;
+		case WM_XBUTTONDOWN:
+		{
+			auto button = GET_XBUTTON_WPARAM( wParam );
+			MouseButtonChange( (int)( VK_MBUTTON + button ), true );	/// GET_XBUTTON_WPARAM returns 1 on XButton1 and 2 on XButton2.
 			break;
 		}
-		case WM_KEYUP:
+		case WM_RBUTTONUP:
+			MouseButtonChange( (int)VK_RBUTTON, false );
+			break;
+		case WM_LBUTTONUP:
+			MouseButtonChange( (int)VK_LBUTTON, false );
+			break;
+		case WM_MBUTTONUP:
+			MouseButtonChange( (int)VK_MBUTTON, false );
+			break;
+		case WM_XBUTTONUP:
 		{
-			if( wParam <= VK_XBUTTON2 )
-				MouseButtonChange( (int)wParam, false );
-			KeyboardChange( (int)wParam, false );
-
+			auto button = GET_XBUTTON_WPARAM( wParam );
+			MouseButtonChange( (int)( VK_MBUTTON + button ), false );	/// GET_XBUTTON_WPARAM returns 1 on XButton1 and 2 on XButton2.
 			break;
 		}
 		case WM_MOUSEWHEEL:
