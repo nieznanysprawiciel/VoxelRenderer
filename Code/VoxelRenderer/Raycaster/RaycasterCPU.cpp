@@ -70,8 +70,8 @@ RaycasterCPU::RaycasterCPU()
 	,	m_renderer( nullptr )
 	,	m_resourceManager( nullptr )
 	,	m_end( false )
-	,	m_raycastEndBarrier( std::thread::hardware_concurrency() )
-	,	m_raycastLoopBarrier( std::thread::hardware_concurrency() )
+	,	m_raycastEndBarrier( GetNumThreads() )
+	,	m_raycastLoopBarrier( GetNumThreads() )
 {}
 
 // ================================ //
