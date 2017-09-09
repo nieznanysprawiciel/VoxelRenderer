@@ -11,7 +11,8 @@
 #include "BlendingState.h"
 #include "DepthStencilState.h"
 
-#include "swCommonLib/Common/MemoryLeaks.h"
+#include "swCommonLib/Common/Converters.h"
+#include "swCommonLib/Common/ObjectDeleter.h"
 
 
 
@@ -391,7 +392,28 @@ std::string		RenderTargetObject::GetResourceName() const
 BufferObject::BufferObject( unsigned int elementSize, unsigned int elementCount )
 	:	m_elementSize( elementSize ),
 		m_elementCount( elementCount )
+{}
+
+// ================================ //
+//
+TextureObject*		BufferObject::CreateRawShaderView		( const filesystem::Path& name, ResourceManager* resourceManager ) const
 {
+	TextureObject* rawViewTexture = this->CreateRawShaderViewImpl();
+	
+	if( rawViewTexture )
+	{
+		auto result = resourceManager->AddTexture( rawViewTexture, Convert::FromString< std::wstring >( name.String(), L"" ) );
+		
+		if( result != rawViewTexture )
+		{
+			assert( !"Texture already existed. We should delete rawViewTexture now." );
+			return nullptr;
+		}
+
+		return rawViewTexture;
+	}
+
+	return nullptr;
 }
 
 

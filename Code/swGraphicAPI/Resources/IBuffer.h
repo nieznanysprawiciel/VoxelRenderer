@@ -85,7 +85,12 @@ public:
 
 	virtual MemoryChunk			CopyData			() = 0;				///< Kopiuje dane z bufora i umieszcza je w zwracanym MemoryChunku.
 	virtual const BufferInfo&	GetDescriptor		() const = 0;		///< Returns buffer descriptor.
-	virtual TextureObject*		CreateRawShaderView	() const = 0;		///< Returns Texture object which can be bound to pipeline as raw buffer shader resource.
-																		///< Enabled only if BufferInfo::AllowRaw was specified.
+
+protected:
+
+	///< Returns Texture object which can be bound to pipeline as raw buffer shader resource.
+	///< Enabled only if BufferInfo::AllowRaw was specified.
+	virtual TextureObject*		CreateRawShaderViewImpl	() const = 0;
+																			
 };
 

@@ -112,7 +112,7 @@ void				RaycasterGPU::UpdateOctree		( OctreePtr octree )
 		// We should release old octree here.
 
 		m_octreeBuffer = m_resourceManager->CreateTextureBuffer( L"Octree", bufferDesc );
-		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView();
+		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView( L"RawOctreeView", m_resourceManager );
 	}
 }
 

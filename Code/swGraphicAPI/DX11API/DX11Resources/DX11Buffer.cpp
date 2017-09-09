@@ -138,7 +138,7 @@ MemoryChunk		DX11Buffer::CopyData()
 
 // ================================ //
 //
-TextureObject*	DX11Buffer::CreateRawShaderView		() const
+TextureObject*	DX11Buffer::CreateRawShaderViewImpl		() const
 {
 	if( m_descriptor.AllowRaw )
 	{

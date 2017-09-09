@@ -112,11 +112,24 @@ Najlepiej, øeby by≥y one tworzone przez ResourceManager, ale wtedy trzeba wymyúl
 @return Zwraca wskaünik na dodany renderTarget.*/
 RenderTargetObject* ResourceManager::AddRenderTarget( RenderTargetObject* renderTarget, const std::wstring& name )
 {
-	RenderTargetObject* newRenderTarget = m_renderTarget.get( name );
-	if ( !newRenderTarget )
-		m_renderTarget.UnsafeAdd( name, renderTarget );	// Dodaliúmy materia≥
+	RenderTargetObject* existingRenderTarget = m_renderTarget.get( name );
+	if ( !existingRenderTarget )
+		m_renderTarget.UnsafeAdd( name, renderTarget );
 
-	return newRenderTarget;
+	return existingRenderTarget ? existingRenderTarget : renderTarget;
+}
+
+/**@brief Adds texture to ResourceManager.
+If texture under this name already existed, texture want be added and new texture will be returned in result.
+
+@todo Consider making this function protected.*/
+TextureObject*		ResourceManager::AddTexture		( TextureObject* texture, const std::wstring& name )
+{
+	TextureObject* existingTex = m_texture.get( name );
+	if ( !existingTex )
+		m_texture.UnsafeAdd( name, texture );
+
+	return existingTex ? existingTex : texture;
 }
 
 /**@brief Dodaje vertex shader do ResourceManagera. Jeøeli obiekt juø istnia≥, to nie jest tworzony nowy.

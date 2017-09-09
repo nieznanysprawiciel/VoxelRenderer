@@ -109,7 +109,7 @@ public:
 	///@}
 
 	RenderTargetObject*				AddRenderTarget				( RenderTargetObject* renderTarget, const std::wstring& name );
-
+	TextureObject*					AddTexture					( TextureObject* texture, const std::wstring& name );
 
 	///@name Listing resources
 	///@{

@@ -47,6 +47,7 @@ implementuje konkretne API graficzne.
 Poniewa¿ zasoby mog¹ byæ wspó³dzielone przez wiele obiektów w silniku, istnieje mechanizm zliczania
 odwo³añ do obiektów implementowany przez klasê @ref ResourceObject.*/
 
+class ResourceManager;
 class AssetsManager;
 struct ModelPart;
 class BufferObject;
@@ -392,18 +393,24 @@ Bufor mo¿e byæ zarówno buforem wierzcho³ków, indeksów jak i sta³ych.
 class BufferObject : public IBuffer
 {
 	RTTR_ENABLE( IBuffer )
-	friend ObjectDeleter<BufferObject>;
+	friend ObjectDeleter< BufferObject >;
+	friend ObjectDeleter< TextureObject >;
 protected:
 	unsigned int		m_elementSize;			///<Rozmiar elementu.
 	unsigned int		m_elementCount;			///<Liczba elementów.
 
 	~BufferObject() = default;
 public:
+
 	BufferObject( unsigned int elementSize, unsigned int elementCount );
 
 	inline unsigned int GetStride()				{ return m_elementSize; }		///<Zwraca rozmiar pojedynczego elementu w buforze.
 	inline unsigned int	GetElementSize()		{ return m_elementSize; }		///<Zwraca rozmiar pojedynczego elementu w buforze.
 	inline unsigned int GetElementCount()		{ return m_elementCount; }		///<Zwraca liczbê elementów w buforze.
+
+	/**@brief Creates raw shader view texture.
+	New texture will be added to ResourceManager.*/
+	virtual TextureObject*		CreateRawShaderView		( const filesystem::Path& name, ResourceManager* resourceManager ) const;
 
 	virtual std::string	GetResourceName	() const override { return GetDescriptor().GetName(); }
 };

@@ -176,8 +176,17 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 //
 RaycasterResult		CastRay				( RaycasterContext rayCtx )
 {
+	// Allows to debug shader if algorithm hangs.
+	const uint maxIters = 130;
+	uint iters = 0;
+
 	while( rayCtx.Scale < CAST_STACK_DEPTH )
 	{
+		// Allows to debug shader if algorithm hangs.
+		if( iters > maxIters )
+			break;
+		iters++;
+
 		if( !rayCtx.ChildDescriptor )
 			rayCtx.ChildDescriptor = GetNode( rayCtx.Current );
 
