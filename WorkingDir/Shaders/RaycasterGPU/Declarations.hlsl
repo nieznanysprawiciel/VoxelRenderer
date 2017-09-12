@@ -168,10 +168,10 @@ VoxelAttributes		GetAttributes			( uint attributeOffset )
 	uint colorPacked = asuint( attribute.w );
 	
 	uint4 color;
-	color.x = ( colorPacked & 0xFF000000 ) >> 24;
-	color.y = ( colorPacked & 0xFF0000 ) >> 16;
-	color.z = ( colorPacked & 0xFF00 ) >> 8;
-	color.w = ( colorPacked & 0xFF );
+	color.w = ( colorPacked & 0xFF000000 ) >> 24;
+	color.z = ( colorPacked & 0xFF0000 ) >> 16;
+	color.y = ( colorPacked & 0xFF00 ) >> 8;
+	color.x = ( colorPacked & 0xFF );
 
 
 	VoxelAttributes attributes;

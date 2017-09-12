@@ -14,7 +14,7 @@ struct StackOperation
 
 
 
-void		InitRaycasting			( float3 position, float3 direction, out RaycasterContext rayCtx );
+void		InitRaycasting			( float3 position, float3 direction, inout RaycasterContext rayCtx );
 
 RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput );
 RaycasterResult		CastRay			( RaycasterContext rayCtx );
@@ -119,7 +119,7 @@ int					HighestBitPos		( int diffs )
 
 // ================================ //
 //
-void				InitRaycasting		( float3 position, float3 direction, out RaycasterContext rayCtx )
+void				InitRaycasting		( float3 position, float3 direction, inout RaycasterContext rayCtx )
 {
 	const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
 
@@ -181,21 +181,12 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 //
 RaycasterResult		CastRay				( RaycasterContext rayCtx )
 {
-	// Allows to debug shader if algorithm hangs.
-	const uint maxIters = 130;
-	uint iters = 0;
-
 	// Note: In CPU version stack is part of RaycasterContext. It's not posible in shader because array can't be passed to functions.
 	// Thats why in this code there're some horible things.
 	StackElement NodesStack[ CAST_STACK_DEPTH ];
 
 	while( rayCtx.Scale < CAST_STACK_DEPTH )
 	{
-		// Allows to debug shader if algorithm hangs.
-		if( iters > maxIters )
-			break;
-		iters++;
-
 		if( rayCtx.ChildDescriptor == 0 )
 			rayCtx.ChildDescriptor = GetNode( rayCtx.Current );
 
