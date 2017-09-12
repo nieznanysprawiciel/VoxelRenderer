@@ -2,15 +2,28 @@
 #include "Camera.hlsl"
 
 
+
+// ================================ //
+//
+struct StackOperation
+{
+	StackElement		Element;
+	uint				Idx;
+};
+
+
+
+
 void		InitRaycasting			( float3 position, float3 direction, out RaycasterContext rayCtx );
 
 RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput );
 RaycasterResult		CastRay			( RaycasterContext rayCtx );
 
 
-ChildFlag	AdvanceStep				( RaycasterContext rayCtx, float3 corner, float tLeave );
-void		PopStep					( RaycasterContext rayCtx, ChildFlag childIdxChange );
-void		PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift );
+ChildFlag			AdvanceStep		( inout RaycasterContext rayCtx, float3 corner, float tLeave );
+uint				PrePopStep		( inout RaycasterContext rayCtx, ChildFlag childIdxChange );
+void				PostPopStep		( inout RaycasterContext rayCtx, StackElement stackElement );
+StackOperation		PushStep		( inout RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift );
 
 uint		FindNewHierarchyLevel	( inout float3 position, float scaleExp, ChildFlag childIdxChange );
 uint		ComputeChildOffset		( RaycasterContext rayCtx, OctreeNode node, ChildFlag childShift );
@@ -83,14 +96,15 @@ bool				ExistsChild			( OctreeNode node, ChildFlag childShift )
 //
 bool				IsLeaf				( OctreeNode node )
 {
-	return node & ( 0x1 << 31 );
+	uint mask = ( 0x1 << 31 );
+	return ( node & mask ) != 0;
 }
 
 // ================================ //
 //
 bool				IsIndirectPointer	( OctreeNode node )
 {
-	return node & ( 0x1 << 30 );
+	return ( node & ( 0x1 << 30 ) ) != 0;
 }
 
 // ================================ //
@@ -161,15 +175,6 @@ void				InitRaycasting		( float3 position, float3 direction, out RaycasterContex
 	if( ParamLineX( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 1, rayCtx.Position.x = 1.5f;
 	if( ParamLineY( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 2, rayCtx.Position.y = 1.5f;
 	if( ParamLineZ( 1.5f, rayCtx ) > rayCtx.tMin ) rayCtx.ChildIdx ^= 4, rayCtx.Position.z = 1.5f;
-
-	for( int i = 0; i < CAST_STACK_DEPTH; ++i )
-	{
-		StackElement element;
-		element.Node = 0;
-		element.tMax = 0.0f;
-
-		rayCtx.NodesStack[ i ] = element;
-	}
 }
 
 // ================================ //
@@ -180,6 +185,10 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 	const uint maxIters = 130;
 	uint iters = 0;
 
+	// Note: In CPU version stack is part of RaycasterContext. It's not posible in shader because array can't be passed to functions.
+	// Thats why in this code there're some horible things.
+	StackElement NodesStack[ CAST_STACK_DEPTH ];
+
 	while( rayCtx.Scale < CAST_STACK_DEPTH )
 	{
 		// Allows to debug shader if algorithm hangs.
@@ -187,7 +196,7 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 			break;
 		iters++;
 
-		if( !rayCtx.ChildDescriptor )
+		if( rayCtx.ChildDescriptor == 0 )
 			rayCtx.ChildDescriptor = GetNode( rayCtx.Current );
 
 		// Terminate.
@@ -206,7 +215,9 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 
 			if( rayCtx.tMin <= tVoxelMax )
 			{
-				PushStep( rayCtx, corner, tVoxelMax, childShift );
+				StackOperation op = PushStep( rayCtx, corner, tVoxelMax, childShift );
+				
+				NodesStack[ op.Idx ] = op.Element;
 				continue;
 			}
 		}
@@ -214,7 +225,10 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 		ChildFlag childIdxChange = AdvanceStep( rayCtx, corner, tLeave );
 
 		if( IsRayOutside( rayCtx.ChildIdx, childIdxChange ) )
-			PopStep( rayCtx, childIdxChange );
+		{
+			uint idx = PrePopStep( rayCtx, childIdxChange );
+			PostPopStep( rayCtx, NodesStack[ idx ] );
+		}
 	}
 
 	if( rayCtx.Scale >= CAST_STACK_DEPTH )
@@ -233,7 +247,7 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 
 // ================================ //
 //
-ChildFlag		AdvanceStep			( RaycasterContext rayCtx, float3 corner, float tLeave )
+ChildFlag		AdvanceStep			( inout RaycasterContext rayCtx, float3 corner, float tLeave )
 {
 	// ADVANCE
 	// Step along the ray.
@@ -254,7 +268,7 @@ ChildFlag		AdvanceStep			( RaycasterContext rayCtx, float3 corner, float tLeave 
 
 // ================================ //
 //
-void			PopStep				( RaycasterContext rayCtx, ChildFlag childIdxChange )
+uint			PrePopStep			( inout RaycasterContext rayCtx, ChildFlag childIdxChange )
 {
 	// POP
 	// Find the highest differing bit between the two positions.
@@ -262,9 +276,15 @@ void			PopStep				( RaycasterContext rayCtx, ChildFlag childIdxChange )
 	rayCtx.Scale = FindNewHierarchyLevel( rayCtx.Position, rayCtx.ScaleExp, childIdxChange );
 	rayCtx.ScaleExp = asfloat( ( rayCtx.Scale - CAST_STACK_DEPTH + 127 ) << 23 ); // exp2f(scale - s_max)
 
-	// Restore parent voxel from the stack.
+	return rayCtx.Scale;
+}
 
-	StackElement stackElement = ReadStack( rayCtx, rayCtx.Scale );
+
+// ================================ //
+//
+void			PostPopStep			( inout RaycasterContext rayCtx, StackElement stackElement )
+{
+	// Restore parent voxel from the stack.
 	rayCtx.Current = stackElement.Node;
 	rayCtx.tMax = stackElement.tMax;
 				
@@ -285,14 +305,19 @@ void			PopStep				( RaycasterContext rayCtx, ChildFlag childIdxChange )
 
 // ================================ //
 //
-void			PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift )
+StackOperation		PushStep				( inout RaycasterContext rayCtx, float3 corner, float tVoxelMax, ChildFlag childShift )
 {
 	float halfVoxel = rayCtx.ScaleExp * 0.5f;				// Half of current node cube dimmension.
 
 	// This line computes intersection with center of current voxel. Write full equation to see why this works.
 	float3 tCenter = ParamLine( float3( halfVoxel, halfVoxel, halfVoxel ), rayCtx.tCoeff, -corner );
 
-	PushOnStack( rayCtx, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
+	//PushOnStack( rayCtx.NodesStack, rayCtx.Scale, rayCtx.Current, rayCtx.tMax );
+	
+	StackOperation op;
+	op.Idx = rayCtx.Scale;
+	op.Element.tMax = rayCtx.tMax;
+	op.Element.Node = rayCtx.Current;
 
 	rayCtx.Current = ComputeChildOffset( rayCtx, rayCtx.ChildDescriptor, childShift );
 
@@ -310,6 +335,8 @@ void			PushStep				( RaycasterContext rayCtx, float3 corner, float tVoxelMax, Ch
 
 	rayCtx.tMax = tVoxelMax;
 	rayCtx.ChildDescriptor = 0;
+
+	return op;
 }
 
 //====================================================================================//

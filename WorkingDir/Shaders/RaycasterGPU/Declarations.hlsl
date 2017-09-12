@@ -64,8 +64,6 @@ struct RaycasterContext
 	
 	int								Scale;
 	float							ScaleExp;
-
-	StackElement					NodesStack[ CAST_STACK_DEPTH ];		///< Absolut offsets from beginning of array.
 };
 
 
@@ -94,26 +92,6 @@ struct RaycasterResult
 	float			Depth;
 	uint			VoxelIdx;
 };
-
-
-// ================================ //
-//
-void				PushOnStack				( RaycasterContext rayCtx, uint idx, uint nodeIdx, float tMax )
-{
-	StackElement element;
-	element.Node = nodeIdx;
-	element.tMax = tMax;
-
-	rayCtx.NodesStack[ idx ] = element;
-}
-
-// ================================ //
-//
-StackElement		ReadStack				( RaycasterContext rayCtx, uint idx )
-{
-	return rayCtx.NodesStack[ idx ];
-}
-
 
 // ================================ //
 //
@@ -150,7 +128,7 @@ uint				GetIndirectPtr	( RaycasterContext rayCtx, OctreeNode node )
 bool				IsEmpty			( OctreeNode node )
 {
 	// If child mask is zero then node is empty.
-	return !ChildMask( node );
+	return ChildMask( node ) == 0;
 }
 
 // ================================ //
