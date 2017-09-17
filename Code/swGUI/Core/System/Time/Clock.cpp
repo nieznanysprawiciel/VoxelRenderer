@@ -99,7 +99,7 @@ Ticks						Clock::TimePoint		() const
 //
 TimeType					Clock::ComputeTimeFromStart		( Ticks ticks ) const
 {
-	auto divider = std::chrono::high_resolution_clock::duration::period::num;
+	auto divider = std::chrono::high_resolution_clock::duration::period::den;
 	return TimeType( ticks - m_startTime ) / divider;
 }
 
