@@ -21,7 +21,7 @@
   
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SourceInclude);$(SourceInclude)swCommonLib/Reflection/src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SourceInclude);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 	  <PreprocessorDefinitions>RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

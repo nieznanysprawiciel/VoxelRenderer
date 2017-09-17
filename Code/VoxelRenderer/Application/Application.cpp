@@ -26,33 +26,35 @@ Application::Application	( int argc, char** argv, sw::gui::INativeGUI* gui )
 
 If you need specific gui initialization in your application override this function.
 You can set different GraphicApi or input api.*/
-void		Application::Initialize()
+bool		Application::Initialize			()
 {
 	m_config = MakeUPtr< Config >( "StartConfig.config" );
-	DefaultInit( m_config->ScreenWidth(), m_config->ScreenHeight(), "Voxel skeletal animation" );
+	return DefaultInit( m_config->ScreenWidth(), m_config->ScreenHeight(), "Voxel skeletal animation" );
 }
 
 /**@brief Function is called when GUI initialization is completed.
 
 In this function you should initialize your application logic.
 */
-void		Application::OnInitialized()
+bool		Application::OnInitialized		()
 {
 	InitResources();
 	InitCamera();
 	InitRaycaster();
 	InitOctree();
+
+	return true;
 }
 
 /**@brief Function invoked when application is going to close itself.*/
-void		Application::OnClosing()
+void		Application::OnClosing			()
 {}
 
 /**@brief */
-void		Application::OnIdle()
+void		Application::OnIdle				( const sw::gui::FrameTime& frameTime )
 {
-	Update();
-	Render();
+	Update( frameTime );
+	Render( frameTime );
 }
 
 
@@ -62,16 +64,16 @@ void		Application::OnIdle()
 
 // ================================ //
 //
-void		Application::Update()
+void		Application::Update				( const sw::gui::FrameTime& frameTime )
 {
-	m_camera->GetController()->ControlObjectPre( m_camera, nullptr );
-	m_camera->GetController()->ControlObjectPost( m_camera, nullptr );
+	m_camera->GetController()->ControlObjectPre( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
+	m_camera->GetController()->ControlObjectPost( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
 }
 
 
 // ================================ //
 //
-void		Application::Render()
+void		Application::Render				( const sw::gui::FrameTime& frameTime )
 {
 	m_timeManager.onStartRenderFrame();
 	double time = m_timeManager.QueryTimeFromBegin();

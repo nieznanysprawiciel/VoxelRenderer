@@ -56,18 +56,20 @@ void		SpectatorCameraController::InitDefaultSpeed()
 
 
 /*Funkcja g³ówna odpowiedzialna za sterowanie ruchem obiektu.*/
-void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IControllersState* globalState )
+void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IControllersState* globalState, TimeType time, TimeDiff elapsed )
 {
+	float elpasedTime = (float)elapsed;
+
 	// Turn left and right
 	if( m_keyboard[ Keyboard::PhysicalKeys::KEY_Q ].IsPressed() &&
 		!m_keyboard[ Keyboard::PhysicalKeys::KEY_E ].IsPressed() )
 	{
-		m_horizontalAngle += m_buttonRotSpeed;
+		m_horizontalAngle += m_buttonRotSpeed * elpasedTime;
 	}
 	else if( m_keyboard[ Keyboard::PhysicalKeys::KEY_E ].IsPressed() &&
 		!m_keyboard[ Keyboard::PhysicalKeys::KEY_Q ].IsPressed() )
 	{
-		m_horizontalAngle += -m_buttonRotSpeed;
+		m_horizontalAngle += -m_buttonRotSpeed * elpasedTime;
 	}
 
 
@@ -80,47 +82,47 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	if( m_keyboard[ Keyboard::PhysicalKeys::KEY_W ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_S ] )
 	{
 		forward = ForwardVector( actor );
-		forward *= m_moveSpeed;
+		forward *= m_moveSpeed * elpasedTime;
 	}
 	else if( m_keyboard[ Keyboard::PhysicalKeys::KEY_S ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_W ] )
 	{
 		forward = BackwardVector( actor );
-		forward *= m_moveSpeed;
+		forward *= m_moveSpeed * elpasedTime;
 	}
 
 	if( m_mouse.GetAxesState()[ Mouse::PhysicalAxes::WHEEL ] != 0.0f )
 	{
-		forward += ForwardVector( actor ) * m_zoomSpeed * m_mouse.GetAxesState()[ Mouse::PhysicalAxes::WHEEL ];
+		forward += ForwardVector( actor ) * m_zoomSpeed * elpasedTime * m_mouse.GetAxesState()[ Mouse::PhysicalAxes::WHEEL ];
 	}
 
 	// Left and right movement
 	if( m_keyboard[ Keyboard::PhysicalKeys::KEY_A ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_D ] )
 	{
 		left = LeftVector( actor );
-		left *= m_moveSpeed;
+		left *= m_moveSpeed * elpasedTime;
 	}
 	else if( m_keyboard[ Keyboard::PhysicalKeys::KEY_D ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_A ] )
 	{
 		left = RightVector( actor );
-		left *= m_moveSpeed;
+		left *= m_moveSpeed * elpasedTime;
 	}
 
 	// Up and Down movement
 	if( m_keyboard[ Keyboard::PhysicalKeys::KEY_R ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_F ] )
-		up = XMVectorSet( 0.0, 1.0, 0.0, 0.0 ) * m_moveSpeed;
+		up = XMVectorSet( 0.0, 1.0, 0.0, 0.0 ) * m_moveSpeed * elpasedTime;
 	else if( m_keyboard[ Keyboard::PhysicalKeys::KEY_F ] && !m_keyboard[ Keyboard::PhysicalKeys::KEY_R ] )
-		up = XMVectorSet( 0.0, -1.0, 0.0, 0.0 ) * m_moveSpeed;
+		up = XMVectorSet( 0.0, -1.0, 0.0, 0.0 ) * m_moveSpeed * elpasedTime;
 
 
 	if( m_mouse.RightButton()->IsPressed() )
 	{
 		float yAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::Y_AXIS ];
 		if( yAxis != 0.0f )
-			m_verticalAngle += -yAxis * m_axisRotSpeed;
+			m_verticalAngle += -yAxis * m_axisRotSpeed * elpasedTime;
 
 		float xAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::X_AXIS ];
 		if( xAxis != 0.0f )
-			m_horizontalAngle += -xAxis * m_axisRotSpeed;
+			m_horizontalAngle += -xAxis * m_axisRotSpeed * elpasedTime;
 	}
 
 	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 1.0, 0.0, 0.0, 0.0 ), m_verticalAngle );
@@ -143,7 +145,7 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 /**@brief Funkcja nic nie robi.
 
 W trybie debug funkcja zatrzymuje siê na assercie.*/
-void SpectatorCameraController::ControlObjectPost( DynamicActor* actor, IControllersState* globalState )
+void SpectatorCameraController::ControlObjectPost( DynamicActor* actor, IControllersState* globalState, TimeType time, TimeDiff elapsed )
 {
 	//assert( !"This is only pre controlled class." );
 }

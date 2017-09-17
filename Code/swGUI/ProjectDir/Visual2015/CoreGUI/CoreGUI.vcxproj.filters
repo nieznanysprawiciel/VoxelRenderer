@@ -37,6 +37,12 @@
     <Filter Include="Core\Media\Brushes">
       <UniqueIdentifier>{021863e9-327c-4478-b54e-6aaa913b72b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\System\Config">
+      <UniqueIdentifier>{07be1fa3-543d-4352-99fc-38fd7cf2dcbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\System\Time">
+      <UniqueIdentifier>{b0d68f75-7f36-478c-ac2e-b6acb4f286b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\targetver.h">
@@ -162,6 +168,15 @@
     <ClInclude Include="..\..\..\Core\System\Events\Input\MouseMoveEventArgs.h">
       <Filter>Core\System\Events\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Config\GUISystemConfig.h">
+      <Filter>Core\System\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Time\Clock.h">
+      <Filter>Core\System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Core\System\Time\FrameTime.h">
+      <Filter>Core\System\Time</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Core\Controls\IControl.cpp">
@@ -229,6 +244,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Core\System\HostLogic.cpp">
       <Filter>Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Core\System\Time\Clock.cpp">
+      <Filter>Core\System\Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

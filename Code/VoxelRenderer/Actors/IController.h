@@ -5,8 +5,13 @@
 
 @brief Klasa bazowa dla kontrolerów.*/
 
-#include "swCommonLib/Common/EngineObject.h"
 
+#include "swCommonLib/Common/EngineObject.h"
+#include "swGUI/Core/System/Time/FrameTime.h"
+
+
+typedef sw::gui::TimeType TimeType;
+typedef sw::gui::TimeDiff TimeDiff;
 
 
 
@@ -20,8 +25,8 @@ class IController : public EngineObject
 public:
 	virtual ~IController() = default;
 
-	virtual void		ControlObjectPre		( DynamicActor* actor, IControllersState* globalState ) = 0;	///< Funkcja wywo³ywana przed 
-	virtual void		ControlObjectPost		( DynamicActor* actor, IControllersState* globalState ) = 0;
+	virtual void		ControlObjectPre		( DynamicActor* actor, IControllersState* globalState, TimeType time, TimeDiff elapsed ) = 0;	///< Funkcja wywo³ywana przed 
+	virtual void		ControlObjectPost		( DynamicActor* actor, IControllersState* globalState, TimeType time, TimeDiff elapsed ) = 0;
 
 	virtual void		Initialize				( DynamicActor* actor ) = 0;
 };

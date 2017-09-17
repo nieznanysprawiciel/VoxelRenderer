@@ -29,14 +29,16 @@ TestFramework::TestFramework		( int argc, char** argv )
 
 // ================================ //
 //
-void			TestFramework::Initialize()
+bool			TestFramework::Initialize()
 {
 	m_resourceManager = new ResourceManager();
 	
-	DefaultInitGraphicAPI();
+	DefaultInitGraphicAPI( true, true );
 	InitTesterNativeGUI();
 	InitTesterDebugInput();
 	DefaultInitRenderingSystem();
+
+	return true;
 }
 
 // ================================ //
