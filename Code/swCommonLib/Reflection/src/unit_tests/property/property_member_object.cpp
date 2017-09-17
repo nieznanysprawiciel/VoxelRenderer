@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -51,6 +51,10 @@ struct property_member_obj_test
     const int           _p2 = 12;
     std::vector<int>    _p3;
     std::vector<int>    _p4 = std::vector<int>(50, 12);
+    variant             _p7 = std::string("hello");
+    const variant       _p8 = 23;
+    int*                _p9 = nullptr;
+    int*                _p10 = &_p1;
 
 
 
@@ -94,6 +98,10 @@ RTTR_REGISTRATION
             metadata("Description", "Some Text"),
             policy::prop::as_reference_wrapper
         )
+        .property("p7", &property_member_obj_test::_p7)
+        .property_readonly("p8", &property_member_obj_test::_p8)
+        .property("p9", &property_member_obj_test::_p9)
+        .property_readonly("p10", &property_member_obj_test::_p10)
         ;
 }
 
@@ -305,6 +313,77 @@ TEST_CASE("property - class object - read only - as_reference_wrapper", "[proper
     CHECK(prop.set_value(obj, "test") == false);
     CHECK(prop.set_value(g_invalid_instance, "test") == false);
     CHECK(prop.get_value(g_invalid_instance).is_valid() == false);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("property - variant as property", "[property]")
+{
+    SECTION("Writable")
+    {
+        property_member_obj_test obj;
+        type prop_type = type::get(obj);
+
+        property prop = prop_type.get_property("p7");
+        REQUIRE(prop.is_valid() == true);
+
+        variant var = prop.get_value(obj);
+        CHECK(obj._p7 == std::string("hello"));
+
+        var = 23;
+        prop.set_value(obj, var);
+
+        CHECK(obj._p7.to_int() == 23);
+    }
+
+    SECTION("Read Only")
+    {
+        property_member_obj_test obj;
+        type prop_type = type::get(obj);
+
+        property prop = prop_type.get_property("p8");
+        REQUIRE(prop.is_valid() == true);
+
+        variant var = prop.get_value(obj);
+        CHECK(obj._p8 == 23);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("property - raw pointer as property", "[property]")
+{
+    SECTION("Writable")
+    {
+        property_member_obj_test obj;
+        type prop_type = type::get(obj);
+
+        property prop = prop_type.get_property("p9");
+        REQUIRE(prop.is_valid() == true);
+
+        variant var = prop.get_value(obj);
+        CHECK(obj._p9 == nullptr);
+
+        int new_value = 23;
+        prop.set_value(obj, &new_value);
+
+        CHECK(obj._p9 == &new_value);
+    }
+
+    SECTION("Read Only")
+    {
+        property_member_obj_test obj;
+        type prop_type = type::get(obj);
+
+        property prop = prop_type.get_property("p10");
+        REQUIRE(prop.is_valid() == true);
+
+        variant var = prop.get_value(obj);
+        CHECK(obj._p10 == &obj._p1);
+
+        CHECK(var.get_type() == type::get<int*>());
+        CHECK(obj._p10 == var.get_value<int*>());
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

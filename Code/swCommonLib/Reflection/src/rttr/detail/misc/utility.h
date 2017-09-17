@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -290,17 +290,10 @@ make_unique(Args&&...) = delete;
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-template< typename T >
-RTTR_INLINE const T& as_const(T& obj) { return const_cast<T&>(obj); }
-
-template< typename T >
-RTTR_INLINE const T& as_const(const T& obj) { return obj; }
-
-template<typename T>
-RTTR_INLINE const T as_const(T&& obj)
+template <class T>
+RTTR_CONSTEXPR RTTR_INLINE add_const_t<T>& as_const(T& value) RTTR_NOEXCEPT
 {
-    static_assert(!std::is_const<T>::value, "The given obj is already const, moving a const RValue will result in a copy!");
-    return std::forward<T>(obj);
+    return value;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -374,10 +367,10 @@ auto reverse(T&& container) -> typename std::conditional< std::is_lvalue_referen
 template<typename T>
 using return_type_normal = add_pointer_t< remove_pointers_t<T> >;
 
-template<typename T>
-using raw_addressof_return_type = std::conditional< is_function_ptr< remove_pointers_except_one_t<T> >::value,
-                                                    add_pointer_t< remove_pointers_except_one_t<T> >,
-                                                    return_type_normal<T> >;
+template<typename T, typename Tp = remove_reference_t<T>>
+using raw_addressof_return_type = std::conditional< is_function_ptr< remove_pointers_except_one_t<Tp> >::value,
+                                                    add_pointer_t< remove_pointers_except_one_t<Tp> >,
+                                                    return_type_normal<Tp> >;
 
 
 template<typename T>

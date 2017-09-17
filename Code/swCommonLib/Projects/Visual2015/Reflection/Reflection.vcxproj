@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\..\Reflection\src\rttr\argument.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\array_mapper.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\array_range.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\associative_mapper.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\constructor.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\destructor.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\detail\array\array_accessor.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="..\..\..\Reflection\src\rttr\type.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\variant.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\variant_array_view.h" />
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant_associative_view.h" />
     <ClInclude Include="..\..\..\Reflection\src\rttr\wrapper_mapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +164,7 @@
     <ClCompile Include="..\..\..\Reflection\src\rttr\type.cpp" />
     <ClCompile Include="..\..\..\Reflection\src\rttr\variant.cpp" />
     <ClCompile Include="..\..\..\Reflection\src\rttr\variant_array_view.cpp" />
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant_associative_view.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Reflection\src\rttr\rttr.cmake" />

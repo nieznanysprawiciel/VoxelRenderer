@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -32,6 +32,7 @@
 
 #include "rttr/detail/misc/function_traits.h"
 #include "rttr/array_mapper.h"
+
 #include "rttr/detail/misc/std_type_traits.h"
 
 
@@ -42,9 +43,13 @@ namespace rttr
 {
 class type;
 
+template<typename T>
+struct associative_container_mapper;
+
 namespace detail
 {
     struct derived_info;
+    struct invalid_type;
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // This trait will removes cv-qualifiers, pointers and reference from type T.
@@ -259,7 +264,7 @@ namespace detail
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
 
-        template<typename T>
+    template<typename T>
     struct get_ptr_impl
     {
         static RTTR_INLINE void* get(T& data)
@@ -463,6 +468,38 @@ namespace detail
 
     template<typename T>
     using is_array = std::integral_constant<bool, is_array_impl<remove_cv_t< remove_reference_t<T> > >::value>;
+
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    template <typename T>
+    struct is_associative_container_impl
+    {
+        typedef char YesType[1];
+        typedef char NoType[2];
+
+        template <typename U> static NoType& check(typename U::is_valid*);
+        template <typename U> static YesType& check(...);
+
+
+        static RTTR_CONSTEXPR_OR_CONST bool value = (sizeof(check<associative_container_mapper<T> >(0)) == sizeof(YesType));
+    };
+
+    template<typename T>
+    using is_associative_container = std::integral_constant<bool, is_associative_container_impl<remove_cv_t< remove_reference_t<T> > >::value>;
+
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    template <typename T>
+    struct associative_container_value_t
+    {
+        template <typename U> static typename U::mapped_type check(typename U::mapped_type*);
+        template <typename U> static void check(...);
+
+        using type = decltype(check<T>(nullptr));
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////
 
     template<typename T>
     using is_raw_array_type = ::rttr::detail::is_array<raw_type_t<T>>;
@@ -935,6 +972,18 @@ namespace detail
     struct is_copy_constructible<std::unique_ptr<T>> : std::false_type {};
 
     /////////////////////////////////////////////////////////////////////////////////////////
+
+    template<typename T>
+    struct property_traits;
+
+    template<typename A, typename C>
+    struct property_traits<A(C::*)>
+    {
+        using class_type = C;
+    };
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+
 } // end namespace detail
 } // end namespace rttr
 

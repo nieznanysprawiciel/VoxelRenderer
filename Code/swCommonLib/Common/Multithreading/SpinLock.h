@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/TypesDefinitions.h"
+#include "swCommonLib/Common/TypesDefinitions.h"
 
 #ifdef _M_AMD64
 #include <mutex>

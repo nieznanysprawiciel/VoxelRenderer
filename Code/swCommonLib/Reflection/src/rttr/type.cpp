@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -99,6 +99,27 @@ bool type::is_derived_from(const type& other) const RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+bool type::is_base_of(const type& other) const RTTR_NOEXCEPT
+{
+    auto& src_raw_type = m_type_data->raw_type_data;
+    auto& tgt_raw_type = other.m_type_data->raw_type_data;
+
+    if (src_raw_type == tgt_raw_type)
+        return true;
+
+    for (auto& t : src_raw_type->get_class_data().m_derived_types)
+    {
+        if (t.m_type_data == tgt_raw_type)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 void* type::apply_offset(void* ptr, const type& source_type, const type& target_type) RTTR_NOEXCEPT
 {
     auto& src_raw_type = source_type.m_type_data->raw_type_data;
@@ -159,6 +180,14 @@ array_range<type> type::get_types() RTTR_NOEXCEPT
 {
     auto& type_list = detail::type_register_private::get_type_storage();
     return array_range<type>(&type_list[1], type_list.size() - 1);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+array_range<type> type::get_template_arguments() const RTTR_NOEXCEPT
+{
+    return array_range<type>(m_type_data->get_class_data().m_nested_types.data(),
+                             m_type_data->get_class_data().m_nested_types.size());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -503,6 +532,14 @@ array_range<constructor> type::get_constructors(filter_items filter) const RTTR_
 destructor type::get_destructor() const RTTR_NOEXCEPT
 {
     return get_raw_type().m_type_data->get_class_data().m_dtor;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+void type::create_wrapped_value(const argument& arg, variant& var) const
+{
+    if (m_type_data->create_wrapper)
+        m_type_data->create_wrapper(arg, var);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

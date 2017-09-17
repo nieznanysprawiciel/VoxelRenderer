@@ -17,6 +17,7 @@ build/
 BuildDir/
 LibDir/
 Project/Documentation/
+Project/Documentation/
 
 
 # Generated documentation
@@ -167,5 +168,5 @@ $RECYCLE.BIN/
 # Mac desktop service store files
 .DS_Store
 
-ReleaseDir/HCF/StreamPosTest.hcf
-ReleaseDir/HCF/WriteToRoot.hcf
+Projects/ReleaseDir/HCF/StreamPosTest.hcf
+Projects/ReleaseDir/HCF/WriteToRoot.hcf

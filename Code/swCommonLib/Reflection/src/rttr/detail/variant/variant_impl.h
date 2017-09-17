@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -35,6 +35,7 @@
 #include "rttr/detail/misc/data_address_container.h"
 #include "rttr/detail/variant/variant_data_policy.h"
 #include "rttr/variant_array_view.h"
+#include "rttr/variant_associative_view.h"
 
 namespace rttr
 {
@@ -188,10 +189,24 @@ RTTR_INLINE variant::try_pointer_conversion(T& to, const type& source_type, cons
     if (!source_type.is_pointer())
         return false;
 
-    if (void * ptr = type::apply_offset(get_raw_ptr(), source_type, target_type))
+    auto ptr = get_raw_ptr();
+
+    if (ptr)
     {
-        to = reinterpret_cast<T>(ptr);
-        return true;
+        if ((ptr = type::apply_offset(ptr, source_type, target_type)))
+        {
+            to = reinterpret_cast<T>(ptr);
+            return true;
+        }
+    }
+    else // a nullptr
+    {
+        // check if a down cast is possible
+        if (source_type.is_derived_from(target_type))
+        {
+            to = reinterpret_cast<T>(ptr);
+            return true;
+        }
     }
 
     return false;
@@ -241,7 +256,19 @@ RTTR_INLINE bool variant::convert(T& value) const
 
     const type source_type = get_type();
     const type target_type = type::get<T>();
-    if (target_type == source_type)
+    if (source_type.is_wrapper() && !target_type.is_wrapper())
+    {
+        variant var = extract_wrapped_value();
+        return var.convert<T>(value);
+    }
+    else if (!source_type.is_wrapper() && target_type.is_wrapper() &&
+             target_type.get_wrapped_type() == source_type)
+    {
+        variant var = create_wrapped_value(target_type);
+        if ((ok = var.is_valid()))
+            value = var.get_value<T>();
+    }
+    else if (target_type == source_type)
     {
         value = const_cast<variant&>(*this).get_value<T>();
         ok = true;
@@ -301,13 +328,26 @@ RTTR_INLINE detail::enable_if_t<!std::is_arithmetic<T>::value && !std::is_enum<T
 template<typename T>
 RTTR_INLINE detail::enable_if_t<std::is_enum<T>::value, T> variant::convert_impl(bool* ok) const
 {
-    variant var = type::get<T>();
-    auto wrapper = std::ref(var);
-    const bool could_convert = convert<std::reference_wrapper<variant>>(wrapper);
-    if (ok)
-        *ok = could_convert;
+    const auto target_type = type::get<T>();
+    if (get_type() == target_type)
+    {
+        T result;
+        const auto could_convert = convert<T>(result);
+        if (ok)
+            *ok = could_convert;
 
-    return var.get_value<T>();
+        return result;
+    }
+    else
+    {
+        variant var = type::get<T>();
+        auto wrapper = std::ref(var);
+        const auto could_convert = convert<std::reference_wrapper<variant>>(wrapper);
+        if (ok)
+            *ok = could_convert;
+
+        return var.get_value<T>();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -30,6 +30,7 @@
 
 #include "rttr/detail/misc/misc_type_traits.h"
 #include "rttr/detail/misc/function_traits.h"
+#include "rttr/detail/misc/template_type_trait.h"
 #include "rttr/detail/type/base_classes.h"
 #include "rttr/detail/type/get_derived_info_func.h"
 #include "rttr/detail/type/get_create_variant_func.h"
@@ -41,6 +42,7 @@
 #include "rttr/property.h"
 #include "rttr/constructor.h"
 #include "rttr/destructor.h"
+
 
 #include <type_traits>
 #include <bitset>
@@ -65,8 +67,10 @@ using get_derived_info_func = derived_info(*)(void*);
 
 struct class_data
 {
-    class_data(get_derived_info_func func) : m_derived_info_func(func),
-                                             m_dtor(create_invalid_item<destructor>())
+    class_data(get_derived_info_func func, std::vector<type> nested_types)
+    :   m_derived_info_func(func),
+        m_nested_types(nested_types),
+        m_dtor(create_invalid_item<destructor>())
     {}
 
     get_derived_info_func       m_derived_info_func;
@@ -76,6 +80,7 @@ struct class_data
     std::vector<property>       m_properties;
     std::vector<method>         m_methods;
     std::vector<constructor>    m_ctors;
+    std::vector<type>           m_nested_types;
     destructor                  m_dtor;
 };
 
@@ -89,6 +94,8 @@ enum class type_trait_infos : std::size_t
     is_function_pointer,
     is_member_object_pointer,
     is_member_function_pointer,
+    is_associative_container,
+    is_template_instantiation,
 
     TYPE_TRAIT_COUNT
 };
@@ -102,6 +109,7 @@ namespace impl
 
 using create_variant_func = decltype(&create_invalid_variant_policy::create_variant);
 using get_base_types_func = decltype(&base_classes<int>::get_types);
+using create_wrapper_func = void(*)(const argument& arg, variant& var);
 
 } // end namespace impl
 
@@ -120,9 +128,10 @@ struct type_data
     std::size_t get_pointer_dimension;
 
     impl::create_variant_func create_variant;
-    impl::get_base_types_func get_base_types; // FIXEM: this info should not be stored, its just temporarily,
+    impl::get_base_types_func get_base_types; // FIXME: this info should not be stored, its just temporarily,
                                               // thats why we store it as function pointer
 
+    impl::create_wrapper_func create_wrapper;
     class_data& (*get_class_data)();
 
     uint16_t type_index;
@@ -139,7 +148,7 @@ struct type_data
 template<typename T>
 static class_data& get_type_class_data() RTTR_NOEXCEPT
 {
-    static std::unique_ptr<class_data> info = make_unique<class_data>(get_most_derived_info_func<T>());
+    static std::unique_ptr<class_data> info = detail::make_unique<class_data>(get_most_derived_info_func<T>(), template_type_trait<T>::get_template_arguments());
     return (*info.get());
 }
 
@@ -147,7 +156,7 @@ static class_data& get_type_class_data() RTTR_NOEXCEPT
 
 static class_data& get_invalid_type_class_data() RTTR_NOEXCEPT
 {
-    static std::unique_ptr<class_data> info = detail::make_unique<class_data>(nullptr);
+    static std::unique_ptr<class_data> info = detail::make_unique<class_data>(nullptr, std::vector<type>());
     return (*info.get());
 }
 
@@ -224,12 +233,46 @@ struct wrapper_type_info<T, false>
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename Wrapper, typename Wrapped_Type>
+static void create_wrapper(const argument& arg, variant& var)
+{
+    if (arg.get_type() != type::get<Wrapped_Type>())
+        return;
+
+    auto& wrapped_type = arg.get_value<Wrapped_Type>();
+    var = wrapper_mapper<Wrapper>::create(wrapped_type);
+}
+
+template<typename Wrapper, typename Tp = wrapper_mapper_t<Wrapper>>
+static enable_if_t<is_wrapper<Wrapper>::value &&
+                   ::rttr::detail::is_copy_constructible<Wrapper>::value &&
+                   std::is_default_constructible<Wrapper>::value &&
+                   has_create_wrapper_func<Wrapper>::value, impl::create_wrapper_func>
+get_create_wrapper_func()
+{
+    return &create_wrapper<Wrapper, Tp>;
+}
+
+
+template<typename Wrapper, typename Tp = wrapper_mapper_t<Wrapper>>
+static enable_if_t<!is_wrapper<Wrapper>::value ||
+                   !::rttr::detail::is_copy_constructible<Wrapper>::value ||
+                   !std::is_default_constructible<Wrapper>::value ||
+                   !has_create_wrapper_func<Wrapper>::value, impl::create_wrapper_func>
+get_create_wrapper_func()
+{
+    return nullptr;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
 using type_trait_value = uint64_t;
 #define TYPE_TRAIT_TO_BITSET_VALUE(trait) (static_cast<std::uint64_t>(std::trait<T>::value) << static_cast<std::size_t>(type_trait_infos::trait))
 #define TYPE_TRAIT_TO_BITSET_VALUE_2(trait, enum_key) (static_cast<std::uint64_t>(trait<T>::value) << static_cast<std::size_t>(type_trait_infos::enum_key))
+#define TYPE_TRAIT_TO_BITSET_VALUE_3(trait, check) (static_cast<std::uint64_t>(trait<T>::check::value) << static_cast<std::size_t>(type_trait_infos::check))
 
 template<typename T>
 type_data& get_type_data() RTTR_NOEXCEPT
@@ -244,6 +287,8 @@ type_data& get_type_data() RTTR_NOEXCEPT
 
                                       &create_variant_func<T>::create_variant,
                                       &base_classes<T>::get_types,
+                                      get_create_wrapper_func<T>(),
+
                                       &get_type_class_data<T>,
                                       0,
                                       type_trait_value{ TYPE_TRAIT_TO_BITSET_VALUE(is_class) |
@@ -253,7 +298,9 @@ type_data& get_type_data() RTTR_NOEXCEPT
                                                         TYPE_TRAIT_TO_BITSET_VALUE(is_arithmetic) |
                                                         TYPE_TRAIT_TO_BITSET_VALUE_2(is_function_ptr, is_function_pointer) |
                                                         TYPE_TRAIT_TO_BITSET_VALUE(is_member_object_pointer) |
-                                                        TYPE_TRAIT_TO_BITSET_VALUE(is_member_function_pointer)}
+                                                        TYPE_TRAIT_TO_BITSET_VALUE(is_member_function_pointer) |
+                                                        TYPE_TRAIT_TO_BITSET_VALUE_2(::rttr::detail::is_associative_container, is_associative_container) |
+                                                        TYPE_TRAIT_TO_BITSET_VALUE_3(template_type_trait, is_template_instantiation)}
                                       };
     return instance;
 }
@@ -268,6 +315,7 @@ static type_data& get_invalid_type_data_impl() RTTR_NOEXCEPT
                                       0, 0,
                                       &create_invalid_variant_policy::create_variant,
                                       &base_classes<void>::get_types,
+                                      get_create_wrapper_func<void>(),
                                       &get_invalid_type_class_data,
                                       0,
                                       type_trait_value{0}};

@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -102,6 +102,8 @@ public:
     static void equal_comparator(const type& t, type_comparator_base* comparator);
 
     static void less_than_comparator(const type& t, type_comparator_base* comparator);
+
+    static void register_base_class(const type& derived_type, const base_class_info& base_info);
 
     /*!
      * \brief Register the type info for the given name

@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -107,12 +107,31 @@ TEST_CASE("variant - get_wrapped_value", "[variant]")
     variant var = std::ref(foo);
     CHECK(var.get_type().is_wrapper() == true);
     CHECK(var.get_type() == type::get<std::reference_wrapper<int>>());
-    CHECK(var.extract_wrapped_value().is_valid() == true);
+    REQUIRE(var.get_type().get_wrapped_type() == type::get<int>());
+    REQUIRE(var.extract_wrapped_value().is_valid() == true);
     CHECK(var.extract_wrapped_value().get_value<int>() == 12);
+
+    int* bar = &foo;
+    var = std::ref(bar);
+    CHECK(var.get_type().is_wrapper() == true);
+    CHECK(var.get_type() == type::get<std::reference_wrapper<int*>>());
+    REQUIRE(var.get_type().get_wrapped_type() == type::get<int*>());
+    REQUIRE(var.extract_wrapped_value().is_valid() == true);
+    CHECK(*var.extract_wrapped_value().get_value<int*>() == foo);
+
+    int** bar2 = &bar;
+    var = std::cref(bar2);
+    CHECK(var.get_type().is_wrapper() == true);
+    CHECK(var.get_type() == type::get<std::reference_wrapper<int** const>>());
+    REQUIRE(var.get_type().get_wrapped_type() == type::get<int** const>());
+    REQUIRE(var.extract_wrapped_value().is_valid() == true);
+    CHECK(**var.extract_wrapped_value().get_value<int** const>() == foo);
+
 
     auto ptr = detail::make_unique<int>(24);
     var = std::ref(ptr);
     CHECK(var.get_type().is_wrapper() == true);
+    REQUIRE(var.get_type().get_wrapped_type() == type::get<std::unique_ptr<int>>());
     CHECK(*var.get_wrapped_value<std::unique_ptr<int>>().get() == 24);
     CHECK(var.extract_wrapped_value().is_valid() == false);
 }

@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -43,6 +43,7 @@ namespace rttr
 {
 
 class variant_array_view;
+class variant_associative_view;
 class type;
 class variant;
 class argument;
@@ -349,6 +350,14 @@ class RTTR_API variant
         bool is_array() const;
 
         /*!
+         * \brief Returns true, when for the underlying or the \ref type::get_wrapped_type() "wrapped type"
+         *        an associative_mapper exists.
+         *
+         * \return True if the containing value is an associative container; otherwise false.
+         */
+        bool is_associative_container() const;
+
+        /*!
          * \brief Returns a reference to the containing value as type \p T.
          *
          * \code{.cpp}
@@ -416,6 +425,8 @@ class RTTR_API variant
          *         When you work with custom types, which are not copyable, the variant will be \ref is_valid "invalid"
          *
          * \return A variant with the wrapped value.
+         *
+         * \see type::is_wrapper()
          */
         variant extract_wrapped_value() const;
 
@@ -424,6 +435,8 @@ class RTTR_API variant
          *        Otherwise `false`.
          *
          * \return `True` if this variant can be converted to `T`; otherwise `false`.
+         *
+         * \see convert(), type::register_converter_func()
          */
         template<typename T>
         bool can_convert() const;
@@ -438,6 +451,8 @@ class RTTR_API variant
          * When the string does not contain non-numeric characters, the conversion will not succeed.
          *
          * \return `True` if this variant can be converted to \p target_type; otherwise `false`.
+         *
+         * \see convert(), type::register_converter_func()
          */
         bool can_convert(const type& target_type) const;
 
@@ -446,22 +461,29 @@ class RTTR_API variant
          *        When the conversion was successfully the function will return `true`.
          *        When the conversion fails, then the containing variant value stays the same and the function will return `false`.
          *
-         * A variant containing a pointer to a custom type will be also converted and return `true`
-         * for this function, if a \ref rttr_cast to the type described by \p target_type would succeed.
+         * There are already certain standard type conversions implemented:
+         * 1. Conversion of all arithmetic types (e.g. `double` to `int`, 'std::size_t' to 'int8_t' and so on)
+         * 2. Conversion of all arithmetic types to and from `std::string`.
+         * 3. Conversion of enum types to `std::string`, its underlying arithmetic types and vice versa.
+         * 4. Conversion of \ref rttr::wrapper_mapper<T> "wrapper classes" to wrapped types and vice versa (e.g, `std::shared_ptr<int>` to `int*`)
+         * 5. Conversion of raw pointers to its derived types, if a \ref rttr_cast to the type described by \p target_type would succeed.
          *
          * See therefore following example code:
          * \code{.cpp}
-         *  struct base { virtual ~base(){} };
-         *  struct derived : base { };
+         *  struct base { virtual ~base(){} RTTR_ENABLE() };
+         *  struct derived : base { RTTR_ENABLE(base) };
          *  derived d;
          *  variant var = static_cast<base*>(&d);           // var contains a '*base' ptr
          *  bool ret = var.convert(type::get<derived*>());  // yields to 'true'
          *  var.is_type<derived*>();                        // yields to 'true'
          * \endcode
          *
-         * \see can_convert()
+         * Additionally, it is possible to add custom conversion function, which has to be registered
+         * via \ref type::register_converter_func().
          *
          * \return `True` if this variant can be converted to \p target_type; otherwise `false`.
+         *
+         * \see can_convert(), type::register_converter_func()
          */
         bool convert(const type& target_type);
 
@@ -481,12 +503,15 @@ class RTTR_API variant
          *  }
          * \endcode
          *
+         * In order to enable a custom type conversion, a conversion function has to be registered
+         * via \ref type::register_converter_func().
+         *
          * \remark Before doing the conversion you should check whether it is in general possible to convert to type \p T
          *         with the function \ref can_convert(). When the conversion fails, a default constructed value of type \p T is returned.
          *
-         * \see can_convert()
-         *
          * \return The converted value as type \p T.
+         *
+         * \see can_convert(), type::register_converter_func()
          */
         template<typename T>
         T convert(bool* ok = nullptr) const;
@@ -509,12 +534,15 @@ class RTTR_API variant
          *  }
          * \endcode
          *
+         * In order to enable a custom type conversion, a conversion function has to be registered
+         * via \ref type::register_converter_func().
+         *
          * \remark Before doing the conversion you should check whether it is in general possible to convert to type \p T
          *         with the function \ref can_convert()
          *
-         * \see can_convert()
-         *
          * \return `True` if the contained data could be converted to \p value; otherwise `false`.
+         *
+         * \see can_convert(), type::register_converter_func()
          */
         template<typename T>
         bool convert(T& value) const;
@@ -530,19 +558,52 @@ class RTTR_API variant
          *
          * \code{.cpp}
          *   int obj_array[100];
-         *   variant var = obj_array;                            // copies the content of obj_array into var
-         *   variant_array_view array = var.create_array_view(); // copies the content of var to a variant_array object
-         *   auto x = array.get_size();                          // set x to 100
-         *   array.set_value(0, 42);                             // set the first index to the value 42
+         *   variant var = obj_array;                           // copies the content of obj_array into var
+         *   variant_array_view view = var.create_array_view(); // creates a view of the hold array in the variant (data is not copied!)
+         *   std::size_t x = view.get_size();                   // return number of elements x = 100
+         *   view.set_value(0, 42);                             // set the first index to the value 42
          * \endcode
-         *
-         * \see can_convert(), convert()
          *
          * \remark This function will return an \ref variant_array_view::is_valid() "invalid" object, when the \ref variant::get_type "type" is no array.
          *
          * \return A variant_array_view object.
+         *
+         * \see can_convert(), convert()
          */
         variant_array_view create_array_view() const;
+
+        /*!
+         * \brief Creates a \ref variant_associative_view from the containing value,
+         *        when the \ref variant::get_type "type" or its \ref type::get_raw_type() "raw type"
+         *        or the \ref type::get_wrapped_type() "wrapped type" is an \ref type::is_associative_container() "associative container".
+         *        Otherwise a default constructed variant_associative_view will be returned.
+         *
+         * A typical example is the following:
+         *
+         * \code{.cpp}
+         *   std::map<int, std::string> my_map;
+         *   my_map.insert({1, "One"});
+         *   my_map.insert({2, "Two"});
+         *   my_map.insert({3, "Three"});
+         *
+         *   variant var = my_map;                                          // copies the content of my_map into var
+         *   variant_associative_view view = var.create_associative_view(); // creates a view of the hold container in the variant (data is not copied!)
+         *   std::size_t x = view.get_size();                               // return number of elements x = 3
+         *   for (auto& item : view)                                        // iterates over all items stored in the container
+         *   {
+         *      auto key = item.first.extract_wrapped_value().to_string();
+         *      auto value = item.second.extract_wrapped_value().to_string();
+         *      std::cout << "key: " << key << " value: " << value << std::endl;
+         *   }
+         * \endcode
+         *
+         * \remark This function will return an \ref variant_associative_view::is_valid() "invalid" object, when the \ref variant::get_type "type" is no associative container.
+         *
+         * \return A variant_associative_view object.
+         *
+         * \see can_convert(), convert()
+         */
+        variant_associative_view create_associative_view() const;
 
         /*!
          * \brief Returns the variant as a `bool` if this variant is of \ref is_type() "type" `bool`.
@@ -894,6 +955,9 @@ class RTTR_API variant
          * \return A boolean with value `true`, when the contained value type is equal to `nullptr`; otherwise false.
          */
         RTTR_INLINE bool is_nullptr() const;
+
+
+        variant create_wrapped_value(const type& wrapped_type) const;
 
     private:
         friend class argument;

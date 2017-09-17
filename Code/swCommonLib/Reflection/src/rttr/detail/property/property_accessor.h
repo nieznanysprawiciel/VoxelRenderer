@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -59,16 +59,6 @@ struct property_accessor<T[N]>
     static bool set_value(T (& prop)[N], argument& arg)
     {
         copy_array(arg.get_value<T[N]>(), prop);
-        return true;
-    }
-};
-
-template<typename T>
-struct property_accessor<T*>
-{
-    static bool set_value(T* prop, argument& arg)
-    {
-        *prop = *arg.get_value<T*>();
         return true;
     }
 };

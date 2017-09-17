@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -62,7 +62,7 @@ public:
     /*!
      * \brief Creates an instance object from a \ref variant object.
      */
-    RTTR_INLINE instance(variant& var) RTTR_NOEXCEPT;
+    RTTR_INLINE instance(const variant& var) RTTR_NOEXCEPT;
 
     /*!
      * \brief Copy constructor for an instance.

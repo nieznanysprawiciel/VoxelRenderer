@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -64,6 +64,29 @@ std::string& get_global_string()
     return text;
 }
 
+struct base_not_registered
+{
+    bool some_method()
+    {
+        return true;
+    }
+
+    void other_method(int i)
+    {
+    }
+};
+
+struct derive_registered : base_not_registered
+{
+
+};
+
+
+struct derive_registered_with_base_class_list : base_not_registered
+{
+    RTTR_ENABLE() // but forgot the base class to insert in the macro
+};
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -110,6 +133,7 @@ RTTR_REGISTRATION
         )
         .method("method_fun_ptr_arg", &method_test::method_fun_ptr_arg)
         .method("method_with_ptr", &method_test::method_with_ptr)
+        .method("variant_func", &method_test::set_func_via_variant)
         ;
 
     registration::class_<method_test_derived>("method_test_derived")
@@ -133,10 +157,21 @@ RTTR_REGISTRATION
         (
             policy::meth::discard_return
         );
+
+    // the class 'derive_registered' has a base class 'base_not_registered'
+    // which is not registered explictely via rttr, however the base-derived relationship
+    // will be established by rttr internaly
+    registration::class_<derive_registered>("derive_registered")
+        .method("some_method", &derive_registered::some_method)
+        .method("other_method", &derive_registered::other_method)
+        ;
+
+    registration::class_<derive_registered_with_base_class_list>("derive_registered_with_base_class_list")
+        .method("some_method", &derive_registered_with_base_class_list::some_method)
+        ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
 
 TEST_CASE("Test method", "[method]")
 {
@@ -267,7 +302,7 @@ TEST_CASE("Test method", "[method]")
     // check up_cast, cross cast and middle in the hierarchy cast through invoke
     method_test_final final_obj;
     type t_final = type::get(final_obj);
-    REQUIRE(t_final.get_methods().size() == 20); // +1 overloaded
+    REQUIRE(t_final.get_methods().size() == 21); // +1 overloaded
     // test the up cast
     t_final.get_method("method_3").invoke(final_obj, 1000);
     REQUIRE(final_obj.method_3_called == true);
@@ -370,13 +405,13 @@ TEST_CASE("Test method signature", "[method]")
 {
     const auto meth_range = type::get<method_test_final>().get_methods();
     std::vector<method> methods(meth_range.cbegin(), meth_range.cend());
-    REQUIRE(methods.size() == 20);
+    REQUIRE(methods.size() == 21);
 
     REQUIRE(methods[0].get_signature() ==  "method_1( )");
     REQUIRE(methods[3].get_signature() ==  std::string("method_4( ") + type::get<std::string>().get_name() + " & )");
     REQUIRE(methods[4].get_signature() ==  "method_5( double* )");
     REQUIRE(methods[5].get_signature() ==  "method_5( int, double )");
-    REQUIRE(methods[19].get_signature() == "method_13( )");
+    REQUIRE(methods[20].get_signature() == "method_13( )");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -481,6 +516,47 @@ TEST_CASE("method - invoke with nullptr", "[method]")
     variant var = meth.invoke(obj, nullptr);
     CHECK(var.is_valid() == true);
     CHECK(obj.method_with_ptr_called == true);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("method - invoke with variant as argument", "[method]")
+{
+    type t_meth = type::get<method_test>();
+    method meth = t_meth.get_method("variant_func");
+    method_test obj;
+
+    auto ret = meth.invoke(obj, variant(23));
+
+    CHECK(ret.is_valid()    == true);
+    CHECK(ret.to_bool()     == true);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("method - invoke base method, which is not registerd", "[method]")
+{
+    type t_meth = type::get<derive_registered>();
+    method meth = t_meth.get_method("some_method");
+    derive_registered obj;
+
+    auto ret = meth.invoke(obj);
+
+    CHECK(ret.is_valid()    == true);
+    CHECK(ret.to_bool()     == true);
+
+    auto base_type = type::get<base_not_registered>();
+
+    CHECK(t_meth.is_derived_from(base_type) == true);
+
+    auto derived_type = type::get<derive_registered_with_base_class_list>();
+    CHECK(derived_type.is_derived_from(base_type) == true);
+
+    auto range = base_type.get_derived_classes();
+
+    REQUIRE(range.size() == 2);
+    CHECK(*range.begin() == t_meth);
+    CHECK(*(++range.begin()) == derived_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

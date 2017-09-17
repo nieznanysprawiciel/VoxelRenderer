@@ -27,18 +27,23 @@
     <ClCompile Include="..\..\..\Common\Properties\Properties.cpp" />
     <ClCompile Include="..\..\..\System\Dir.cpp" />
     <ClCompile Include="..\..\..\System\File.cpp" />
+    <ClCompile Include="..\..\..\System\Filesystem\filesystem\path.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Common\Config\ConfigHelper.h" />
     <ClInclude Include="..\..\..\Common\Converters.h" />
     <ClInclude Include="..\..\..\Common\EngineObject.h" />
+    <ClInclude Include="..\..\..\Common\Logging\Logger.h" />
     <ClInclude Include="..\..\..\Common\MemoryChunk.h" />
     <ClInclude Include="..\..\..\Common\MemoryLeaks.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\QueueMT.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\ReaderWriterLock.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\Semaphore.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLock.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\SpinLockedQueue.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\ThreadsBarrier.h" />
     <ClInclude Include="..\..\..\Common\Multithreading\ThreadsLatch.h" />
+    <ClInclude Include="..\..\..\Common\Multithreading\UniqueLock.h" />
     <ClInclude Include="..\..\..\Common\Nullable.h" />
     <ClInclude Include="..\..\..\Common\ObjectDeleter.h" />
     <ClInclude Include="..\..\..\Common\Properties\Containers\ICollection.h" />
@@ -51,9 +56,15 @@
     <ClInclude Include="..\..\..\Common\UPtr.h" />
     <ClInclude Include="..\..\..\System\Dir.h" />
     <ClInclude Include="..\..\..\System\File.h" />
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\fwd.h" />
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\path.h" />
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\resolver.h" />
     <ClInclude Include="..\..\..\System\Path.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Reflection\Reflection.vcxproj">
+      <Project>{59fa8028-2346-4246-854f-14dcfab6ab56}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Serialization\Serialization.vcxproj">
       <Project>{561754cb-295d-4d69-8dbc-bc069d1a636a}</Project>
     </ProjectReference>

@@ -19,6 +19,12 @@
     <Filter Include="Common\Multithreading">
       <UniqueIdentifier>{d2e3373f-b49e-4611-a93b-e727e7ceeb9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Logging">
+      <UniqueIdentifier>{c846e1e2-4296-4192-b226-3874455dc193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Filesystem">
+      <UniqueIdentifier>{8a21dd59-2a45-46e5-b3ec-17912109b0cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Common\Converters.cpp">
@@ -44,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Common\Multithreading\ThreadsLatch.cpp">
       <Filter>Common\Multithreading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\System\Filesystem\filesystem\path.cpp">
+      <Filter>System\Filesystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +124,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Multithreading\ThreadsLatch.h">
       <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\QueueMT.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Logging\Logger.h">
+      <Filter>Common\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\ReaderWriterLock.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Multithreading\UniqueLock.h">
+      <Filter>Common\Multithreading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\fwd.h">
+      <Filter>System\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\path.h">
+      <Filter>System\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\System\Filesystem\filesystem\resolver.h">
+      <Filter>System\Filesystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

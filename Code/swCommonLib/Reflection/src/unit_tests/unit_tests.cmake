@@ -1,6 +1,6 @@
 ####################################################################################
 #                                                                                  #
-#  Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     #
+#  Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     #
 #                                                                                  #
 #  This file is part of RTTR (Run Time Type Reflection)                            #
 #  License: MIT License                                                            #
@@ -88,4 +88,5 @@ set(SOURCE_FILES main.cpp
                  variant/variant_conv_to_string.cpp
                  variant/variant_conv_to_enum.cpp
                  variant_array_view/variant_array_view_test.cpp
+                 variant_associative_view/variant_associative_view_test.cpp
                  )
