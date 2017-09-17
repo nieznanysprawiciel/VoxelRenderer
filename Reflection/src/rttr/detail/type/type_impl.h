@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -194,6 +194,13 @@ RTTR_FORCE_INLINE bool type::is_class() const RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+RTTR_FORCE_INLINE bool type::is_template_instantiation() const RTTR_NOEXCEPT
+{
+    return m_type_data->type_trait_value(detail::type_trait_infos::is_template_instantiation);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 RTTR_FORCE_INLINE bool type::is_enumeration() const RTTR_NOEXCEPT
 {
     return m_type_data->type_trait_value(detail::type_trait_infos::is_enum);
@@ -204,6 +211,13 @@ RTTR_FORCE_INLINE bool type::is_enumeration() const RTTR_NOEXCEPT
 RTTR_FORCE_INLINE bool type::is_array() const RTTR_NOEXCEPT
 {
     return m_type_data->type_trait_value(detail::type_trait_infos::is_array);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+RTTR_FORCE_INLINE bool type::is_associative_container() const RTTR_NOEXCEPT
+{
+    return m_type_data->type_trait_value(detail::type_trait_infos::is_associative_container);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -369,6 +383,14 @@ RTTR_INLINE type type::get() RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+template<>
+RTTR_INLINE type type::get<detail::invalid_type>() RTTR_NOEXCEPT
+{
+    return detail::get_invalid_type();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 template<typename T>
 RTTR_INLINE type type::get(T&& object) RTTR_NOEXCEPT
 {
@@ -382,6 +404,14 @@ template<typename T>
 RTTR_INLINE bool type::is_derived_from() const RTTR_NOEXCEPT
 {
     return is_derived_from(type::get<T>());
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+RTTR_INLINE bool type::is_base_of() const RTTR_NOEXCEPT
+{
+    return is_base_of(type::get<T>());
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

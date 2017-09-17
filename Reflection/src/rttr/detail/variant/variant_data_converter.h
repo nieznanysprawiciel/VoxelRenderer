@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -60,7 +60,6 @@ struct default_type_converter
     static bool convert_to(const T& value, argument& arg)
     {
         const type target_type = arg.get_type();
-        bool result = false;
         if (target_type == type::get<bool>())
             return Type_Converter::to(value, arg.get_value<bool>());
         else if (target_type == type::get<char>())

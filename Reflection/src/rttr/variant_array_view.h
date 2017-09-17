@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -155,7 +155,9 @@ class RTTR_API variant_array_view
         variant_array_view(variant_array_view&& other) RTTR_NOEXCEPT;
 
         /*!
-         * \brief Destroys the variant_array_view and the contained data.
+         * \brief Destroys the variant_array_view.
+         *
+         * \remark The underlying data is not destroyed.
          */
         ~variant_array_view() RTTR_NOEXCEPT;
 

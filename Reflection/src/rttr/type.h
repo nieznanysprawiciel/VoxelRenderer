@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -67,12 +67,16 @@ template<typename T, typename Enable = void>
 struct type_getter;
 
 static type get_invalid_type() RTTR_NOEXCEPT;
+struct invalid_type{};
 struct type_data;
 class destructor_wrapper_base;
 class property_wrapper_base;
 
 template<typename T>
 type_data& get_type_data() RTTR_NOEXCEPT;
+
+template<typename T, typename Tp, typename Converter>
+struct variant_data_base_policy;
 } // end namespace detail
 
 /*!
@@ -281,7 +285,7 @@ class RTTR_API type
          *
          * \remark When the current type is not a wrapper type, this function will return an \ref type::is_valid "invalid type".
          *
-         * \see wrapper_mapper<T>
+         * \see \ref wrapper_mapper "wrapper_mapper<T>"
          *
          * \return The type object of the wrapped type.
          */
@@ -343,6 +347,49 @@ class RTTR_API type
          */
         RTTR_FORCE_INLINE bool is_class() const RTTR_NOEXCEPT;
 
+         /*!
+         * \brief Returns true whether the given type is an instantiation of a class template.
+         *
+         * See following example code:
+         * \code{.cpp}
+         * template<typename T>
+         * struct foo { }; // class template
+         *
+         * struct bar { }; // NO class template
+         *
+         * type::get<foo<int>>().is_template_instantiation(); // yield to 'true'
+         * type::get<bar>().is_template_instantiation();      // yield to 'false'
+         * \endcode
+         *
+         * \return `true` if the type is a class template, otherwise `false`.
+         *
+         * \see get_template_arguments()
+         */
+        RTTR_FORCE_INLINE bool is_template_instantiation() const RTTR_NOEXCEPT;
+
+        /*!
+         * \brief Returns a list of type objects that represents the template arguments.
+         *        An empty list is returned when this type is not an instantiation of a template
+         *        or contains no template arguments at all.
+         *
+         * See following example code:
+         * \code{.cpp}
+         * template<typename...Args>
+         * struct my_class { };
+         *
+         * auto type_list = type::get<my_class<int, bool, char>>().get_template_arguments();
+         * for (const auto& t : type_list)
+         * {
+         *    std::cout << t.get_name() << " " << std::endl; // will print 'int bool char'
+         * }
+         * \endcode
+         *
+         * \return A list of nested types.
+         *
+         * \see is_template_instantiation()
+         */
+        array_range<type> get_template_arguments() const RTTR_NOEXCEPT;
+
         /*!
          * \brief Returns true whether the given type represents an enumeration.
          *
@@ -369,10 +416,10 @@ class RTTR_API type
          *        - \p `std::weak_ptr<T>`
          *        - \p `std::unique_ptr<T>`
          *
-         *        In order to work with custom wrapper types, its required to specialize the class \ref rttr::wrapper_mapper<T> "wrapper_mapper<T>"
+         *        In order to work with custom wrapper types, its required to specialize the class \ref wrapper_mapper "wrapper_mapper<T>"
          *        and implement a getter function to retrieve the encapsulate type.
          *
-         * \see \ref rttr::wrapper_mapper<T> "wrapper_mapper<T>"
+         * \see \ref wrapper_mapper "wrapper_mapper<T>"
          *
          * \return True if the type is an wrapper, otherwise false.
          *
@@ -387,6 +434,16 @@ class RTTR_API type
          * \see \ref array_mapper "array_mapper<T>"
          */
         RTTR_FORCE_INLINE bool is_array() const RTTR_NOEXCEPT;
+
+        /*!
+         * \brief Returns true whether the given type represents an
+         *        <a target="_blank" href=https://en.wikipedia.org/wiki/Associative_containers>associative container</a>.
+         *
+         * \return True if the type is an associative container, otherwise false.
+         *
+         * \see \ref associative_container_mapper "associative_container_mapper<T>"
+         */
+        RTTR_FORCE_INLINE bool is_associative_container() const RTTR_NOEXCEPT;
 
         /*!
          * \brief Returns true whether the given type represents a pointer.
@@ -451,6 +508,29 @@ class RTTR_API type
          */
         template<typename T>
         bool is_derived_from() const RTTR_NOEXCEPT;
+
+        /*!
+         * \brief Returns true if this type is the base class from the given type \p other, otherwise false.
+         *
+         * \remark Make sure that the complete class hierarchy has the macro RTTR_ENABLE
+         *         inside the class declaration, otherwise the returned information of this function
+         *         is **not correct**.
+         *
+         * \return Returns true if this type is a base class type from \p other, otherwise false.
+         */
+        bool is_base_of(const type& other) const RTTR_NOEXCEPT;
+
+         /*!
+         * \brief Returns true if this type is the base class from the given type \a T, otherwise false.
+         *
+         * \remark Make sure that the complete class hierarchy has the macro RTTR_ENABLE
+         *         inside the class declaration, otherwise the returned information of this function
+         *         is **not correct**.
+         *
+         * \return Returns true if this type is a base class type from \a T, otherwise false.
+         */
+        template<typename T>
+        bool is_base_of() const RTTR_NOEXCEPT;
 
         /*!
          * \brief Returns a range of all base classes of this type.
@@ -1033,10 +1113,10 @@ class RTTR_API type
         RTTR_FORCE_INLINE string_view get_full_name() const RTTR_NOEXCEPT;
 
         /*!
-         * \brief Initialize all the global variables needed to retrieve the type informations.
-         *
+         * \brief Creates a wrapped value from the given argument \p arg and moves it into the
+         *        the given variant \p var.
          */
-        static void init_globals();
+        void create_wrapped_value(const argument& arg, variant& var) const;
 
 
         /////////////////////////////////////////////////////////////////////////////////
@@ -1059,6 +1139,9 @@ class RTTR_API type
 
         template<typename T>
         friend detail::type_data& detail::get_type_data() RTTR_NOEXCEPT;
+
+        template<typename T, typename Tp, typename Converter>
+        friend struct detail::variant_data_base_policy;
 
     private:
         detail::type_data* m_type_data;

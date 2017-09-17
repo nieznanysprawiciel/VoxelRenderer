@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -57,6 +57,11 @@ struct method_test
     void method_with_ptr(int* ptr)   { method_with_ptr_called = true; }
 
     void method_fun_ptr_arg(void(*func_ptr)(int)) { method_func_ptr_arg_called = true; m_func_ptr = func_ptr; }
+
+    bool set_func_via_variant(const rttr::variant& var)
+    {
+        return (var == 23) ? true : false;
+    }
 
     double dummy_data = 12;
     std::string dummy_text = "Hello World";

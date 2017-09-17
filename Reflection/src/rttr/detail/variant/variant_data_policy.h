@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -32,6 +32,7 @@
 #include "rttr/detail/variant/variant_data.h"
 #include "rttr/detail/misc/argument_wrapper.h"
 #include "rttr/detail/variant_array_view/variant_array_view_creator.h"
+#include "rttr/detail/variant_associative_view/variant_associative_view_creator.h"
 #include "rttr/detail/variant/variant_data_converter.h"
 #include "rttr/detail/comparison/compare_equal.h"
 #include "rttr/detail/comparison/compare_less.h"
@@ -121,6 +122,7 @@ enum class variant_policy_operation : uint8_t
     CLONE,
     SWAP,
     EXTRACT_WRAPPED_VALUE,
+    CREATE_WRAPPED_VALUE,
     GET_VALUE,
     GET_TYPE,
     GET_PTR,
@@ -128,7 +130,9 @@ enum class variant_policy_operation : uint8_t
     GET_RAW_PTR,
     GET_ADDRESS_CONTAINER,
     IS_ARRAY,
+    IS_ASSOCIATIVE_CONTAINER,
     TO_ARRAY,
+    CREATE_ASSOCIATIV_VIEW,
     IS_VALID,
     IS_NULLPTR,
     CONVERT,
@@ -242,6 +246,15 @@ struct variant_data_base_policy
                 arg.get_value<variant>() = get_wrapped_value(Tp::get_value(src_data));
                 break;
             }
+            case variant_policy_operation::CREATE_WRAPPED_VALUE:
+            {
+                const auto& params          = arg.get_value<std::tuple<variant&, const type&>>();
+                variant& var                = std::get<0>(params);
+                const type& wrapper_type    = std::get<1>(params);
+
+                wrapper_type.create_wrapped_value(Tp::get_value(src_data), var);
+                break;
+            }
             case variant_policy_operation::GET_VALUE:
             {
                 arg.get_value<const void*>() = &Tp::get_value(src_data);
@@ -281,25 +294,31 @@ struct variant_data_base_policy
             {
                 return can_create_array_container<T>::value;
             }
+            case variant_policy_operation::IS_ASSOCIATIVE_CONTAINER:
+            {
+                return can_create_associative_view<T>::value;
+            }
             case variant_policy_operation::TO_ARRAY:
             {
                 arg.get_value<std::unique_ptr<array_wrapper_base>&>() = create_variant_array_view(const_cast<T&>(Tp::get_value(src_data)));
                 break;
             }
+            case variant_policy_operation::CREATE_ASSOCIATIV_VIEW:
+            {
+                arg.get_value<variant_associative_view_private&>() = create_variant_associative_view(const_cast<T&>(Tp::get_value(src_data)));
+                break;
+            }
             case variant_policy_operation::CONVERT:
             {
                 return Converter::convert_to(Tp::get_value(src_data), arg.get_value<argument>());
-                break;
             }
             case variant_policy_operation::IS_VALID:
             {
                 return true;
-                break;
             }
             case variant_policy_operation::IS_NULLPTR:
             {
                 return is_nullptr(Tp::get_value(src_data));
-                break;
             }
             case variant_policy_operation::COMPARE_EQUAL:
             {
@@ -331,7 +350,6 @@ struct variant_data_base_policy
                 }
 
                 return false;
-                break;
             }
             case variant_policy_operation::COMPARE_LESS:
             {
@@ -353,7 +371,6 @@ struct variant_data_base_policy
 
                 // as last try, do a string conversion
                 return (lhs.to_string() < rhs.to_string());
-                break;
             }
         }
 
@@ -600,6 +617,8 @@ struct RTTR_API variant_data_policy_empty
             case variant_policy_operation::DESTROY:
             case variant_policy_operation::CLONE:
             case variant_policy_operation::SWAP:
+            case variant_policy_operation::EXTRACT_WRAPPED_VALUE:
+            case variant_policy_operation::CREATE_WRAPPED_VALUE:
             {
                 break;
             }
@@ -642,14 +661,21 @@ struct RTTR_API variant_data_policy_empty
             {
                 return false;
             }
+            case variant_policy_operation::IS_ASSOCIATIVE_CONTAINER:
+            {
+                return false;
+            }
             case variant_policy_operation::TO_ARRAY:
+            {
+                break;
+            }
+            case variant_policy_operation::CREATE_ASSOCIATIV_VIEW:
             {
                 break;
             }
             case variant_policy_operation::IS_VALID:
             {
                 return false;
-                break;
             }
             case variant_policy_operation::IS_NULLPTR:
             {
@@ -739,9 +765,21 @@ struct RTTR_API variant_data_policy_void
             {
                 return false;
             }
+             case variant_policy_operation::IS_ASSOCIATIVE_CONTAINER:
+            {
+                return false;
+            }
             case variant_policy_operation::TO_ARRAY:
             {
                 break;
+            }
+            case variant_policy_operation::CREATE_ASSOCIATIV_VIEW:
+            {
+                break;
+            }
+            case variant_policy_operation::CREATE_WRAPPED_VALUE:
+            {
+                return false;
             }
             case variant_policy_operation::IS_NULLPTR:
             {
@@ -750,7 +788,6 @@ struct RTTR_API variant_data_policy_void
             case variant_policy_operation::IS_VALID:
             {
                 return true;
-                break;
             }
             case variant_policy_operation::CONVERT:
             {
@@ -830,6 +867,10 @@ struct RTTR_API variant_data_policy_nullptr_t
                 swap(get_value(src_data), arg.get_value<variant_data>());
                 break;
             }
+            case variant_policy_operation::CREATE_WRAPPED_VALUE:
+            {
+                return false;
+            }
             case variant_policy_operation::EXTRACT_WRAPPED_VALUE:
             {
                 break;
@@ -872,7 +913,15 @@ struct RTTR_API variant_data_policy_nullptr_t
             {
                 return false;
             }
+             case variant_policy_operation::IS_ASSOCIATIVE_CONTAINER:
+            {
+                return false;
+            }
             case variant_policy_operation::TO_ARRAY:
+            {
+                break;
+            }
+            case variant_policy_operation::CREATE_ASSOCIATIV_VIEW:
             {
                 break;
             }

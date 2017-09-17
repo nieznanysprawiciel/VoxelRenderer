@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -148,7 +148,8 @@ class property_wrapper<object_ptr, C*, void, Acc_Level, return_as_ptr, set_as_pt
         {
             if (arg.is_type<C*>())
             {
-                return property_accessor<C*>::set_value(m_accessor, arg);
+                *m_accessor = *arg.get_value<C*>();
+                return true;
             }
             else
             {
@@ -198,7 +199,7 @@ class property_wrapper<object_ptr, C*, void, Acc_Level, return_as_ptr, read_only
 
         variant get_value(instance& object) const
         {
-            return (variant(const_cast<const C*>(m_accessor)));
+            return (variant(m_accessor));
         }
 
     private:

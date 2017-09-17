@@ -423,6 +423,12 @@
     <ClInclude Include="..\..\..\Reflection\src\rttr\detail\variant\variant_impl.h">
       <Filter>ReflectionCode\rttr\detail\variant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\associative_mapper.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Reflection\src\rttr\variant_associative_view.h">
+      <Filter>ReflectionCode\rttr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Reflection\src\rttr\constructor.cpp">
@@ -499,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Reflection\src\rttr\detail\variant\variant_compare.cpp">
       <Filter>ReflectionCode\rttr\detail\variant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Reflection\src\rttr\variant_associative_view.cpp">
+      <Filter>ReflectionCode\rttr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

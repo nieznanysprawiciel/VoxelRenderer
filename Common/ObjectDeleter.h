@@ -7,10 +7,15 @@
 które maj¹ prywatne destruktory.
 */
 
+class ResourceObject;
 template <class TYPE> class ResourceContainer;
+template< class ResourceType > class ResourceContainer;
+template<> class ResourceContainer< ResourceObject >;
 
-
-
+namespace sw
+{
+class AssetsManager;
+}	// sw
 
 /**
 @ingroup Helpers
@@ -35,8 +40,9 @@ w klasie deklaruj¹cej przyjaŸñ nie bêd¹ psu³y ca³ego kodu aplikacji.
 template<typename class_type> class ObjectDeleterKey
 {
 	friend class ResourceManager;
-	friend class AssetsManager;
+	friend class sw::AssetsManager;
 	friend class ResourceContainer<class_type>;
+	friend class ResourceContainer< ResourceObject >;
 	friend class RenderTargetObject;
 private:
 	ObjectDeleterKey() = default;						///<Tylko klasa zaprzyjaŸniona mo¿e stworzyæ obiekt.

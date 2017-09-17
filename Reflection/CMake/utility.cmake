@@ -1,6 +1,6 @@
 ####################################################################################
 #                                                                                  #
-#  Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     #
+#  Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     #
 #                                                                                  #
 #  This file is part of RTTR (Run Time Type Reflection)                            #
 #  License: MIT License                                                            #
@@ -451,6 +451,8 @@ function(getCompilerName _COMPILER_NAME)
     set(COMPILER_NAME "vs2013")
   elseif(MSVC_VERSION EQUAL 1900)
     set(COMPILER_NAME "vs2015")
+  elseif(MSVC_VERSION EQUAL 1910)
+    set(COMPILER_NAME "vs2017")
   elseif(CMAKE_COMPILER_IS_GNUCXX)
     set(COMPILER_NAME "gcc")
     if(WIN32)

@@ -8,6 +8,8 @@
 #include "swCommonLib/Common/TypesDefinitions.h"
 #include "Path.h"
 
+#include <string>
+
 
 namespace filesystem
 {
@@ -35,6 +37,11 @@ public:
 	bool			Remove		();
 	bool			Move		( const Path& newPath );
 	bool			Copy		( const Path& newPath );
+
+
+public:
+
+	static std::string		Load		( const Path& newPath );
 };
 
 }	// filesystem

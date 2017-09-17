@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -92,12 +92,24 @@ struct other_derived : virtual base
     RTTR_ENABLE(base)
 };
 
+enum class test_enum
+{
+    first = 1,
+    second = 2
+};
+
 } // end anonymous namespace
 
 RTTR_REGISTRATION
 {
     type::register_converter_func(convert_to_string);
     type::register_converter_func(convert_to_vector);
+
+    registration::enumeration<test_enum>("test_enum")
+        (
+            value("first", test_enum::first),
+            value("second", test_enum::second)
+    );
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -589,6 +601,12 @@ TEST_CASE("variant test - convert internal", "[variant]")
     CHECK(var.is_type<derived*>() == true);
     CHECK(var.get_value<derived*>() == d);
     CHECK(var.convert<base*>() == b);
+
+    derived* d2 = nullptr;
+    var = d2;
+    could_convert = false;
+    CHECK(var.convert<base*>(&could_convert) == nullptr);
+    CHECK(could_convert == true);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -628,6 +646,144 @@ TEST_CASE("variant test - convert to nullptr", "[variant]")
 
         CHECK(var.convert(type::get<std::nullptr_t>()) == true);
     }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("variant test - convert from wrapped value", "[variant]")
+{
+    SECTION("valid conversion")
+    {
+        int obj = 42;
+        variant var = std::ref(obj);
+
+        CHECK(var.can_convert(type::get<int>()) == true);
+
+        bool ok = false;
+        int val = var.convert<int>(&ok);
+        CHECK(ok == true);
+        CHECK(val == obj);
+
+        CHECK(var.convert(type::get<int>()) == true);
+
+        int val_2;
+        CHECK(var.convert<int>(val_2) == true);
+        CHECK(val_2 == obj);
+    }
+
+    SECTION("valid conversion std::shared_ptr")
+    {
+        auto raw_ptr = new int(42);
+        variant var = std::shared_ptr<int>(raw_ptr);
+
+        CHECK(var.can_convert(type::get<int*>()) == true);
+
+        bool ok = false;
+        auto val = var.convert<int*>(&ok);
+        CHECK(ok == true);
+        CHECK(val == raw_ptr);
+
+        int* val_2;
+        CHECK(var.convert<int*>(val_2) == true);
+        CHECK(val_2 == raw_ptr);
+
+        CHECK(var.convert(type::get<int*>()) == true);
+    }
+
+    SECTION("invalid conversion")
+    {
+        int obj = 42;
+        int* obj_ptr = &obj;
+        variant var = std::ref(obj_ptr);
+
+        // cannot convert from int* to int automatically
+        CHECK(var.can_convert(type::get<int>()) == false);
+
+        bool ok = false;
+        int val = var.convert<int>(&ok);
+        CHECK(ok == false);
+
+        CHECK(var.convert(type::get<int>()) == false);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("variant test - convert to wrapped value", "[variant]")
+{
+    SECTION("valid conversion")
+    {
+        auto raw_ptr = new int(42);
+        variant var = raw_ptr;
+
+        REQUIRE(var.can_convert(type::get<std::shared_ptr<int>>()) == true);
+
+        auto result = var.convert(type::get<std::shared_ptr<int>>());
+        CHECK(result == true);
+        CHECK(var.get_type() == type::get<std::shared_ptr<int>>());
+        CHECK(var.get_value<std::shared_ptr<int>>().get() == raw_ptr);
+    }
+
+    SECTION("convert and return wrapper")
+    {
+        auto raw_ptr = new int(42);
+        variant var = raw_ptr;
+
+
+        CHECK(var.can_convert<std::shared_ptr<int>>() == true);
+
+        bool ok = false;
+        auto ptr = var.convert<std::shared_ptr<int>>(&ok);
+        CHECK(ok == true);
+        CHECK(ptr.get() == raw_ptr);
+        CHECK(var.get_type() == type::get<int*>());
+    }
+
+    SECTION("convert to existing wrapper")
+    {
+        auto raw_ptr = new int(42);
+        variant var = raw_ptr;
+        std::shared_ptr<int> ptr;
+        CHECK(var.convert(ptr)  == true);
+        CHECK(ptr.get()         == raw_ptr);
+        CHECK(var.get_type()    == type::get<int*>());
+    }
+
+    SECTION("invalid conversion")
+    {
+        int obj = 42;
+        variant var = obj;
+
+        CHECK(var.can_convert(type::get<std::unique_ptr<int>>())        == false);
+        CHECK(var.can_convert(type::get<std::reference_wrapper<int>>()) == false);
+        CHECK(var.can_convert(type::get<std::weak_ptr<int>>())          == false);
+        CHECK(var.can_convert(type::get<std::shared_ptr<int>>())        == false);
+
+        var = &obj;
+
+        CHECK(var.can_convert(type::get<std::unique_ptr<int>>())        == false);
+        CHECK(var.can_convert(type::get<std::reference_wrapper<int>>()) == false);
+        CHECK(var.can_convert(type::get<std::weak_ptr<int>>())          == false);
+        // bool is wrong wrapped type!
+        CHECK(var.can_convert(type::get<std::shared_ptr<bool>>())       == false);
+
+        auto result = var.convert(type::get<std::shared_ptr<bool>>());
+        CHECK(result == false);
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+TEST_CASE("variant test - convert from enum", "[variant]")
+{
+    auto ok = false;
+    rttr::variant var = type::get<test_enum>().get_enumeration().name_to_value("second");
+    test_enum converted = var.convert<test_enum>(&ok);
+
+    CHECK(ok == true);
+    CHECK(converted != test_enum::first);
+    CHECK(converted == test_enum::second);
+    CHECK(static_cast<int>(converted) == 2);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////

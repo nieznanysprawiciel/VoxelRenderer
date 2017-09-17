@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RTTR.h"
+#include "swCommonLib/Common/RTTR.h"
 #include "swCommonLib/Common/Properties/Property.h"
 
 

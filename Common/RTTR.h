@@ -183,6 +183,6 @@ class StaticActor : public EngineObject
 */
 
 #define BIND_AS_PTR		( rttr::policy::prop::bind_as_ptr )
-
+#define BIND_AS_REF		( rttr::policy::prop::as_reference_wrapper )
 
 

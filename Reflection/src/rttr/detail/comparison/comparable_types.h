@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -46,7 +46,8 @@ using is_comparable_type = std::integral_constant<bool, std::is_same<T, std::str
                                                         std::is_same<T, string_view>::value ||
                                                         std::is_arithmetic<T>::value ||
                                                         std::is_enum<T>::value ||
-                                                        std::is_same<T, std::nullptr_t>::value
+                                                        std::is_same<T, std::nullptr_t>::value ||
+                                                        std::is_pointer<T>::value
                                                  >;
 
 /////////////////////////////////////////////////////////////////////////////////////////

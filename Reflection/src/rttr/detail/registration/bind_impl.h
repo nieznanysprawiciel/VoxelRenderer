@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -43,6 +43,7 @@
 #include "rttr/detail/misc/utility.h"
 #include "rttr/detail/type/type_register.h"
 #include "rttr/detail/default_arguments/default_arguments.h"
+#include "rttr/detail/registration/register_base_class_from_accessor.h"
 #include "rttr/policy.h"
 #include "rttr/type.h"
 
@@ -391,6 +392,7 @@ class registration::bind<detail::prop, Class_Type, A, acc_level> : public regist
         bind(const std::shared_ptr<detail::registration_executer>& reg_exec, string_view name, A acc)
         :   registration_derived_t<Class_Type>(reg_exec), m_reg_exec(reg_exec), m_name(name), m_acc(acc)
         {
+            detail::register_accessor_class_type_when_needed<Class_Type, A>();
             m_reg_exec->add_registration_func(this);
         }
 
@@ -480,6 +482,8 @@ class registration::bind<detail::prop, Class_Type, A1, A2, acc_level> : public r
         bind(const std::shared_ptr<detail::registration_executer>& reg_exec, string_view name, A1 getter, A2 setter)
         :   registration_derived_t<Class_Type>(reg_exec), m_reg_exec(reg_exec), m_name(name), m_getter(getter), m_setter(setter)
         {
+            detail::register_accessor_class_type_when_needed<Class_Type, A1>();
+            detail::register_accessor_class_type_when_needed<Class_Type, A2>();
             m_reg_exec->add_registration_func(this);
         }
 
@@ -568,6 +572,7 @@ class registration::bind<detail::prop_readonly, Class_Type, A, acc_level> : publ
         bind(const std::shared_ptr<detail::registration_executer>& reg_exec, string_view name, A acc)
         :   registration_derived_t<Class_Type>(reg_exec), m_reg_exec(reg_exec), m_name(name), m_acc(acc)
         {
+            detail::register_accessor_class_type_when_needed<Class_Type, A>();
             m_reg_exec->add_registration_func(this);
         }
 
@@ -699,6 +704,7 @@ class registration::bind<detail::meth, Class_Type, F, acc_level> : public regist
         bind(const std::shared_ptr<detail::registration_executer>& reg_exec, string_view name, F f)
         :   registration_derived_t<Class_Type>(reg_exec), m_reg_exec(reg_exec), m_name(name), m_func(f)
         {
+            detail::register_accessor_class_type_when_needed<Class_Type, F>();
             m_reg_exec->add_registration_func(this);
         }
 

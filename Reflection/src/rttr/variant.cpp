@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -29,6 +29,7 @@
 
 #include "rttr/detail/variant/variant_data_policy.h"
 #include "rttr/variant_array_view.h"
+#include "rttr/variant_associative_view.h"
 #include "rttr/argument.h"
 
 #include <algorithm>
@@ -164,6 +165,13 @@ bool variant::is_array() const
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+bool variant::is_associative_container() const
+{
+    return m_policy(detail::variant_policy_operation::IS_ASSOCIATIVE_CONTAINER, m_data, detail::argument_wrapper());
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 type variant::get_type() const
 {
     type src_type = detail::get_invalid_type();
@@ -182,10 +190,28 @@ variant variant::extract_wrapped_value() const
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+variant variant::create_wrapped_value(const type& wrapped_type) const
+{
+    variant var;
+    m_policy(detail::variant_policy_operation::CREATE_WRAPPED_VALUE, m_data, std::tie(var, wrapped_type));
+    return var;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 variant_array_view variant::create_array_view() const
 {
     variant_array_view result;
     m_policy(detail::variant_policy_operation::TO_ARRAY, m_data, result.m_array_wrapper);
+    return result;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+variant_associative_view variant::create_associative_view() const
+{
+    variant_associative_view result;
+    m_policy(detail::variant_policy_operation::CREATE_ASSOCIATIV_VIEW, m_data, result.m_view);
     return result;
 }
 
@@ -196,7 +222,8 @@ bool variant::can_convert(const type& target_type) const
     if (!is_valid())
         return false;
 
-    const type source_type = get_type();
+    type source_type = get_type();
+    source_type = (source_type.is_wrapper() && !target_type.is_wrapper()) ? source_type.get_wrapped_type() : source_type;
 
     if (source_type == target_type)
         return true;
@@ -204,6 +231,12 @@ bool variant::can_convert(const type& target_type) const
     if (source_type.get_pointer_dimension() == 1 && target_type.get_pointer_dimension() == 1)
     {
         if (void * ptr = type::apply_offset(get_raw_ptr(), source_type, target_type))
+            return true;
+    }
+
+    if (!source_type.is_wrapper() && target_type.is_wrapper())
+    {
+        if (target_type.get_wrapped_type() == source_type && target_type.m_type_data->create_wrapper)
             return true;
     }
 
@@ -243,6 +276,18 @@ bool variant::convert(const type& target_type, variant& target_var) const
     {
         target_var = *this;
         return true; // the current variant is already the target type, we don't need to do anything
+    }
+    else if (!source_type.is_wrapper() && target_type.is_wrapper() &&
+             target_type.get_wrapped_type() == source_type)
+    {
+        target_var = create_wrapped_value(target_type);
+        ok = target_var.is_valid();
+    }
+    else if (source_type.is_wrapper() && !target_type.is_wrapper())
+    {
+        variant var = extract_wrapped_value();
+        ok = var.convert(target_type);
+        target_var = var;
     }
     else if ((source_is_arithmetic && target_is_arithmetic) ||
             (source_is_arithmetic && target_type == string_type) ||

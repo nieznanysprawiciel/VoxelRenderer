@@ -1,6 +1,6 @@
 /************************************************************************************
 *                                                                                   *
-*   Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     *
+*   Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     *
 *                                                                                   *
 *   This file is part of RTTR (Run Time Type Reflection)                            *
 *   License: MIT License                                                            *
@@ -46,7 +46,7 @@ RTTR_INLINE instance::instance() RTTR_NOEXCEPT
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-RTTR_INLINE instance::instance(variant& var) RTTR_NOEXCEPT
+RTTR_INLINE instance::instance(const variant& var) RTTR_NOEXCEPT
 :   m_data_container(var.get_data_address_container())
 {
 }

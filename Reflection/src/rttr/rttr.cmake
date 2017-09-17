@@ -1,6 +1,6 @@
 ####################################################################################
 #                                                                                  #
-#  Copyright (c) 2014, 2015 - 2016 Axel Menzel <info@rttr.org>                     #
+#  Copyright (c) 2014, 2015 - 2017 Axel Menzel <info@rttr.org>                     #
 #                                                                                  #
 #  This file is part of RTTR (Run Time Type Reflection)                            #
 #  License: MIT License                                                            #
@@ -29,6 +29,7 @@ set(HEADER_FILES access_levels.h
                  argument.h
                  array_mapper.h
                  array_range.h
+                 associative_mapper.h
                  constructor.h
                  destructor.h
                  enumeration.h
@@ -48,6 +49,7 @@ set(HEADER_FILES access_levels.h
                  type.h
                  variant.h
                  variant_array_view.h
+                 variant_associative_view.h
                  wrapper_mapper.h
                  detail/array/array_accessor.h
                  detail/array/array_accessor_impl.h
@@ -83,6 +85,7 @@ set(HEADER_FILES access_levels.h
                  detail/filter/filter_item_funcs.h
                  detail/impl/argument_impl.h
                  detail/impl/array_range_impl.h
+                 detail/impl/associative_mapper_impl.h
                  detail/impl/enum_flags_impl.h
                  detail/impl/instance_impl.h
                  detail/impl/rttr_cast_impl.h
@@ -101,8 +104,10 @@ set(HEADER_FILES access_levels.h
                  detail/misc/flat_map.h
                  detail/misc/flat_multimap.h
                  detail/misc/function_traits.h
+				 detail/misc/iterator_wrapper.h
                  detail/misc/misc_type_traits.h
                  detail/misc/std_type_traits.h
+                 detail/misc/template_type_trait.h
                  detail/misc/utility.h
                  detail/parameter_info/parameter_infos.h
                  detail/parameter_info/parameter_infos_compare.h
@@ -121,6 +126,7 @@ set(HEADER_FILES access_levels.h
                  detail/property/property_wrapper_object.h
                  detail/registration/bind_types.h
                  detail/registration/bind_impl.h
+                 detail/registration/register_base_class_from_accessor.h
                  detail/registration/registration_impl.h
                  detail/registration/registration_executer.h
                  detail/type/accessor_type.h
@@ -144,6 +150,9 @@ set(HEADER_FILES access_levels.h
                  detail/variant_array_view/variant_array_view_creator.h
                  detail/variant_array_view/variant_array_view_creator_impl.h
                  detail/variant_array_view/variant_array_view_traits.h
+                 detail/variant_associative_view/variant_associative_view_private.h
+                 detail/variant_associative_view/variant_associative_view_creator.h
+                 detail/variant_associative_view/variant_associative_view_creator_impl.h
                 )
 
 set(SOURCE_FILES constructor.cpp
@@ -157,6 +166,7 @@ set(SOURCE_FILES constructor.cpp
                  type.cpp
                  variant.cpp
                  variant_array_view.cpp
+                 variant_associative_view.cpp
                  detail/comparison/compare_equal.cpp
                  detail/comparison/compare_less.cpp
                  detail/misc/standard_types.cpp
