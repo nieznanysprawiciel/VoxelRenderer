@@ -48,10 +48,10 @@ SpectatorCameraController::~SpectatorCameraController()
 //
 void		SpectatorCameraController::InitDefaultSpeed()
 {
-	m_moveSpeed = 0.1f;
-	m_buttonRotSpeed = 0.01f;
-	m_axisRotSpeed = 0.01f;
-	m_zoomSpeed = 0.01f;
+	m_moveSpeed = 1.0f;
+	m_buttonRotSpeed = 0.1f;
+	m_axisRotSpeed = 0.1f;
+	m_zoomSpeed = 0.1f;
 }
 
 
