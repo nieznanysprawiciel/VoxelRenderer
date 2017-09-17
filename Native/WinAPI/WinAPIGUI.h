@@ -60,6 +60,7 @@ public:
 	virtual bool				Init			( const NativeGUIInitData& initData )			override;
 	virtual sw::input::IInput*	UseNativeInput	()												override;
 	virtual INativeWindow*		CreateWindow	( NativeWindowDescriptor& descriptor )			override;
+	virtual void				EndApplication	()												override;
 
 	static WinAPIGUI*			Create			();
 

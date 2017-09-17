@@ -31,6 +31,14 @@ MockGUI*		MockGUI::Create()
 	return new MockGUI();
 }
 
+// ================================ //
+//
+void			MockGUI::EndApplication()
+{
+	/// @todo How to close application in MockGUI.
+	exit( 0 );
+}
+
 
 
 //====================================================================================//

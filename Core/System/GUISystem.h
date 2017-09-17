@@ -1,10 +1,20 @@
 #pragma once
+/**
+@file GUISystem.h
+@author nieznanysprawiciel
+@copyright File is part of Sleeping Wombat Libraries.
+*/
+
+
+
 
 #include "swCommonLib/Common/EngineObject.h"
 #include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
 #include "swGUI/Native/INativeGUI.h"
 #include "Events/EventsSystem.h"
 #include "swGUI/Core/System/Rendering/RenderingSystem.h"
+#include "swGUI/Core/System/Config/GUISystemConfig.h"
+#include "swGUI/Core/System/Time/Clock.h"
 
 #include "HostWindow.h"
 
@@ -249,6 +259,8 @@ private:
 
 protected:
 
+	GUISystemConfig				m_guiConfig;		///< Configuration flags.
+
 	IGraphicAPIInitializer*		m_graphicApi;		///< Contains object responsible for dealing with specifics graphic apis.
 	INativeGUI*					m_nativeGUI;		///< Native window system used to display main application window.
 	input::IInput*				m_input;			///< Input processor.
@@ -258,6 +270,8 @@ protected:
 
 	std::vector< HostWindow* >	m_windows;
 	HostWindow*					m_focusedWindow;	///< Only one window can have focus and only this will be processed.
+
+	Clock						m_clock;			///< Application time manager.
 
 	CommandLineArgs				m_cmdArgs;
 
@@ -274,29 +288,36 @@ public:
 protected:
 	///@name User overrides
 	///@{
-	virtual	void	Initialize		();
-	virtual void	OnInitialized	() = 0;
+	virtual	bool	Initialize		();
+	virtual bool	OnInitialized	() = 0;
 	virtual void	OnClosing		() = 0;
-	virtual void	OnIdle			() = 0;
+	virtual void	OnIdle			( const FrameTime& frameTime ) = 0;
 	///@}
 
 	///@name Default initialization functions
 	///@{
-	void			DefaultInitWithoutWindow	();
-	void			DefaultInit					( uint16 width, uint16 height, const std::string& windowTitle );
+	bool			DefaultInitWithoutWindow	();
+	bool			DefaultInit					( uint16 width, uint16 height, const std::string& windowTitle );
 	bool			DefaultInitNativeGUI		();
-	bool			DefaultInitGraphicAPI		();
+	bool			DefaultInitGraphicAPI		( bool debug, bool singleThreaded );
 	bool			DefaultInitRenderingSystem	();
+	bool			DefaultInitFirstWindow		( uint16 width, uint16 height, const std::string& windowTitle, bool show );
+	bool			DefaultInitResourceManager	();
+	bool			InitResourceManager			( ResourceManager* resourceManager );
+
+	bool			ResourceManagerInitImpl		( ResourceManager* resourceManager );
 	///@}
 
 public:
 
 	///@name Main functions
 	///@{
-	void			Init			();
+	bool			Init			();
 	int				MainLoop		();
 	bool			MainLoopCore	();
-	void			HandleEvents	();
+	void			HandleEvents	( const FrameTime& frameTime );
+	void			RenderGUI		( const FrameTime& frameTime );
+	void			CloseLogic		();
 	///@}
 
 public:
@@ -314,6 +335,10 @@ public:
 	@note windowDesc can change. For instance: if you set AdjustSize to true, function will return real window size.*/
 	HostWindow*		CreateNativeHostWindow		( NativeWindowDescriptor& windowDesc );
 
+
+private:
+
+	int				GetSyncInterval				() const;
 
 public:
 	static GUISystem&	Get				();

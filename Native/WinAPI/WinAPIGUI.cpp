@@ -193,6 +193,13 @@ void        WinAPIGUI::HandleEvent              ( HWND hWnd, UINT message, WPARA
 	}
 }
 
+// ================================ //
+//
+void		WinAPIGUI::EndApplication			()
+{
+	PostQuitMessage( 0 );
+}
+
 
 /**@copydoc INativeGUI::MainLoop*/
 bool		WinAPIGUI::MainLoop                 ( bool blockingMode )

@@ -56,6 +56,9 @@ public:
 
 	/**@brief Creates native GUI window.*/
 	virtual INativeWindow*			CreateWindow	( NativeWindowDescriptor& descriptor ) = 0;
+
+	/**@brief REquest native gui to close application.*/
+	virtual void					EndApplication	() = 0;
 };
 
 

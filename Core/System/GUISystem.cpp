@@ -47,6 +47,10 @@ GUISystem::~GUISystem()
 	delete m_nativeGUI;
 }
 
+//====================================================================================//
+//			Main loop	
+//====================================================================================//
+
 
 /**@brief Application main loop.
 
@@ -59,7 +63,7 @@ int					GUISystem::MainLoop()
 		if( end ) break;
 	}
 
-	OnClosing();
+	CloseLogic();
 
 	return 0;
 }
@@ -71,24 +75,25 @@ int					GUISystem::MainLoop()
 bool				GUISystem::MainLoopCore()
 {
 	// Process native events.
-	bool end = m_nativeGUI->MainLoop( true );
-	if( end ) return true;;
+	bool end = m_nativeGUI->MainLoop( m_guiConfig.UseBlockingMode );
+	if( end ) return true;
 
-	HandleEvents();
+	auto frameTime = m_clock.AdvanceFrame();
+
+	HandleEvents( frameTime );
 
 	// @todo How should it be done ??
-	OnIdle();
-	if( m_focusedWindow )
-		m_focusedWindow->GetSwapChain()->Present( 1 );
+	OnIdle( frameTime );
+	RenderGUI( frameTime );
 
 	return false;
 }
 
 /**@brief Processes messages and passes them to focused window.*/
-void				GUISystem::HandleEvents()
+void				GUISystem::HandleEvents		( const FrameTime& frameTime )
 {
 	// @todo We should pass correct time in parameter.
-	m_input->Update( 0.0 );
+	m_input->Update( (float)frameTime.Elapsed );
 
 	if( m_focusedWindow )
 		m_focusedWindow->HandleInput();
@@ -105,12 +110,43 @@ void				GUISystem::HandleEvents()
 	}
 }
 
+// ================================ //
+//
+void				GUISystem::RenderGUI		( const FrameTime& frameTime )
+{
+	if( m_guiConfig.RedrawOnlyFocused && m_focusedWindow )
+		m_focusedWindow->GetSwapChain()->Present( GetSyncInterval() );
+
+	if( !m_guiConfig.RedrawOnlyFocused )
+	{
+		for( auto window : m_windows )
+			window->GetSwapChain()->Present( GetSyncInterval() );
+	}
+}
+
+// ================================ //
+//
+void				GUISystem::CloseLogic		()
+{
+	OnClosing();
+}
+
+
+//====================================================================================//
+//			Initialization	
+//====================================================================================//
 
 /**@brief Invoke this function in application entry point (main).*/
-void				GUISystem::Init()
+bool				GUISystem::Init()
 {
-	Initialize();		// Initialize subsystems.
-	OnInitialized();	// User initialization.
+	bool result = true;
+
+	result = result && Initialize();		// Initialize subsystems.
+	result = result && OnInitialized();		// User initialization.
+
+	m_clock.Start();	// Start clock as last in initialization.
+
+	return result;
 }
 
 
@@ -118,30 +154,33 @@ void				GUISystem::Init()
 
 If you need specific gui initialization in your application override this function.
 You can set different GraphicApi or input api.*/
-void				GUISystem::Initialize()
+bool				GUISystem::Initialize()
 {
-	DefaultInit( 1024, 768, "Window Tittle" );
+	return DefaultInit( 1024, 768, "Window Tittle" );
 }
 
 /**@brief Makes initialization but leaves window creation for user.*/
-void				GUISystem::DefaultInitWithoutWindow	()
+bool				GUISystem::DefaultInitWithoutWindow	()
 {
-	m_resourceManager = new ResourceManager();
+	bool result = true;
 
-	DefaultInitGraphicAPI();
-	DefaultInitNativeGUI();
-	DefaultInitRenderingSystem();
+	result = result && DefaultInitResourceManager();
+	result = result && DefaultInitGraphicAPI( false, true );
+	result = result && DefaultInitNativeGUI();
+	result = result && DefaultInitRenderingSystem();
+
+	return result;
 }
 
 /**@brief Default GUI system initialization function.*/
-void				GUISystem::DefaultInit				( uint16 width, uint16 height, const std::string& windowTitle )
+bool				GUISystem::DefaultInit				( uint16 width, uint16 height, const std::string& windowTitle )
 {
-	DefaultInitWithoutWindow();
+	bool result = true;
 
-	// Note: we must always initialize first focus window. This is probably hack, but OnFocusChanged delegate won't be invoked.
-	m_focusedWindow = CreateNativeHostWindow( width, height, windowTitle );
-	assert( m_focusedWindow );
-	m_focusedWindow->GotFocus();
+	result = result && DefaultInitWithoutWindow();
+	result = result && DefaultInitFirstWindow( width, height, windowTitle, true );
+
+	return result;
 }
 
 
@@ -154,21 +193,26 @@ bool				GUISystem::DefaultInitNativeGUI		()
 	NativeGUIInitData nativeGUIInit;
 	nativeGUIInit.FocusChanged = fastdelegate::MakeDelegate( this, &GUISystem::OnFocusChanged );
 
-	m_nativeGUI->Init( nativeGUIInit );
+	bool result = m_nativeGUI->Init( nativeGUIInit );
+	if( result )
+	{
+		m_input = m_nativeGUI->UseNativeInput();
+		assert( m_input );
+	}
 
-	m_input = m_nativeGUI->UseNativeInput();
-	assert( m_input );
-
-	return true;
+	return result;
 }
 
 /**@brief Default graphic api initialization.*/
-bool				GUISystem::DefaultInitGraphicAPI	()
+bool				GUISystem::DefaultInitGraphicAPI	( bool debug, bool singleThreaded )
 {
 	// ResourceFactory creates api which is linked as library.
 	m_graphicApi = ResourcesFactory::CreateAPIInitializer();
+
 	GraphicAPIInitData graphicApiData;
 	graphicApiData.CreateSwapChain = false;		// We will create swap chain and render target later with window.
+	graphicApiData.SingleThreaded = singleThreaded;
+	graphicApiData.UseDebugLayer = debug;
 
 	auto result = m_graphicApi->InitAPI( graphicApiData );
 	assert( result );
@@ -193,10 +237,53 @@ bool				GUISystem::DefaultInitRenderingSystem	()
 	return true;
 }
 
+// ================================ //
+//
+bool				GUISystem::DefaultInitFirstWindow		( uint16 width, uint16 height, const std::string& windowTitle, bool show )
+{
+	// Note: we must always initialize first focus window. This is probably hack, but OnFocusChanged delegate won't be invoked.
+	m_focusedWindow = CreateNativeHostWindow( width, height, windowTitle );
+	assert( m_focusedWindow );
+	m_focusedWindow->GotFocus();
+
+	if( show )
+		m_focusedWindow->GetNativeWindow()->Show();
+	else
+		m_focusedWindow->GetNativeWindow()->Hide();
+
+	return true;
+}
+
+/**@brief Function creates ResourceManager and calls default initialization.*/
+bool				GUISystem::DefaultInitResourceManager	()
+{
+	m_resourceManager = new ResourceManager();
+	return ResourceManagerInitImpl( m_resourceManager );
+}
+
+/**@brief This functions sets ResourceManager from parameter and calls default initialization.*/
+bool				GUISystem::InitResourceManager			( ResourceManager* resourceManager )
+{
+	m_resourceManager = resourceManager;
+	return ResourceManagerInitImpl( m_resourceManager );
+}
+
+// ================================ //
+//
+bool				GUISystem::ResourceManagerInitImpl		( ResourceManager* resourceManager )
+{
+	// Empty for future use
+	return true;
+}
+
+//====================================================================================//
+//			Focus management	
+//====================================================================================//
+
 /**@brief Changes focused window.
 
 Delegate for native GUI.*/
-void				GUISystem::OnFocusChanged	( INativeWindow* window, bool value )
+void				GUISystem::OnFocusChanged				( INativeWindow* window, bool value )
 {
 	if( !value )
 	{
@@ -238,6 +325,11 @@ void				GUISystem::OnFocusChanged	( INativeWindow* window, bool value )
 	}
 }
 
+//====================================================================================//
+//			Windows creation	
+//====================================================================================//
+
+
 // ================================ //
 //
 HostWindow*			GUISystem::CreateNativeHostWindow	( uint16 width, uint16 height, const std::string& windowTitle )
@@ -262,6 +354,10 @@ HostWindow*			GUISystem::CreateNativeHostWindow	( NativeWindowDescriptor& window
 
 	return hostWindow;
 }
+
+//====================================================================================//
+//				Other functions
+//====================================================================================//
 
 /**@copydoc EngineObject::MemorySize*/
 Size				GUISystem::GetMemorySize()
@@ -297,6 +393,16 @@ const char*			GUISystem::ProgramPath()
 }
 
 
+//====================================================================================//
+//			Internal implementation	
+//====================================================================================//
+
+// ================================ //
+//
+int					GUISystem::GetSyncInterval() const
+{
+	return m_guiConfig.UseVSync ? 1 : 0;
+}
 
 /**@brief */
 GUISystem&			GUISystem::Get()
