@@ -6,6 +6,9 @@
 
 
 using namespace DirectX;
+using namespace sw::input;
+
+
 
 namespace vr
 {
@@ -87,7 +90,17 @@ void				RaycasterGPU::Init				( IRenderer* renderer, ResourceManager* resourceMa
 // ================================ //
 //
 void				RaycasterGPU::ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )
-{}
+{
+	if( keyboard[ Keyboard::PhysicalKeys::KEY_1 ].IsKeyDownEvent() )
+	{
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/RaycasterGPU/SimpleColor.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_2 ].IsKeyDownEvent() )
+	{
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/RaycasterGPU/Normals.hlsl", "main" );
+	}
+
+}
 
 
 //====================================================================================//

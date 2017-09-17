@@ -43,6 +43,8 @@ bool		Application::OnInitialized		()
 	InitRaycaster();
 	InitOctree();
 
+	m_guiConfig.UseBlockingMode = false;
+
 	return true;
 }
 
