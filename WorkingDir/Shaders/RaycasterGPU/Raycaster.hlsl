@@ -40,7 +40,10 @@ uint		CountNodesBefore		( ChildFlag childShift, uint childMask );
 //
 float				copysignf			( float value, float signParam )
 {
-	return abs( value ) * sign( signParam );
+	if( signParam > 0.0 )
+		return abs( value );
+	else
+		return -abs( value );
 }
 
 // ================================ //
@@ -121,7 +124,8 @@ int					HighestBitPos		( int diffs )
 //
 void				InitRaycasting		( float3 position, float3 direction, inout RaycasterContext rayCtx )
 {
-	const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
+	//const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
+	const float epsilon = 1e-10;
 
 	rayCtx.RayStartPosition = position;
 	rayCtx.RayDirection = direction;
