@@ -113,7 +113,7 @@ uint				ChildPackPtr	( OctreeNode node )
 uint				GetNode			( uint idx )
 {
 	// Note: We address buffer in bytes and pointers are stored as multiple of OctreeNode size.
-	return Octree.Load( idx * OCTREE_NODE_SIZE );
+	return asuint( Octree.Load( idx * OCTREE_NODE_SIZE ) );
 }
 
 // ================================ //
@@ -145,7 +145,7 @@ BlockDescriptor		GetBlockDescriptor		( OctreeLeaf leaf )
 	BlockDescriptor blockDescriptor;
 
 	// In future we could support multiple descriptors, each on start of new block.
-	uint2 desc = Octree.Load2( 0 );
+	uint2 desc = asuint( Octree.Load2( 0 ) );
 
 	blockDescriptor.AttributesOffset = desc.x;
 	blockDescriptor.RootNodeOffset = desc.y;
@@ -164,7 +164,7 @@ uint				AttributesOffset		( OctreeLeaf leaf )
 VoxelAttributes		GetAttributes			( uint attributeOffset )
 {
 	// Note: We address buffer in bytes and pointers are stored as multiple of OctreeNode size.
-	float4 attribute = Octree.Load4( attributeOffset * OCTREE_NODE_SIZE );
+	float4 attribute = asfloat( Octree.Load4( attributeOffset * OCTREE_NODE_SIZE ) );
 	uint colorPacked = asuint( attribute.w );
 	
 	uint4 color;
