@@ -6,6 +6,7 @@
 #include "Octree/OctreeBuilder.h"
 #include "VoxelRenderer/SVO/VoxtreeHeader.h"
 #include "swCommonLib/HierarchicalChunkedFormat/HCF.h"
+#include "swCommonLib/System/Dir.h"
 
 
 
@@ -33,6 +34,7 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 //
 bool			VoxelConverter::Write		( const filesystem::Path& outputFilePath, vr::OctreePtr octree )
 {
+	filesystem::Dir::CreateDirectory( outputFilePath );
 	return octree->WriteToFile( outputFilePath );
 }
 
