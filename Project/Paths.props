@@ -13,11 +13,23 @@
 	<SourceDir>$(SourceInclude)</SourceDir>
 	<ExternalDir>$(RootDir)External\</ExternalDir>
 	<WorkingDir>$(RootDir)WorkingDir\</WorkingDir>
+	
+
+    <ConfigTypeSmallString Condition="'$(Configuration)'=='Debug'" >debug</ConfigTypeSmallString>
+    <ConfigTypeSmallString Condition="'$(Configuration)'!='Debug'" >release</ConfigTypeSmallString>
+	 
   </PropertyGroup>
   
   <PropertyGroup>
     <_PropertySheetDisplayName>Paths</_PropertySheetDisplayName>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <BuildMacro Include="ConfigTypeSmallString">
+      <Value>$(ConfigTypeSmallString)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
   
   <ItemDefinitionGroup>
     <ClCompile>

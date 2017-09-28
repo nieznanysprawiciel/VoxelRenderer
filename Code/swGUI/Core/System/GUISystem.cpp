@@ -212,7 +212,7 @@ bool				GUISystem::DefaultInitGraphicAPI	( bool debug, bool singleThreaded )
 	GraphicAPIInitData graphicApiData;
 	graphicApiData.CreateSwapChain = false;		// We will create swap chain and render target later with window.
 	graphicApiData.SingleThreaded = singleThreaded;
-	graphicApiData.UseDebugLayer = debug;
+	graphicApiData.UseDebugLayer = true;
 
 	auto result = m_graphicApi->InitAPI( graphicApiData );
 	assert( result );

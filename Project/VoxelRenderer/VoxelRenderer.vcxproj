@@ -60,21 +60,29 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="VoxelRendererConfig.props" />
     <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+    <Import Project="IncludeFBX_SDK.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="VoxelRendererConfig.props" />
     <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+    <Import Project="IncludeFBX_SDK.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="VoxelRendererConfig.props" />
     <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+    <Import Project="IncludeFBX_SDK.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="VoxelRendererConfig.props" />
     <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+    <Import Project="IncludeFBX_SDK.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -159,6 +167,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraController.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
@@ -171,6 +180,8 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +190,8 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraController.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Animation.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Skeleton.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.h" />
@@ -191,6 +204,10 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FbxHelperStructs.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMeshVertex.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
@@ -300,6 +317,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
