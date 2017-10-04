@@ -9,6 +9,8 @@
 
 #include "VoxelRenderer/Actors/CameraController.h"
 
+#include "VoxelRenderer/ShellMesh/FBXLoader.h"
+
 namespace vr
 {
 
@@ -42,6 +44,7 @@ bool		Application::OnInitialized		()
 	InitCamera();
 	InitRaycaster();
 	InitOctree();
+	InitShellMesh();
 
 	m_guiConfig.UseBlockingMode = false;
 
@@ -184,6 +187,22 @@ void		Application::InitResources()
 	assert( depthStencilState );
 
 	m_blitEffect = std::unique_ptr< BlitEffect >( new BlitEffect( m_resourceManager ) );
+}
+
+// ================================ //
+//
+void		Application::InitShellMesh()
+{
+	FBXLoader* loader = new FBXLoader();
+
+	if( loader->CanLoad( m_config->ShellMeshFilePath() ) )
+	{
+		auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
+		if( mesh.IsValid )
+			m_shellMesh = mesh.Value;
+	}
+
+	delete loader;
 }
 
 

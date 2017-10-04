@@ -73,6 +73,13 @@ Config::Config	( const std::string& filePath )
 				deser.Exit();
 			}
 
+			if( deser.EnterObject( "ShellMesh" ) )
+			{
+				m_ShellMeshFilePath = deser.GetAttribute( "FilePath", m_ShellMeshFilePath );
+
+				deser.Exit();
+			}
+
 			deser.Exit();
 		}
 	}

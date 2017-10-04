@@ -141,6 +141,14 @@ void				CameraActor::SetFov				( float fov )
 	UpdateMatrix();
 }
 
+/**@brief */
+DirectX::XMFLOAT4X4 CameraActor::GetView			() const
+{
+
+
+	return DirectX::XMFLOAT4X4();
+}
+
 /**@copydoc CameraData*/
 CameraData			CameraActor::GetCameraData() const
 {

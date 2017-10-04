@@ -180,6 +180,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
@@ -204,6 +205,8 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\PrintOctreeRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\Structures\ShaderCameraBuffer.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FbxHelperStructs.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.h" />
@@ -316,6 +319,22 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

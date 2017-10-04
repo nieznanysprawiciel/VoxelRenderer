@@ -2,7 +2,7 @@
 
 #include "VoxelRenderer/Application/RenderingHelpers.h"
 
-
+#include "Structures/ShaderCameraBuffer.h"
 
 
 using namespace DirectX;
@@ -12,31 +12,6 @@ using namespace sw::input;
 
 namespace vr
 {
-
-
-//====================================================================================//
-//			Helper structures	
-//====================================================================================//
-
-// ================================ //
-// This structure should be binary equal to structure in Declarations.hlsl file.
-// Note that members of ShaderCameraData could be in different order then in CameraData structure.
-struct ShaderCameraData
-{
-	XMFLOAT3			Position;
-	float				Fov;
-	XMFLOAT3			Direction;
-	float				Width;
-	XMFLOAT3			UpVector;
-	float				Height;
-	XMFLOAT3			RightVector;
-	float				ViewportSize;
-	float				NearPlane;
-	float				FarPlane;
-	bool				IsPerspective;
-
-	float				Align1;			///< Constant buffers must have size which is multiple of 16 bytes.
-};
 
 
 

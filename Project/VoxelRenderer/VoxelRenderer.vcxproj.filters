@@ -31,6 +31,12 @@
     <Filter Include="VoxelRenderer\Animation">
       <UniqueIdentifier>{95fd0ca1-487d-4228-a6e6-aac68ac68f94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelRenderer\Raycaster\Structures">
+      <UniqueIdentifier>{1338b9f9-1243-4be5-b7a2-8daf8a831a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\ShellMesh">
+      <UniqueIdentifier>{27fdaf8d-72a0-4ef7-8ff8-a255685cfde4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -93,7 +99,12 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.cpp">
       <Filter>VoxelRenderer\ShellMesh</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp">
+      <Filter>VoxelRenderer\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.cpp">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -177,6 +188,12 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Animation.h">
       <Filter>VoxelRenderer\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\Structures\ShaderCameraBuffer.h">
+      <Filter>VoxelRenderer\Raycaster\Structures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
@@ -202,6 +219,12 @@
     </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\Normals.hlsl">
       <Filter>Shaders\RaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshVS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

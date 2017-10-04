@@ -6,6 +6,7 @@
 
 #include "VoxelRenderer/Raycaster/IRaycaster.h"
 #include "VoxelRenderer/Actors/CameraActor.h"
+#include "VoxelRenderer/ShellMesh/ShellMesh.h"
 
 #include "VoxelRenderer/Application/TimeManager.h"
 
@@ -28,6 +29,7 @@ private:
 	IRaycasterUPtr		m_raycaster;
 	CameraActor*		m_camera;
 	OctreePtr			m_octree;
+	ShellMeshPtr		m_shellMesh;
 
 	ResourcePtr< RenderTargetObject >		m_svoRT;
 	ResourcePtr< RenderTargetObject >		m_mainRT;
@@ -60,6 +62,7 @@ private:
 	void			InitRaycaster	();
 	void			InitOctree		();
 	void			InitResources	();
+	void			InitShellMesh	();
 	///@}
 };
 

@@ -12,6 +12,10 @@
 #include "swInputLibrary/InputCore/KeyboardState.h"
 #include "swInputLibrary/InputCore/MouseState.h"
 
+#include "VoxelRenderer/ShellMesh/ShellMesh.h"
+
+
+
 namespace vr
 {
 
@@ -24,6 +28,7 @@ public:
 	explicit		IRaycaster		() = default;
 					~IRaycaster		() = default;
 
+	virtual void	RenderShellMeshes	( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )				{}
 	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
 	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )							= 0;
 

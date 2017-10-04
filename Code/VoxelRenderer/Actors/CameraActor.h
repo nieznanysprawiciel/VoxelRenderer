@@ -91,6 +91,7 @@ public:
 	float				GetFov				() const					{ return m_fov; }
 
 	DirectX::XMFLOAT4X4		GetProjection	() const					{ return m_projectionMatrix; }
+	DirectX::XMFLOAT4X4		GetView			() const;
 
 	CameraData			GetCameraData		() const;
 

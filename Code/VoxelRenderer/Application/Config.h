@@ -36,6 +36,7 @@ private:
 
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, RaycasterType, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, OctreeFilePath, "" );
+	DEFINE_CONFIG_VALUE_DEFAULT( std::string, ShellMeshFilePath, "" );
 
 public:
 	explicit		Config	( const std::string& filePath );
