@@ -3,6 +3,7 @@
 
 #include "IRaycaster.h"
 
+#include "VoxelRenderer/Application/Presentation/BlitEffect.h"
 
 
 namespace vr
@@ -32,7 +33,15 @@ protected:
 	ResourcePtr< RasterizerState >		m_rasterizerState;
 	ResourcePtr< DepthStencilState >	m_depthStencilState;
 
+	ResourcePtr< RenderTargetObject >	m_shellMeshTarget;
+
+	BlitEffectUPtr		m_blitEffect;
+
+	uint16				m_width;
+	uint16				m_height;
+
 public:
+	explicit			ShellMeshRenderer();
 
 
 	virtual void			RenderShellMeshes	( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )					override;
@@ -43,7 +52,9 @@ public:
 
 private:
 
-	void					UpdateCamera	( CameraActor* camera );
+	void					UpdateCamera			( CameraActor* camera );
+	void					ReallocateRenderTarget	( uint16 newWidth, uint16 newHeight );
+
 };
 
 

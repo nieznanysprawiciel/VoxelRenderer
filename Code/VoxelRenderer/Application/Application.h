@@ -29,7 +29,8 @@ private:
 	IRaycasterUPtr		m_raycaster;
 	CameraActor*		m_camera;
 	OctreePtr			m_octree;
-	ShellMeshPtr		m_shellMesh;
+
+	std::vector< ShellMeshPtr >				m_shellMeshes;
 
 	ResourcePtr< RenderTargetObject >		m_svoRT;
 	ResourcePtr< RenderTargetObject >		m_mainRT;

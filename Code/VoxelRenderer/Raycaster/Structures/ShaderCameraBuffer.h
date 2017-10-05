@@ -37,5 +37,8 @@ struct CameraConstants
 	DirectX::XMFLOAT4X4		ViewMatrix;				///< View matrix.
 	DirectX::XMFLOAT4X4		ProjectionMatrix;		///< Projection matrix.
 	DirectX::XMFLOAT3		CameraPosition;			///< Position of camera in world space.
+
+
+	float					FillTo16Bytes;
 };
 

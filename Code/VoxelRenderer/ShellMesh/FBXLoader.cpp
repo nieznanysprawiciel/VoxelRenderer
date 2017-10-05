@@ -176,7 +176,7 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 	{
 		for( int vertexIdx = 0; vertexIdx < 3; ++vertexIdx )
 		{
-			Index32 controlPointIdx = (Index32)fbxMesh->GetPolygonVertex( i, vertexIdx );
+			Index32 controlPointIdx = (Index32)fbxMesh->GetPolygonVertex( (int)i, vertexIdx );
 			indicies.push_back( controlPointIdx + ctrlPointsOffset );
 		}
 	}
@@ -216,7 +216,7 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 				for( unsigned int i = 0; i < numOfIndices; ++i )
 				{
 					auto & curControlPoint = controlPoints[ currCluster->GetControlPointIndices()[ i ] ];
-					AddWeight( curControlPoint, currCluster->GetControlPointWeights()[ i ], currJointIndex );
+					AddWeight( curControlPoint, (float)currCluster->GetControlPointWeights()[ i ], currJointIndex );
 				}
 			}
 		}
@@ -259,7 +259,7 @@ vr::SkeletonPtr						FBXLoader::LoadSkeleton				( FbxNode* rootNode )
 //
 void								FBXLoader::BuildSkeleton			( std::vector< vr::Joint >& joints, FbxNode* node, int parentIdx )
 {
-	int thisIdx = joints.size() - 1;
+	int thisIdx = (int)joints.size() - 1;
 
 	if( node->GetNodeAttribute() &&
 		node->GetNodeAttribute()->GetAttributeType() &&

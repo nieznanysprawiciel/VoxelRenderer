@@ -26,11 +26,19 @@ private:
 	ResourcePtr< BufferObject >		m_shellMeshIndex;		///< IndexBuffer
 	ResourcePtr< BufferObject >		m_animMatricies;
 
+	Size				m_numVerticies;
+	Size				m_numIndiecies;
+
 protected:
 public:
 	explicit		ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TemporaryMeshInit& meshInitData );
 	~ShellMesh	() = default;
 
+	BufferObject*			GetVertexBuffer	()		{ return m_shellMesh.Ptr(); }
+	BufferObject*			GetIndexBuffer	()		{ return m_shellMeshIndex.Ptr(); }
+
+	Size					GetNumVerticies	() const { return m_numVerticies; }
+	Size					GetNumIndicies	() const { return m_numIndiecies; }
 };
 
 DEFINE_PTR_TYPE( ShellMesh );

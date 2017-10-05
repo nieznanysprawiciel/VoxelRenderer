@@ -6,6 +6,7 @@
 #include "VoxelRenderer/Raycaster/PrintOctreeRaycaster.h"
 #include "VoxelRenderer/Raycaster/DepthRaycaster.h"
 #include "VoxelRenderer/Raycaster/NormalsRaycaster.h"
+#include "VoxelRenderer/Raycaster/ShellMeshRenderer.h"
 
 #include "VoxelRenderer/Actors/CameraController.h"
 
@@ -85,6 +86,7 @@ void		Application::Render				( const sw::gui::FrameTime& frameTime )
 	
 	m_raycaster->ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
 
+	m_raycaster->RenderShellMeshes( m_shellMeshes, m_camera );
 	m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
 	//m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
 	m_blitEffect->Blit( m_renderingSystem->GetRenderer(), m_svoRT->GetColorBuffer(), m_mainRT.Ptr() );
@@ -137,6 +139,8 @@ void		Application::InitRaycaster	()
 		m_raycaster = MakeUPtr< DepthRaycaster >();
 	else if( raycasterType == "NormalsRaycaster" )
 		m_raycaster = MakeUPtr< NormalsRaycaster >();
+	else if( raycasterType == "ShellMeshRenderer" )
+		m_raycaster = MakeUPtr< ShellMeshRenderer >();
 	else
 	{
 		/// Error !
@@ -199,7 +203,7 @@ void		Application::InitShellMesh()
 	{
 		auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
 		if( mesh.IsValid )
-			m_shellMesh = mesh.Value;
+			m_shellMeshes.push_back( mesh.Value );
 	}
 
 	delete loader;

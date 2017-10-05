@@ -41,40 +41,56 @@ DirectX::XMFLOAT4X4				Transpose				( DirectX::XMFLOAT4X4 mat )
 //====================================================================================//
 
 
+// ================================ //
+//
+ShellMeshRenderer::ShellMeshRenderer()
+	:	m_height( 0 )
+	,	m_width( 0 )
+{}
 
 // ================================ //
 //
 void				ShellMeshRenderer::RenderShellMeshes( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )
 {
+	if( m_width != camera->GetWidth() || m_height != camera->GetHeight() )
+		ReallocateRenderTarget( (uint16)camera->GetWidth(), (uint16)camera->GetHeight() );
+
 	UpdateCamera( camera );
 
+	RenderingHelper::ClearRenderTargetAndDepth( m_renderer, m_shellMeshTarget.Ptr(), DirectX::XMFLOAT4( 0.0, 0.0, 0.0, 0.0 ), 1.0f );
+	RenderingHelper::SetRenderTarget( m_renderer, m_shellMeshTarget.Ptr(), m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
 
+	SetShaderStateCommand shaderState;
+	RenderingHelper::ClearTextureState( shaderState );
+
+	shaderState.VertexShader = m_vertexShader.Ptr();
+	shaderState.PixelShader = m_pixelShader.Ptr();
+
+	m_renderer->SetShaderState( shaderState );
+
+	RenderingHelper::BindBuffer( m_renderer, m_cameraBuffer.Ptr(), 0, (uint8)ShaderType::VertexShader );
+
+	for( auto & shellMesh : shellMeshes )
+	{
+		DrawCommand drawCommand;
+		drawCommand.BaseVertex = 0;
+		drawCommand.BufferOffset = 0;
+		drawCommand.NumVertices = (uint32)shellMesh->GetNumIndicies();
+		drawCommand.Topology = PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		drawCommand.VertexBuffer = shellMesh->GetVertexBuffer();
+		drawCommand.IndexBufer = shellMesh->GetIndexBuffer();
+		drawCommand.ExtendedIndex = true;
+		drawCommand.Layout = m_layout.Ptr();
+
+		m_renderer->Draw( drawCommand );
+	}
 }
 
 // ================================ //
 //
 void				ShellMeshRenderer::Render			( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
-	//UpdateOctree( octree );
-	//UpdateCamera( camera );
-
-
-	//RenderingHelper::ClearRenderTargetAndDepth( m_renderer, svoRenderTarget, DirectX::XMFLOAT4( 0.0, 0.0, 0.0, 0.0 ), 1.0f );
-	//RenderingHelper::SetRenderTarget( m_renderer, svoRenderTarget, m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
-
-	//SetShaderStateCommand shaderState;
-	//RenderingHelper::ClearTextureState( shaderState );
-
-	//shaderState.VertexShader = m_vertexShader.Ptr();
-	//shaderState.PixelShader = m_pixelShader.Ptr();
-
-	//RenderingHelper::SetTexture( shaderState, m_octreeTexBuff.Ptr(), 0, (uint8)ShaderType::PixelShader );
-
-	//m_renderer->SetShaderState( shaderState );
-
-	//RenderingHelper::BindBuffer( m_renderer, m_cameraBuffer.Ptr(), 0, (uint8)ShaderType::PixelShader );
-
-	//RenderingHelper::DrawBufferLess( m_renderer, 3, PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+	m_blitEffect->Blit( m_renderer, m_shellMeshTarget->GetColorBuffer(), svoRenderTarget );
 }
 
 // ================================ //
@@ -100,6 +116,8 @@ void				ShellMeshRenderer::Init				( IRenderer* renderer, ResourceManager* resou
 	m_pixelShader = resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPS.hlsl", "main" );
 
 	m_layout = layout;
+
+	m_blitEffect = std::unique_ptr< BlitEffect >( new BlitEffect( m_resourceManager ) );
 }
 
 // ================================ //
@@ -129,6 +147,23 @@ void				ShellMeshRenderer::UpdateCamera		( CameraActor* camera )
 	else
 		RenderingHelper::UpdateBuffer( m_renderer, m_cameraBuffer.Ptr(), cameraData );
 
+}
+
+// ================================ //
+//
+void				ShellMeshRenderer::ReallocateRenderTarget	( uint16 newWidth, uint16 newHeight )
+{
+	// Allocate render target for shell mesh rendering result.
+	RenderTargetDescriptor descriptor;
+	descriptor.TextureWidth = newWidth;
+	descriptor.TextureHeight = newHeight;
+	descriptor.TextureType = TextureType::TEXTURE_TYPE_TEXTURE2D;
+	descriptor.ColorBuffFormat = ResourceFormat::RESOURCE_FORMAT_R8G8B8A8_UNORM;
+	descriptor.DepthStencilFormat = DepthStencilFormat::DEPTH_STENCIL_FORMAT_D16_UNORM;
+	descriptor.Usage = ResourceUsage::RESOURCE_USAGE_DEFAULT;
+
+	m_shellMeshTarget = m_resourceManager->CreateRenderTarget( L"::ShellMeshTarget", descriptor );
+	assert( m_shellMeshTarget );
 }
 
 }	// vr

@@ -30,6 +30,40 @@ RTTR_REGISTRATION
 
 using namespace DirectX;
 
+
+
+//====================================================================================//
+//			Helpers	
+//====================================================================================//
+
+/**@brief Funkcja odwraca wektor pozycji, aby by³ zwrócony w przeciwnym kierunku.
+Potrzebne w momencie tworzenia macierzy widoku na podstawie po³o¿enia kamery.
+
+@param[inout] result_vector Wektor pozycji. Nale¿y podaæ tutaj wektor do odwrócenia. Wynik zostanie zwrócony w tej zmiennej.
+*/
+inline void inverse_camera_position( DirectX::XMVECTOR& result_vector )
+{
+	result_vector = DirectX::XMVectorNegate( result_vector );
+	//result_vector = XMVectorSetW( result_vector, 0.0 );		// sk³adowa W powinna byæ 0, ale funkcja XMMatrixTranslationFromVector na ni¹ wogóle nie patrzy
+}
+
+/**@brief Funkcja odwraca kwaternion orientacji, aby by³ zwrócony w przeciwnym kierunku.
+Potrzebne w momencie tworzenia macierzy widoku na podstawie po³o¿enia kamery.
+
+@param[inout] result_vector Kwaternion orientacji. Nale¿y podaæ tutaj wektor do odwrócenia. Wynik zostanie zwrócony w tej zmiennej.
+*/
+inline void inverse_camera_orientation( DirectX::XMVECTOR& result_vector )
+{
+	result_vector = DirectX::XMVectorNegate( result_vector );
+	result_vector = DirectX::XMVectorSetW( result_vector, -DirectX::XMVectorGetW( result_vector ) );
+}
+
+
+//====================================================================================//
+//			Camera implementation	
+//====================================================================================//
+
+
 /**@brief Tworzy domyœln¹ kamerê perspektywiczn¹ o parametrach:
 m_width:		1920
 m_height:		1080
@@ -144,9 +178,23 @@ void				CameraActor::SetFov				( float fov )
 /**@brief */
 DirectX::XMFLOAT4X4 CameraActor::GetView			() const
 {
+	XMMATRIX viewMatrix;
+	XMVECTOR position = GetPosition();
+	XMVECTOR orientation = GetOrientation();
 
+	inverse_camera_position( position );
+	inverse_camera_orientation( orientation );
 
-	return DirectX::XMFLOAT4X4();
+	viewMatrix = XMMatrixTranslationFromVector( position );
+	XMMATRIX rotation_matrix = XMMatrixRotationQuaternion( orientation );
+	viewMatrix = viewMatrix * rotation_matrix;
+
+	viewMatrix = XMMatrixTranspose( viewMatrix );
+
+	XMFLOAT4X4 viewMat;
+	XMStoreFloat4x4( &viewMat, viewMatrix );
+
+	return viewMat;
 }
 
 /**@copydoc CameraData*/
