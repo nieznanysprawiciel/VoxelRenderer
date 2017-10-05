@@ -189,8 +189,6 @@ DirectX::XMFLOAT4X4 CameraActor::GetView			() const
 	XMMATRIX rotation_matrix = XMMatrixRotationQuaternion( orientation );
 	viewMatrix = viewMatrix * rotation_matrix;
 
-	viewMatrix = XMMatrixTranspose( viewMatrix );
-
 	XMFLOAT4X4 viewMat;
 	XMStoreFloat4x4( &viewMat, viewMatrix );
 
