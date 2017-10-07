@@ -52,12 +52,7 @@ private:
 	Nullable< FbxMeshCollection >	ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
 	Nullable< TemporaryMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TemporaryMeshInit >& mesh, SkeletonPtr skeleton );
 
-
-	template< typename VertexType >
-	void				CopyVertexBuffer	( const std::vector< VertexType >& verticies, MemoryChunk& destination );
-
-	template< typename IndexType >
-	void				CopyIndexBuffer		( const std::vector< std::vector< Index32 > >& indicies, MemoryChunk& destination );
+	void							Scale			( Nullable< TemporaryMeshInit >& mesh );
 };
 
 

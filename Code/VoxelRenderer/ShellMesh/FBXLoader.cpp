@@ -97,6 +97,9 @@ Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, c
 		tempMeshInit = ProcessMesh( mesh, tempMeshInit, skeleton );
 	}
 
+	Scale( tempMeshInit );
+
+
 	ReturnIfInvalid( tempMeshInit );
 
 	return std::make_shared< vr::ShellMesh >( manager, skeleton, nullptr, tempMeshInit.Value );
@@ -236,6 +239,43 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 	mesh.Value.Indicies.push_back( std::move( indicies ) );
 
 	return std::move( mesh );
+}
+
+// ================================ //
+//
+void								FBXLoader::Scale					( Nullable< TemporaryMeshInit >& mesh )
+{
+	if( mesh.IsValid )
+	{
+		auto & verticies = mesh.Value.Verticies;
+
+		const float floatMax = std::numeric_limits< float >::max();
+		const float floatMin = std::numeric_limits< float >::min();
+
+		XMFLOAT3 min( floatMax, floatMax, floatMax );
+		XMFLOAT3 max( floatMin, floatMin, floatMin );
+
+		for( auto& vertex : verticies )
+		{
+			if( vertex.Position.x < min.x ) min.x = vertex.Position.x;
+			if( vertex.Position.y < min.y ) min.y = vertex.Position.y;
+			if( vertex.Position.z < min.z ) min.z = vertex.Position.x;
+
+			if( vertex.Position.x > max.x ) max.x = vertex.Position.x;
+			if( vertex.Position.y > max.y ) max.y = vertex.Position.y;
+			if( vertex.Position.z > max.z ) max.z = vertex.Position.x;
+		}
+
+		XMFLOAT3 range( max.x - min.x, max.y - min.y, max.z - min.z );
+		float rangeMax = std::max( std::max( range.x, range.y ), range.z );
+
+		for( auto& vertex : verticies )
+		{
+			vertex.Position.x = vertex.Position.x / rangeMax;
+			vertex.Position.y = vertex.Position.y / rangeMax;
+			vertex.Position.z = vertex.Position.z / rangeMax;
+		}
+	}
 }
 
 
