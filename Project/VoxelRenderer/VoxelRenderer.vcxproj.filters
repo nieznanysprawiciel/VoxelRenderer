@@ -226,6 +226,9 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPS.hlsl">
       <Filter>Shaders\ShellMesh</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshWeightsPS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">

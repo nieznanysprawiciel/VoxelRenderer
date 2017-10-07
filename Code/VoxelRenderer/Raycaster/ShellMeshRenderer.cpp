@@ -123,7 +123,16 @@ void				ShellMeshRenderer::Init				( IRenderer* renderer, ResourceManager* resou
 // ================================ //
 //
 void				ShellMeshRenderer::ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )
-{}
+{
+	if( keyboard[ Keyboard::PhysicalKeys::KEY_1 ].IsKeyDownEvent() )
+	{
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPS.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_2 ].IsKeyDownEvent() )
+	{
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshWeightsPS.hlsl", "main" );
+	}
+}
 
 
 //====================================================================================//
