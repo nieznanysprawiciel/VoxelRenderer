@@ -267,13 +267,14 @@ void								FBXLoader::Scale					( Nullable< TemporaryMeshInit >& mesh )
 		}
 
 		XMFLOAT3 range( max.x - min.x, max.y - min.y, max.z - min.z );
+		XMFLOAT3 center( ( max.x + min.x ) / 2.0f, ( max.y + min.y ) / 2.0f, ( max.z + min.z ) / 2.0f );
 		float rangeMax = std::max( std::max( range.x, range.y ), range.z );
 
 		for( auto& vertex : verticies )
 		{
-			vertex.Position.x = vertex.Position.x / rangeMax;
-			vertex.Position.y = vertex.Position.y / rangeMax;
-			vertex.Position.z = vertex.Position.z / rangeMax;
+			vertex.Position.x = ( vertex.Position.x - center.x ) / rangeMax;
+			vertex.Position.y = ( vertex.Position.y - center.y ) / rangeMax;
+			vertex.Position.z = ( vertex.Position.z - center.z ) / rangeMax;
 		}
 	}
 }
