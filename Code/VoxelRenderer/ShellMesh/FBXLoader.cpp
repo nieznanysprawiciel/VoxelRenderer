@@ -19,9 +19,44 @@ namespace vr
 
 
 // ================================ //
+//
+FbxAMatrix			GetGeometryTransformation		( FbxNode* inNode )
+{
+	if( !inNode )
+	{
+		throw std::exception( "Null for mesh geometry" );
+	}
+
+	const FbxVector4 lT = inNode->GetGeometricTranslation( FbxNode::eSourcePivot );
+	const FbxVector4 lR = inNode->GetGeometricRotation( FbxNode::eSourcePivot );
+	const FbxVector4 lS = inNode->GetGeometricScaling( FbxNode::eSourcePivot );
+
+	return FbxAMatrix( lT, lR, lS );
+}
+
+// ================================ //
+//
+FbxMesh*			GetMeshAttribute				( FbxNode* node )
+{
+	for( int i = 0; i < node->GetNodeAttributeCount(); i++ )
+	{
+		auto attribute = node->GetNodeAttributeByIndex( i );
+		if( attribute->GetAttributeType() == FbxNodeAttribute::eMesh )
+			return static_cast< FbxMesh* >( attribute );
+	}
+
+	return nullptr;
+}
+
+
+
+
+
+// ================================ //
 // Helpers declarations
 
 DirectX::XMFLOAT3	Get			( const fbxsdk::FbxVector4& vector );
+DirectX::XMFLOAT4X4	Get			( const fbxsdk::FbxMatrix& matrix );
 bool				operator==	( const fbxsdk::FbxVector4& vec1, const DirectX::XMFLOAT3& vec2 );
 
 void				AddWeight					( vr::ShellMeshVertex & vertex, float weight, uint8 idx );
@@ -97,12 +132,15 @@ Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, c
 		tempMeshInit = ProcessMesh( mesh, tempMeshInit, skeleton );
 	}
 
+	auto animation = LoadAnimation( meshData, scene, skeleton );
+
 	Scale( tempMeshInit );
 
+	scene->Destroy();
 
 	ReturnIfInvalid( tempMeshInit );
 
-	return std::make_shared< vr::ShellMesh >( manager, skeleton, nullptr, tempMeshInit.Value );
+	return std::make_shared< vr::ShellMesh >( manager, skeleton, animation, tempMeshInit.Value );
 }
 
 /**@brief Returns true if loader can load specific file.
@@ -139,22 +177,14 @@ Nullable< FbxMeshCollection >		FBXLoader::ProcessNode		( FbxNode* node, Nullable
 			transformation( i, j ) = static_cast<float>( transformMatrix.Get( i, j ) );
 	}
 
-	for( int i = 0; i < node->GetNodeAttributeCount(); i++ )
-	{
-		if( ( node->GetNodeAttributeByIndex( i ) )->GetAttributeType() == FbxNodeAttribute::eMesh )
-		{
-			// Look only for meshes. Ignore rest
-			FbxNodeMesh mesh;
-			mesh.Transformation = transformation;
-			mesh.Node = node;
-			mesh.Mesh = (FbxMesh*)node->GetNodeAttributeByIndex( i );
+	// Look only for meshes. Ignore rest
+	FbxNodeMesh mesh;
+	mesh.Transformation = transformation;
+	mesh.Node = node;
+	mesh.Mesh = GetMeshAttribute( node );
 
-			meshes.Value.Segments.push_back( mesh );
-		}
-	}
-
-	//for( int i = 0; i < node->GetChildCount(); i++ )
-	//	meshes = ProcessNode( node->GetChild( i ), meshes );
+	if( mesh.Mesh )
+		meshes.Value.Segments.push_back( mesh );
 
 	return std::move( meshes );
 }
@@ -200,6 +230,8 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 		curVertex.Weights[ 2 ] = 0.0f;
 		curVertex.Weights[ 3 ] = 0.0f;
 	}
+
+	FbxAMatrix geometryTransform = GetGeometryTransformation( fbxNode );
 
 	// Process deformers to extract weights.
 	unsigned int numDeformers = fbxMesh->GetDeformerCount();
@@ -320,6 +352,80 @@ void								FBXLoader::BuildSkeleton			( std::vector< vr::Joint >& joints, FbxNo
 
 // ================================ //
 //
+AnimationPtr						FBXLoader::LoadAnimation			( Nullable< FbxMeshCollection >& nodes, FbxScene* scene, SkeletonPtr skeleton )
+{
+	TemporaryAnimationInit animInit;
+	animInit.JointsAnims.resize( skeleton->GetJoints().size() );
+
+	FbxAnimStack* currAnimStack = scene->GetSrcObject< FbxAnimStack >( 0 );
+	FbxString animStackName = currAnimStack->GetName();
+	auto name = animStackName.Buffer();
+
+	FbxTakeInfo* takeInfo = scene->GetTakeInfo( animStackName );
+
+	animInit.Start = takeInfo->mLocalTimeSpan.GetStart();
+	animInit.End =  takeInfo->mLocalTimeSpan.GetStop();
+
+	for( auto& meshData : nodes.Value.Segments )
+	{
+		LoadAnimation( meshData.Node, scene, animInit, skeleton );
+	}
+
+	return std::make_shared< Animation >( animInit );
+}
+
+// ================================ //
+//
+void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, TemporaryAnimationInit& animInit, SkeletonPtr skeleton )
+{
+	FbxAMatrix geometryTransform = GetGeometryTransformation( node );
+
+	FbxMesh* fbxMesh = GetMeshAttribute( node );
+
+	// Process deformers to extract weights.
+	unsigned int numDeformers = fbxMesh->GetDeformerCount();
+	for( unsigned int deformerIndex = 0; deformerIndex < numDeformers; ++deformerIndex )
+	{
+		FbxSkin* currSkin = static_cast<FbxSkin*>( fbxMesh->GetDeformer( deformerIndex, FbxDeformer::eSkin ) );
+		if( currSkin->GetDeformerType() == FbxDeformer::eSkin )
+		{
+			unsigned int numOfClusters = currSkin->GetClusterCount();
+			for( unsigned int clusterIndex = 0; clusterIndex < numOfClusters; ++clusterIndex )
+			{
+				FbxCluster* currCluster = currSkin->GetCluster( clusterIndex );
+				std::string currJointName = currCluster->GetLink()->GetName();
+				unsigned int currJointIndex = FindJointIndexUsingName( currJointName, skeleton );
+
+
+				FbxAMatrix transformMatrix;						
+				FbxAMatrix transformLinkMatrix;					
+				FbxAMatrix globalBindposeInverseMatrix;
+
+				currCluster->GetTransformMatrix(transformMatrix);	// The transformation of the mesh at binding time
+				currCluster->GetTransformLinkMatrix(transformLinkMatrix);	// The transformation of the cluster(joint) at binding time from joint space to world space
+				globalBindposeInverseMatrix = transformLinkMatrix.Inverse() * transformMatrix * geometryTransform;
+
+				// :(
+				const_cast< DirectX::XMFLOAT4X4& >( skeleton->GetJoints()[ currJointIndex ].GlobalBindposeInverse ) = Get( globalBindposeInverseMatrix );
+
+				for( FbxLongLong i = animInit.Start.GetFrameCount( FbxTime::eFrames24 ); i <= animInit.End.GetFrameCount( FbxTime::eFrames24 ); ++i )
+				{
+					FbxTime currTime;
+					currTime.SetFrame( i, FbxTime::eFrames24 );
+
+					FbxAMatrix currentTransformOffset = node->EvaluateGlobalTransform( currTime ) * geometryTransform;
+					auto globalTransform = currentTransformOffset.Inverse() * currCluster->GetLink()->EvaluateGlobalTransform( currTime );
+					
+					animInit.JointsAnims[ currJointIndex ].AddKey( currTime.GetSecondDouble(), Get( globalTransform ) );
+				}
+
+			}
+		}
+	}
+}
+
+// ================================ //
+//
 void								FBXLoader::TransformVerticies		( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix )
 {
 	XMMATRIX transform = XMLoadFloat4x4( &matrix );
@@ -348,6 +454,23 @@ DirectX::XMFLOAT3	Get( const fbxsdk::FbxVector4& vector )
 	result.x = (float)vector.mData[ 0 ];
 	result.y = (float)vector.mData[ 1 ];
 	result.z = (float)vector.mData[ 2 ];
+	return result;
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT4X4 Get( const fbxsdk::FbxMatrix & matrix )
+{
+	DirectX::XMFLOAT4X4 result;
+
+	for( int i = 0; i < 4; ++i )
+	{
+		for( int j = 0; j < 4; ++j )
+		{
+			result.m[ i ][ j ] = matrix.Get( i, j );
+		}
+	}
+
 	return result;
 }
 

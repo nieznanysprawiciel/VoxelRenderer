@@ -46,15 +46,18 @@ private:
 	vr::SkeletonPtr					LoadSkeleton	( FbxNode* rootNode );
 	void							BuildSkeleton	( std::vector< vr::Joint >& joints, FbxNode* node, int parentIdx );
 
-
-	void		TransformVerticies	( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix );
+	vr::AnimationPtr				LoadAnimation	( Nullable< FbxMeshCollection >& nodes, FbxScene* scene, SkeletonPtr skeleton );
+	void							LoadAnimation	( FbxNode* node, FbxScene* scene, TemporaryAnimationInit & animInit, SkeletonPtr skeleton );
 
 	Nullable< FbxMeshCollection >	ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
 	Nullable< TemporaryMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TemporaryMeshInit >& mesh, SkeletonPtr skeleton );
 
 	void							Scale			( Nullable< TemporaryMeshInit >& mesh );
+
+	void		TransformVerticies	( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix );
 };
 
 
 }	// sw
+
 

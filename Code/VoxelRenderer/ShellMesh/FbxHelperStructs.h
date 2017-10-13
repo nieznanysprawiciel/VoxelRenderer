@@ -2,6 +2,7 @@
 
 #include "swGraphicAPI/Resources/MeshResources.h"
 #include "ShellMeshVertex.h"
+#include "VoxelRenderer/Animation/Animation.h"
 
 #include "fbxsdk.h"
 
@@ -46,5 +47,15 @@ struct TemporaryMeshInit
 	std::vector< std::vector< Index32 > >	Indicies;
 };
 
-}	// sw
+// ================================ //
+//
+struct TemporaryAnimationInit
+{
+	FbxTime		Start;
+	FbxTime		End;
+
+	std::vector< JointAnimation >	JointsAnims;
+};
+
+}	// vr
 

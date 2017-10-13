@@ -105,6 +105,9 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.cpp">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Animation.cpp">
+      <Filter>VoxelRenderer\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
