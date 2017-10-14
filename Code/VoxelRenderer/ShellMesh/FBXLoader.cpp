@@ -61,6 +61,7 @@ bool				operator==	( const fbxsdk::FbxVector4& vec1, const DirectX::XMFLOAT3& ve
 
 void				AddWeight					( vr::ShellMeshVertex & vertex, float weight, uint8 idx );
 unsigned int		FindJointIndexUsingName		( const std::string& name, SkeletonPtr skeleton );
+unsigned int		FindJointIndexUsingID		( uint64 id, SkeletonPtr skeleton );
 
 
 /**@brief Suported file extensions which can be load by loader.*/
@@ -244,8 +245,8 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 			for( unsigned int clusterIndex = 0; clusterIndex < numOfClusters; ++clusterIndex )
 			{
 				FbxCluster* currCluster = currSkin->GetCluster( clusterIndex );
-				std::string currJointName = currCluster->GetLink()->GetName();
-				unsigned int currJointIndex = FindJointIndexUsingName( currJointName, skeleton );
+				auto jointID = currCluster->GetLink()->GetUniqueID();
+				unsigned int currJointIndex = FindJointIndexUsingID( jointID, skeleton );
 
 				unsigned int numOfIndices = currCluster->GetControlPointIndicesCount();
 				for( unsigned int i = 0; i < numOfIndices; ++i )
@@ -341,6 +342,7 @@ void								FBXLoader::BuildSkeleton			( std::vector< vr::Joint >& joints, FbxNo
 		vr::Joint currJoint;
 		currJoint.ParentIndex = parentIdx;
 		currJoint.Name = node->GetName();
+		currJoint.ID = node->GetUniqueID();
 		joints.push_back( currJoint );
 	}
 
@@ -393,8 +395,8 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 			for( unsigned int clusterIndex = 0; clusterIndex < numOfClusters; ++clusterIndex )
 			{
 				FbxCluster* currCluster = currSkin->GetCluster( clusterIndex );
-				std::string currJointName = currCluster->GetLink()->GetName();
-				unsigned int currJointIndex = FindJointIndexUsingName( currJointName, skeleton );
+				auto jointID = currCluster->GetLink()->GetUniqueID();
+				unsigned int currJointIndex = FindJointIndexUsingID( jointID, skeleton );
 
 
 				FbxAMatrix transformMatrix;						
@@ -467,7 +469,7 @@ DirectX::XMFLOAT4X4 Get( const fbxsdk::FbxMatrix & matrix )
 	{
 		for( int j = 0; j < 4; ++j )
 		{
-			result.m[ i ][ j ] = matrix.Get( i, j );
+			result.m[ i ][ j ] = (float)matrix.Get( i, j );
 		}
 	}
 
@@ -506,6 +508,21 @@ unsigned int		FindJointIndexUsingName		( const std::string& name, SkeletonPtr sk
 	for( int i = 0; i < joints.size(); ++i )
 	{
 		if( joints[ i ].Name == name )
+			return i;
+	}
+
+	assert( false );
+	return std::numeric_limits< unsigned int >::max();
+}
+
+// ================================ //
+//
+unsigned int		FindJointIndexUsingID		( uint64 id, SkeletonPtr skeleton )
+{
+	auto& joints = skeleton->GetJoints();
+	for( int i = 0; i < joints.size(); ++i )
+	{
+		if( joints[ i ].ID == id )
 			return i;
 	}
 

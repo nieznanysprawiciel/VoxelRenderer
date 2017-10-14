@@ -31,6 +31,10 @@ public:
 	explicit	JointAnimation	() = default;
 
 	void		AddKey		( TimeType time, const Transform& matrix );
+
+private:
+
+	std::vector< TimeType >::iterator		FindPlace		( TimeType time );
 };
 
 

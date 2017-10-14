@@ -23,23 +23,36 @@ Animation::Animation		( TemporaryAnimationInit& animInit )
 //
 void			JointAnimation::AddKey		( TimeType time, const Transform& matrix )
 {
-	Size i = 0;
-	for( ; i < m_keysTime.size(); i++ )
-	{
-		if( m_keysTime[ i ] < time )
-			break;
-	}
+	auto timeIter = FindPlace( time );
 
-	if( i == m_keysTime.size() )
+	if( timeIter == m_keysTime.end() )
 	{
 		m_keysTime.push_back( time );
 		m_keysValue.push_back( matrix );
+
+		return;
 	}
-	else
+
+	auto distance = std::distance( m_keysTime.begin(), timeIter );
+	auto valueIter = m_keysValue.begin() + distance;
+
+	// Key exists. Update it.
+	if( abs( *timeIter - time ) < std::numeric_limits< float >::epsilon() )
 	{
-		m_keysTime.insert( m_keysTime.begin() + i, time );
-		m_keysValue.insert( m_keysValue.begin() + i, matrix );
+		*valueIter = matrix;
+		return;
 	}
+
+	// Add new key in the middle of vector.
+	m_keysTime.insert( timeIter, time );
+	m_keysValue.insert( valueIter, matrix );
+}
+
+// ================================ //
+//
+std::vector< TimeType >::iterator		JointAnimation::FindPlace		( TimeType time )
+{
+	return std::lower_bound( m_keysTime.begin(), m_keysTime.end(), time );
 }
 
 }

@@ -15,6 +15,7 @@ namespace vr
 struct Joint
 {
 	int						ParentIndex;
+	uint64					ID;
 	std::string				Name;
 	DirectX::XMFLOAT4X4		GlobalBindposeInverse;
 };
