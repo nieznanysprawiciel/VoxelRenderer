@@ -42,8 +42,8 @@ ShellMesh::ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, Animatio
 	MemoryChunk indexChunk( (uint32)m_numIndiecies * sizeof( Index32 ) );
 	CopyIndexBuffer< Index32 >( meshInitData.Indicies, indexChunk );
 
-	m_shellMesh = manager->CreateVertexBuffer( L"::ShellMeshVertex", (uint8*)meshInitData.Verticies.data(), sizeof( ShellMeshVertex ), meshInitData.Verticies.size() );
-	m_shellMeshIndex = manager->CreateIndexBuffer( L"ShellMeshIndex", indexChunk.GetMemory< uint8* >(), sizeof( Index32 ), m_numIndiecies );
+	m_shellMesh = manager->CreateVertexBuffer( L"::ShellMeshVertex", (uint8*)meshInitData.Verticies.data(), sizeof( ShellMeshVertex ), (uint32)meshInitData.Verticies.size() );
+	m_shellMeshIndex = manager->CreateIndexBuffer( L"ShellMeshIndex", indexChunk.GetMemory< uint8* >(), sizeof( Index32 ), (uint32)m_numIndiecies );
 }
 
 }

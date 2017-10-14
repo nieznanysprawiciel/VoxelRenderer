@@ -13,6 +13,7 @@ namespace vr
 
 typedef float TimeType;
 typedef DirectX::XMFLOAT4X4 Transform;
+typedef DirectX::XMMATRIX Matrix;
 
 
 struct TemporaryAnimationInit;
@@ -31,15 +32,19 @@ public:
 	explicit	JointAnimation	() = default;
 
 	void		AddKey		( TimeType time, const Transform& matrix );
+	Matrix 		Evaluate	( TimeType time );
 
 private:
 
 	std::vector< TimeType >::iterator		FindPlace		( TimeType time );
+
+	Matrix		LinearInterpolate	( TimeType time, TimeType key1Time, TimeType key2Time, const Transform& transform1, const Transform& transform2 );
 };
 
 
 
-/**@brief */
+// ================================ //
+//
 class Animation
 {
 private:
@@ -50,6 +55,8 @@ protected:
 public:
 	explicit		Animation		( TemporaryAnimationInit& animInit );
 	~Animation	() = default;
+
+	std::vector< Transform >		Evaluate		( TimeType time );
 
 };
 

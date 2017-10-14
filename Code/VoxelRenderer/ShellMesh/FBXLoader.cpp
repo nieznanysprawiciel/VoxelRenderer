@@ -418,7 +418,7 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 					FbxAMatrix currentTransformOffset = node->EvaluateGlobalTransform( currTime ) * geometryTransform;
 					auto globalTransform = currentTransformOffset.Inverse() * currCluster->GetLink()->EvaluateGlobalTransform( currTime );
 					
-					animInit.JointsAnims[ currJointIndex ].AddKey( currTime.GetSecondDouble(), Get( globalTransform ) );
+					animInit.JointsAnims[ currJointIndex ].AddKey( (TimeType)currTime.GetSecondDouble(), Get( globalTransform ) );
 				}
 
 			}
