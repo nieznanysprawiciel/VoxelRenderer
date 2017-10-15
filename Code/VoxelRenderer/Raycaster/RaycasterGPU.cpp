@@ -23,7 +23,7 @@ namespace vr
 
 // ================================ //
 //
-void				RaycasterGPU::Render			( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
+void				RaycasterGPU::Render			( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
 	UpdateOctree( octree );
 	UpdateCamera( camera );

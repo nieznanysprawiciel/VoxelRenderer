@@ -33,7 +33,7 @@ public:
 					~FakeRaycaster		() = default;
 
 
-	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )					override;
+	virtual void	Render				( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )	override;
 	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )										override;
 
 	// Inherited via IRaycaster

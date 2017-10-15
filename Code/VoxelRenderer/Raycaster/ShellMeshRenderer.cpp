@@ -50,7 +50,7 @@ ShellMeshRenderer::ShellMeshRenderer()
 
 // ================================ //
 //
-void				ShellMeshRenderer::RenderShellMeshes( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )
+void				ShellMeshRenderer::RenderShellMeshes( TimeType time, const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )
 {
 	if( m_width != camera->GetWidth() || m_height != camera->GetHeight() )
 		ReallocateRenderTarget( (uint16)camera->GetWidth(), (uint16)camera->GetHeight() );
@@ -72,6 +72,12 @@ void				ShellMeshRenderer::RenderShellMeshes( const std::vector< ShellMeshPtr >&
 
 	for( auto & shellMesh : shellMeshes )
 	{
+		UpdateAnimation( time, shellMesh->GetAnimation() );
+		UpdateMeshBuffer( shellMesh );
+
+		RenderingHelper::BindBuffer( m_renderer, m_animationBuffer.Ptr(), 1, (uint8)ShaderType::VertexShader );
+		RenderingHelper::BindBuffer( m_renderer, m_meshTransformBuffer.Ptr(), 2, (uint8)ShaderType::VertexShader );
+
 		DrawCommand drawCommand;
 		drawCommand.BaseVertex = 0;
 		drawCommand.BufferOffset = 0;
@@ -88,7 +94,7 @@ void				ShellMeshRenderer::RenderShellMeshes( const std::vector< ShellMeshPtr >&
 
 // ================================ //
 //
-void				ShellMeshRenderer::Render			( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
+void				ShellMeshRenderer::Render			( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
 	m_blitEffect->Blit( m_renderer, m_shellMeshTarget->GetColorBuffer(), svoRenderTarget );
 }
@@ -126,11 +132,18 @@ void				ShellMeshRenderer::ProcessInput		( const sw::input::MouseState& mouse, c
 {
 	if( keyboard[ Keyboard::PhysicalKeys::KEY_1 ].IsKeyDownEvent() )
 	{
+		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshVS.hlsl", "main" );
 		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPS.hlsl", "main" );
 	}
 	else if( keyboard[ Keyboard::PhysicalKeys::KEY_2 ].IsKeyDownEvent() )
 	{
+		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshVS.hlsl", "main" );
 		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshWeightsPS.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_3 ].IsKeyDownEvent() )
+	{
+		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshAnimVS.hlsl", "main" );
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshAnimPS.hlsl", "main" );
 	}
 }
 
@@ -156,6 +169,62 @@ void				ShellMeshRenderer::UpdateCamera		( CameraActor* camera )
 	else
 		RenderingHelper::UpdateBuffer( m_renderer, m_cameraBuffer.Ptr(), cameraData );
 
+}
+
+// ================================ //
+//
+void				ShellMeshRenderer::UpdateAnimation			( TimeType time, AnimationPtr animation )
+{
+	auto & bonesTransforms = animation->Evaluate( time );
+
+	if( bonesTransforms.size() > 200 )
+		throw std::runtime_error( "Number of bones exceeds max value." );
+
+	uint32 bufferSize = sizeof( Transform ) * (uint32)bonesTransforms.size();
+
+	if( !m_animationBuffer )
+	{
+		m_animationBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
+		return;
+	}
+
+	if( m_animationBuffer->GetElementSize() != bufferSize )
+	{
+		// @todo Here we should free previous buffer.
+		m_animationBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
+		return;
+	}
+
+	UpdateBufferCommand updateCommand;
+	updateCommand.Buffer = m_animationBuffer.Ptr();
+	updateCommand.FillData = (uint8*)bonesTransforms.data();
+	updateCommand.Size = bufferSize;
+
+	m_renderer->UpdateBuffer( updateCommand );
+}
+
+// ================================ //
+//
+void				ShellMeshRenderer::UpdateMeshBuffer			( ShellMeshPtr shellMesh )
+{
+	MeshContants meshConstants;
+	meshConstants.Translate = shellMesh->GetTranslate();
+	meshConstants.Scale = shellMesh->GetScale();
+
+	uint32 bufferSize = sizeof( MeshContants );
+
+	if( !m_meshTransformBuffer )
+	{
+		m_meshTransformBuffer = m_resourceManager->CreateConstantsBuffer( L"ShellMeshTransforms", (uint8*)&meshConstants, bufferSize );
+		return;
+	}
+
+	UpdateBufferCommand updateCommand;
+	updateCommand.Buffer = m_animationBuffer.Ptr();
+	updateCommand.FillData = (uint8*)&meshConstants;
+	updateCommand.Size = bufferSize;
+
+	m_renderer->UpdateBuffer( updateCommand );
 }
 
 // ================================ //

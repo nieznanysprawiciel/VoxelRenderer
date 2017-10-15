@@ -1,4 +1,6 @@
 
+#define MAX_BONES 200
+
 
 
 // ================================ //
@@ -12,11 +14,19 @@ cbuffer CameraConstants : register( b0 )
 
 // ================================ //
 //
+cbuffer BonesTransforms : register( b1 )
+{
+	matrix			BoneTransform[ MAX_BONES ];
+}
+
+// ================================ //
+//
 cbuffer MeshContants : register( b2 )
 {
 	float3			Translate;
 	float			Scale;
 }
+
 
 // ================================ //
 //
@@ -43,14 +53,19 @@ OutputVS	main( InputVS input )
 {
 	OutputVS output = (OutputVS)0;
 
-	output.Position = input.Position + float4( Translate, 0.0 );
-	output.Position = output.Position * Scale;
+	float4 position = mul( input.Position, BoneTransform[ input.BlendIdx.x ] ) * input.BlendWeights.x;
+	position += mul( input.Position, BoneTransform[ input.BlendIdx.y ] ) * input.BlendWeights.y;
+	position += mul( input.Position, BoneTransform[ input.BlendIdx.z ] ) * input.BlendWeights.z;
+	position += mul( input.Position, BoneTransform[ input.BlendIdx.w ] ) * input.BlendWeights.w;
 
-	output.Position = mul( input.Position, ViewMatrix );
+	position += float4( Translate, 0.0 );
+	position = position * Scale;
+
+	output.Position = mul( position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );
 	output.BlendIdx = input.BlendIdx;
 	output.BlendWeights = input.BlendWeights;
-
+	
 	return output;
 }
 

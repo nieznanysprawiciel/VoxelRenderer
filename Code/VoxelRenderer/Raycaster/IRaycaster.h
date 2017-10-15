@@ -28,11 +28,11 @@ public:
 	explicit		IRaycaster		() = default;
 					~IRaycaster		() = default;
 
-	virtual void	RenderShellMeshes	( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )				{}
-	virtual void	Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
-	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )							= 0;
+	virtual void	RenderShellMeshes	( TimeType time, const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )				{}
+	virtual void	Render				( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
+	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )											= 0;
 
-	virtual void	ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )	= 0;
+	virtual void	ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )					= 0;
 };
 
 DEFINE_UPTR_TYPE( IRaycaster );

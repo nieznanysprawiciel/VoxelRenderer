@@ -10,18 +10,24 @@ namespace vr
 //
 Animation::Animation		( TemporaryAnimationInit& animInit )
 	:	m_jointsAnims( animInit.JointsAnims )
-{}
+	,	m_animLength( 0.0 )
+{
+	auto length = animInit.End - animInit.Start;
+	m_animLength = (TimeType)length.GetSecondDouble();
+}
 
 // ================================ //
 //
 std::vector< Transform >		Animation::Evaluate		( TimeType time )
 {
 	std::vector< Transform > animMats;
-	animMats.reserve( m_jointsAnims.size() );
+	animMats.resize( m_jointsAnims.size() );
+
+	auto wrappedTime = fmod( time, m_animLength );
 
 	for( int i = 0; i < m_jointsAnims.size(); ++i )
 	{
-		DirectX::XMMATRIX frameTransform = m_jointsAnims[ i ].Evaluate( time );
+		DirectX::XMMATRIX frameTransform = m_jointsAnims[ i ].Evaluate( wrappedTime );
 		frameTransform = DirectX::XMMatrixTranspose( frameTransform );
 
 		DirectX::XMStoreFloat4x4( &animMats[ i ], frameTransform );
@@ -70,6 +76,9 @@ void			JointAnimation::AddKey		( TimeType time, const Transform& matrix )
 //
 Matrix									JointAnimation::Evaluate		( TimeType time )
 {
+	if( m_keysTime.size() == 0 )
+		return DirectX::XMMatrixIdentity();
+
 	if( m_keysTime.size() == 1 )
 		return DirectX::XMLoadFloat4x4( &m_keysValue[ 0 ] );
 

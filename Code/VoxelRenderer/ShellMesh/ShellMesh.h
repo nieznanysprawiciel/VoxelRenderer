@@ -29,6 +29,9 @@ private:
 	Size				m_numVerticies;
 	Size				m_numIndiecies;
 
+	DirectX::XMFLOAT3	m_translate;
+	float				m_scale;
+
 protected:
 public:
 	explicit		ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TemporaryMeshInit& meshInitData );
@@ -39,6 +42,15 @@ public:
 
 	Size					GetNumVerticies	() const { return m_numVerticies; }
 	Size					GetNumIndicies	() const { return m_numIndiecies; }
+
+	AnimationPtr			GetAnimation	() const { return m_animation; }
+
+	DirectX::XMFLOAT3		GetTranslate	() const { return m_translate; }
+	float					GetScale		() const { return m_scale; }
+
+private:
+
+	void					ComputeScale	( TemporaryMeshInit& meshInitData );
 };
 
 DEFINE_PTR_TYPE( ShellMesh );

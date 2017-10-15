@@ -4,6 +4,8 @@
 #include <DirectXMath.h>
 
 
+namespace vr
+{
 
 
 // ================================ //
@@ -41,4 +43,15 @@ struct CameraConstants
 
 	float					FillTo16Bytes;
 };
+
+
+// ================================ //
+//
+struct MeshContants
+{
+	DirectX::XMFLOAT3		Translate;
+	float					Scale;
+};
+
+}
 

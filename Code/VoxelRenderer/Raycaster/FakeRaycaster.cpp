@@ -35,7 +35,7 @@ void			FakeRaycaster::Init			( IRenderer* renderer, ResourceManager* resourceMan
 
 // ================================ //
 //
-void			FakeRaycaster::Render		( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
+void			FakeRaycaster::Render		( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
 	RenderingHelper::ClearRenderTargetAndDepth( m_renderer, svoRenderTarget, DirectX::XMFLOAT4( 0.0, 0.0, 0.0, 0.0 ), 1.0f );
 	RenderingHelper::SetRenderTarget( m_renderer, svoRenderTarget, m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );

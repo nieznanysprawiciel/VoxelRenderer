@@ -101,7 +101,7 @@ void			RaycasterCPU::Init			( IRenderer* renderer, ResourceManager* resourceMana
 
 // ================================ //
 //
-void			RaycasterCPU::Render		( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
+void			RaycasterCPU::Render		( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )
 {
 	if( m_width != camera->GetWidth() || m_height != camera->GetHeight() )
 		ReallocateRenderBuffer( (uint16)camera->GetWidth(), (uint16)camera->GetHeight() );

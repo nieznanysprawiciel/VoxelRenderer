@@ -135,7 +135,7 @@ Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, c
 
 	auto animation = LoadAnimation( meshData, scene, skeleton );
 
-	Scale( tempMeshInit );
+	//Scale( tempMeshInit );
 
 	scene->Destroy();
 

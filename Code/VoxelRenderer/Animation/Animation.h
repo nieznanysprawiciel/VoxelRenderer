@@ -50,6 +50,7 @@ class Animation
 private:
 
 	std::vector< JointAnimation >	m_jointsAnims;
+	TimeType						m_animLength;
 
 protected:
 public:

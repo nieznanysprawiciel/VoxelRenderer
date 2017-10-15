@@ -86,9 +86,9 @@ void		Application::Render				( const sw::gui::FrameTime& frameTime )
 	
 	m_raycaster->ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
 
-	m_raycaster->RenderShellMeshes( m_shellMeshes, m_camera );
-	m_raycaster->Render( m_octree, m_svoRT.Ptr(), m_camera );
-	//m_raycaster->Render( m_octree, m_mainRT.Ptr(), m_camera );
+	m_raycaster->RenderShellMeshes( (vr::TimeType)frameTime.Time, m_shellMeshes, m_camera );
+	m_raycaster->Render( (vr::TimeType)frameTime.Time, m_octree, m_svoRT.Ptr(), m_camera );
+
 	m_blitEffect->Blit( m_renderingSystem->GetRenderer(), m_svoRT->GetColorBuffer(), m_mainRT.Ptr() );
 }
 

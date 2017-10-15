@@ -5,6 +5,8 @@
 
 #include "VoxelRenderer/Application/Presentation/BlitEffect.h"
 
+#include "VoxelRenderer/Animation/Animation.h"
+
 
 namespace vr
 {
@@ -23,6 +25,8 @@ protected:
 	ResourceManager*		m_resourceManager;
 
 	ResourcePtr< BufferObject >		m_cameraBuffer;
+	ResourcePtr< BufferObject >		m_animationBuffer;
+	ResourcePtr< BufferObject >		m_meshTransformBuffer;
 
 	ResourcePtr< VertexShader >		m_vertexShader;
 	ResourcePtr< PixelShader >		m_pixelShader;
@@ -44,8 +48,8 @@ public:
 	explicit			ShellMeshRenderer();
 
 
-	virtual void			RenderShellMeshes	( const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )					override;
-	virtual void			Render				( OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )			override;
+	virtual void			RenderShellMeshes	( TimeType time, const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )			override;
+	virtual void			Render				( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )	override;
 	virtual void			Init				( IRenderer* renderer, ResourceManager* resourceManager )								override;
 	virtual void			ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )		override;
 
@@ -53,6 +57,8 @@ public:
 private:
 
 	void					UpdateCamera			( CameraActor* camera );
+	void					UpdateAnimation			( TimeType time, AnimationPtr animation );
+	void					UpdateMeshBuffer		( ShellMeshPtr shellMesh );
 	void					ReallocateRenderTarget	( uint16 newWidth, uint16 newHeight );
 
 };
