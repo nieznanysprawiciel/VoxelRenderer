@@ -44,9 +44,9 @@ OutputVS	main( InputVS input )
 	OutputVS output = (OutputVS)0;
 
 	output.Position = input.Position + float4( Translate, 0.0 );
-	output.Position = output.Position * Scale;
+	output.Position.xyz = output.Position.xyz * Scale;
 
-	output.Position = mul( input.Position, ViewMatrix );
+	output.Position = mul( output.Position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );
 	output.BlendIdx = input.BlendIdx;
 	output.BlendWeights = input.BlendWeights;

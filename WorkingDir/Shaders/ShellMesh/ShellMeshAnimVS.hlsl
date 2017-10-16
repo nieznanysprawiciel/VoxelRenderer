@@ -59,7 +59,8 @@ OutputVS	main( InputVS input )
 	position += mul( input.Position, BoneTransform[ input.BlendIdx.w ] ) * input.BlendWeights.w;
 
 	position += float4( Translate, 0.0 );
-	position = position * Scale;
+	position.xyz = position.xyz * Scale;
+	position.z = 1.0f;
 
 	output.Position = mul( position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );
