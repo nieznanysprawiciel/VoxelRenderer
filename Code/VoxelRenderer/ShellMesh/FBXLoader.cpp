@@ -136,6 +136,7 @@ Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, c
 	auto animation = LoadAnimation( meshData, scene, skeleton );
 
 	//Scale( tempMeshInit );
+	RepairWeights( tempMeshInit );
 
 	scene->Destroy();
 
@@ -308,6 +309,27 @@ void								FBXLoader::Scale					( Nullable< TemporaryMeshInit >& mesh )
 			vertex.Position.x = ( vertex.Position.x - center.x ) / rangeMax;
 			vertex.Position.y = ( vertex.Position.y - center.y ) / rangeMax;
 			vertex.Position.z = ( vertex.Position.z - center.z ) / rangeMax;
+		}
+	}
+}
+
+// ================================ //
+/// Weights were clamped if number of joints influencing one vertex was greater then 4.
+/// We must scale them, so they sum will be equal to 1.0.
+void								FBXLoader::RepairWeights			( Nullable< TemporaryMeshInit >& mesh )
+{
+	if( mesh.IsValid )
+	{
+		for( auto& vertex : mesh.Value.Verticies )
+		{
+			auto weights = vertex.Weights;
+			auto sum = weights[ 0 ] + weights[ 1 ] + weights[ 2 ] + weights[ 3 ];
+
+			// Scale = 1 / sum
+			weights[ 0 ] = weights[ 0 ] / sum;
+			weights[ 1 ] = weights[ 1 ] / sum;
+			weights[ 2 ] = weights[ 2 ] / sum;
+			weights[ 3 ] = weights[ 3 ] / sum;
 		}
 	}
 }

@@ -53,6 +53,7 @@ private:
 	Nullable< TemporaryMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TemporaryMeshInit >& mesh, SkeletonPtr skeleton );
 
 	void							Scale			( Nullable< TemporaryMeshInit >& mesh );
+	void							RepairWeights	( Nullable< TemporaryMeshInit >& mesh );
 
 	void		TransformVerticies	( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix );
 };
