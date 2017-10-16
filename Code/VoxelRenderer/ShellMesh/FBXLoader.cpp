@@ -395,7 +395,7 @@ AnimationPtr						FBXLoader::LoadAnimation			( Nullable< FbxMeshCollection >& no
 		LoadAnimation( meshData.Node, scene, animInit, skeleton );
 	}
 
-	return std::make_shared< Animation >( animInit );
+	return std::make_shared< Animation >( skeleton, animInit );
 }
 
 // ================================ //

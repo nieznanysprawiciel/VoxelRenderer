@@ -8,9 +8,10 @@ namespace vr
 
 // ================================ //
 //
-Animation::Animation		( TemporaryAnimationInit& animInit )
+Animation::Animation		( SkeletonPtr skeleton, TemporaryAnimationInit& animInit )
 	:	m_jointsAnims( animInit.JointsAnims )
 	,	m_animLength( 0.0 )
+	,	m_skeleton( skeleton )
 {
 	auto length = animInit.End - animInit.Start;
 	m_animLength = (TimeType)length.GetSecondDouble();
@@ -28,6 +29,8 @@ std::vector< Transform >		Animation::Evaluate		( TimeType time )
 	for( int i = 0; i < m_jointsAnims.size(); ++i )
 	{
 		DirectX::XMMATRIX frameTransform = m_jointsAnims[ i ].Evaluate( wrappedTime );
+		DirectX::XMMATRIX globalBindBoseInverse = DirectX::XMLoadFloat4x4( &m_skeleton->GetJoints()[ i ].GlobalBindposeInverse );
+		frameTransform = DirectX::XMMatrixMultiply( globalBindBoseInverse, frameTransform );
 		frameTransform = DirectX::XMMatrixTranspose( frameTransform );
 
 		DirectX::XMStoreFloat4x4( &animMats[ i ], frameTransform );

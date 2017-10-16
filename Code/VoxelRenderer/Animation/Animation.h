@@ -3,6 +3,7 @@
 
 #include "swCommonLib/Common/TypesDefinitions.h"
 
+#include "VoxelRenderer/Animation/Skeleton.h"
 
 #include <vector>
 #include <DirectXMath.h>
@@ -51,10 +52,11 @@ private:
 
 	std::vector< JointAnimation >	m_jointsAnims;
 	TimeType						m_animLength;
+	SkeletonPtr						m_skeleton;
 
 protected:
 public:
-	explicit		Animation		( TemporaryAnimationInit& animInit );
+	explicit		Animation		( SkeletonPtr skeleton, TemporaryAnimationInit& animInit );
 	~Animation	() = default;
 
 	std::vector< Transform >		Evaluate		( TimeType time );
