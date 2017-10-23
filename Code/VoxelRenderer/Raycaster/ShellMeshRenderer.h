@@ -15,6 +15,15 @@ namespace vr
 typedef uint8 ChildFlag;
 
 
+// ================================ //
+//
+struct HelperConstants
+{
+	uint32		ShowBlendWeightsIdx;
+	
+	uint32		Aligns[ 3 ];
+};
+
 
 /**@brief GPU raycaster using compute shaders.*/
 class ShellMeshRenderer : public IRaycaster
@@ -27,6 +36,7 @@ protected:
 	ResourcePtr< BufferObject >		m_cameraBuffer;
 	ResourcePtr< BufferObject >		m_animationBuffer;
 	ResourcePtr< BufferObject >		m_meshTransformBuffer;
+	ResourcePtr< BufferObject >		m_helperConstants;
 
 	ResourcePtr< VertexShader >		m_vertexShader;
 	ResourcePtr< PixelShader >		m_pixelShader;
@@ -44,6 +54,8 @@ protected:
 	uint16				m_width;
 	uint16				m_height;
 
+	HelperConstants		m_helperConsts;
+
 public:
 	explicit			ShellMeshRenderer();
 
@@ -60,7 +72,7 @@ private:
 	void					UpdateAnimation			( TimeType time, AnimationPtr animation );
 	void					UpdateMeshBuffer		( ShellMeshPtr shellMesh );
 	void					ReallocateRenderTarget	( uint16 newWidth, uint16 newHeight );
-
+	void					UpdateHelperConstants	();
 };
 
 

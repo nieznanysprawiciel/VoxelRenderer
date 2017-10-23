@@ -46,7 +46,9 @@ DirectX::XMFLOAT4X4				Transpose				( DirectX::XMFLOAT4X4 mat )
 ShellMeshRenderer::ShellMeshRenderer()
 	:	m_height( 0 )
 	,	m_width( 0 )
-{}
+{
+	m_helperConsts.ShowBlendWeightsIdx = 0;
+}
 
 // ================================ //
 //
@@ -56,6 +58,7 @@ void				ShellMeshRenderer::RenderShellMeshes( TimeType time, const std::vector< 
 		ReallocateRenderTarget( (uint16)camera->GetWidth(), (uint16)camera->GetHeight() );
 
 	UpdateCamera( camera );
+	UpdateHelperConstants();
 
 	RenderingHelper::ClearRenderTargetAndDepth( m_renderer, m_shellMeshTarget.Ptr(), DirectX::XMFLOAT4( 0.0, 0.0, 0.0, 0.0 ), 1.0f );
 	RenderingHelper::SetRenderTarget( m_renderer, m_shellMeshTarget.Ptr(), m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
@@ -69,6 +72,7 @@ void				ShellMeshRenderer::RenderShellMeshes( TimeType time, const std::vector< 
 	m_renderer->SetShaderState( shaderState );
 
 	RenderingHelper::BindBuffer( m_renderer, m_cameraBuffer.Ptr(), 0, (uint8)ShaderType::VertexShader );
+	RenderingHelper::BindBuffer( m_renderer, m_helperConstants.Ptr(), 3, (uint8)ShaderType::VertexShader );
 
 	for( auto & shellMesh : shellMeshes )
 	{
@@ -144,6 +148,20 @@ void				ShellMeshRenderer::ProcessInput		( const sw::input::MouseState& mouse, c
 	{
 		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshAnimVS.hlsl", "main" );
 		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshAnimPS.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_4 ].IsKeyDownEvent() )
+	{
+		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshPaintWeightsVS.hlsl", "main" );
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPaintWeightsPS.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_ADD ].IsKeyDownEvent() )
+	{
+		m_helperConsts.ShowBlendWeightsIdx++;
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPADMINUS ].IsKeyDownEvent() )
+	{
+		if( m_helperConsts.ShowBlendWeightsIdx > 0 )
+			m_helperConsts.ShowBlendWeightsIdx--;
 	}
 }
 
@@ -242,6 +260,26 @@ void				ShellMeshRenderer::ReallocateRenderTarget	( uint16 newWidth, uint16 newH
 
 	m_shellMeshTarget = m_resourceManager->CreateRenderTarget( L"::ShellMeshTarget", descriptor );
 	assert( m_shellMeshTarget );
+}
+
+// ================================ //
+//
+void				ShellMeshRenderer::UpdateHelperConstants	()
+{
+	uint32 bufferSize = sizeof( HelperConstants );
+
+	if( !m_helperConstants )
+	{
+		m_helperConstants = m_resourceManager->CreateConstantsBuffer( L"HelperConstants", (uint8*)&m_helperConsts, bufferSize );
+		return;
+	}
+
+	UpdateBufferCommand updateCommand;
+	updateCommand.Buffer = m_helperConstants.Ptr();
+	updateCommand.FillData = (uint8*)&m_helperConsts;
+	updateCommand.Size = bufferSize;
+
+	m_renderer->UpdateBuffer( updateCommand );
 }
 
 }	// vr

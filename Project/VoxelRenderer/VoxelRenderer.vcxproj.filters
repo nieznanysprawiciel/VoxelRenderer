@@ -238,6 +238,12 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimVS.hlsl">
       <Filter>Shaders\ShellMesh</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPaintWeightsPS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPaintWeightsVS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">
