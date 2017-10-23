@@ -73,15 +73,15 @@ OutputVS	main( InputVS input )
 
 	if( weight >= 0.5f )
 	{
-		float lerpFactorR = 2.0f * ( weight - 0.5f );
-		float lerpFactorG = 1.0f - lerpFactorR;
-		output.Color = float4( lerpFactorR, lerpFactorG, 0.0, 1.0f );
+		float lerpFactorG = 1.0f - 2.0f * ( weight - 0.5f );
+		output.Color = float4( 1.0f, lerpFactorG, 0.0, 1.0f );
 	}
 	else
 	{
-		float lerpFactorB = 2.0f * weight;
-		float lerpFactorG = 1.0f - lerpFactorB;
-		output.Color = float4( 0.0f, lerpFactorG, lerpFactorB, 1.0f );
+		float lerpFactorR = 2.0f * weight;
+		float lerpFactorG = lerpFactorR;
+		float lerpFactorB = 1.0f - lerpFactorR;
+		output.Color = float4( lerpFactorR, lerpFactorG, lerpFactorB, 1.0f );
 	}
 
 	return output;
