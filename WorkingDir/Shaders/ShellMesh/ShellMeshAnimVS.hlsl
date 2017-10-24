@@ -60,7 +60,7 @@ OutputVS	main( InputVS input )
 
 	position += float4( Translate, 0.0 );
 	position.xyz = position.xyz * Scale;
-	position.z = 1.0f;
+	position.w = 1.0f;
 
 	output.Position = mul( position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );

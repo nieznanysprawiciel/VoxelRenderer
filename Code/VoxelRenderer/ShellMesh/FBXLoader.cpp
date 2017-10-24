@@ -365,6 +365,7 @@ void								FBXLoader::BuildSkeleton			( std::vector< vr::Joint >& joints, FbxNo
 		currJoint.ParentIndex = parentIdx;
 		currJoint.Name = node->GetName();
 		currJoint.ID = node->GetUniqueID();
+		DirectX::XMStoreFloat4x4( &currJoint.GlobalBindposeInverse, DirectX::XMMatrixIdentity() );
 		joints.push_back( currJoint );
 	}
 
@@ -425,9 +426,9 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 				FbxAMatrix transformLinkMatrix;					
 				FbxAMatrix globalBindposeInverseMatrix;
 
-				currCluster->GetTransformMatrix(transformMatrix);	// The transformation of the mesh at binding time
-				currCluster->GetTransformLinkMatrix(transformLinkMatrix);	// The transformation of the cluster(joint) at binding time from joint space to world space
-				globalBindposeInverseMatrix = transformLinkMatrix.Inverse() * transformMatrix * geometryTransform;
+				currCluster->GetTransformMatrix( transformMatrix );	// The transformation of the mesh at binding time
+				currCluster->GetTransformLinkMatrix( transformLinkMatrix );	// The transformation of the cluster(joint) at binding time from joint space to world space
+				globalBindposeInverseMatrix = transformMatrix * geometryTransform * transformLinkMatrix.Inverse();
 
 				// :(
 				const_cast< DirectX::XMFLOAT4X4& >( skeleton->GetJoints()[ currJointIndex ].GlobalBindposeInverse ) = Get( globalBindposeInverseMatrix );
@@ -438,7 +439,7 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 					currTime.SetFrame( i, FbxTime::eFrames24 );
 
 					FbxAMatrix currentTransformOffset = node->EvaluateGlobalTransform( currTime ) * geometryTransform;
-					auto globalTransform = currentTransformOffset.Inverse() * currCluster->GetLink()->EvaluateGlobalTransform( currTime );
+					auto globalTransform = currCluster->GetLink()->EvaluateGlobalTransform( currTime ) * currentTransformOffset.Inverse();
 					
 					animInit.JointsAnims[ currJointIndex ].AddKey( (TimeType)currTime.GetSecondDouble(), Get( globalTransform ) );
 				}
@@ -491,7 +492,7 @@ DirectX::XMFLOAT4X4 Get( const fbxsdk::FbxMatrix & matrix )
 	{
 		for( int j = 0; j < 4; ++j )
 		{
-			result.m[ i ][ j ] = (float)matrix.Get( i, j );
+			result( i, j ) = (float)matrix.Get( i, j );
 		}
 	}
 

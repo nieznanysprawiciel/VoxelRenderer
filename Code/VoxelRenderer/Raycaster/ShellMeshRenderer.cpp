@@ -238,7 +238,7 @@ void				ShellMeshRenderer::UpdateMeshBuffer			( ShellMeshPtr shellMesh )
 	}
 
 	UpdateBufferCommand updateCommand;
-	updateCommand.Buffer = m_animationBuffer.Ptr();
+	updateCommand.Buffer = m_meshTransformBuffer.Ptr();
 	updateCommand.FillData = (uint8*)&meshConstants;
 	updateCommand.Size = bufferSize;
 
