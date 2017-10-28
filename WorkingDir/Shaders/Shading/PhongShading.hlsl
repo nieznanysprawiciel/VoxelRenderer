@@ -192,7 +192,7 @@ float4				ComputePhongLightResultColor		( float3 worldPosition, float3 normal, f
 
 	PhongResult phongResult = ComputeLightPhong( worldPosition, normal, viewDir );
 	
-	resultColor.xyz = phongResult.Diffuse.xyz * color;
+	resultColor.xyz += phongResult.Diffuse.xyz * color;
 	resultColor.xyz += phongResult.Specular;			// Specular is always white for now.
 	
 	return resultColor;

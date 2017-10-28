@@ -341,15 +341,22 @@ StackOperation		PushStep				( inout RaycasterContext rayCtx, float3 corner, floa
 
 // ================================ //
 //
-RaycasterResult				Raycasting				( float4 screenSpace, CameraData cameraInput )
+RaycasterResult				RaycastingCore			( float4 screenSpace, float3 position, float3 direction )
 {
 	RaycasterContext rayCtx;
 
+	InitRaycasting( position, direction, rayCtx );
+	return CastRay( rayCtx );
+}
+
+// ================================ //
+//
+RaycasterResult				Raycasting				( float4 screenSpace, CameraData cameraInput )
+{
 	float3 direction = ComputeRayDirection( cameraInput, screenSpace.x, screenSpace.y );
 	float3 position = ComputeRayPosition( cameraInput, screenSpace.x, screenSpace.y );
 
-	InitRaycasting( position, direction, rayCtx );
-	return CastRay( rayCtx );
+	return RaycastingCore( screenSpace, position, direction );
 
 }
 
