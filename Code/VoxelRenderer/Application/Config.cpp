@@ -59,6 +59,36 @@ Config::Config	( const std::string& filePath )
 				deser.Exit();
 			}
 
+			if( deser.EnterObject( "Lights" ) )
+			{
+				if( deser.EnterObject( "DirectionalLight" ) )
+				{
+					if( deser.EnterObject( "Direction" ) )
+					{
+						m_DirLightDirection.x = (float)deser.GetAttribute( "X", m_DirLightDirection.x );
+						m_DirLightDirection.y = (float)deser.GetAttribute( "Y", m_DirLightDirection.y );
+						m_DirLightDirection.z = (float)deser.GetAttribute( "Z", m_DirLightDirection.z );
+
+						deser.Exit();
+					}
+
+					if( deser.EnterObject( "Color" ) )
+					{
+						m_DirLightColor.x = (float)deser.GetAttribute( "X", m_DirLightColor.x );
+						m_DirLightColor.y = (float)deser.GetAttribute( "Y", m_DirLightColor.y );
+						m_DirLightColor.z = (float)deser.GetAttribute( "Z", m_DirLightColor.z );
+
+						deser.Exit();
+					}
+
+					m_DirLightIntensity = (float)deser.GetAttribute( "Intensity", m_DirLightIntensity );
+
+					deser.Exit();
+				}
+
+				deser.Exit();
+			}
+
 			if( deser.EnterObject( "Raycaster" ) )
 			{
 				m_RaycasterType = deser.GetAttribute( "Type", m_RaycasterType );

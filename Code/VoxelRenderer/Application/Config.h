@@ -34,6 +34,10 @@ private:
 	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraFar, 1.0f );
 	DEFINE_CONFIG_VALUE_DEFAULT( float, CameraNear, 1000.0f );
 
+	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, DirLightDirection );
+	DEFINE_CONFIG_VALUE( DirectX::XMFLOAT3, DirLightColor );
+	DEFINE_CONFIG_VALUE( float, DirLightIntensity );
+
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, RaycasterType, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, OctreeFilePath, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, ShellMeshFilePath, "" );
