@@ -27,7 +27,7 @@ void				RaycasterGPU::Render			( TimeType time, OctreePtr octree, RenderTargetOb
 {
 	UpdateOctree( octree );
 	UpdateCamera( camera );
-
+	UpdateLights();
 
 	RenderingHelper::ClearRenderTargetAndDepth( m_renderer, svoRenderTarget, DirectX::XMFLOAT4( 0.0, 0.0, 0.0, 0.0 ), 1.0f );
 	RenderingHelper::SetRenderTarget( m_renderer, svoRenderTarget, m_rasterizerState.Ptr(), m_blendingState.Ptr(), m_depthStencilState.Ptr() );
@@ -43,6 +43,7 @@ void				RaycasterGPU::Render			( TimeType time, OctreePtr octree, RenderTargetOb
 	m_renderer->SetShaderState( shaderState );
 
 	RenderingHelper::BindBuffer( m_renderer, m_cameraBuffer.Ptr(), 0, (uint8)ShaderType::PixelShader );
+	RenderingHelper::BindBuffer( m_renderer, m_lightsBuffer.Ptr(), 1, (uint8)ShaderType::PixelShader );
 
 	RenderingHelper::DrawBufferLess( m_renderer, 3, PrimitiveTopology::PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 }
@@ -75,7 +76,10 @@ void				RaycasterGPU::ProcessInput		( const sw::input::MouseState& mouse, const 
 	{
 		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/RaycasterGPU/Normals.hlsl", "main" );
 	}
-
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_3 ].IsKeyDownEvent() )
+	{
+		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/RaycasterGPU/PhongColor.hlsl", "main" );
+	}
 }
 
 
@@ -129,6 +133,16 @@ void				RaycasterGPU::UpdateCamera		( CameraActor* camera )
 	else
 		RenderingHelper::UpdateBuffer( m_renderer, m_cameraBuffer.Ptr(), cameraData );
 
+}
+
+// ================================ //
+//
+void				RaycasterGPU::UpdateLights		()
+{
+	if( !m_lightsBuffer )
+		m_lightsBuffer = m_resourceManager->CreateConstantsBuffer( L"Lights constant buffer", (uint8*)&m_lights->GetLights(), sizeof( LightConstants ) );
+	else
+		RenderingHelper::UpdateBuffer( m_renderer, m_lightsBuffer.Ptr(), m_lights->GetLights() );
 }
 
 }	// vr

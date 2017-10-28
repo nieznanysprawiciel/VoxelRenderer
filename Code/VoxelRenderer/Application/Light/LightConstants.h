@@ -8,15 +8,31 @@
 namespace vr
 {
 
-#define MAX_LIGHTS 2
+#define MAX_LIGHTS 3
 
 
-/**@brief Description of light parameters.*/
-struct PointLightParams
+
+/**@brief Type of light.
+@ingroup Lights*/
+enum class LightType : int32
+{
+	PointLight = 0,
+	SpotLight,
+	DirectionalLight
+};
+
+
+
+/**@brief Description of light parameters.
+@ingroup Lights*/
+struct LightParams
 {
 	DirectX::XMFLOAT3		Color;
 	float					ClampRadius;
 	DirectX::XMFLOAT3		Position;
+	float					SpotAngle;
+	DirectX::XMFLOAT3		Direction;		// Wspó³rzêdne s¹ zanegowane, ¿eby shader mia³ mniej roboty
+	LightType				Type;
 	float					ConstAttenuation;
 	float					LinearAttenuation;
 	float					QuadraticAttenuation;
@@ -24,10 +40,13 @@ struct PointLightParams
 
 	// ================================ //
 	//
-	PointLightParams()
+	LightParams()
 		:	Position( DirectX::XMFLOAT3( 0.0, 0.0, 0.0 ) )
 		,	Color( DirectX::XMFLOAT3( 1.0, 1.0, 1.0 ) )
+		,	Direction( DirectX::XMFLOAT3( 0.0, 0.0, 1.0 ) )
 		,	ClampRadius( 300000.0f )
+		,	SpotAngle( 30.0f )
+		,	Type( LightType::PointLight )
 		,	ConstAttenuation( 0.0f )
 		,	LinearAttenuation( 0.0f )
 		,	QuadraticAttenuation( 1.0f )
@@ -35,30 +54,18 @@ struct PointLightParams
 	{}
 };
 
-/**@brief Description of light parameters.*/
-struct DirectionalLightParams
-{
-	DirectX::XMFLOAT3		Color;
-	float					Intensity;
-	DirectX::XMFLOAT3		Direction;
-	float					Align2;
 
-	// ================================ //
-	//
-	DirectionalLightParams()
-		:	Direction( DirectX::XMFLOAT3( 0.0, 0.0, -1.0 ) )
-		,	Color( DirectX::XMFLOAT3( 1.0, 1.0, 1.0 ) )
-		,	Intensity( 1.0 )
-	{}
-};
+/**@brief Constant buffer layout with light data.
 
-/**@brief Constant buffer layout with light data.*/
+@see LightParams
+@ingroup ConstantBuffers
+@ingroup Lights*/
 struct LightConstants
 {
-	DirectionalLightParams	DirectionalLight;
-	PointLightParams		LightData[ MAX_LIGHTS ];
+	DirectX::XMFLOAT3		AmbientColor;
+	uint32					NumLights;			///< Number of lights. Must be lower then ENGINE_MAX_LIGHTS.
+	LightParams				LightData[ MAX_LIGHTS ];
 };
-
 
 
 }

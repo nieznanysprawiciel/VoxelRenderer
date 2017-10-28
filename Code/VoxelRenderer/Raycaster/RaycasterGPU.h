@@ -26,6 +26,7 @@ protected:
 	ResourcePtr< BufferObject >		m_cameraBuffer;
 	ResourcePtr< BufferObject >		m_octreeBuffer;
 	ResourcePtr< TextureObject >	m_octreeTexBuff;
+	ResourcePtr< BufferObject >		m_lightsBuffer;
 
 	ResourcePtr< VertexShader >		m_vertexShader;
 	ResourcePtr< PixelShader >		m_pixelShader;
@@ -49,6 +50,7 @@ private:
 
 	void					UpdateOctree	( OctreePtr octree );
 	void					UpdateCamera	( CameraActor* camera );
+	void					UpdateLights	();
 };
 
 

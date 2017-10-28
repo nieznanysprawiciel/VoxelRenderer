@@ -234,7 +234,7 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 	if( ( rayCtx.OctantMask & 4 ) == 0 ) rayCtx.Position.z = 3.0f - rayCtx.ScaleExp - rayCtx.Position.z;
 
 	RaycasterResult result;
-	result.Depth = 0.0;		//rayCtx.tMin - rayCtx.tCubeMin;;
+	result.Depth = rayCtx.tMin;		//rayCtx.tMin - rayCtx.tCubeMin;;
 	result.VoxelIdx = rayCtx.Current;
 
 	return result;

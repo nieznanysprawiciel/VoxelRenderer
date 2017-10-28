@@ -40,6 +40,9 @@
     <Filter Include="VoxelRenderer\Application\Light">
       <UniqueIdentifier>{318f081a-4f93-457a-afef-ca34b7a0bf8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Shading">
+      <UniqueIdentifier>{7ef27a53-da66-4d66-a262-f0149fedf20d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -255,6 +258,12 @@
     </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshPaintWeightsVS.hlsl">
       <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\Shading\PhongShading.hlsl">
+      <Filter>Shaders\Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\PhongColor.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

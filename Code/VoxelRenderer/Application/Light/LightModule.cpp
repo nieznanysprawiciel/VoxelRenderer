@@ -10,14 +10,17 @@ namespace vr
 //
 LightModule::LightModule	( Config& config )
 {
-	auto & dirLight = m_lightsData.DirectionalLight;
+	// Set data for directional light which is first in array..
+	auto & dirLight = m_lightsData.LightData[ 0 ];
 	dirLight.Color = config.DirLightColor();
 	dirLight.Direction = config.DirLightDirection();
 	dirLight.Intensity = config.DirLightIntensity();
+	dirLight.Type = LightType::DirectionalLight;
+
+	m_lightsData.AmbientColor = DirectX::XMFLOAT3( 0.1f, 0.1f, 0.1f );
 
 	// Disable rest of lights.
-	m_lightsData.LightData[ 0 ].ClampRadius = 0.0f;
-	m_lightsData.LightData[ 1 ].ClampRadius = 0.0f;
+	m_lightsData.NumLights = 1;
 }
 
 
