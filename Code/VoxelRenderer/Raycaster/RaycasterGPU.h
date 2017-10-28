@@ -34,12 +34,14 @@ protected:
 	ResourcePtr< RasterizerState >		m_rasterizerState;
 	ResourcePtr< DepthStencilState >	m_depthStencilState;
 
+	LightModulePtr					m_lights;
+
 public:
 
 
 
 	virtual void			Render			( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		override;
-	virtual void			Init			( IRenderer* renderer, ResourceManager* resourceManager )								override;
+	virtual void			Init			( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )			override;
 	virtual void			ProcessInput	( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )		override;
 
 

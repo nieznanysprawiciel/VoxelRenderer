@@ -41,6 +41,7 @@ In this function you should initialize your application logic.
 */
 bool		Application::OnInitialized		()
 {
+	InitLights();
 	InitResources();
 	InitCamera();
 	InitRaycaster();
@@ -74,6 +75,8 @@ void		Application::Update				( const sw::gui::FrameTime& frameTime )
 {
 	m_camera->GetController()->ControlObjectPre( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
 	m_camera->GetController()->ControlObjectPost( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
+
+	m_lightModule->Update( frameTime.Time, frameTime.Elapsed );
 }
 
 
@@ -90,6 +93,13 @@ void		Application::Render				( const sw::gui::FrameTime& frameTime )
 	m_raycaster->Render( (vr::TimeType)frameTime.Time, m_octree, m_svoRT.Ptr(), m_camera );
 
 	m_blitEffect->Blit( m_renderingSystem->GetRenderer(), m_svoRT->GetColorBuffer(), m_mainRT.Ptr() );
+}
+
+// ================================ //
+//
+void		Application::InitLights		()
+{
+	m_lightModule = std::make_shared< LightModule >( *m_config.get() );
 }
 
 // ================================ //
@@ -147,7 +157,7 @@ void		Application::InitRaycaster	()
 	}
 
 	if( m_raycaster )
-		m_raycaster->Init( m_renderingSystem->GetRenderer(), m_resourceManager );
+		m_raycaster->Init( m_renderingSystem->GetRenderer(), m_resourceManager, m_lightModule );
 }
 
 // ================================ //

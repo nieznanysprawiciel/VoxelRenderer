@@ -9,6 +9,7 @@
 #include "VoxelRenderer/ShellMesh/ShellMesh.h"
 
 #include "VoxelRenderer/Application/TimeManager.h"
+#include "VoxelRenderer/Application/Light/LightModule.h"
 
 #include "Presentation/BlitEffect.h"
 
@@ -38,6 +39,7 @@ private:
 	BlitEffectUPtr		m_blitEffect;
 
 	TimeManager			m_timeManager;
+	LightModulePtr		m_lightModule;
 
 protected:
 public:
@@ -59,6 +61,7 @@ private:
 private:
 	///@name Initialization functions
 	///@{
+	void			InitLights		();
 	void			InitCamera		();
 	void			InitRaycaster	();
 	void			InitOctree		();

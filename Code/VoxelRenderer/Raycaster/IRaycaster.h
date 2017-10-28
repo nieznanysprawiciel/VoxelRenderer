@@ -4,6 +4,8 @@
 #include "swGraphicAPI/Resources/MeshResources.h"
 #include "VoxelRenderer/SVO/Octree.h"
 #include "VoxelRenderer/Actors/CameraActor.h"
+#include "VoxelRenderer/Application/Light/LightModule.h"
+
 
 #include "swGraphicAPI/ResourceManager/ResourceManager.h"
 #include "swGraphicAPI/Rendering/IGraphicAPIInitializer.h"
@@ -30,7 +32,7 @@ public:
 
 	virtual void	RenderShellMeshes	( TimeType time, const std::vector< ShellMeshPtr >& shellMeshes, CameraActor* camera )				{}
 	virtual void	Render				( TimeType time, OctreePtr octree, RenderTargetObject* svoRenderTarget, CameraActor* camera )		= 0;
-	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager )											= 0;
+	virtual void	Init				( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )					= 0;
 
 	virtual void	ProcessInput		( const sw::input::MouseState& mouse, const sw::input::KeyboardState& keyboard )					= 0;
 };

@@ -37,6 +37,9 @@
     <Filter Include="Shaders\ShellMesh">
       <UniqueIdentifier>{27fdaf8d-72a0-4ef7-8ff8-a255685cfde4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelRenderer\Application\Light">
+      <UniqueIdentifier>{318f081a-4f93-457a-afef-ca34b7a0bf8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Animation.cpp">
       <Filter>VoxelRenderer\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.cpp">
+      <Filter>VoxelRenderer\Application\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\Structures\ShaderCameraBuffer.h">
       <Filter>VoxelRenderer\Raycaster\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.h">
+      <Filter>VoxelRenderer\Application\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightConstants.h">
+      <Filter>VoxelRenderer\Application\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

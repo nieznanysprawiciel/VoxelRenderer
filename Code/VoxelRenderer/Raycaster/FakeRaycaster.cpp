@@ -10,7 +10,7 @@ namespace vr
 
 // ================================ //
 //
-void			FakeRaycaster::Init			( IRenderer* renderer, ResourceManager* resourceManager )
+void			FakeRaycaster::Init			( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )
 {
 	m_renderer = renderer;
 	m_resourceManager = resourceManager;

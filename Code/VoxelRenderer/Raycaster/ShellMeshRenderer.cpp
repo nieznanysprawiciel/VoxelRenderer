@@ -105,7 +105,7 @@ void				ShellMeshRenderer::Render			( TimeType time, OctreePtr octree, RenderTar
 
 // ================================ //
 //
-void				ShellMeshRenderer::Init				( IRenderer* renderer, ResourceManager* resourceManager )
+void				ShellMeshRenderer::Init				( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )
 {
 	m_resourceManager = resourceManager;
 	m_renderer = renderer;

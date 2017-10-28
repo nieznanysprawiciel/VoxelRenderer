@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.cpp" />
@@ -196,6 +197,8 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Skeleton.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightConstants.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\TimeManager.h" />

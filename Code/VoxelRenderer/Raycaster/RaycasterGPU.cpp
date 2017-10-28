@@ -49,10 +49,11 @@ void				RaycasterGPU::Render			( TimeType time, OctreePtr octree, RenderTargetOb
 
 // ================================ //
 //
-void				RaycasterGPU::Init				( IRenderer* renderer, ResourceManager* resourceManager )
+void				RaycasterGPU::Init				( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )
 {
 	m_resourceManager = resourceManager;
 	m_renderer = renderer;
+	m_lights = lights;
 
 	m_blendingState = resourceManager->GetBlendingState( BlendingInfo() );
 	m_rasterizerState = resourceManager->GetRasterizerState( RasterizerStateInfo() );

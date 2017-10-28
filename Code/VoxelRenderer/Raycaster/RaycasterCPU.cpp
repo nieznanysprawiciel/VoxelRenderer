@@ -91,7 +91,7 @@ RaycasterCPU::~RaycasterCPU()
 
 // ================================ //
 //
-void			RaycasterCPU::Init			( IRenderer* renderer, ResourceManager* resourceManager )
+void			RaycasterCPU::Init			( IRenderer* renderer, ResourceManager* resourceManager, LightModulePtr lights )
 {
 	m_resourceManager = resourceManager;
 
