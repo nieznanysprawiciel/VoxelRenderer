@@ -265,6 +265,9 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\PhongColor.hlsl">
       <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimGS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">
