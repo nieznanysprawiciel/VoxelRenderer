@@ -50,7 +50,11 @@ public:
 
 private:
 
-	void					ComputeScale	( TemporaryMeshInit& meshInitData );
+	void								ComputeScale		( TemporaryMeshInit& meshInitData );
+	std::vector< ShellMeshVertex >		BuildVertexBuffer	( TemporaryMeshInit& meshInitData );
+	void								SortTriangleWeights	( ShellMeshVertex& point1, ShellMeshVertex& point2, ShellMeshVertex& point3 );
+
+	void								AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex& point );
 };
 
 DEFINE_PTR_TYPE( ShellMesh );

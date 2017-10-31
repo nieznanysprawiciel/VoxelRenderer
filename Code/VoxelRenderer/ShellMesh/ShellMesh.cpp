@@ -39,13 +39,16 @@ ShellMesh::ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, Animatio
 		m_numIndiecies += meshInitData.Indicies[ i ].size();
 	}
 
+	ComputeScale( meshInitData );
+
 	MemoryChunk indexChunk( (uint32)m_numIndiecies * sizeof( Index32 ) );
 	CopyIndexBuffer< Index32 >( meshInitData.Indicies, indexChunk );
 
 	m_shellMesh = manager->CreateVertexBuffer( L"::ShellMeshVertex", (uint8*)meshInitData.Verticies.data(), sizeof( ShellMeshVertex ), (uint32)meshInitData.Verticies.size() );
 	m_shellMeshIndex = manager->CreateIndexBuffer( L"ShellMeshIndex", indexChunk.GetMemory< uint8* >(), sizeof( Index32 ), (uint32)m_numIndiecies );
 
-	ComputeScale( meshInitData );
+	// Only check now
+	//BuildVertexBuffer( meshInitData );
 }
 
 // ================================ //
@@ -77,6 +80,58 @@ void			ShellMesh::ComputeScale		( TemporaryMeshInit & meshInitData )
 
 	m_translate = DirectX::XMFLOAT3( -center.x, -center.y, -center.z );
 	m_scale = 1.0f / rangeMax;
+}
+
+// ================================ //
+// Split verticies. Each vertex will be referenced only once.
+// Then sort triangles weights.
+std::vector< ShellMeshVertex >		ShellMesh::BuildVertexBuffer	( TemporaryMeshInit& meshInitData )
+{
+	std::vector< ShellMeshVertex > vertexBuffer;
+
+	auto & verticies = meshInitData.Verticies;
+
+	for( auto & indexBuff : meshInitData.Indicies )
+	{
+		for( auto idx : indexBuff )
+			vertexBuffer.push_back( verticies[ idx ] );
+	}
+
+	for( Size i = 0; i < vertexBuffer.size(); i += 3 )
+		SortTriangleWeights( vertexBuffer[ i ], vertexBuffer[ i + 1 ], vertexBuffer[ i + 2 ] );
+
+	return vertexBuffer;
+}
+
+// ================================ //
+// Each triangle should have only 4 weight indicies which it references.
+void								ShellMesh::SortTriangleWeights	( ShellMeshVertex& point1,
+																	  ShellMeshVertex& point2,
+																	  ShellMeshVertex& point3 )
+{
+	std::set< uint8 > uniqueIdx;
+
+	AddWeights( uniqueIdx, point1 );
+	AddWeights( uniqueIdx, point2 );
+	AddWeights( uniqueIdx, point3 );
+
+	if( uniqueIdx.size() > 4 )
+	{
+		static Size numOverflows = 0;
+		numOverflows++;
+	}
+
+}
+
+// ================================ //
+//
+void								ShellMesh::AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex& point )
+{
+	for( int i = 0; i < 4; ++i )
+	{
+		if( point.Weights[ i ] > 0.0f )
+			idxSet.insert( point.WeightIdx[ i ] );
+	}
 }
 
 }
