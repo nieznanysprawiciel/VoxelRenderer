@@ -43,6 +43,9 @@
     <Filter Include="Shaders\Shading">
       <UniqueIdentifier>{7ef27a53-da66-4d66-a262-f0149fedf20d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Tools">
+      <UniqueIdentifier>{80873dd9-8ce9-451a-bdbf-c6afe1a8cc3a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -267,6 +270,9 @@
     </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimGS.hlsl">
       <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\Tools\MatrixInverse.hlsl">
+      <Filter>Shaders\Tools</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
