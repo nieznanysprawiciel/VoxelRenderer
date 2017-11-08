@@ -10,6 +10,7 @@
 
 #include "DX11VertexShader.h"
 #include "DX11PixelShader.h"
+#include "DX11GeometryShader.h"
 #include "DX11ComputeShader.h"
 #include "DX11Buffer.h"
 #include "DX11Texture.h"
@@ -24,6 +25,7 @@
 typedef DX11Texture				Texture;
 typedef DX11VertexShader		VertexShaderObject;
 typedef DX11PixelShader			PixelShaderObject;
+typedef DX11GeometryShader		GeometryShaderObject;
 typedef DX11Buffer				Buffer;
 typedef DX11ComputeShader		ComputeShaderObject;
 typedef DX11DepthStencilState	DepthStencilStateObject;
@@ -104,6 +106,19 @@ DepthStencilState*	ResourcesFactory::CreateDepthStencilState	( const DepthStenci
 PixelShader*		ResourcesFactory::CreatePixelShaderFromFile( const std::wstring& fileName, const std::string& shaderName, const char* shaderModel )
 {
 	auto shader = PixelShaderObject::CreateFromFile( fileName, shaderName, shaderModel );
+	if( shader )
+	{
+		shader->SetFileName( fileName );
+		shader->SetShaderName( shaderName );
+	}
+	return shader;
+}
+
+// ================================ //
+//
+GeometryShader*		ResourcesFactory::CreateGeometryShaderFromFile( const std::wstring& fileName, const std::string& shaderName, const char* shaderModel )
+{
+	auto shader = GeometryShaderObject::CreateFromFile( fileName, shaderName, shaderModel );
 	if( shader )
 	{
 		shader->SetFileName( fileName );

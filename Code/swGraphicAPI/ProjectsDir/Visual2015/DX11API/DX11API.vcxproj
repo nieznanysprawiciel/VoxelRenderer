@@ -146,6 +146,7 @@
     <ClInclude Include="..\..\..\DX11API\DX11Renderer\DX11Renderer.h" />
     <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11Buffer.h" />
     <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11ComputeShader.h" />
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11GeometryShader.h" />
     <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11InputLayout.h" />
     <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11InputLayoutDescriptor.h" />
     <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11PipelineState.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="..\..\..\DX11API\DX11Renderer\DX11Renderer.cpp" />
     <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11Buffer.cpp" />
     <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11ComputeShader.cpp" />
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11GeometryShader.cpp" />
     <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11InputLayout.cpp" />
     <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11InputLayoutDescriptor.cpp" />
     <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11PipelineState.cpp" />

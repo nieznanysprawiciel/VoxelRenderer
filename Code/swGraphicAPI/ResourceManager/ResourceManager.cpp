@@ -255,22 +255,22 @@ PixelShader* ResourceManager::LoadPixelShader				( const std::wstring& fileName,
 	return shader;
 }
 
+// ================================ //
+//
 GeometryShader*		ResourceManager::LoadGeometryShader	( const std::wstring& fileName, const std::string& shaderEntry )
 {
-	//GeometryShader* shader = m_geometryShader.get( fileName );
-	//if ( !shader )
-	//{
-	//	// Nie by³o shadera, trzeba go stworzyæ i dodaæ
-	//	shader = ResourcesFactory::CreatePixelShaderFromFile( fileName, shaderEntry );
-	//	if ( !shader )		// shader móg³ mieæ z³y format, a nie chcemy dodawaæ nullptra do ResourceManagera
-	//		return nullptr;
+	GeometryShader* shader = m_geometryShader.get( fileName );
+	if ( !shader )
+	{
+		// Nie by³o shadera, trzeba go stworzyæ i dodaæ
+		shader = ResourcesFactory::CreateGeometryShaderFromFile( fileName, shaderEntry );
+		if ( !shader )		// shader móg³ mieæ z³y format, a nie chcemy dodawaæ nullptra do ResourceManagera
+			return nullptr;
 
-	//	m_geometryShader.UnsafeAdd( fileName, shader );	// Dodaliœmy teksturê
-	//}
+		m_geometryShader.UnsafeAdd( fileName, shader );	// Dodaliœmy teksturê
+	}
 
-	//return shader;
-	assert( !"Implements me" );
-	return nullptr;
+	return shader;
 }
 
 ControlShader*		ResourceManager::LoadControlShader	( const std::wstring& fileName, const std::string& shaderEntry )

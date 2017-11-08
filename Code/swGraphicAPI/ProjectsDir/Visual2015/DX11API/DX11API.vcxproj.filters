@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\..\DX11API\DX11Initializer\DX11Initializer.h">
       <Filter>DX11API\DX11Initializer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\DX11API\DX11Resources\DX11GeometryShader.h">
+      <Filter>DX11API\DX11Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\DX11API\stdafx.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\DX11API\DX11Initializer\DX11Initializer.cpp">
       <Filter>DX11API\DX11Initializer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\DX11API\DX11Resources\DX11GeometryShader.cpp">
+      <Filter>DX11API\DX11Resources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

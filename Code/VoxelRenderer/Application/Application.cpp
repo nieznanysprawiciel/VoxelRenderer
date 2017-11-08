@@ -7,6 +7,8 @@
 #include "VoxelRenderer/Raycaster/DepthRaycaster.h"
 #include "VoxelRenderer/Raycaster/NormalsRaycaster.h"
 #include "VoxelRenderer/Raycaster/ShellMeshRenderer.h"
+#include "VoxelRenderer/Raycaster/AnimationRaycasterGPU.h"
+
 
 #include "VoxelRenderer/Actors/CameraController.h"
 
@@ -151,6 +153,8 @@ void		Application::InitRaycaster	()
 		m_raycaster = MakeUPtr< NormalsRaycaster >();
 	else if( raycasterType == "ShellMeshRenderer" )
 		m_raycaster = MakeUPtr< ShellMeshRenderer >();
+	else if( raycasterType == "AnimationRaycasterGPU" )
+		m_raycaster = MakeUPtr< AnimationRaycasterGPU >();
 	else
 	{
 		/// Error !
