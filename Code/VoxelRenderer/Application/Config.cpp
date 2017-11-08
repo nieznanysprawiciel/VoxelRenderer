@@ -106,6 +106,7 @@ Config::Config	( const std::string& filePath )
 			if( deser.EnterObject( "ShellMesh" ) )
 			{
 				m_ShellMeshFilePath = deser.GetAttribute( "FilePath", m_ShellMeshFilePath );
+				m_AnimatedOctreePath = deser.GetAttribute( "OctreeFile", m_AnimatedOctreePath );
 
 				deser.Exit();
 			}

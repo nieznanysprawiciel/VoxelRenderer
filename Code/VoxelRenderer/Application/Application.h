@@ -67,6 +67,8 @@ private:
 	void			InitOctree		();
 	void			InitResources	();
 	void			InitShellMesh	();
+
+	OctreePtr		LoadOctree		( const std::string& octreeFile );
 	///@}
 };
 

@@ -41,6 +41,7 @@ private:
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, RaycasterType, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, OctreeFilePath, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, ShellMeshFilePath, "" );
+	DEFINE_CONFIG_VALUE_DEFAULT( std::string, AnimatedOctreePath, "" );
 
 public:
 	explicit		Config	( const std::string& filePath );

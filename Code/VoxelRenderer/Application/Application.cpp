@@ -168,14 +168,7 @@ void		Application::InitRaycaster	()
 //
 void		Application::InitOctree		()
 {
-	m_octree = std::make_shared< Octree >();
-
-	filesystem::Path filePath = m_config->OctreeFilePath();
-	if( filePath.Exists() )
-	{
-		bool result = m_octree->LoadFromFile( filePath );
-		assert( result );
-	}
+	m_octree = LoadOctree( m_config->OctreeFilePath() );
 }
 
 // ================================ //
@@ -217,10 +210,36 @@ void		Application::InitShellMesh()
 	{
 		auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
 		if( mesh.IsValid )
+		{
 			m_shellMeshes.push_back( mesh.Value );
+
+			auto& animOctreeFile = m_config->AnimatedOctreePath();
+			OctreePtr animOctree = LoadOctree( animOctreeFile );
+
+			if( animOctree )
+				mesh.Value->ApplyOctree( m_resourceManager, animOctree );
+		}
 	}
 
 	delete loader;
+}
+
+// ================================ //
+//
+OctreePtr	Application::LoadOctree		( const std::string& octreeFile )
+{
+	OctreePtr octree = std::make_shared< Octree >();
+
+	filesystem::Path filePath = octreeFile;
+	if( filePath.Exists() )
+	{
+		bool result = octree->LoadFromFile( filePath );
+		assert( result );
+
+		return nullptr;
+	}
+
+	return octree;
 }
 
 

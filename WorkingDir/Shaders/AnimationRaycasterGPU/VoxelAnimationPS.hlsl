@@ -58,6 +58,11 @@ float4 main( OutputGS input ) : SV_TARGET
 	float3 position = mul( float4( input.WorldPosition, 1.0f ), transformMatrix ).xyz;
 	direction = mul( float4( direction, 0.0f ), transformMatrix ).xyz;
 
+	// Note: The octree is assumed to reside at coordinates [1, 2]. Our Shell mesh is in center of coordinates system
+	// and has bounding box of size 1.0. We must move start position.
+	// We don't support shell meshes not in center just yet.
+	position += float3( 1.5f, 1.5f, 1.5f );
+
 	RaycasterResult result = RaycastingCore( input.Position, position, direction );
 
 	if( result.VoxelIdx != 0 )
