@@ -79,7 +79,7 @@ void				ShellMeshRenderer::RenderShellMeshes( TimeType time, const std::vector< 
 		UpdateAnimation( time, shellMesh->GetAnimation() );
 		UpdateMeshBuffer( shellMesh );
 
-		RenderingHelper::BindBuffer( m_renderer, m_animationBuffer.Ptr(), 1, (uint8)ShaderType::VertexShader );
+		RenderingHelper::BindBuffer( m_renderer, m_bonesBuffer.Ptr(), 1, (uint8)ShaderType::VertexShader );
 		RenderingHelper::BindBuffer( m_renderer, m_meshTransformBuffer.Ptr(), 2, (uint8)ShaderType::VertexShader );
 
 		DrawCommand drawCommand;
@@ -200,21 +200,21 @@ void				ShellMeshRenderer::UpdateAnimation			( TimeType time, AnimationPtr anima
 
 	uint32 bufferSize = sizeof( Transform ) * (uint32)bonesTransforms.size();
 
-	if( !m_animationBuffer )
+	if( !m_bonesBuffer )
 	{
-		m_animationBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
+		m_bonesBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
 		return;
 	}
 
-	if( m_animationBuffer->GetElementSize() != bufferSize )
+	if( m_bonesBuffer->GetElementSize() != bufferSize )
 	{
 		// @todo Here we should free previous buffer.
-		m_animationBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
+		m_bonesBuffer = m_resourceManager->CreateConstantsBuffer( L"BonesTransforms", (uint8*)bonesTransforms.data(), bufferSize );
 		return;
 	}
 
 	UpdateBufferCommand updateCommand;
-	updateCommand.Buffer = m_animationBuffer.Ptr();
+	updateCommand.Buffer = m_bonesBuffer.Ptr();
 	updateCommand.FillData = (uint8*)bonesTransforms.data();
 	updateCommand.Size = bufferSize;
 

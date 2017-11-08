@@ -371,11 +371,12 @@ void	DX11Renderer::SetShaderState	( const SetShaderStateCommand& command )
 //
 void	DX11Renderer::SetShaderState	( const SetShaderStateExCommand& command )
 {
-	assert( false );
+	//assert( false );
 	// Implement geometry, hull and domain shader first.
 
 	auto vertexShader = DX11( command.VertexShader );
 	auto pixelShader = DX11( command.PixelShader );
+	auto geometryShader = DX11( command.GeometryShader );
 	//auto geometryShader = DX11( command.GeometryShader );
 	//auto 
 
@@ -384,7 +385,7 @@ void	DX11Renderer::SetShaderState	( const SetShaderStateExCommand& command )
 
 	device_context->VSSetShader( vertexShader->Get(), nullptr, 0 );
 	device_context->PSSetShader( pixelShader->Get(), nullptr, 0 );
-	device_context->GSSetShader( nullptr, nullptr, 0 );
+	device_context->GSSetShader( geometryShader->Get(), nullptr, 0 );
 	device_context->HSSetShader( nullptr, nullptr, 0 );
 	device_context->DSSetShader( nullptr, nullptr, 0 );
 

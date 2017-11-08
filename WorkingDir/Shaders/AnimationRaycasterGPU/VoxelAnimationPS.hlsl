@@ -10,7 +10,14 @@
 #define MAX_BONES 200
 
 
-
+// ================================ //
+//
+cbuffer CameraConstants : register( b0 )
+{
+	matrix			ViewMatrix;					///< View matrix.
+	matrix			ProjectionMatrix;			///< Projection matrix.
+	float3			CameraPosition;				///< Position of camera in world space.
+}
 
 // ================================ //
 //
@@ -47,7 +54,7 @@ float4 main( OutputGS input ) : SV_TARGET
 
 	transformMatrix = Inverse( transformMatrix );
 
-	float3 direction = ComputeRayDirection( CameraInput, input.Position.x, input.Position.y );
+	float3 direction = normalize( input.WorldPosition - CameraPosition );
 	float3 position = mul( float4( input.WorldPosition, 1.0f ), transformMatrix ).xyz;
 	direction = mul( float4( direction, 0.0f ), transformMatrix ).xyz;
 

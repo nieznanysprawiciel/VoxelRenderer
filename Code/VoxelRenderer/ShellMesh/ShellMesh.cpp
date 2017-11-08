@@ -134,6 +134,29 @@ void								ShellMesh::AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex
 	}
 }
 
+// ================================ //
+//
+void								ShellMesh::ApplyOctree			( ResourceManager* manager, OctreePtr octree )
+{
+	if( m_octree != octree )
+	{
+		m_octree = octree;
+
+		TextureBufferInitData bufferDesc;
+		bufferDesc.AllowRaw = true;
+		bufferDesc.ElementSize = sizeof( OctreeNode );
+		bufferDesc.NumElements = (uint32)octree->AccessOctree().size();
+		bufferDesc.Usage = ResourceUsage::RESOURCE_USAGE_DEFAULT;
+		bufferDesc.Data = (uint8*)octree->AccessOctree().data();
+		
+		// We should release old octree here.
+
+		// @todo: we should give unique names to buffers otherwise, we can't create more then one shell mesh octree.
+		m_octreeBuffer = manager->CreateTextureBuffer( L"Octree", bufferDesc );
+		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView( L"RawOctreeView", manager );
+	}
+}
+
 }
 
 

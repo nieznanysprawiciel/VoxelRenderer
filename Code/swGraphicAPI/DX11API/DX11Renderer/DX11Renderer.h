@@ -14,6 +14,9 @@
 #include "swGraphicAPI/Resources/DepthStencilState.h"
 #include "swGraphicAPI/Rendering/IRenderer.h"
 
+#include "swGraphicAPI/DX11API/DX11Resources/DX11GeometryShader.h"
+
+
 class DX11Renderer;
 typedef DX11Renderer Renderer;
 
@@ -22,6 +25,7 @@ inline DX11Buffer*				DX11	( BufferObject* res )		{ return static_cast< DX11Buff
 inline DX11Texture*				DX11	( TextureObject* res )		{ return static_cast< DX11Texture* >( res ); }
 inline DX11ComputeShader*		DX11	( ComputeShader* res )		{ return static_cast< DX11ComputeShader* >( res ); }
 inline DX11PixelShader*			DX11	( PixelShader* res )		{ return static_cast< DX11PixelShader* >( res ); }
+inline DX11GeometryShader*		DX11	( GeometryShader* res )		{ return static_cast< DX11GeometryShader* >( res ); }
 inline DX11VertexShader*		DX11	( VertexShader* res )		{ return static_cast< DX11VertexShader* >( res ); }
 inline DX11RenderTarget*		DX11	( RenderTargetObject* res )	{ return static_cast< DX11RenderTarget* >( res ); }
 
@@ -31,7 +35,6 @@ inline DX11DepthStencilState*	DX11	( DepthStencilState* res )	{ return static_ca
 inline DX11InputLayout*			DX11	( ShaderInputLayout* res )	{ return static_cast< DX11InputLayout* >( res ); }
 
 
-//DX11GeometryShader*	Typed	( GeometryShader* res )		{ return static_cast< DX11GeometryShader* >( res ); }
 
 
 // @todo There're constants in ConstantsBuffersFormats.h file. This is duplicate, but there's no way to do this :(.

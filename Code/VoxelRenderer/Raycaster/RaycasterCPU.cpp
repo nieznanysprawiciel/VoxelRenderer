@@ -12,18 +12,6 @@ namespace vr
 
 
 
-const StepDirection StepXPlus = 0;
-const StepDirection StepYPlus = 1;
-const StepDirection StepZPlus = 2;
-
-const StepDirection StepXMinus = 3;
-const StepDirection StepYMinus = 4;
-const StepDirection StepZMinus = 5;
-
-const uint8 PositiveOUT = 8;
-const uint8 NegativeOUT = 9;
-
-
 // ================================ //
 //
 uint32			FloatAsInt		( float number )

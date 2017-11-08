@@ -34,7 +34,7 @@ protected:
 	ResourceManager*		m_resourceManager;
 
 	ResourcePtr< BufferObject >		m_cameraBuffer;
-	ResourcePtr< BufferObject >		m_animationBuffer;
+	ResourcePtr< BufferObject >		m_bonesBuffer;
 	ResourcePtr< BufferObject >		m_meshTransformBuffer;
 	ResourcePtr< BufferObject >		m_helperConstants;
 
