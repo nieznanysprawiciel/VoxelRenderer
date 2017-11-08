@@ -16,7 +16,7 @@ struct StackOperation
 
 void		InitRaycasting			( float3 position, float3 direction, inout RaycasterContext rayCtx );
 
-RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput );
+
 RaycasterResult		CastRay			( RaycasterContext rayCtx );
 
 
@@ -347,17 +347,6 @@ RaycasterResult				RaycastingCore			( float4 screenSpace, float3 position, float
 
 	InitRaycasting( position, direction, rayCtx );
 	return CastRay( rayCtx );
-}
-
-// ================================ //
-//
-RaycasterResult				Raycasting				( float4 screenSpace, CameraData cameraInput )
-{
-	float3 direction = ComputeRayDirection( cameraInput, screenSpace.x, screenSpace.y );
-	float3 position = ComputeRayPosition( cameraInput, screenSpace.x, screenSpace.y );
-
-	return RaycastingCore( screenSpace, position, direction );
-
 }
 
 

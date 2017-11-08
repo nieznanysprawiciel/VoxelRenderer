@@ -289,6 +289,9 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimationVS.hlsl">
       <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\RaycasterWithCamera.hlsl">
+      <Filter>Shaders\RaycasterGPU</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">
