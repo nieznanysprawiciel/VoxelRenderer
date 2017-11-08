@@ -5,6 +5,7 @@
 struct OutputVS
 {
 	linear float4			Position : SV_POSITION;
+	linear float3			WorldPosition : TEXCOORD0;
 	nointerpolation uint4	BlendIdx : BLENDINDICES;
 	linear float4			BlendWeights : BLENDWEIGHT;
 };
@@ -18,6 +19,7 @@ struct OutputVS
 struct OutputGS
 {
 	float4					Position : SV_POSITION;
+	linear float3			WorldPosition : TEXCOORD0;
 	nointerpolation uint	BlendIdx[ WEIGHTS_PER_TRIANGLE ] : BLENDINDICES;
 	linear float			BlendWeights[ WEIGHTS_PER_TRIANGLE ] : BLENDWEIGHT;
 };
@@ -29,6 +31,7 @@ OutputGS		InitVertex		( OutputVS inVertex )
 {
 	OutputGS vertex;
 	vertex.Position = inVertex.Position;
+	vertex.WorldPosition = inVertex.WorldPosition;
 
 	for( uint i = 0; i < WEIGHTS_PER_TRIANGLE; i++ )
 	{

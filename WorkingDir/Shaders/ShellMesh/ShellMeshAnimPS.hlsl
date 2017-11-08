@@ -5,6 +5,7 @@
 struct OutputVS
 {
 	linear float4			Position : SV_POSITION;
+	linear float3			WorldPosition : TEXCOORD0;
 	nointerpolation uint4	BlendIdx : BLENDINDICES;
 	linear float4			BlendWeights : BLENDWEIGHT;
 };

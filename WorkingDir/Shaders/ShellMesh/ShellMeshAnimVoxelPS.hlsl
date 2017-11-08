@@ -1,5 +1,6 @@
 #include "../Tools/MatrixInverse.hlsl"
-
+#include "../RaycasterGPU/Raycaster.hlsl"
+#include "../Shading/PhongShading.hlsl"
 
 
 
@@ -9,20 +10,14 @@
 #define MAX_BONES 200
 
 
-// ================================ //
-//
-struct OutputVS
-{
-	linear float4			Position : SV_POSITION;
-	nointerpolation uint4	BlendIdx : BLENDINDICES;
-	linear float4			BlendWeights : BLENDWEIGHT;
-};
+
 
 // ================================ //
 //
 struct OutputGS
 {
 	float4					Position : SV_POSITION;
+	linear float3			WorldPosition : TEXCOORD0;
 	nointerpolation uint	BlendIdx[ WEIGHTS_PER_TRIANGLE ] : BLENDINDICES;
 	linear float			BlendWeights[ WEIGHTS_PER_TRIANGLE ] : BLENDWEIGHT;
 };
@@ -37,12 +32,38 @@ cbuffer BonesTransforms : register( b1 )
 
 // ================================ //
 //
-float4 main( OutputVS input ) : SV_TARGET
+float4 main( OutputGS input ) : SV_TARGET
 {
+	// Create transformation matrix for this pixel.
+	matrix transformMatrix = input.BlendWeights[ 0 ] * BoneTransform[ input.BlendIdx[ 0 ] ];
+	for( int i = 1; i < WEIGHTS_PER_TRIANGLE; ++i )
+	{
+		float weight = input.BlendWeights[ i ];
+		if( weight == 0.0 )
+			break;
 
+		transformMatrix += weight * BoneTransform[ input.BlendIdx[ i ] ];
+	}
 
+	transformMatrix = Inverse( transformMatrix );
 
-	return float4(1.0f, 1.0f, 1.0f, 1.0f);
+	float3 direction = ComputeRayDirection( CameraInput, input.Position.x, input.Position.y );
+	float3 position = mul( float4( input.WorldPosition, 1.0f ), transformMatrix ).xyz;
+	direction = mul( float4( direction, 0.0f ), transformMatrix ).xyz;
+
+	RaycasterResult result = RaycastingCore( input.Position, position, direction );
+
+	if( result.VoxelIdx != 0 )
+	{
+		OctreeLeaf leaf = GetResultLeafNode( result.VoxelIdx );
+		VoxelAttributes attributes = GetLeafAttributes( leaf );
+
+		return float4( attributes.Color ) / 255.0f;
+	}
+	else
+	{
+		return float4( 0.0, 0.0, 0.0, 0.0 );
+	}
 }
 
 

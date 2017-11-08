@@ -42,6 +42,7 @@ struct InputVS
 struct OutputVS
 {
 	linear float4			Position : SV_POSITION;
+	linear float3			WorldPosition : TEXCOORD0;
 	nointerpolation uint4	BlendIdx : BLENDINDICES;
 	linear float4			BlendWeights : BLENDWEIGHT;
 };
@@ -62,6 +63,7 @@ OutputVS	main( InputVS input )
 	position.xyz = position.xyz * Scale;
 	position.w = 1.0f;
 
+	output.WorldPosition = position.xyz;
 	output.Position = mul( position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );
 	output.BlendIdx = input.BlendIdx;

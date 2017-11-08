@@ -120,6 +120,9 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.cpp">
       <Filter>VoxelRenderer\Application\Light</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\AnimationRaycasterGPU.cpp">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h">
@@ -215,6 +218,9 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightConstants.h">
       <Filter>VoxelRenderer\Application\Light</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\AnimationRaycasterGPU.h">
+      <Filter>VoxelRenderer\Raycaster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">
@@ -268,11 +274,14 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\PhongColor.hlsl">
       <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimGS.hlsl">
-      <Filter>Shaders\ShellMesh</Filter>
-    </FxCompile>
     <FxCompile Include="..\..\WorkingDir\Shaders\Tools\MatrixInverse.hlsl">
       <Filter>Shaders\Tools</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimVoxelPS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimVoxelGS.hlsl">
+      <Filter>Shaders\ShellMesh</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
