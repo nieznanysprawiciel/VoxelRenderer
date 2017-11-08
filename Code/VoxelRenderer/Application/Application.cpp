@@ -236,10 +236,10 @@ OctreePtr	Application::LoadOctree		( const std::string& octreeFile )
 		bool result = octree->LoadFromFile( filePath );
 		assert( result );
 
-		return nullptr;
+		return octree;
 	}
 
-	return octree;
+	return nullptr;
 }
 
 
