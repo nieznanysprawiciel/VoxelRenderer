@@ -28,8 +28,9 @@ protected:
 	ResourcePtr< BufferObject >		m_animationBuffer;
 	ResourcePtr< BufferObject >		m_meshTransformBuffer;
 
-	ResourcePtr< VertexShader >		m_vertexShader;
-	ResourcePtr< PixelShader >		m_pixelShader;
+	ResourcePtr< VertexShader >		m_animVertexShader;
+	ResourcePtr< GeometryShader >	m_animGeometryShader;
+	ResourcePtr< PixelShader >		m_animPixelShader;
 
 	ResourcePtr< ShaderInputLayout >	m_layout;
 

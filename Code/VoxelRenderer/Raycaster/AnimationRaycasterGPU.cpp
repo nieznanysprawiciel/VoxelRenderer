@@ -68,8 +68,8 @@ void				AnimationRaycasterGPU::RenderShellMeshes( TimeType time, const std::vect
 	SetShaderStateCommand shaderState;
 	RenderingHelper::ClearTextureState( shaderState );
 
-	shaderState.VertexShader = m_vertexShader.Ptr();
-	shaderState.PixelShader = m_pixelShader.Ptr();
+	shaderState.VertexShader = m_animVertexShader.Ptr();
+	shaderState.PixelShader = m_animPixelShader.Ptr();
 
 	m_renderer->SetShaderState( shaderState );
 
@@ -123,8 +123,9 @@ void				AnimationRaycasterGPU::Init				( IRenderer* renderer, ResourceManager* r
 	
 	ShaderInputLayout* layout;
 
-	m_vertexShader = resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshVS.hlsl", "main", &layout, animLayoutDesc );
-	m_pixelShader = resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPS.hlsl", "main" );
+	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationVS.hlsl", "main", &layout, animLayoutDesc );
+	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationGS.hlsl", "main" );
+	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationPS.hlsl", "main" );
 
 	m_layout = layout;
 
@@ -137,23 +138,9 @@ void				AnimationRaycasterGPU::ProcessInput		( const sw::input::MouseState& mous
 {
 	if( keyboard[ Keyboard::PhysicalKeys::KEY_1 ].IsKeyDownEvent() )
 	{
-		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshVS.hlsl", "main" );
-		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPS.hlsl", "main" );
-	}
-	else if( keyboard[ Keyboard::PhysicalKeys::KEY_2 ].IsKeyDownEvent() )
-	{
-		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshVS.hlsl", "main" );
-		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshWeightsPS.hlsl", "main" );
-	}
-	else if( keyboard[ Keyboard::PhysicalKeys::KEY_3 ].IsKeyDownEvent() )
-	{
-		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshAnimVS.hlsl", "main" );
-		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshAnimPS.hlsl", "main" );
-	}
-	else if( keyboard[ Keyboard::PhysicalKeys::KEY_4 ].IsKeyDownEvent() )
-	{
-		m_vertexShader = m_resourceManager->LoadVertexShader( L"Shaders/ShellMesh/ShellMeshPaintWeightsVS.hlsl", "main" );
-		m_pixelShader = m_resourceManager->LoadPixelShader( L"Shaders/ShellMesh/ShellMeshPaintWeightsPS.hlsl", "main" );
+		m_animVertexShader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationVS.hlsl", "main" );
+		m_animGeometryShader = m_resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationGS.hlsl", "main" );
+		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationPS.hlsl", "main" );
 	}
 }
 

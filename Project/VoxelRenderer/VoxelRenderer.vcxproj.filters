@@ -46,6 +46,9 @@
     <Filter Include="Shaders\Tools">
       <UniqueIdentifier>{80873dd9-8ce9-451a-bdbf-c6afe1a8cc3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\AnimationRaycasterGPU">
+      <UniqueIdentifier>{1559826e-30ee-43d8-96a0-9cd24590b3fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp">
@@ -277,11 +280,14 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\Tools\MatrixInverse.hlsl">
       <Filter>Shaders\Tools</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimVoxelPS.hlsl">
-      <Filter>Shaders\ShellMesh</Filter>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimationGS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\WorkingDir\Shaders\ShellMesh\ShellMeshAnimVoxelGS.hlsl">
-      <Filter>Shaders\ShellMesh</Filter>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimationPS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimationVS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
