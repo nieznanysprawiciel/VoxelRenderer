@@ -59,8 +59,8 @@ OutputVS	main( InputVS input )
 	position += mul( input.Position, BoneTransform[ input.BlendIdx.z ] ) * input.BlendWeights.z;
 	position += mul( input.Position, BoneTransform[ input.BlendIdx.w ] ) * input.BlendWeights.w;
 
-	position += float4( Translate, 0.0 );
-	position.xyz = position.xyz * Scale;
+	//position += float4( Translate, 0.0 );
+	//position.xyz = position.xyz * Scale;
 	position.w = 1.0f;
 
 	output.WorldPosition = position.xyz;

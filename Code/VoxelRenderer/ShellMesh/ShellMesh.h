@@ -63,6 +63,8 @@ public:
 
 	void					ApplyOctree		( ResourceManager* manager, OctreePtr octree );
 
+	std::vector< Transform >			Evaluate			( TimeType time );
+
 private:
 
 	void								ComputeScale		( TemporaryMeshInit& meshInitData );
@@ -70,6 +72,7 @@ private:
 	void								SortTriangleWeights	( ShellMeshVertex& point1, ShellMeshVertex& point2, ShellMeshVertex& point3 );
 
 	void								AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex& point );
+	void								ApplyScaleToAnim	( std::vector< Transform >& bonesTransforms );
 };
 
 DEFINE_PTR_TYPE( ShellMesh );

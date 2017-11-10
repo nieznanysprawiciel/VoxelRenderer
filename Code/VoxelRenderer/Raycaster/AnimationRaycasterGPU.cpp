@@ -77,11 +77,11 @@ void				AnimationRaycasterGPU::RenderShellMeshes( TimeType time, const std::vect
 
 	for( auto & shellMesh : shellMeshes )
 	{
-		UpdateAnimation( time, shellMesh->GetAnimation() );
+		UpdateAnimation( time, shellMesh );
 		UpdateMeshBuffer( shellMesh );
 
 		RenderingHelper::BindBuffer( m_renderer, m_bonesBuffer.Ptr(), 1, (uint8)ShaderType::VertexShader | (uint8)ShaderType::PixelShader );
-		RenderingHelper::BindBuffer( m_renderer, m_meshTransformBuffer.Ptr(), 2, (uint8)ShaderType::VertexShader );
+		RenderingHelper::BindBuffer( m_renderer, m_meshTransformBuffer.Ptr(), 2, (uint8)ShaderType::VertexShader | (uint8)ShaderType::PixelShader );
 
 		RenderingHelper::SetTexture( shaderState, shellMesh->GetOctreeTexture(), 0, (uint8)ShaderType::PixelShader );
 		m_renderer->SetShaderState( shaderState );
@@ -173,9 +173,9 @@ void				AnimationRaycasterGPU::UpdateCamera		( CameraActor* camera )
 
 // ================================ //
 //
-void				AnimationRaycasterGPU::UpdateAnimation			( TimeType time, AnimationPtr animation )
+void				AnimationRaycasterGPU::UpdateAnimation			( TimeType time, ShellMeshPtr shellMesh )
 {
-	auto & bonesTransforms = animation->Evaluate( time );
+	auto & bonesTransforms = shellMesh->Evaluate( time );
 
 	if( bonesTransforms.size() > 200 )
 		throw std::runtime_error( "Number of bones exceeds max value." );

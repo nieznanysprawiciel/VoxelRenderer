@@ -23,6 +23,22 @@ cbuffer CameraConstants : register( b0 )
 
 // ================================ //
 //
+cbuffer BonesTransforms : register( b1 )
+{
+	matrix			BoneTransform[ MAX_BONES ];
+}
+
+// ================================ //
+//
+cbuffer MeshContants : register( b2 )
+{
+	float3			Translate;
+	float			Scale;
+}
+
+
+// ================================ //
+//
 struct OutputGS
 {
 	float4					Position : SV_POSITION;
@@ -31,19 +47,13 @@ struct OutputGS
 	linear float			BlendWeights[ WEIGHTS_PER_TRIANGLE ] : BLENDWEIGHT;
 };
 
-// ================================ //
-//
-cbuffer BonesTransforms : register( b1 )
-{
-	matrix			BoneTransform[ MAX_BONES ];
-}
 
 
 // ================================ //
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
-	const float offsetRay = 0.01;
+	const float offsetRay = 0.05;
 
 	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
 
@@ -64,6 +74,11 @@ float4 main( OutputGS input ) : SV_TARGET
 	float3 position = mul( float4( input.WorldPosition, 1.0f ), transformMatrix ).xyz;
 	direction = mul( float4( direction, 0.0f ), transformMatrix ).xyz;
 
+	// Mesh was scaled and centered but bones transformation not.
+	// We must inverse these transformations.
+	position = position + Translate;
+	position = position * Scale;
+
 	// Note: The octree is assumed to reside at coordinates [1, 2]. Our Shell mesh is in center of coordinates system
 	// and has bounding box of size 1.0. We must move start position.
 	// We don't support shell meshes not in center just yet.
@@ -82,8 +97,8 @@ float4 main( OutputGS input ) : SV_TARGET
 		OctreeLeaf leaf = GetResultLeafNode( result.VoxelIdx );
 		VoxelAttributes attributes = GetLeafAttributes( leaf );
 
-		return resultColor;
-		//return float4( attributes.Color ) / 255.0f;
+		//return resultColor;
+		return float4( attributes.Color ) / 255.0f;
 	}
 
 	return resultColor;

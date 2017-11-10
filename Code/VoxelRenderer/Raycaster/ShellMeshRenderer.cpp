@@ -76,7 +76,7 @@ void				ShellMeshRenderer::RenderShellMeshes( TimeType time, const std::vector< 
 
 	for( auto & shellMesh : shellMeshes )
 	{
-		UpdateAnimation( time, shellMesh->GetAnimation() );
+		UpdateAnimation( time, shellMesh );
 		UpdateMeshBuffer( shellMesh );
 
 		RenderingHelper::BindBuffer( m_renderer, m_bonesBuffer.Ptr(), 1, (uint8)ShaderType::VertexShader );
@@ -191,9 +191,9 @@ void				ShellMeshRenderer::UpdateCamera		( CameraActor* camera )
 
 // ================================ //
 //
-void				ShellMeshRenderer::UpdateAnimation			( TimeType time, AnimationPtr animation )
+void				ShellMeshRenderer::UpdateAnimation			( TimeType time, ShellMeshPtr shellMesh )
 {
-	auto & bonesTransforms = animation->Evaluate( time );
+	auto bonesTransforms = shellMesh->Evaluate( time );
 
 	if( bonesTransforms.size() > 200 )
 		throw std::runtime_error( "Number of bones exceeds max value." );

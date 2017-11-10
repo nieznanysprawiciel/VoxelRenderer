@@ -69,7 +69,7 @@ public:
 private:
 
 	void					UpdateCamera			( CameraActor* camera );
-	void					UpdateAnimation			( TimeType time, AnimationPtr animation );
+	void					UpdateAnimation			( TimeType time, ShellMeshPtr animation );
 	void					UpdateMeshBuffer		( ShellMeshPtr shellMesh );
 	void					ReallocateRenderTarget	( uint16 newWidth, uint16 newHeight );
 	void					UpdateHelperConstants	();

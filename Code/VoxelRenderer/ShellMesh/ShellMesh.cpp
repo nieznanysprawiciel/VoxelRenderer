@@ -136,6 +136,27 @@ void								ShellMesh::AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex
 
 // ================================ //
 //
+void								ShellMesh::ApplyScaleToAnim		( std::vector< Transform >& bonesTransforms )
+{
+	DirectX::XMMATRIX scaling = DirectX::XMMatrixScaling( m_scale, m_scale, m_scale );
+	DirectX::XMMATRIX translate = DirectX::XMMatrixTranslation ( m_translate.x, m_translate.y, m_translate.z );
+
+	DirectX::XMMATRIX postTransform = DirectX::XMMatrixMultiply( translate, scaling );
+
+	// Apply scaling and translation to global bind pose inverse matrix.
+	for( auto & transform : bonesTransforms )
+	{
+		DirectX::XMMATRIX boneMatrix = DirectX::XMLoadFloat4x4( &transform );
+		boneMatrix = DirectX::XMMatrixTranspose( boneMatrix );
+		boneMatrix = DirectX::XMMatrixMultiply( boneMatrix, postTransform );
+		boneMatrix = DirectX::XMMatrixTranspose( boneMatrix );
+
+		DirectX::XMStoreFloat4x4( &transform, boneMatrix );
+	}
+}
+
+// ================================ //
+//
 void								ShellMesh::ApplyOctree			( ResourceManager* manager, OctreePtr octree )
 {
 	if( m_octree != octree )
@@ -155,6 +176,17 @@ void								ShellMesh::ApplyOctree			( ResourceManager* manager, OctreePtr octre
 		m_octreeBuffer = manager->CreateTextureBuffer( L"DynamicOctree", bufferDesc );
 		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView( L"RawDynamicOctreeView", manager );
 	}
+}
+
+// ================================ //
+//
+std::vector< Transform >			ShellMesh::Evaluate				( TimeType time )
+{
+	auto bonesTransforms = m_animation->Evaluate( time );
+	
+	ApplyScaleToAnim( bonesTransforms );
+
+	return bonesTransforms;
 }
 
 }
