@@ -1,3 +1,5 @@
+
+#include "../RaycasterGPU/Declarations.hlsl"		// This is hack. Raycaster.hlsl can't include this file when it's nested.
 #include "../Tools/MatrixInverse.hlsl"
 #include "../RaycasterGPU/Raycaster.hlsl"
 #include "../Shading/PhongShading.hlsl"
@@ -41,6 +43,10 @@ cbuffer BonesTransforms : register( b1 )
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
+	const float offsetRay = 0.01;
+
+	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
+
 	// Create transformation matrix for this pixel.
 	matrix transformMatrix = input.BlendWeights[ 0 ] * BoneTransform[ input.BlendIdx[ 0 ] ];
 	for( int i = 1; i < WEIGHTS_PER_TRIANGLE; ++i )
@@ -62,20 +68,25 @@ float4 main( OutputGS input ) : SV_TARGET
 	// and has bounding box of size 1.0. We must move start position.
 	// We don't support shell meshes not in center just yet.
 	position += float3( 1.5f, 1.5f, 1.5f );
+	position -= direction * offsetRay;
+
+	// Paint all pixels inside shell mesh.
+	resultColor = float4( 0.2, 0.2, 0.2, 1.0 );
 
 	RaycasterResult result = RaycastingCore( input.Position, position, direction );
 
 	if( result.VoxelIdx != 0 )
 	{
+		resultColor = float4( 1.0, 1.0, 1.0, 1.0 );
+
 		OctreeLeaf leaf = GetResultLeafNode( result.VoxelIdx );
 		VoxelAttributes attributes = GetLeafAttributes( leaf );
 
-		return float4( attributes.Color ) / 255.0f;
+		return resultColor;
+		//return float4( attributes.Color ) / 255.0f;
 	}
-	else
-	{
-		return float4( 0.0, 0.0, 0.0, 0.0 );
-	}
+
+	return resultColor;
 }
 
 

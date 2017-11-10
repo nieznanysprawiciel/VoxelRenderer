@@ -45,6 +45,9 @@ protected:
 	uint16				m_width;
 	uint16				m_height;
 
+	TimeType			m_pauseTime;
+	bool				m_pause;
+
 public:
 	explicit			AnimationRaycasterGPU();
 

@@ -51,6 +51,7 @@ DirectX::XMFLOAT4X4				Transpose				( DirectX::XMFLOAT4X4 mat )
 AnimationRaycasterGPU::AnimationRaycasterGPU()
 	:	m_height( 0 )
 	,	m_width( 0 )
+	,	m_pause( false )
 {}
 
 // ================================ //

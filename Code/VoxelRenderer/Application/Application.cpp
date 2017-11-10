@@ -75,10 +75,16 @@ void		Application::OnIdle				( const sw::gui::FrameTime& frameTime )
 //
 void		Application::Update				( const sw::gui::FrameTime& frameTime )
 {
+	m_timeManager.ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
+	m_timeManager.ProcessTime( frameTime );
+
+	// Camera should move even when everything is paused. Pass real frame time.
 	m_camera->GetController()->ControlObjectPre( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
 	m_camera->GetController()->ControlObjectPost( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
 
-	m_lightModule->Update( frameTime.Time, frameTime.Elapsed );
+	auto animFrameTime = m_timeManager.GetCurrentFrameTime();
+
+	m_lightModule->Update( animFrameTime.Time, animFrameTime.Elapsed );
 }
 
 
@@ -86,13 +92,12 @@ void		Application::Update				( const sw::gui::FrameTime& frameTime )
 //
 void		Application::Render				( const sw::gui::FrameTime& frameTime )
 {
-	m_timeManager.onStartRenderFrame();
-	double time = m_timeManager.QueryTimeFromBegin();
-	
+	auto animFrameTime = m_timeManager.GetCurrentFrameTime();
+
 	m_raycaster->ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
 
-	m_raycaster->RenderShellMeshes( (vr::TimeType)frameTime.Time, m_shellMeshes, m_camera );
-	m_raycaster->Render( (vr::TimeType)frameTime.Time, m_octree, m_svoRT.Ptr(), m_camera );
+	m_raycaster->RenderShellMeshes( (vr::TimeType)animFrameTime.Time, m_shellMeshes, m_camera );
+	m_raycaster->Render( (vr::TimeType)animFrameTime.Time, m_octree, m_svoRT.Ptr(), m_camera );
 
 	m_blitEffect->Blit( m_renderingSystem->GetRenderer(), m_svoRT->GetColorBuffer(), m_mainRT.Ptr() );
 }
