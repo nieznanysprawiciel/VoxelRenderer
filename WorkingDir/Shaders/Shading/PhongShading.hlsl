@@ -1,3 +1,5 @@
+#ifndef _PHONG_SHADING_HLSL
+#define _PHONG_SHADING_HLSL
 
 
 #define MAX_LIGHTS 3
@@ -203,3 +205,5 @@ float4				ComputePhongLightResultColor		( float3 worldPosition, float3 normal, f
 
 
 
+
+#endif

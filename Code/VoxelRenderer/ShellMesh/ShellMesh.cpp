@@ -152,8 +152,8 @@ void								ShellMesh::ApplyOctree			( ResourceManager* manager, OctreePtr octre
 		// We should release old octree here.
 
 		// @todo: we should give unique names to buffers otherwise, we can't create more then one shell mesh octree.
-		m_octreeBuffer = manager->CreateTextureBuffer( L"Octree", bufferDesc );
-		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView( L"RawOctreeView", manager );
+		m_octreeBuffer = manager->CreateTextureBuffer( L"DynamicOctree", bufferDesc );
+		m_octreeTexBuff = m_octreeBuffer->CreateRawShaderView( L"RawDynamicOctreeView", manager );
 	}
 }
 

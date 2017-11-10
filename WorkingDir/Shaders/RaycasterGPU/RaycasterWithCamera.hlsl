@@ -1,3 +1,7 @@
+#ifndef _RAYCASTER_WITH_CAMERA_HLSL
+#define _RAYCASTER_WITH_CAMERA_HLSL
+
+#include "Declarations.hlsl"
 #include "Raycaster.hlsl"
 #include "Camera.hlsl"
 
@@ -19,3 +23,5 @@ RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput )
 	return RaycastingCore( screenSpace, position, direction );
 }
 
+
+#endif

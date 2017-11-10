@@ -1,6 +1,10 @@
-#include "Declarations.hlsl"
-#include "Camera.hlsl"
+#ifndef _RAYCASTER_HLSL
+#define _RAYCASTER_HLSL
 
+
+#ifndef _DECLARATIONS_HLSL
+	#include "Declarations.hlsl"
+#endif
 
 
 // ================================ //
@@ -414,3 +418,4 @@ uint		ComputeChildOffset		( RaycasterContext rayCtx, OctreeNode node, ChildFlag 
 	return childOffset;
 }
 
+#endif
