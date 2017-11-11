@@ -8,7 +8,7 @@ float4 main( float4 screenSpace : SV_Position ) : SV_TARGET
 	float3 direction = ComputeRayDirection( CameraInput, screenSpace.x, screenSpace.y );
 	float3 position = ComputeRayPosition( CameraInput, screenSpace.x, screenSpace.y );
 
-	RaycasterResult result = RaycastingCore( screenSpace, position, direction );
+	RaycasterResult result = RaycastingCore( position, direction );
 
 	if( result.VoxelIdx != 0 )
 	{

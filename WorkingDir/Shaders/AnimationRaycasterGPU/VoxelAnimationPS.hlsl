@@ -53,7 +53,7 @@ struct OutputGS
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
-	const float offsetRay = 0.05;
+	const float offsetRay = 0.00;
 
 	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
 
@@ -88,7 +88,7 @@ float4 main( OutputGS input ) : SV_TARGET
 	// Paint all pixels inside shell mesh.
 	resultColor = float4( 0.2, 0.2, 0.2, 1.0 );
 
-	RaycasterResult result = RaycastingCore( input.Position, position, direction );
+	RaycasterResult result = RaycastingCore( position, direction );
 
 	if( result.VoxelIdx != 0 )
 	{

@@ -345,7 +345,7 @@ StackOperation		PushStep				( inout RaycasterContext rayCtx, float3 corner, floa
 
 // ================================ //
 //
-RaycasterResult				RaycastingCore			( float4 screenSpace, float3 position, float3 direction )
+RaycasterResult				RaycastingCore			( float3 position, float3 direction )
 {
 	RaycasterContext rayCtx;
 
