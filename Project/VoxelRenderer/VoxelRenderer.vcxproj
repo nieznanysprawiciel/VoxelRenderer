@@ -175,7 +175,8 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\Application\TimeManager.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Time\FPSCounter.cpp" />
+    <ClCompile Include="..\..\Code\VoxelRenderer\Application\Time\TimeManager.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\AnimationRaycasterGPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.cpp" />
@@ -202,7 +203,8 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Presentation\BlitEffect.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\RenderingHelpers.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\Application\TimeManager.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Time\FPSCounter.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\Application\Time\TimeManager.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\AnimationRaycasterGPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\DepthRaycaster.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\FakeRaycaster.h" />

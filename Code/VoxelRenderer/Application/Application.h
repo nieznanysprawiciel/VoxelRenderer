@@ -8,7 +8,7 @@
 #include "VoxelRenderer/Actors/CameraActor.h"
 #include "VoxelRenderer/ShellMesh/ShellMesh.h"
 
-#include "VoxelRenderer/Application/TimeManager.h"
+#include "VoxelRenderer/Application/Time/TimeManager.h"
 #include "VoxelRenderer/Application/Light/LightModule.h"
 
 #include "Presentation/BlitEffect.h"
@@ -47,16 +47,18 @@ public:
 				~Application	() = default;
 
 protected:
+
 	virtual	bool	Initialize		() override;
 	virtual bool	OnInitialized	() override;
 	virtual void	OnClosing		() override;
 	virtual void	OnIdle			( const sw::gui::FrameTime& frameTime ) override;
-
-
+	
 private:
+
 	void			Update		( const sw::gui::FrameTime& frameTime );
 	void			Render		( const sw::gui::FrameTime& frameTime );
-
+	
+	void			UpdateTime	( const sw::gui::FrameTime& frameTime );
 
 private:
 	///@name Initialization functions

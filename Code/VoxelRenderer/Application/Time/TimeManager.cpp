@@ -16,7 +16,8 @@ namespace vr
 // ================================ //
 //
 TimeManager::TimeManager()
-	:	m_isPaused( false )
+	:	m_fpsCounter( 60 )
+	,	m_isPaused( false )
 	,	m_pauseTime( 0.0f )
 {}
 
@@ -24,6 +25,8 @@ TimeManager::TimeManager()
 //
 void		TimeManager::ProcessTime		( const sw::gui::FrameTime & frameTime )
 {
+	m_fpsCounter.ProcessTime( frameTime );
+
 	m_frameTime.Elapsed = frameTime.Elapsed;
 
 	if( m_isPaused )

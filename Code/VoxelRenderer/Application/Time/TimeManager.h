@@ -8,6 +8,8 @@
 
 #include "swGUI/Core/System/Time/FrameTime.h"
 
+#include "FPSCounter.h"
+
 
 
 namespace vr
@@ -24,7 +26,10 @@ private:
 
 	sw::gui::FrameTime		m_frameTime;
 
+	FPSCounter				m_fpsCounter;
+
 public:
+
 	TimeManager();
 	~TimeManager() = default;
 
@@ -34,6 +39,8 @@ public:
 public:
 
 	sw::gui::FrameTime		GetCurrentFrameTime	() { return m_frameTime; }
+
+	FPSCounter &			GetFPSCounter		() { return m_fpsCounter; }
 };
 
 

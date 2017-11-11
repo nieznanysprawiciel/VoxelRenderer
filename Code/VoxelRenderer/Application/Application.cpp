@@ -75,8 +75,7 @@ void		Application::OnIdle				( const sw::gui::FrameTime& frameTime )
 //
 void		Application::Update				( const sw::gui::FrameTime& frameTime )
 {
-	m_timeManager.ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
-	m_timeManager.ProcessTime( frameTime );
+	UpdateTime( frameTime );
 
 	// Camera should move even when everything is paused. Pass real frame time.
 	m_camera->GetController()->ControlObjectPre( m_camera, nullptr, frameTime.Time, frameTime.Elapsed );
@@ -87,6 +86,20 @@ void		Application::Update				( const sw::gui::FrameTime& frameTime )
 	m_lightModule->Update( animFrameTime.Time, animFrameTime.Elapsed );
 }
 
+
+// ================================ //
+//
+void		Application::UpdateTime		( const sw::gui::FrameTime & frameTime )
+{
+	m_timeManager.ProcessInput( m_input->GetMouseDevice()[ 0 ]->GetState(), m_input->GetKeyboardDevice()[ 0 ]->GetState() );
+	m_timeManager.ProcessTime( frameTime );
+
+	if( m_timeManager.GetFPSCounter().NeedsFPSRefresh() )
+	{
+		auto fpsText = m_timeManager.GetFPSCounter().PrintFPS();
+		m_windows[ 0 ]->GetNativeWindow()->SetTitle( "Voxel skeletal animation. " + fpsText );
+	}
+}
 
 // ================================ //
 //
