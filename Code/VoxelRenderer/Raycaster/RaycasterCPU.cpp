@@ -46,6 +46,16 @@ DirectX::XMFLOAT3	operator-( const DirectX::XMFLOAT3& float3 )
 	return result;
 }
 
+// ================================ //
+//
+DirectX::XMFLOAT3	operator+( const DirectX::XMFLOAT3& float3, const DirectX::XMFLOAT3& other )
+{
+	DirectX::XMFLOAT3 result;
+	result.x = other.x + float3.x;
+	result.y = other.y + float3.y;
+	result.z = other.z + float3.z;
+	return result;
+}
 
 
 using namespace DirectX;
@@ -227,8 +237,8 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayPosition		( CameraActor* camera, int 
 		float yFactor = 1.0f - screenY / ( cameraData.Height / 2 );
 
 		XMVECTOR position = cameraData.GetPosition();
-		position = XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ) + position;
-		position = XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ) + position;
+		position = XMVectorAdd( XMVectorScale( cameraData.GetUpVector(), yFactor * cameraData.ViewportSize ),  position );
+		position = XMVectorAdd( XMVectorScale( cameraData.GetRightVector(), xFactor * aspect * cameraData.ViewportSize ), position );
 
 		XMFLOAT3 resultPos;
 		XMStoreFloat3( &resultPos, position );	
@@ -247,8 +257,8 @@ DirectX::XMFLOAT3		RaycasterCPU::ComputeRayDirection		( CameraActor* camera, int
 		auto d = cameraData.Width / ( 2 * tan( XMConvertToRadians( cameraData.Fov / 2.0f ) ) );
 		XMVECTOR cameraAxis = cameraData.GetDirection() * XMVectorReplicate( d );
 
-		cameraAxis = XMVectorScale( cameraData.GetUpVector(), cameraData.Height / 2 - screenY ) + cameraAxis;
-		cameraAxis = XMVectorScale( cameraData.GetRightVector(), screenX - cameraData.Width / 2 ) + cameraAxis;
+		cameraAxis = XMVectorAdd( XMVectorScale( cameraData.GetUpVector(), cameraData.Height / 2 - screenY ), cameraAxis );
+		cameraAxis = XMVectorAdd( XMVectorScale( cameraData.GetRightVector(), screenX - cameraData.Width / 2 ), cameraAxis );
 
 		XMVECTOR rayDir = XMVector3Normalize( cameraAxis );
 
@@ -269,7 +279,7 @@ void					RaycasterCPU::InitRaycasting			( const DirectX::XMFLOAT3& position, con
 {
 	const float epsilon = exp2f( -(float)rayCtx.Octree->GetMaxDepth() );
 
-	rayCtx.RayStartPosition = position;
+	rayCtx.RayStartPosition = position + DirectX::XMFLOAT3( 1.5f, 1.5f, 1.5f );
 	rayCtx.RayDirection = direction;
 
     // Get rid of small ray direction components to avoid division by zero.

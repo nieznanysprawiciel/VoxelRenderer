@@ -79,13 +79,10 @@ float4 main( OutputGS input ) : SV_TARGET
 	position = position + Translate;
 	position = position * Scale;
 
-	// Note: The octree is assumed to reside at coordinates [1, 2]. Our Shell mesh is in center of coordinates system
-	// and has bounding box of size 1.0. We must move start position.
-	// We don't support shell meshes not in center just yet.
-	position += float3( 1.5f, 1.5f, 1.5f );
+	// If shell mesh should be larger then underlying voxel model. If it isn't, we can offset ray to avoid collision misses.
 	position -= direction * offsetRay;
 
-	// Paint all pixels inside shell mesh.
+	// Paint all pixels inside shell mesh but outside of voxel model.
 	resultColor = float4( 0.2, 0.2, 0.2, 1.0 );
 
 	RaycasterResult result = RaycastingCore( position, direction );

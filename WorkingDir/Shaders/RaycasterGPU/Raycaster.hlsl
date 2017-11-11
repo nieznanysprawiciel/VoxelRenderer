@@ -131,7 +131,9 @@ void				InitRaycasting		( float3 position, float3 direction, inout RaycasterCont
 	//const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
 	const float epsilon = 1e-10;
 
-	rayCtx.RayStartPosition = position;
+	// The octree is assumed to reside at coordinates [1, 2]. We assume that our model is centered in point (0, 0, 0) and it's size is 1.
+	// In this case we must move our starting rau position.
+	rayCtx.RayStartPosition = position + float3( 1.5, 1.5, 1.5 );
 	rayCtx.RayDirection = direction;
 	rayCtx.ChildDescriptor = 0;
 
