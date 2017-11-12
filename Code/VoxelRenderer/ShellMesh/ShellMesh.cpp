@@ -67,11 +67,11 @@ void			ShellMesh::ComputeScale		( TemporaryMeshInit & meshInitData )
 	{
 		if( vertex.Position.x < min.x ) min.x = vertex.Position.x;
 		if( vertex.Position.y < min.y ) min.y = vertex.Position.y;
-		if( vertex.Position.z < min.z ) min.z = vertex.Position.x;
+		if( vertex.Position.z < min.z ) min.z = vertex.Position.z;
 
 		if( vertex.Position.x > max.x ) max.x = vertex.Position.x;
 		if( vertex.Position.y > max.y ) max.y = vertex.Position.y;
-		if( vertex.Position.z > max.z ) max.z = vertex.Position.x;
+		if( vertex.Position.z > max.z ) max.z = vertex.Position.z;
 	}
 
 	DirectX::XMFLOAT3 range( max.x - min.x, max.y - min.y, max.z - min.z );
