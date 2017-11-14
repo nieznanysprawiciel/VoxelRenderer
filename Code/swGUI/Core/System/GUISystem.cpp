@@ -41,8 +41,8 @@ GUISystem::~GUISystem()
 	for( auto window : m_windows )
 		delete window;
 
-	m_graphicApi->ReleaseAPI();
 	delete m_resourceManager;
+	m_graphicApi->ReleaseAPI();
 	delete m_graphicApi;
 	delete m_nativeGUI;
 }

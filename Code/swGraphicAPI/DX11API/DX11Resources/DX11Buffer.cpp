@@ -81,7 +81,7 @@ DX11Buffer*		DX11Buffer::CreateFromMemory	( const std::wstring& name, const uint
 	}
 
 	HRESULT result;
-	ID3D11Buffer* newBuffer;
+	ComPtr< ID3D11Buffer > newBuffer;
 	result = device->CreateBuffer( &bufferDesc, initDataPtr, &newBuffer );
 	if( FAILED( result ) )
 		return nullptr;
