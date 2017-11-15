@@ -51,7 +51,7 @@ bool		Application::OnInitialized		()
 	InitShellMesh();
 
 	m_guiConfig.UseBlockingMode = false;
-	m_guiConfig.UseVSync = false;
+	m_guiConfig.UseVSync = m_config->EnableVSync();
 
 	return true;
 }

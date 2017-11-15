@@ -28,6 +28,8 @@ Config::Config	( const std::string& filePath )
 				m_ScreenWidth	= deser.GetAttribute( "Width", m_ScreenWidth );
 				m_ViewportSize	= deser.GetAttribute( "ViewportSize", m_ViewportSize );
 
+				m_EnableVSync = deser.GetAttribute( "EnableVSync", m_EnableVSync );
+
 				deser.Exit();
 			}
 
