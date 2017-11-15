@@ -34,7 +34,14 @@ DX11SwapChain::~DX11SwapChain()
 /**@copydoc SwapChain::Present.*/
 void	DX11SwapChain::Present( int syncInterval )
 {
-	m_swapChain->Present( syncInterval, 0 );
+	HRESULT result = m_swapChain->Present( syncInterval, 0 );
+	if( FAILED( result ) )
+	{
+		// Here we should handle device removed event
+		HRESULT reason = device->GetDeviceRemovedReason();
+
+		OutputDebugStringA( std::string( "Device removed" ).c_str() );
+	}
 }
 
 /**@copydoc SwapChain::Resize.*/

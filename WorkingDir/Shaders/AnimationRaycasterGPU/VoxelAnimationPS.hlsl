@@ -85,17 +85,20 @@ float4 main( OutputGS input ) : SV_TARGET
 	// Paint all pixels inside shell mesh but outside of voxel model.
 	resultColor = float4( 0.2, 0.2, 0.2, 1.0 );
 
-	RaycasterResult result = RaycastingCore( position, direction );
-
-	if( result.VoxelIdx != 0 )
+	if( !any( isnan( position ) ) && !any( isnan( direction ) ) )
 	{
-		resultColor = float4( 1.0, 1.0, 1.0, 1.0 );
+		RaycasterResult result = RaycastingCore( position, direction );
 
-		OctreeLeaf leaf = GetResultLeafNode( result.VoxelIdx );
-		VoxelAttributes attributes = GetLeafAttributes( leaf );
+		if( result.VoxelIdx != 0 )
+		{
+			resultColor = float4( 1.0, 1.0, 1.0, 1.0 );
 
-		//return resultColor;
-		return float4( attributes.Color ) / 255.0f;
+			OctreeLeaf leaf = GetResultLeafNode( result.VoxelIdx );
+			VoxelAttributes attributes = GetLeafAttributes( leaf );
+
+			//return resultColor;
+			return float4( attributes.Color ) / 255.0f;
+		}
 	}
 
 	return resultColor;
