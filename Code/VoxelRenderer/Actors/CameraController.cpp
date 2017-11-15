@@ -50,7 +50,7 @@ void		SpectatorCameraController::InitDefaultSpeed()
 {
 	m_moveSpeed = 1.0f;
 	m_buttonRotSpeed = 0.1f;
-	m_axisRotSpeed = 0.1f;
+	m_axisRotSpeed = 0.003f;
 	m_zoomSpeed = 0.1f;
 }
 
@@ -118,11 +118,11 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	{
 		float yAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::Y_AXIS ];
 		if( yAxis != 0.0f )
-			m_verticalAngle += -yAxis * m_axisRotSpeed * elpasedTime;
+			m_verticalAngle += -yAxis * m_axisRotSpeed;
 
 		float xAxis = m_mouse.GetAxesState()[ Mouse::PhysicalAxes::X_AXIS ];
 		if( xAxis != 0.0f )
-			m_horizontalAngle += -xAxis * m_axisRotSpeed * elpasedTime;
+			m_horizontalAngle += -xAxis * m_axisRotSpeed;
 	}
 
 	XMVECTOR verticalRotationQuat = XMQuaternionRotationNormal( XMVectorSet( 1.0, 0.0, 0.0, 0.0 ), m_verticalAngle );
