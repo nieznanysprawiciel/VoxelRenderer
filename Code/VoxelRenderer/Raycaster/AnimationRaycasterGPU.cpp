@@ -145,6 +145,12 @@ void				AnimationRaycasterGPU::ProcessInput		( const sw::input::MouseState& mous
 		m_animGeometryShader = m_resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationGS.hlsl", "main" );
 		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationPS.hlsl", "main" );
 	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_2 ].IsKeyDownEvent() )
+	{
+		m_animVertexShader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main" );
+		m_animGeometryShader = m_resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2GS.hlsl", "main" );
+		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2PS.hlsl", "main" );
+	}
 }
 
 

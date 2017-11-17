@@ -301,6 +301,15 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\RaycasterGPU\RaycasterWithCamera.hlsl">
       <Filter>Shaders\RaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation2GS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation2PS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation2VS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">

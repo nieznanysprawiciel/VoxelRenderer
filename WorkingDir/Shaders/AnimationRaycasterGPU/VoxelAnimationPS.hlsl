@@ -68,7 +68,7 @@ float4 main( OutputGS input ) : SV_TARGET
 		transformMatrix += weight * BoneTransform[ input.BlendIdx[ i ] ];
 	}
 
-	transformMatrix = Inverse( transformMatrix );
+	transformMatrix = Inverse4x4( transformMatrix );
 
 	float3 direction = normalize( input.WorldPosition - CameraPosition );
 	float3 position = mul( float4( input.WorldPosition, 1.0f ), transformMatrix ).xyz;

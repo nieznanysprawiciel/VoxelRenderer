@@ -5,7 +5,7 @@
 // ================================ //
 // http://answers.unity3d.com/questions/218333/shader-inversefloat4x4-function.html
 // Under WTFPL license.
-float4x4	Inverse		( float4x4 input )
+float4x4	Inverse4x4			( float4x4 input )
 {
 #define minor(a,b,c) determinant( float3x3( input.a, input.b, input.c ) )
 //determinant(float3x3(input._22_23_23, input._32_33_34, input._42_43_44))
@@ -37,4 +37,30 @@ float4x4	Inverse		( float4x4 input )
 	#undef minor
 }
 
+
 #endif
+
+
+// ================================ //
+//
+float3x3	Inverse3x3			( float3x3 matrixA )
+{
+	float detA = determinant( matrixA );
+	
+	float3 col1 = matrixA._11_21_31;
+	float3 col2 = matrixA._12_22_32;
+	float3 col3 = matrixA._13_23_33;
+
+	float3 row1 = cross( col2, col3 );
+	float3 row2 = cross( col3, col1 );
+	float3 row3 = cross( col1, col2 );
+
+	float3x3 inverseMat;
+	inverseMat._11_12_13 = row1;
+	inverseMat._21_22_23 = row1;
+	inverseMat._31_32_33 = row1;
+
+	return inverseMat / detA;
+}
+
+
