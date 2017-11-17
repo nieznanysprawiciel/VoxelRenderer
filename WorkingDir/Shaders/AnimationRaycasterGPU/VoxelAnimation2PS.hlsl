@@ -77,7 +77,7 @@ float3x3			ComputeVertexInverseMat		( float4 weights, uint4 indicies )
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
-	const float offsetRay = 0.015;
+	const float offsetRay = 0.0001;
 
 	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
 
