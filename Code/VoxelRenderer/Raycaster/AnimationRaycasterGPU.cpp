@@ -126,9 +126,9 @@ void				AnimationRaycasterGPU::Init				( IRenderer* renderer, ResourceManager* r
 	
 	ShaderInputLayout* layout;
 
-	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationVS.hlsl", "main", &layout, animLayoutDesc );
-	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationGS.hlsl", "main" );
-	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimationPS.hlsl", "main" );
+	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main", &layout, animLayoutDesc );
+	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2GS.hlsl", "main" );
+	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2PS.hlsl", "main" );
 
 	m_layout = layout;
 
