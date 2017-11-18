@@ -59,16 +59,22 @@ float3x3			Cast3x3						( matrix mat )
 	return float3x3( mat._11_12_13, mat._21_22_23, mat._31_32_33 );
 }
 
-
 // ================================ //
 //
-float3x3			ComputeVertexInverseMat		( float4 weights, uint4 indicies )
+float3x3			ComputeForwardMatrix		( float4 weights, uint4 indicies )
 {
 	float3x3 forwardMat =	Cast3x3( BoneTransform[ indicies.x ] ) * weights.x +
 							Cast3x3( BoneTransform[ indicies.y ] ) * weights.y +
 							Cast3x3( BoneTransform[ indicies.z ] ) * weights.z +
 							Cast3x3( BoneTransform[ indicies.w ] ) * weights.w;
+	return forwardMat;
+}
 
+// ================================ //
+//
+float3x3			ComputeVertexInverseMat		( float4 weights, uint4 indicies )
+{
+	float3x3 forwardMat = ComputeForwardMatrix( weights, indicies );
 	return Inverse3x3( forwardMat );
 }
 
@@ -77,7 +83,7 @@ float3x3			ComputeVertexInverseMat		( float4 weights, uint4 indicies )
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
-	const float offsetRay = 0.0001;
+	const float offsetRay = 0.002;
 
 	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
 
@@ -86,16 +92,22 @@ float4 main( OutputGS input ) : SV_TARGET
 	float3x3 vertex2InvMat = ComputeVertexInverseMat( input.BlendWeights[ 1 ], input.BlendIdx[ 1 ] );
 	float3x3 vertex3InvMat = ComputeVertexInverseMat( input.BlendWeights[ 2 ], input.BlendIdx[ 2 ] );
 
+	float3 test = float3( 1.0, 0.0, 0.0 );
+	float3 afterTest = mul( test, ComputeForwardMatrix( input.BlendWeights[ 0 ], input.BlendIdx[ 0 ] ) );
+	afterTest = mul( test, vertex1InvMat );
+
+	float3 direction = afterTest;
+
 	// Position is already computed since we need position in model space.
 	// Direction will be computed for each vertex of triangle. We need to transform
 	// direction to model space too. In first step we compute transformed directions by taking 
 	// 3 vertex matricies. Then we interpolate between these directions using barycentric coordinates.
-	float3 direction = input.WorldPosition - CameraPosition;
+	direction = input.WorldPosition - CameraPosition;
 	float3 position = input.ModelPosition;
 
-	float3 vertex1Direction = mul( direction, vertex1InvMat );
-	float3 vertex2Direction = mul( direction, vertex2InvMat );
-	float3 vertex3Direction = mul( direction, vertex3InvMat );
+	float3 vertex1Direction = normalize( mul( direction, vertex1InvMat ) );
+	float3 vertex2Direction = normalize( mul( direction, vertex2InvMat ) );
+	float3 vertex3Direction = normalize( mul( direction, vertex3InvMat ) );
 
 	direction = input.Barycentric.x * vertex1Direction + input.Barycentric.y * vertex2Direction + input.Barycentric.z * vertex3Direction;
 	direction = normalize( direction );

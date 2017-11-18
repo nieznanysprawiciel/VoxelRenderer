@@ -55,10 +55,7 @@ float3x3	Inverse3x3			( float3x3 matrixA )
 	float3 row2 = cross( col3, col1 );
 	float3 row3 = cross( col1, col2 );
 
-	float3x3 inverseMat;
-	inverseMat._11_12_13 = row1;
-	inverseMat._21_22_23 = row1;
-	inverseMat._31_32_33 = row1;
+	float3x3 inverseMat = float3x3( row1, row2, row3 );
 
 	return inverseMat / detA;
 }
