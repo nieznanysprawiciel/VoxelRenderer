@@ -34,6 +34,7 @@ cbuffer MeshContants : register( b2 )
 {
 	float3			Translate;
 	float			Scale;
+	float			OffsetShell;
 }
 
 
@@ -53,7 +54,7 @@ struct OutputGS
 //
 float4 main( OutputGS input ) : SV_TARGET
 {
-	const float offsetRay = 0.015;
+	const float offsetRay = OffsetShell;
 
 	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
 

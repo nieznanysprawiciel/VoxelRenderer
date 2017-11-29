@@ -48,6 +48,8 @@ protected:
 	TimeType			m_pauseTime;
 	bool				m_pause;
 
+	float				m_offsetShell;
+
 public:
 	explicit			AnimationRaycasterGPU();
 

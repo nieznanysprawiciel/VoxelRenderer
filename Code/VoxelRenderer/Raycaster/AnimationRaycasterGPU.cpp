@@ -52,6 +52,7 @@ AnimationRaycasterGPU::AnimationRaycasterGPU()
 	:	m_height( 0 )
 	,	m_width( 0 )
 	,	m_pause( false )
+	,	m_offsetShell( 0.0 )
 {}
 
 // ================================ //
@@ -151,6 +152,15 @@ void				AnimationRaycasterGPU::ProcessInput		( const sw::input::MouseState& mous
 		m_animGeometryShader = m_resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2GS.hlsl", "main" );
 		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2PS.hlsl", "main" );
 	}
+
+	if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPADPLUS ].IsPressed() )
+	{
+		m_offsetShell += 0.0001f;
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPADMINUS ].IsPressed() )
+	{
+		m_offsetShell -= 0.0001f;
+	}
 }
 
 
@@ -216,6 +226,7 @@ void				AnimationRaycasterGPU::UpdateMeshBuffer			( ShellMeshPtr shellMesh )
 	MeshContants meshConstants;
 	meshConstants.Translate = shellMesh->GetTranslate();
 	meshConstants.Scale = shellMesh->GetScale();
+	meshConstants.OffsetShell = m_offsetShell;
 
 	uint32 bufferSize = sizeof( MeshContants );
 

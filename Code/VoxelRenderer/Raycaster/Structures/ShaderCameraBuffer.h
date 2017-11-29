@@ -51,6 +51,9 @@ struct MeshContants
 {
 	DirectX::XMFLOAT3		Translate;
 	float					Scale;
+	float					OffsetShell;
+
+	DirectX::XMFLOAT3		Align16;
 };
 
 }

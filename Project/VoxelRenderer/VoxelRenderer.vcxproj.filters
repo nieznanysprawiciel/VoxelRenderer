@@ -315,5 +315,8 @@
     <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">
       <Filter>VoxelRenderer\ShellMesh</Filter>
     </None>
+    <None Include="AnimHelpers.hlsli">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </None>
   </ItemGroup>
 </Project>
