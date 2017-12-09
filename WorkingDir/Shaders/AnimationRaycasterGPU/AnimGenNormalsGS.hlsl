@@ -79,7 +79,7 @@ void main( triangle OutputVS input[ 3 ], inout TriangleStream< OutputGS > output
 
 	float3 edge1 = vertex[ 1 ].ModelPosition - vertex[ 0 ].ModelPosition;
 	float3 edge2 = vertex[ 2 ].ModelPosition - vertex[ 0 ].ModelPosition;
-	float3 normal = normalize( cross( edge1, edge2 ) );
+	float3 normal = -normalize( cross( edge1, edge2 ) );
 
 	// Set baricentric coords for verticies.
 	vertex[ 0 ].Barycentric[ 0 ] = 1.0;
