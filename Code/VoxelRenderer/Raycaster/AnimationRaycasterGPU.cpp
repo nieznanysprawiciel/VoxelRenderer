@@ -124,7 +124,10 @@ void				AnimationRaycasterGPU::Init				( IRenderer* renderer, ResourceManager* r
 
 	ShaderInputLayout* layout;
 
-	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main", &layout, animLayoutDesc );
+	// Generate layout for shader that uses all vertex attributes.
+	auto shader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/AnimLoadedNormalsVS.hlsl", "main", &layout, animLayoutDesc );
+
+	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main" );
 	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2GS.hlsl", "main" );
 	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2PS.hlsl", "main" );
 
@@ -154,6 +157,12 @@ void				AnimationRaycasterGPU::ProcessInput		( const sw::input::MouseState& mous
 		m_animVertexShader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main" );
 		m_animGeometryShader = m_resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/AnimGenNormalsGS.hlsl", "main" );
 		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/AnimGenNormalsPS.hlsl", "main" );
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_4 ].IsKeyDownEvent() )
+	{
+		m_animVertexShader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/AnimLoadedNormalsVS.hlsl", "main" );
+		m_animGeometryShader = nullptr;
+		m_animPixelShader = m_resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/AnimLoadedNormalsPS.hlsl", "main" );
 	}
 
 	if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPADPLUS ].IsPressed() )
