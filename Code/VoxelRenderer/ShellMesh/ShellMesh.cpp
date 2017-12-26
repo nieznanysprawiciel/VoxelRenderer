@@ -1,6 +1,6 @@
 #include "ShellMesh.h"
 
-
+#include "swGraphicAPI/Resources/ResourcesFactory.h"
 
 
 namespace vr
@@ -153,6 +153,19 @@ void								ShellMesh::ApplyScaleToAnim		( std::vector< Transform >& bonesTransf
 
 		DirectX::XMStoreFloat4x4( &transform, boneMatrix );
 	}
+}
+
+// ================================ //
+//
+InputLayoutDescriptor*				ShellMesh::CreateShellLayout	()
+{
+	auto animLayoutDesc = ResourcesFactory::CreateInputLayoutDescriptor( L"::AnimationLayout" );
+	animLayoutDesc->AddRow( "POSITION", ResourceFormat::RESOURCE_FORMAT_R32G32B32_FLOAT, 0, 0, false, 0 );
+	animLayoutDesc->AddRow( "BLENDINDICES", ResourceFormat::RESOURCE_FORMAT_R8G8B8A8_UINT, 0, 12, false, 0 );
+	animLayoutDesc->AddRow( "BLENDWEIGHT", ResourceFormat::RESOURCE_FORMAT_R32G32B32A32_FLOAT, 0, 16, false, 0 );
+	animLayoutDesc->AddRow( "NORMAL", ResourceFormat::RESOURCE_FORMAT_R32G32B32_FLOAT, 0, 32, false, 0 );
+
+	return animLayoutDesc;
 }
 
 // ================================ //

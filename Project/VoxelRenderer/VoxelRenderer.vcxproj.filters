@@ -233,6 +233,9 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Time\FPSCounter.h">
       <Filter>VoxelRenderer\Application\Time</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\DXMathOperator.h">
+      <Filter>VoxelRenderer\ShellMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\WorkingDir\Shaders\RendererTest.hlsl">

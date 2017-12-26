@@ -115,10 +115,7 @@ void				ShellMeshRenderer::Init				( IRenderer* renderer, ResourceManager* resou
 	m_depthStencilState = resourceManager->GetDepthStencilState( DepthStencilInfo() );
 
 	// Layout
-	auto animLayoutDesc = ResourcesFactory::CreateInputLayoutDescriptor( L"::AnimationLayout" );
-	animLayoutDesc->AddRow( "POSITION", ResourceFormat::RESOURCE_FORMAT_R32G32B32_FLOAT, 0, 0, false, 0 );
-	animLayoutDesc->AddRow( "BLENDINDICES", ResourceFormat::RESOURCE_FORMAT_R8G8B8A8_UINT, 0, 12, false, 0 );
-	animLayoutDesc->AddRow( "BLENDWEIGHT", ResourceFormat::RESOURCE_FORMAT_R32G32B32A32_FLOAT, 0, 16, false, 0 );
+	auto animLayoutDesc = ShellMesh::CreateShellLayout();
 	
 	ShaderInputLayout* layout;
 

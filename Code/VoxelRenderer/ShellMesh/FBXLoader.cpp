@@ -1,7 +1,7 @@
 #include "FBXLoader.h"
 #include "FbxLoader.inl"
 
-//#include "Tools/Geometric/Processors/Converter.h"
+#include "swGeometrics/GeometricsCore/Processors/Converter.h"
 
 
 
@@ -259,18 +259,42 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 		}
 	}
 
-	// ================================ //
-	// Copy prepared vertex buffer.
-	for( auto& shellVertex : controlPoints )
+
+
+	unsigned int vertexCounter = 0;
+	unsigned int polygonCounter = 0;
+
+	std::vector< ShellMeshVertex >			verticies;		verticies.reserve( 3 * polygonsCount );
+
+	// Create vertex buffer.
+	while( polygonCounter < polygonsCount )
 	{
-		mesh.Value.Verticies.push_back( shellVertex );
+		for( int vertexIdx = 0; vertexIdx < 3; ++vertexIdx )
+		{
+			Index32 controlPointIdx = fbxMesh->GetPolygonVertex( polygonCounter, vertexIdx );
+			ShellMeshVertex curVertex = controlPoints[ controlPointIdx ];
+
+			// Find vertex normal and uvs coord.
+			FbxVector4 fbxNormal;
+			fbxMesh->GetPolygonVertexNormal( polygonCounter, vertexIdx, fbxNormal );
+
+			curVertex.Normal = Get( fbxNormal );
+
+			verticies.push_back( curVertex );
+
+			++vertexCounter;		//zliczamy wierzcho³ki
+		}
+
+		polygonCounter++;
 	}
+
+	auto newIndicies = sw::geometrics::Converter::MakeIndexed< ShellMeshVertex, Index32 >( verticies, mesh.Value.Verticies );
 
 	// Verticies in FBX file have transformations which we must apply.
 	// We don't have to preserve transformation matrix for each segment with this approach.
 	TransformVerticies( mesh.Value.Verticies, ctrlPointsOffset, nodeData.Transformation );
 
-	mesh.Value.Indicies.push_back( std::move( indicies ) );
+	mesh.Value.Indicies.push_back( std::move( newIndicies ) );
 
 	return std::move( mesh );
 }

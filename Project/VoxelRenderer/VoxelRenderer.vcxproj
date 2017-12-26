@@ -215,6 +215,7 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\Structures\ShaderCameraBuffer.h" />
+    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\DXMathOperator.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FbxHelperStructs.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.h" />

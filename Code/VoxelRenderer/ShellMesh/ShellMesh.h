@@ -73,6 +73,10 @@ private:
 
 	void								AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex& point );
 	void								ApplyScaleToAnim	( std::vector< Transform >& bonesTransforms );
+
+public:
+
+	static InputLayoutDescriptor*		CreateShellLayout	();
 };
 
 DEFINE_PTR_TYPE( ShellMesh );
