@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  
+  <PropertyGroup Label="UserMacros">
+	<swGeometricsRootDir>$(MSBuildThisFileDirectory)..\..\</swGeometricsRootDir>
+	<swGeometricsProjectsDir>$(swGeometricsRootDir)ProjectDir\</swGeometricsProjectsDir>
+	<swGeometricsTestsDir>$(swGeometricsRootDir)Tests\</swGeometricsTestsDir>
+	<swGeometricsReleaseDir>$(swGeometricsProjectsDir)Output\</swGeometricsReleaseDir>
+	<swGeometricsLibDir>$(swGeometricsReleaseDir)LibDir\</swGeometricsLibDir>
+	<swGeometricsBuildDir>$(swGeometricsReleaseDir)BuildDir\</swGeometricsBuildDir>
+	<swGeometricsSourceInclude>$(swGeometricsRootDir)..\</swGeometricsSourceInclude>
+	<swGeometricsSourceDir>$(swGeometricsRootDir)</swGeometricsSourceDir>
+	<swGeometricsExternalDir>$(swGeometricsRootDir)External\</swGeometricsExternalDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <_PropertySheetDisplayName>Paths</_PropertySheetDisplayName>
+  </PropertyGroup>
+  
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(swGeometricsSourceInclude);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+		<PreprocessorDefinitions>RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+</Project>

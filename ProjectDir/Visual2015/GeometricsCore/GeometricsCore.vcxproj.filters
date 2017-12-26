@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Geometric">
+      <UniqueIdentifier>{35368297-005b-4437-9a49-95209c009ff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PrecompiledHeader">
+      <UniqueIdentifier>{d766bd05-ce31-4d85-9b9b-3c1fb7acedd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometric\Processors">
+      <UniqueIdentifier>{e11d0cac-6ccc-402f-ae7d-4d153c261777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometric\Types">
+      <UniqueIdentifier>{6f6dc0f3-9b86-4139-bcad-31f899aa469c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\GeometricsCore\stdafx.cpp">
+      <Filter>PrecompiledHeader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\GeometricsCore\stdafx.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GeometricsCore\targetver.h">
+      <Filter>PrecompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GeometricsCore\Processors\Converter.h">
+      <Filter>Geometric\Processors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GeometricsCore\Types\IndexedGeometry.h">
+      <Filter>Geometric\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\GeometricsCore\Processors\Converter.inl">
+      <Filter>Geometric\Processors</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
