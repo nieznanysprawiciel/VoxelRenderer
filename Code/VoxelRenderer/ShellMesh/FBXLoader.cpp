@@ -486,6 +486,10 @@ void								FBXLoader::TransformVerticies		( std::vector< vr::ShellMeshVertex >&
 		XMVECTOR position = XMLoadFloat3( &vertex.Position );
 		position = XMVector3Transform( position, transform );
 		XMStoreFloat3( &vertex.Position, position );
+
+		XMVECTOR normal = XMLoadFloat3( &vertex.Normal );
+		normal = XMVector3TransformNormal( normal, transform );
+		XMStoreFloat3( &vertex.Normal, normal );
 	}
 }
 
