@@ -11,6 +11,10 @@
 
 int main( int argc, char** argv )
 {
+	std::cout << "// ================================================================= //" << std::endl;
+	std::cout << "// Program for converting SVO files to VoxelRenderer internal format." << std::endl;
+	std::cout << "// ================================================================= //" << std::endl << std::endl;
+
 	try
 	{
 		TCLAP::CmdLine cmd( "Program for converting SVO files to VoxelRenderer internal format.", ' ', "0.1" );
@@ -37,6 +41,9 @@ int main( int argc, char** argv )
 			std::cout << "Input Path: [" << inputFile.String() << "] should have .octree extension." << std::endl;
 			return 1;
 		}
+
+		std::cout << "Converting file: [" << inputFile.String() << "]" << std::endl;
+		std::cout << "Output file: [" << outputFile.String() << "]" << std::endl;
 
 		VoxelConverter converter;
 		bool result = converter.Convert( inputFile, outputFile );
