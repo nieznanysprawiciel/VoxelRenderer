@@ -10,6 +10,9 @@
     <Filter Include="VoxelConverter\SVO">
       <UniqueIdentifier>{f3bb0e66-5aca-4ca0-a9ba-319708e89856}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelConverter\Texturing">
+      <UniqueIdentifier>{f4cd7308-5446-42f8-b320-e931f1f32afd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
@@ -24,6 +27,10 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp">
       <Filter>VoxelConverter\SVO</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\Texturing.cpp">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h">
@@ -49,6 +56,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h">
       <Filter>VoxelConverter\SVO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Texturing.h">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TexturingEnums.h">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.h">
+      <Filter>VoxelConverter\Texturing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

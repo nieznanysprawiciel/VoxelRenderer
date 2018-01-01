@@ -148,6 +148,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp" />
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.cpp" />
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\Texturing.cpp" />
     <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
@@ -155,6 +157,9 @@
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Texturing.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TexturingEnums.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
