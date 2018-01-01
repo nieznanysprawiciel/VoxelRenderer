@@ -18,34 +18,59 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\etc1_utils.c" />
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\image_DXT.c" />
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\image_helper.c" />
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\SOIL2.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\etc1_utils.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\image_DXT.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\image_helper.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\jo_jpeg.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\pkm_helper.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\pvr_helper.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\SOIL2.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_DDS.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_DDS_c.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_ext.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_ext_c.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pkm.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pkm_c.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pvr.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pvr_c.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stb_image.h" />
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stb_image_write.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{07E75BAA-5125-442A-9432-FD5131C5B65A}</ProjectGuid>
+    <ProjectGuid>{5D7A9630-092C-4A17-BB50-51750C67BAEC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>VoxelConverter</RootNamespace>
+    <RootNamespace>Soil2</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -58,44 +83,32 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VoxelConverterConfig.props" />
+    <Import Project="Soil2Config.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VoxelConverterConfig.props" />
+    <Import Project="Soil2Config.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VoxelConverterConfig.props" />
+    <Import Project="Soil2Config.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="VoxelConverterConfig.props" />
+    <Import Project="Soil2Config.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -104,11 +117,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,13 +131,12 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,42 +147,14 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Code\VoxelConverter\main.cpp" />
-    <ClCompile Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.cpp" />
-    <ClCompile Include="..\..\Code\VoxelConverter\VoxelConverter.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h" />
-    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
-    <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
-    <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxtreeHeader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">
-      <Project>{9abcbab4-05b4-47c5-b5d8-f201559fd096}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\HierarchicalChunkedFormat\HierarchicalChunkedFormat.vcxproj">
-      <Project>{50cf2c5d-4a13-4d16-8e65-441fe7155333}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Soil2\Soil2.vcxproj">
-      <Project>{5d7a9630-092c-4a17-bb50-51750c67baec}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

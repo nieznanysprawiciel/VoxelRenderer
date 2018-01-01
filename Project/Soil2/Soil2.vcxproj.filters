@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Soil2">
+      <UniqueIdentifier>{ae0090ad-c4cf-4a72-b864-0c5867261e88}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\etc1_utils.c">
+      <Filter>Soil2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\image_DXT.c">
+      <Filter>Soil2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\image_helper.c">
+      <Filter>Soil2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\Soil2\src\SOIL2\SOIL2.c">
+      <Filter>Soil2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\etc1_utils.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\image_DXT.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\image_helper.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\jo_jpeg.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\pkm_helper.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\pvr_helper.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\SOIL2.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stb_image.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stb_image_write.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_DDS.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_DDS_c.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_ext.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_ext_c.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pkm.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pkm_c.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pvr.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\Soil2\src\SOIL2\stbi_pvr_c.h">
+      <Filter>Soil2</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
