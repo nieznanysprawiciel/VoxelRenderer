@@ -13,6 +13,9 @@
     <Filter Include="VoxelConverter\Texturing">
       <UniqueIdentifier>{f4cd7308-5446-42f8-b320-e931f1f32afd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelConverter\Texturing\Samplers">
+      <UniqueIdentifier>{dfa4ae12-67ad-4f32-b520-1762fc4a4ca3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
@@ -30,7 +33,12 @@
     <ClCompile Include="..\..\Code\VoxelConverter\Texturing\Texturing.cpp">
       <Filter>VoxelConverter\Texturing</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.cpp" />
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\OctreeAccessor.cpp">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.cpp">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Code\VoxelConverter\VoxelConverter.h">
@@ -64,6 +72,15 @@
       <Filter>VoxelConverter\Texturing</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.h">
+      <Filter>VoxelConverter\Texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\Samplers.h">
+      <Filter>VoxelConverter\Texturing\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\PointSampler.h">
+      <Filter>VoxelConverter\Texturing\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\OctreeAccessor.h">
       <Filter>VoxelConverter\Texturing</Filter>
     </ClInclude>
   </ItemGroup>

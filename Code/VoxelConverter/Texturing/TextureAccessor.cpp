@@ -43,7 +43,7 @@ bool			TextureAccessor::LoadImage		( const filesystem::Path& filePath )
 
 // ================================ //
 //
-glm::vec2		TextureAccessor::TexelSpacePosition		( glm::vec2 uv )
+glm::vec2		TextureAccessor::TexelSpacePosition		( glm::vec2 uv ) const
 {
 	uv.x = ApplyWrapping( m_wrappingModeX, uv.x );
 	uv.y = ApplyWrapping( m_wrappingModeY, uv.y );
@@ -53,7 +53,7 @@ glm::vec2		TextureAccessor::TexelSpacePosition		( glm::vec2 uv )
 
 // ================================ //
 //
-glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos )
+glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos ) const
 {
 	texelPos = glm::clamp( texelPos, glm::ivec2( 0, 0 ), glm::ivec2( m_width - 1, m_height - 1 ) );
 
@@ -61,7 +61,7 @@ glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos )
 	uint8* texelPtr = m_textureData + offset;
 
 	// Zero color vector.
-	glm::vec4 color( 0.0f );
+	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
 
 	// This dispatches texel written in little endian.
 	for( int channel = m_channels; channel >= 0; ++channel )
@@ -77,7 +77,7 @@ glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos )
 
 // ================================ //
 //
-float			TextureAccessor::ApplyWrapping		( WrappingMode mode, float coord )
+float			TextureAccessor::ApplyWrapping		( WrappingMode mode, float coord ) const
 {
 	switch( mode )
 	{

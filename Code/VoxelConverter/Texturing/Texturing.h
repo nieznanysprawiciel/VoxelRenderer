@@ -2,6 +2,7 @@
 
 #include "VoxelRenderer/SVO/Octree.h"
 #include "TexturingEnums.h"
+#include "Samplers/Samplers.h"
 
 #include "swCommonLib/System/Path.h"
 
@@ -25,6 +26,8 @@ public:
 	explicit		Texturing		( vr::OctreePtr octree );
 					~Texturing		() = default;
 
+
+	bool			TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType );
 };
 
 

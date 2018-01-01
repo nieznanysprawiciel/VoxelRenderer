@@ -29,12 +29,12 @@ public:
 
 	bool			LoadImage			( const filesystem::Path& filePath );
 
-	glm::vec2		TexelSpacePosition	( glm::vec2 uv );
-	glm::vec4		SampleTexel			( glm::ivec2 texelPos );
+	glm::vec2		TexelSpacePosition	( glm::vec2 uv ) const;
+	glm::vec4		SampleTexel			( glm::ivec2 texelPos ) const;
 
 private:
 
-	float			ApplyWrapping		( WrappingMode mode, float coord );
+	float			ApplyWrapping		( WrappingMode mode, float coord ) const;
 };
 
 
