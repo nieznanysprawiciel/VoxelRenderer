@@ -14,6 +14,10 @@
 
 #include "VoxelRenderer/ShellMesh/FBXLoader.h"
 
+
+#include <iostream>
+
+
 namespace vr
 {
 
@@ -177,10 +181,15 @@ void		Application::InitRaycaster	()
 	else
 	{
 		/// Error !
+		std::cout << "Raycaster of type [" << raycasterType << "] doesn't exist" << std::endl;
 	}
 
 	if( m_raycaster )
+	{
 		m_raycaster->Init( m_renderingSystem->GetRenderer(), m_resourceManager, m_lightModule );
+
+		std::cout << "Raycaster of type [" << raycasterType << "] initialized" << std::endl;
+	}
 }
 
 // ================================ //
@@ -225,20 +234,32 @@ void		Application::InitShellMesh()
 {
 	FBXLoader* loader = new FBXLoader();
 
+	std::cout << "Loading shell mesh from [" << m_config->ShellMeshFilePath() << "]..." << std::endl;
+
 	if( loader->CanLoad( m_config->ShellMeshFilePath() ) )
 	{
 		auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
 		if( mesh.IsValid )
 		{
+			std::cout << "Shell mesh loaded succesfully.\nLoading animated SVO..." << std::endl;
+
 			m_shellMeshes.push_back( mesh.Value );
 
 			auto& animOctreeFile = m_config->AnimatedOctreePath();
 			OctreePtr animOctree = LoadOctree( animOctreeFile );
 
 			if( animOctree )
+			{
 				mesh.Value->ApplyOctree( m_resourceManager, animOctree );
+
+				std::cout << "Shell mesh and animated SVO loaded succesfully." << std::endl;
+			}
 		}
+		else
+			std::cout << "Loading shell mesh failed." << std::endl;
 	}
+	else
+		std::cout << "Loader can load this type of file." << std::endl;
 
 	delete loader;
 }
@@ -247,16 +268,24 @@ void		Application::InitShellMesh()
 //
 OctreePtr	Application::LoadOctree		( const std::string& octreeFile )
 {
+	std::cout << "Loading octree file [" << octreeFile << "]..." << std::endl;
+
 	OctreePtr octree = std::make_shared< Octree >();
 
 	filesystem::Path filePath = octreeFile;
 	if( filePath.Exists() )
 	{
 		bool result = octree->LoadFromFile( filePath );
-		assert( result );
+		
+		if( !result )
+			std::cout << "Loading file failed." << std::endl;
+		else
+			std::cout << "Octree loaded succesfully." << std::endl;
 
 		return octree;
 	}
+	else
+		std::cout << "File doesn't exist." << std::endl;
 
 	return nullptr;
 }

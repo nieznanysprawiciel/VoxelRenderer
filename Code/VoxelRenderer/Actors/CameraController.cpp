@@ -138,7 +138,6 @@ void		SpectatorCameraController::ControlObjectPre		( DynamicActor* actor, IContr
 	{
 		XMFLOAT3 pos;
 		XMStoreFloat3( &pos, actor->GetPosition() );
-		std::cout << "\rCamera position: ( " << pos.x << ", " << pos.y << ", " << pos.z << " )";
 	}
 }
 
