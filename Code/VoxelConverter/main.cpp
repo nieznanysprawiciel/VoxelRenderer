@@ -55,9 +55,11 @@ int main( int argc, char** argv )
 
 			if( !textureFile.Exists() )
 			{
-				std::cout << "Texture Path: [" << inputFile.String() << "] doesn't exist." << std::endl;
+				std::cout << "Texture Path: [" << textureFile.String() << "] doesn't exist." << std::endl;
 				return 1;
 			}
+
+			std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
 
 			converter.AddTexture( textureFile );
 		}

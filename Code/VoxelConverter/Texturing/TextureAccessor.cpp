@@ -57,16 +57,17 @@ glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos ) const
 {
 	texelPos = glm::clamp( texelPos, glm::ivec2( 0, 0 ), glm::ivec2( m_width - 1, m_height - 1 ) );
 
-	PtrOffset offset = m_height * texelPos.y * m_channels + m_width * texelPos.x * m_channels;
+	PtrOffset offset = m_width * texelPos.y * m_channels + texelPos.x * m_channels;
 	uint8* texelPtr = m_textureData + offset;
 
 	// Zero color vector.
 	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
 
 	// This dispatches texel written in little endian.
-	for( int channel = m_channels; channel >= 0; ++channel )
+	int channelOffset = 0;
+	for( int channel = m_channels - 1; channel >= 0; --channel, channelOffset++ )
 	{
-		auto texelChannelPtr = texelPtr + channel;
+		auto texelChannelPtr = texelPtr + channelOffset;
 		uint8 sample = *texelChannelPtr;
 		color[ channel ] = (float)sample / 255.0f;
 	}
