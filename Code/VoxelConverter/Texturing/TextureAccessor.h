@@ -22,6 +22,9 @@ private:
 	int				m_width;
 	int				m_channels;
 
+	bool			m_flipU;
+	bool			m_flipV;
+
 protected:
 public:
 	explicit		TextureAccessor		( WrappingMode modeX, WrappingMode modeY );

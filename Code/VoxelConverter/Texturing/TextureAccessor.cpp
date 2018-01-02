@@ -16,6 +16,8 @@ TextureAccessor::TextureAccessor( WrappingMode modeX, WrappingMode modeY )
 	,	m_height( 0 )
 	,	m_width( 0 )
 	,	m_channels( 0 )
+	,	m_flipU( false )
+	,	m_flipV( false )
 {}
 
 // ================================ //
@@ -47,6 +49,9 @@ glm::vec2		TextureAccessor::TexelSpacePosition		( glm::vec2 uv ) const
 {
 	uv.x = ApplyWrapping( m_wrappingModeX, uv.x );
 	uv.y = ApplyWrapping( m_wrappingModeY, uv.y );
+
+	if( m_flipU ) uv.x = 1.0f - uv.x;
+	if( m_flipV ) uv.y = 1.0f - uv.y;
 
 	return uv * glm::vec2( m_width - 1, m_height - 1 );
 }
