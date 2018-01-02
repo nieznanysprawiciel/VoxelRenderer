@@ -12,12 +12,18 @@
 template< typename SamplerObject >
 void			TextureOctreeWithSampler		( const TextureAccessor& tex, OctreeAccessor& octree, Size startRange, Size endRange )
 {
+	/// @todo In future we should check bounds of startRange and endRange here, but current implementation iterates
+	/// all attributes, so there's nothing to worry yet.
 
-
-	for( Size attrib = startRange; attrib < endRange; attrib++ )
+	for( Size attribIdx = startRange; attribIdx < endRange; attribIdx++ )
 	{
+		auto& attributes = octree.GetAttributes( attribIdx );
 
+		// We interpret colors as UVs coords. External tool should prepare SVO containing UVs.
+		glm::vec2 uv( attributes.Color.x, attributes.Color.y );
+		glm::vec4 color = SamplerObject::Sample( tex, uv );
 
+		attributes.Color = DirectX::XMFLOAT3( color.x, color.y, color.z );
 	}
 }
 
@@ -25,7 +31,7 @@ void			TextureOctreeWithSampler		( const TextureAccessor& tex, OctreeAccessor& o
 
 // ================================ //
 //
-Texturing::Texturing	( vr::OctreePtr octree )
+Texturing::Texturing	( OctreeAccessor octree )
 	:	m_octree( octree )
 	,	m_wrappingModeX( WrappingMode::Mirror )
 	,	m_wrappingModeY( WrappingMode::Mirror )
@@ -35,7 +41,7 @@ Texturing::Texturing	( vr::OctreePtr octree )
 //
 bool		Texturing::TextureOctree		( const filesystem::Path& filePath, SamplerType samplingType )
 {
-	if( !m_octree )
+	if( !m_octree.IsValid() )
 		return false;
 
 	TextureAccessor textureAcc( m_wrappingModeX, m_wrappingModeY );
@@ -43,12 +49,10 @@ bool		Texturing::TextureOctree		( const filesystem::Path& filePath, SamplerType 
 	if( !textureAcc.LoadImage( filePath ) )
 		return false;
 
-	OctreeAccessor octreeAcc( m_octree );
-
 	switch( samplingType )
 	{
 		case SamplerType::Point:
-			TextureOctreeWithSampler< PointSampler >( textureAcc, octreeAcc, 0, octreeAcc.GetNumberAttributes() );
+			TextureOctreeWithSampler< PointSampler >( textureAcc, m_octree, 0, m_octree.GetNumberAttributes() );
 		case SamplerType::Box:
 			return false;
 		default:

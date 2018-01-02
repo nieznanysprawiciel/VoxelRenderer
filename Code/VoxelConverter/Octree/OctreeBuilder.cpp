@@ -6,6 +6,9 @@
 #include "VoxelRenderer/SVO/OctreeNode.h"
 #include "VoxelRenderer/SVO/VoxelAttributes.h"
 
+#include "VoxelConverter/Texturing/Texturing.h"
+#include "VoxelConverter/Texturing/OctreeAccessor.h"
+
 #include <fstream>
 
 
@@ -61,17 +64,20 @@ OctreeBuilder::OctreeBuilder()
 	,	m_curNodesOffset( 0 )
 	,	m_curIndirectOffset( 0 )
 	,	m_attributesOffset( 0 )
+	,	m_gridLength( 0 )
 	,	m_maxDirectOffset( ComputeMaxDirectOffset() )
 {}
 
 // ================================ //
 //
-OctreePtr			OctreeBuilder::BuildOctree		( OctreeInfo& srcOctree )
+bool				OctreeBuilder::ReadOctree		( OctreeInfo& srcOctree )
 {
 	if( srcOctree.filesExist() )
 	{
 		m_numNodes = srcOctree.n_nodes;
 		m_numAttribs = srcOctree.n_data;
+
+		m_gridLength = srcOctree.gridlength;
 
 		m_octree = std::unique_ptr< ooc::OctreeNode[] >( new ooc::OctreeNode[ m_numNodes ] );
 		m_attributes = std::unique_ptr< ooc::Payload[] >( new ooc::Payload[ m_numAttribs ] );
@@ -79,13 +85,39 @@ OctreePtr			OctreeBuilder::BuildOctree		( OctreeInfo& srcOctree )
 		ReadNodes( srcOctree, (uint8*)m_octree.get() );
 		ReadData( srcOctree, (uint8*)m_attributes.get() );
 
-		BuildEmptyStructure();
-		BuildAttributesSegment();
-		BuildNodeHierarchy();
-
-		OctreePtr octree = std::make_shared< Octree >( std::move( m_data ), srcOctree.gridlength, m_curIndirectOffset );
-		return octree;
+		return true;
 	}
+
+	return false;
+}
+
+// ================================ //
+//
+bool				OctreeBuilder::TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType )
+{
+	OctreeAccessor octree( m_octree.get(), m_attributes.get(), m_numNodes, m_numAttribs );
+	Texturing texturing( octree );
+
+	return texturing.TextureOctree( filePath, samplingType );
+}
+
+// ================================ //
+//
+OctreePtr			OctreeBuilder::BuildOctree		()
+{
+	BuildEmptyStructure();
+	BuildAttributesSegment();
+	BuildNodeHierarchy();
+
+	return std::make_shared< Octree >( std::move( m_data ), m_gridLength, m_curIndirectOffset );
+}
+
+// ================================ //
+//
+OctreePtr			OctreeBuilder::BuildOctree		( OctreeInfo& srcOctree )
+{
+	if( ReadOctree( srcOctree ) )
+		return BuildOctree();
 
 	return nullptr;
 }

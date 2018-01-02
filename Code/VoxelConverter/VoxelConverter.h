@@ -9,6 +9,9 @@
 class VoxelConverter
 {
 private:
+
+	filesystem::Path		m_texturePath;
+
 protected:
 public:
 	explicit		VoxelConverter		() = default;
@@ -19,6 +22,10 @@ public:
 
 	bool			Convert				( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath );
 
+	/**@brief Adds texture. Overwrites previous if existed.
+	@todo In future add support for multiple textures. To do this we must encode
+	texture index for every voxel.*/
+	void			AddTexture			( const filesystem::Path& texPath );
 };
 
 

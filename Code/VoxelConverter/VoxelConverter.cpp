@@ -12,10 +12,17 @@
 
 // ================================ //
 //
-bool			VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath )
+bool				VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath )
 {
 	vr::OctreePtr octree = Load( inputFilePath );
 	return Write( outputFilePath, octree );
+}
+
+// ================================ //
+//
+void				VoxelConverter::AddTexture	( const filesystem::Path& texPath )
+{
+	m_texturePath = texPath;
 }
 
 
@@ -27,7 +34,16 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 	parseOctreeHeader( inputFilePath.String(), srcOctree );
 
 	vr::OctreeBuilder builder;
-	return builder.BuildOctree( srcOctree );
+
+	if( builder.ReadOctree( srcOctree ) )
+	{
+		if( !m_texturePath.String().empty() )
+			builder.TextureOctree( m_texturePath, SamplerType::Point );
+
+		return builder.BuildOctree();
+	}
+
+	return nullptr;
 }
 
 // ================================ //

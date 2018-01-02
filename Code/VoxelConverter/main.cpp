@@ -20,16 +20,18 @@ int main( int argc, char** argv )
 		TCLAP::CmdLine cmd( "Program for converting SVO files to VoxelRenderer internal format.", ' ', "0.1" );
 
 		TCLAP::ValueArg< std::string > inputFileArg( "i", "input", "Input SVO file", true, "", "file path" );
-		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output Voxelrenderer file", true, "", "file path" );
+		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output VoxelRenderer file", true, "", "file path" );
+		TCLAP::ValueArg< std::string > textureFileArg( "t", "texture", "Input texture to use on octree", false, "", "file path" );
 
 		cmd.add( inputFileArg );
 		cmd.add( outputFileArg );
+		cmd.add( textureFileArg );
 
 		cmd.parse( argc, argv );
 
 		filesystem::Path inputFile = inputFileArg.getValue();
 		filesystem::Path outputFile = outputFileArg.getValue();
-
+		
 		if( !inputFile.Exists() )
 		{
 			std::cout << "Input Path: [" << inputFile.String() << "] doesn't exist." << std::endl;
@@ -46,6 +48,20 @@ int main( int argc, char** argv )
 		std::cout << "Output file: [" << outputFile.String() << "]" << std::endl;
 
 		VoxelConverter converter;
+
+		if( textureFileArg.isSet() )
+		{
+			filesystem::Path textureFile = textureFileArg.getValue();
+
+			if( !textureFile.Exists() )
+			{
+				std::cout << "Texture Path: [" << inputFile.String() << "] doesn't exist." << std::endl;
+				return 1;
+			}
+
+			converter.AddTexture( textureFile );
+		}
+
 		bool result = converter.Convert( inputFile, outputFile );
 		
 		if( result )

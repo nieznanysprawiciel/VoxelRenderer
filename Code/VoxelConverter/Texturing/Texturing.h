@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VoxelRenderer/SVO/Octree.h"
+#include "VoxelConverter/Texturing/OctreeAccessor.h"
 #include "TexturingEnums.h"
 #include "Samplers/Samplers.h"
 
@@ -18,12 +18,12 @@ private:
 	WrappingMode	m_wrappingModeX;
 	WrappingMode	m_wrappingModeY;
 
-	vr::OctreePtr	m_octree;
+	OctreeAccessor	m_octree;
 
 protected:
 public:
 
-	explicit		Texturing		( vr::OctreePtr octree );
+	explicit		Texturing		( OctreeAccessor octree );
 					~Texturing		() = default;
 
 

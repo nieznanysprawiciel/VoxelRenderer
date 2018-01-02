@@ -9,6 +9,9 @@
 
 #include "VoxelRenderer/SVO/Octree.h"
 
+#include "VoxelConverter/Texturing/TexturingEnums.h"
+#include "VoxelConverter/Texturing/Samplers/Samplers.h"
+
 
 namespace vr
 {
@@ -23,6 +26,7 @@ private:
 
 	Size			m_numNodes;
 	Size			m_numAttribs;
+	Size			m_gridLength;
 
 	std::unique_ptr< ooc::OctreeNode[] >	m_octree;
 	std::unique_ptr< ooc::Payload[] >		m_attributes;
@@ -39,6 +43,10 @@ public:
 					~OctreeBuilder		() = default;
 
 	OctreePtr		BuildOctree			( OctreeInfo& srcOctree );
+
+	bool			ReadOctree			( OctreeInfo& srcOctree );
+	bool			TextureOctree		( const filesystem::Path& filePath, SamplerType samplingType );
+	OctreePtr		BuildOctree			();
 
 private:
 

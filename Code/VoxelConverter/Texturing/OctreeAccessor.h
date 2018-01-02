@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include "VoxelRenderer/SVO/Octree.h"
+#include "VoxelConverter/Octree/oocOctree.h"
+#include "VoxelConverter/Octree/oocPayload.h"
 
 
 
@@ -11,20 +12,23 @@ class OctreeAccessor
 {
 private:
 
-	vr::OctreePtr		m_octree;
+	ooc::OctreeNode*	m_nodes;
+	ooc::Payload*		m_attributes;
 
-	uint32				m_attributesOffset;
-
+	uint64				m_numNodes;
+	uint64				m_numAttributes;
 
 protected:
 public:
 
-	explicit		OctreeAccessor		( vr::OctreePtr octree );
+	explicit		OctreeAccessor		( ooc::OctreeNode* nodes, ooc::Payload* attribs, uint64 numNodes, uint64 numAttribs );
 					~OctreeAccessor	() = default;
 
 
 	Size					GetNumberAttributes		() const;
-	vr::VoxelAttributes&	GetAttributes			( Size idx );
+	ooc::Payload&			GetAttributes			( Size idx );
+
+	bool					IsValid					() const;
 
 };
 

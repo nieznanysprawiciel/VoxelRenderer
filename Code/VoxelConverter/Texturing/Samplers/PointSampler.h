@@ -16,7 +16,7 @@ public:
 	~PointSampler	() = default;
 
 
-	inline glm::vec4		Sample		( const TextureAccessor& tex, glm::vec2 uv );
+	static inline glm::vec4		Sample		( const TextureAccessor& tex, glm::vec2 uv );
 };
 
 //====================================================================================//

@@ -1,26 +1,39 @@
 #include "OctreeAccessor.h"
 
-
+#include "VoxelRenderer/SVO/OctreeNode.h"
 
 
 // ================================ //
 //
-OctreeAccessor::OctreeAccessor( vr::OctreePtr octree )
-	:	m_octree( octree )
-{
-	m_attributesOffset = octree->GetBlockDescriptor().AttributesOffset;
-}
+OctreeAccessor::OctreeAccessor( ooc::OctreeNode* nodes, ooc::Payload* attribs, uint64 numNodes, uint64 numAttribs )
+	:	m_nodes( nodes )
+	,	m_attributes( attribs )
+	,	m_numNodes( numNodes )
+	,	m_numAttributes( numAttribs )
+{}
 
 // ================================ //
 //
 Size							OctreeAccessor::GetNumberAttributes	() const
 {
-	return Size();
+	return m_numAttributes;
 }
 
 // ================================ //
 //
-vr::VoxelAttributes&			OctreeAccessor::GetAttributes		( Size idx )
+ooc::Payload&					OctreeAccessor::GetAttributes		( Size idx )
 {
-	// TODO: insert return statement here
+	assert( idx < m_numAttributes );
+
+	return m_attributes[ idx ];
+}
+
+// ================================ //
+//
+bool							OctreeAccessor::IsValid				() const
+{
+	if( m_attributes && m_nodes )
+		return true;
+
+	return false;
 }
