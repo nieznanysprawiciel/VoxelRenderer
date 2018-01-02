@@ -33,7 +33,7 @@ bool			TextureAccessor::LoadImage		( const filesystem::Path& filePath )
 	if( !filePath.Exists() )
 		return false;
 
-	m_textureData = stbi_load( filePath.String().c_str(), &m_width, &m_height, &m_channels, 4 );
+	m_textureData = stbi_load( filePath.String().c_str(), &m_width, &m_height, &m_channels, 0 );
 	
 	if( !m_textureData )
 		return false;
