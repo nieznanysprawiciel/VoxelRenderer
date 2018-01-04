@@ -16,7 +16,7 @@ TextureAccessor::TextureAccessor( WrappingMode modeX, WrappingMode modeY )
 	,	m_height( 0 )
 	,	m_width( 0 )
 	,	m_channels( 0 )
-	,	m_flipU( false )
+	,	m_flipU( true )
 	,	m_flipV( false )
 {}
 
