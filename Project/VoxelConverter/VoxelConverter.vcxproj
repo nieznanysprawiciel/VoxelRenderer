@@ -159,6 +159,7 @@
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\OctreeAccessor.h" />
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\BilinearSampler.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\PointSampler.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\Samplers.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\TextureAccessor.h" />

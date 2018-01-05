@@ -83,5 +83,8 @@
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\OctreeAccessor.h">
       <Filter>VoxelConverter\Texturing</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\BilinearSampler.h">
+      <Filter>VoxelConverter\Texturing\Samplers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

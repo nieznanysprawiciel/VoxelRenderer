@@ -9,9 +9,10 @@
 enum class SamplerType : uint8
 {
 	Point,
-	Box
+	Bilinear
 };
 
 
 #include "PointSampler.h"
+#include "BilinearSampler.h"
 

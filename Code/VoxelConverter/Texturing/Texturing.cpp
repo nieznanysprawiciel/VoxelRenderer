@@ -53,8 +53,8 @@ bool		Texturing::TextureOctree		( const filesystem::Path& filePath, SamplerType 
 	{
 		case SamplerType::Point:
 			TextureOctreeWithSampler< PointSampler >( textureAcc, m_octree, 0, m_octree.GetNumberAttributes() );
-		case SamplerType::Box:
-			return false;
+		case SamplerType::Bilinear:
+			TextureOctreeWithSampler< BilinearSampler >( textureAcc, m_octree, 0, m_octree.GetNumberAttributes() );
 		default:
 			return false;
 	}

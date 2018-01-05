@@ -38,7 +38,7 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 	if( builder.ReadOctree( srcOctree ) )
 	{
 		if( !m_texturePath.String().empty() )
-			builder.TextureOctree( m_texturePath, SamplerType::Point );
+			builder.TextureOctree( m_texturePath, SamplerType::Bilinear );
 
 		return builder.BuildOctree();
 	}
