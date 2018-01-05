@@ -1,6 +1,7 @@
 #pragma once
 
 #include "VoxelRenderer/SVO/Octree.h"
+#include "VoxelConverter/Texturing/Samplers/Samplers.h"
 
 #include "swCommonLib/System/Path.h"
 
@@ -11,10 +12,11 @@ class VoxelConverter
 private:
 
 	filesystem::Path		m_texturePath;
+	SamplerType				m_samplerType;
 
 protected:
 public:
-	explicit		VoxelConverter		() = default;
+	explicit		VoxelConverter		();
 					~VoxelConverter		() = default;
 
 	vr::OctreePtr	Load				( const filesystem::Path& inputFilePath );
@@ -26,6 +28,8 @@ public:
 	@todo In future add support for multiple textures. To do this we must encode
 	texture index for every voxel.*/
 	void			AddTexture			( const filesystem::Path& texPath );
+
+	void			SetSampler			( SamplerType type ) { m_samplerType = type; }
 };
 
 

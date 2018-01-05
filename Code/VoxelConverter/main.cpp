@@ -22,10 +22,12 @@ int main( int argc, char** argv )
 		TCLAP::ValueArg< std::string > inputFileArg( "i", "input", "Input SVO file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output VoxelRenderer file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > textureFileArg( "t", "texture", "Input texture to use on octree", false, "", "file path" );
+		TCLAP::ValueArg< std::string > textureFilteringArg( "f", "filter", "Filter used to texture octree", false, "Bilinear", "Filter type string" );
 
 		cmd.add( inputFileArg );
 		cmd.add( outputFileArg );
 		cmd.add( textureFileArg );
+		cmd.add( textureFilteringArg );
 
 		cmd.parse( argc, argv );
 
@@ -62,6 +64,15 @@ int main( int argc, char** argv )
 			std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
 
 			converter.AddTexture( textureFile );
+
+			std::string filterName = textureFilteringArg.getValue();
+			
+			if( filterName == "Bilinear" )
+				converter.SetSampler( SamplerType::Bilinear );
+			else if( filterName == "Point" )
+				converter.SetSampler( SamplerType::Point );
+			else
+				std::cout << "Unknown filter: [" << filterName << "]. Using default instead." << std::endl;
 		}
 
 		bool result = converter.Convert( inputFile, outputFile );

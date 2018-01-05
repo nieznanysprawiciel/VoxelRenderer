@@ -12,6 +12,14 @@
 
 // ================================ //
 //
+VoxelConverter::VoxelConverter()
+	:	m_samplerType( SamplerType::Bilinear )
+{}
+
+
+
+// ================================ //
+//
 bool				VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath )
 {
 	vr::OctreePtr octree = Load( inputFilePath );
@@ -38,7 +46,7 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 	if( builder.ReadOctree( srcOctree ) )
 	{
 		if( !m_texturePath.String().empty() )
-			builder.TextureOctree( m_texturePath, SamplerType::Bilinear );
+			builder.TextureOctree( m_texturePath, m_samplerType );
 
 		return builder.BuildOctree();
 	}
