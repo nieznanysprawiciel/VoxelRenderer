@@ -49,6 +49,7 @@ protected:
 	bool				m_pause;
 
 	float				m_offsetShell;
+	bool				m_enableShellDisplay;
 
 public:
 	explicit			AnimationRaycasterGPU();

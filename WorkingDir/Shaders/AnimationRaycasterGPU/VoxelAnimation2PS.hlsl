@@ -14,7 +14,7 @@ float4 main( OutputGS input ) : SV_TARGET
 {
 	const float offsetRay = OffsetShell;
 
-	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
+	float4 resultColor = float4( 0.4, 0.4, 0.4, 1.0 );
 
 	// Create inverse matricies for all 3 verticies.
 	float3x3 vertex1InvMat = ComputeVertexInverseMat( input.BlendWeights[ 0 ], input.BlendIdx[ 0 ] );
@@ -55,7 +55,8 @@ float4 main( OutputGS input ) : SV_TARGET
 	}
 
 	// Incase of voxel misses don't paint enything on screen.
-	discard;
+	if( !EnableShellDisplay )
+		discard;
 	return resultColor;
 }
 

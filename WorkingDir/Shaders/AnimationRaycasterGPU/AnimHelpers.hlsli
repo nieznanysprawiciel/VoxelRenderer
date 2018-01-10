@@ -29,6 +29,7 @@ cbuffer MeshContants : register( b2 )
 	float3			Translate;
 	float			Scale;
 	float			OffsetShell;
+	bool			EnableShellDisplay;
 }
 
 

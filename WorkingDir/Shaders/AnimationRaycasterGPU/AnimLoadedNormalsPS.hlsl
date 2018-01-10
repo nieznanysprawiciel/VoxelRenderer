@@ -24,7 +24,7 @@ float4 main( OutputNormVS input ) : SV_TARGET
 {
 	const float offsetRay = OffsetShell;
 
-	float4 resultColor = float4( 0.0, 0.0, 0.0, 0.0 );
+	float4 resultColor = float4( 0.4, 0.4, 0.4, 1.0 );
 
 	float3 direction = -normalize( input.Normal );
 	float3 position = input.ModelPosition;
@@ -49,7 +49,8 @@ float4 main( OutputNormVS input ) : SV_TARGET
 	}
 
 	// Incase of voxel misses don't paint enything on screen.
-	discard;
+	if( !EnableShellDisplay )
+		discard;
 	return resultColor;
 }
 
