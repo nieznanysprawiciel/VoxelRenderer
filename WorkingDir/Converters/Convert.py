@@ -100,6 +100,17 @@ def ComputeDefaultOuputPath( inputModelFile ):
     return modelFileName + ".voxtree"
 
     
+def CleanTemporaries( triFile, octreeFile):
+    
+    os.remove( triFile )
+    os.remove( triFile + "data" )
+    
+    os.remove( octreeFile )
+    os.remove( octreeFile + "data" )
+    os.remove( octreeFile + "nodes" )
+    
+    
+    
 def MakeConvertsion():
     
     if len( sys.argv ) < 2:
@@ -122,6 +133,7 @@ def MakeConvertsion():
     CallSVOBuilder( ComputeTriFile( modelToConvert ), gridSize )
     CallVoxelConverter( ComputeOctreeFile( modelToConvert, gridSize ), outputPath, texturePath, filterType )
     
+    CleanTemporaries( ComputeTriFile( modelToConvert ), ComputeOctreeFile( modelToConvert, gridSize ) )
     
     
 MakeConvertsion()
