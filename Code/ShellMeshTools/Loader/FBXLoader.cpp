@@ -181,6 +181,13 @@ bool						FBXLoader::CanLoad		( const filesystem::Path& fileName )
 
 // ================================ //
 //
+bool								FBXLoader::ExportObj		( const filesystem::Path & fileName, const TexturedMesh & mesh )
+{
+	return false;
+}
+
+// ================================ //
+//
 FbxScene*							FBXLoader::LoadFbxScene		( const filesystem::Path& fileName )
 {
 	FbxImporter* FbxImporter = FbxImporter::Create( fbx_manager, "" );

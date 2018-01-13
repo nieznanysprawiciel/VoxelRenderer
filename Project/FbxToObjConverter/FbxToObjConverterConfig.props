@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Paths.props" />
+  <Import Project="IncludeFBX_SDK.props" />
+  <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+  <PropertyGroup Label="UserMacros">
+    <FbxToObjConverterName>FbxToObjConverter</FbxToObjConverterName>
+    <FbxToObjConverterLibDir>$(LibDir)$(FbxToObjConverterName)\$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</FbxToObjConverterLibDir>
+    <FbxToObjConverterSourceDir>$(SourceDir)$(FbxToObjConverterName)\</FbxToObjConverterSourceDir>
+    <FbxToObjConverterFileName>$(FbxToObjConverterName)</FbxToObjConverterFileName>
+    <FbxToObjConverterBuildDir>$(BuildDir)$(FbxToObjConverterName)$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</FbxToObjConverterBuildDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(FbxToObjConverterBuildDir)</IntDir>
+    <TargetName>$(FbxToObjConverterFileName)</TargetName>
+    <OutDir>$(FbxToObjConverterLibDir)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ExternalDir)tclap-1.2.1/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

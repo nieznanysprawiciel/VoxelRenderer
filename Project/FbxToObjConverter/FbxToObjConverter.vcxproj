@@ -19,73 +19,53 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Code\ShellMeshTools\Animation\Animation.cpp" />
-    <ClCompile Include="..\..\Code\ShellMeshTools\Animation\Skeleton.cpp" />
-    <ClCompile Include="..\..\Code\ShellMeshTools\Loader\FBXLoader.cpp" />
-    <ClCompile Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMesh.cpp" />
-    <ClCompile Include="..\..\Code\ShellMeshTools\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
-    </ClCompile>
+    <ClCompile Include="..\..\Code\FbxToObjConverter\Converter.cpp" />
+    <ClCompile Include="..\..\Code\FbxToObjConverter\main.cpp" />
+    <ClCompile Include="..\..\Code\FbxToObjConverter\ObjExporter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Code\ShellMeshTools\Animation\Animation.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\Animation\Skeleton.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\FbxHelperStructs.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\FBXLoader.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\ILoader.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\DXMathOperator.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMesh.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMeshVertex.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\TexturedVertex.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\stdafx.h" />
-    <ClInclude Include="..\..\Code\ShellMeshTools\targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Code\ShellMeshTools\Loader\FbxLoader.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Code\swGraphicAPI\ProjectsDir\Visual2015\DX11API\DX11API.vcxproj">
-      <Project>{44643d7f-1c71-41c1-b452-b2dc5e088a58}</Project>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\CommonBase\CommonBase.vcxproj">
+      <Project>{9abcbab4-05b4-47c5-b5d8-f201559fd096}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\Code\swGraphicAPI\ProjectsDir\Visual2015\ResourceManager\ResourceManager.vcxproj">
-      <Project>{9f71f0da-1d72-4e96-93b7-5ac2c9cb6ede}</Project>
+    <ProjectReference Include="..\..\Code\swCommonLib\Projects\Visual2015\SerializerXML\SerializerXML.vcxproj">
+      <Project>{91cc6d16-f22c-434a-95e0-35ee857054c7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\ShellMeshTools\ShellMeshTools.vcxproj">
+      <Project>{2efecbbb-dd42-4b38-a65a-640eaf4de9b6}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Code\FbxToObjConverter\Converter.h" />
+    <ClInclude Include="..\..\Code\FbxToObjConverter\ObjExporter.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2EFECBBB-DD42-4B38-A65A-640EAF4DE9B6}</ProjectGuid>
+    <ProjectGuid>{8E37A4EB-7660-409F-B390-D0D79C8252F2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ShellMeshTools</RootNamespace>
+    <RootNamespace>FbxToObjConverter</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -98,76 +78,95 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="ShellMeshToolsConfig.props" />
+    <Import Project="FbxToObjConverterConfig.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="ShellMeshToolsConfig.props" />
+    <Import Project="FbxToObjConverterConfig.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="ShellMeshToolsConfig.props" />
+    <Import Project="FbxToObjConverterConfig.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="ShellMeshToolsConfig.props" />
+    <Import Project="FbxToObjConverterConfig.props" />
+    <Import Project="LinkFBX_SDK.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderFile>ShellMeshTools/stdafx.h</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -44,6 +44,8 @@ public:
 	Nullable< vr::ShellMeshPtr >	LoadMesh			( ResourceManager* manager, const filesystem::Path& fileName );
 	bool							CanLoad				( const filesystem::Path& fileName );
 
+	bool							ExportObj			( const filesystem::Path& fileName, const TexturedMesh& mesh );
+
 private:
 
 	vr::SkeletonPtr					LoadSkeleton	( FbxNode* rootNode );
