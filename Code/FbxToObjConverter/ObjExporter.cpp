@@ -83,7 +83,7 @@ void			ObjExporter::WriteUVs		()
 		uv.y = vertex.UV.y;
 		uv.z = static_cast< float >( vertex.MaterialID );
 
-		WriteVertex( uv );
+		WriteUV( uv );
 	}
 
 	m_file << std::endl << std::endl;
@@ -144,7 +144,7 @@ void			ObjExporter::WriteIndex		( Index32 idxToWrite )
 	auto idx = idxToWrite + 1;
 
 	// Index for vertex, normal and texture is the same.
-	m_file << Convert::ToString( idx ) << "/" << Convert::ToString( idx ) << "/" << Convert::ToString( idx ) << "";
+	m_file << Convert::ToString( idx ) << "/" << Convert::ToString( idx ) << "/" << Convert::ToString( idx ) << " ";
 }
 
 // ================================ //

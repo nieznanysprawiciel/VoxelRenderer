@@ -36,12 +36,6 @@ int main( int argc, char** argv )
 			return 1;
 		}
 
-		if( inputFile.GetExtension() != ".octree" )
-		{
-			std::cout << "Input Path: [" << inputFile.String() << "] should have .octree extension." << std::endl;
-			return 1;
-		}
-
 		std::cout << "Converting file: [" << inputFile.String() << "]" << std::endl;
 		std::cout << "Output file: [" << outputFile.String() << "]" << std::endl;
 
