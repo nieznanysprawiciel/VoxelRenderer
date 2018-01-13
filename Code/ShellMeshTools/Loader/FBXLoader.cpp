@@ -360,6 +360,7 @@ Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nu
 			curVertex.Position = Get( fbxControlPoints[ controlPointIdx ] );
 			curVertex.Normal = GetVertexNormal( fbxMesh, polygonCounter, vertexIdx );
 			curVertex.UV = GetVertexUV( fbxMesh, polygonCounter, vertexIdx, lUVSetName );
+			curVertex.MaterialID = 0;
 
 			verticies.push_back( curVertex );
 
