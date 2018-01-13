@@ -42,5 +42,27 @@ inline void		FBXLoader::CopyIndexBuffer		( const std::vector< std::vector< Index
 }
 
 
+// ================================ //
+//
+template< typename VertexType >
+inline
+void			FBXLoader::TransformVerticies	( std::vector< VertexType >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix )
+{
+	XMMATRIX transform = XMLoadFloat4x4( &matrix );
+
+	for( uint32 i = offset; i < verticies.size(); ++i )
+	{
+		auto& vertex = verticies[ i ];
+
+		XMVECTOR position = XMLoadFloat3( &vertex.Position );
+		position = XMVector3Transform( position, transform );
+		XMStoreFloat3( &vertex.Position, position );
+
+		XMVECTOR normal = XMLoadFloat3( &vertex.Normal );
+		normal = XMVector3TransformNormal( normal, transform );
+		XMStoreFloat3( &vertex.Normal, normal );
+	}
+}
+
 }	// sw
 

@@ -65,6 +65,9 @@
     <ClInclude Include="..\..\Code\ShellMeshTools\Loader\ILoader.h">
       <Filter>ShellMeshTools\Loader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\TexturedVertex.h">
+      <Filter>ShellMeshTools\ShellMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Code\ShellMeshTools\Loader\FbxLoader.inl">

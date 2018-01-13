@@ -4,6 +4,7 @@
 @copyright File based on FBXLoader from SWEngine.*/
 
 #include "fbxsdk.h"
+#include "swCommonLib/Common/TypesDefinitions.h"
 #include "FbxHelperStructs.h"
 
 #include "ShellMeshTools/ShellMesh/ShellMeshVertex.h"
@@ -38,8 +39,10 @@ public:
 	FBXLoader();
 	~FBXLoader();
 
-	Nullable< vr::ShellMeshPtr >	LoadMesh	( ResourceManager* manager, const filesystem::Path& fileName );
-	bool							CanLoad		( const filesystem::Path& fileName );
+
+	Nullable< TexturedMesh >		LoadTexturedMesh	( const filesystem::Path& fileName );
+	Nullable< vr::ShellMeshPtr >	LoadMesh			( ResourceManager* manager, const filesystem::Path& fileName );
+	bool							CanLoad				( const filesystem::Path& fileName );
 
 private:
 
@@ -49,13 +52,23 @@ private:
 	vr::AnimationPtr				LoadAnimation	( Nullable< FbxMeshCollection >& nodes, FbxScene* scene, SkeletonPtr skeleton );
 	void							LoadAnimation	( FbxNode* node, FbxScene* scene, TemporaryAnimationInit & animInit, SkeletonPtr skeleton );
 
-	Nullable< FbxMeshCollection >	ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
-	Nullable< TemporaryMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TemporaryMeshInit >& mesh, SkeletonPtr skeleton );
+	Nullable< FbxMeshCollection >		ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
+	Nullable< TempShellMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TempShellMeshInit >& mesh, SkeletonPtr skeleton );
+	Nullable< TexturedMesh >			ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh );
 
-	void							Scale			( Nullable< TemporaryMeshInit >& mesh );
-	void							RepairWeights	( Nullable< TemporaryMeshInit >& mesh );
+	void							Scale			( Nullable< TempShellMeshInit >& mesh );
+	void							RepairWeights	( Nullable< TempShellMeshInit >& mesh );
 
-	void		TransformVerticies	( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix );
+	template< typename VertexType >
+	void							TransformVerticies	( std::vector< VertexType >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix );
+
+
+private:
+
+	FbxScene*						LoadFbxScene		( const filesystem::Path& fileName );
+
+	static DirectX::XMFLOAT3		GetVertexNormal		( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx );
+	static DirectX::XMFLOAT2		GetVertexUV			( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx, const char* setName );
 };
 
 

@@ -28,7 +28,7 @@ inline void			CopyIndexBuffer		( const std::vector< std::vector< Index32 > >& in
 
 // ================================ //
 //
-ShellMesh::ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TemporaryMeshInit& meshInitData )
+ShellMesh::ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TempShellMeshInit& meshInitData )
 	:	m_skeleton( skeleton )
 	,	m_animation( anim )
 {
@@ -54,7 +54,7 @@ ShellMesh::ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, Animatio
 
 // ================================ //
 //
-void			ShellMesh::ComputeScale		( TemporaryMeshInit & meshInitData )
+void			ShellMesh::ComputeScale		( TempShellMeshInit & meshInitData )
 {
 	auto & verticies = meshInitData.Verticies;
 
@@ -86,7 +86,7 @@ void			ShellMesh::ComputeScale		( TemporaryMeshInit & meshInitData )
 // ================================ //
 // Split verticies. Each vertex will be referenced only once.
 // Then sort triangles weights.
-std::vector< ShellMeshVertex >		ShellMesh::BuildVertexBuffer	( TemporaryMeshInit& meshInitData )
+std::vector< ShellMeshVertex >		ShellMesh::BuildVertexBuffer	( TempShellMeshInit& meshInitData )
 {
 	std::vector< ShellMeshVertex > vertexBuffer;
 

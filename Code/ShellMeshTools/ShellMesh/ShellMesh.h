@@ -43,7 +43,7 @@ private:
 protected:
 public:
 	
-	explicit		ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TemporaryMeshInit& meshInitData );
+	explicit		ShellMesh		( ResourceManager* manager, SkeletonPtr skeleton, AnimationPtr anim, TempShellMeshInit& meshInitData );
 	~ShellMesh	() = default;
 
 	BufferObject*			GetVertexBuffer	()		{ return m_shellMesh.Ptr(); }
@@ -67,8 +67,8 @@ public:
 
 private:
 
-	void								ComputeScale		( TemporaryMeshInit& meshInitData );
-	std::vector< ShellMeshVertex >		BuildVertexBuffer	( TemporaryMeshInit& meshInitData );
+	void								ComputeScale		( TempShellMeshInit& meshInitData );
+	std::vector< ShellMeshVertex >		BuildVertexBuffer	( TempShellMeshInit& meshInitData );
 	void								SortTriangleWeights	( ShellMeshVertex& point1, ShellMeshVertex& point2, ShellMeshVertex& point3 );
 
 	void								AddWeights			( std::set< uint8 >& idxSet, ShellMeshVertex& point );

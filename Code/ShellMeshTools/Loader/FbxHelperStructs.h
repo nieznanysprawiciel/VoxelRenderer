@@ -2,6 +2,7 @@
 
 #include "swGraphicAPI/Resources/MeshResources.h"
 #include "ShellMeshTools/ShellMesh/ShellMeshVertex.h"
+#include "ShellMeshTools/ShellMesh/TexturedVertex.h"
 #include "ShellMeshTools/Animation/Animation.h"
 
 #include "fbxsdk.h"
@@ -41,11 +42,16 @@ struct FbxMeshCollection
 
 // ================================ //
 //
+template< typename VertexType >
 struct TemporaryMeshInit
 {
-	std::vector< vr::ShellMeshVertex >		Verticies;
+	std::vector< VertexType >				Verticies;
 	std::vector< std::vector< Index32 > >	Indicies;
 };
+
+typedef TemporaryMeshInit< vr::ShellMeshVertex > TempShellMeshInit;
+typedef TemporaryMeshInit< vr::TexturedVertex > TexturedMesh;
+
 
 // ================================ //
 //

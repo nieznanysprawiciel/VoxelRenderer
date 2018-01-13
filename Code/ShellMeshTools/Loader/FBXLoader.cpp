@@ -4,6 +4,7 @@
 
 #include "swGeometrics/GeometricsCore/Processors/Converter.h"
 
+#include "ShellMeshTools/ShellMesh/TexturedVertex.h"
 
 
 #include "swCommonLib/Common/Converters.h"
@@ -57,6 +58,7 @@ FbxMesh*			GetMeshAttribute				( FbxNode* node )
 // Helpers declarations
 
 DirectX::XMFLOAT3	Get			( const fbxsdk::FbxVector4& vector );
+DirectX::XMFLOAT2	Get			( const fbxsdk::FbxVector2& vector );
 DirectX::XMFLOAT4X4	Get			( const fbxsdk::FbxMatrix& matrix );
 bool				operator==	( const fbxsdk::FbxVector4& vec1, const DirectX::XMFLOAT3& vec2 );
 
@@ -95,27 +97,42 @@ FBXLoader::~FBXLoader()
 //			New loading	
 //====================================================================================//
 
+// ================================ //
+//
+Nullable< TexturedMesh >			FBXLoader::LoadTexturedMesh		( const filesystem::Path& fileName )
+{
+	FbxScene* scene = LoadFbxScene( fileName );
+	FbxNode* root = scene->GetRootNode();
+
+	if( root == nullptr )
+		return "Root node is nullptr";
+
+	Nullable< FbxMeshCollection > meshData( NullableInit::Valid );
+	for( int i = 0; i < scene->GetNodeCount(); i++ )
+		meshData = ProcessNode( scene->GetNode( i ), meshData );
+
+	ReturnIfInvalid( meshData );
+
+	Nullable< TexturedMesh > tempMeshInit( NullableInit::Valid );
+
+	for( auto& mesh : meshData.Value.Segments )
+	{
+		tempMeshInit = ProcessMesh( mesh, tempMeshInit );
+	}
+
+	scene->Destroy();
+
+	ReturnIfInvalid( tempMeshInit );
+
+	return tempMeshInit;
+}
+
 /**@brief Loads file.*/
 Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, const filesystem::Path& fileName )
 {
-	FbxImporter* FbxImporter = FbxImporter::Create( fbx_manager, "" );
-	m_filePath = fileName;
-
-	if( !FbxImporter->Initialize( m_filePath.String().c_str(), -1, fbx_manager->GetIOSettings() ) )
-	{
-		auto& status = FbxImporter->GetStatus();
-		throw std::runtime_error( status.GetErrorString() );
-	}
-
-	FbxScene* scene = FbxScene::Create( fbx_manager, "Scene" );
-	FbxImporter->Import( scene );
-	FbxImporter->Destroy();
-
-	// Triangulate scene before loading.
-	FbxGeometryConverter triangulator( fbx_manager );
-	triangulator.Triangulate( scene, true );
-
+	FbxScene* scene = LoadFbxScene( fileName );
 	FbxNode* root = scene->GetRootNode();
+
 	if( root == nullptr )
 		return "Root node is nullptr";
 
@@ -127,7 +144,7 @@ Nullable< vr::ShellMeshPtr >		FBXLoader::LoadMesh		( ResourceManager* manager, c
 
 	ReturnIfInvalid( meshData );
 
-	Nullable< TemporaryMeshInit > tempMeshInit( NullableInit::Valid );
+	Nullable< TempShellMeshInit > tempMeshInit( NullableInit::Valid );
 
 	for( auto& mesh : meshData.Value.Segments )
 	{
@@ -162,6 +179,29 @@ bool						FBXLoader::CanLoad		( const filesystem::Path& fileName )
 	return false;
 }
 
+// ================================ //
+//
+FbxScene*							FBXLoader::LoadFbxScene		( const filesystem::Path& fileName )
+{
+	FbxImporter* FbxImporter = FbxImporter::Create( fbx_manager, "" );
+	m_filePath = fileName;
+
+	if( !FbxImporter->Initialize( m_filePath.String().c_str(), -1, fbx_manager->GetIOSettings() ) )
+	{
+		auto& status = FbxImporter->GetStatus();
+		throw std::runtime_error( status.GetErrorString() );
+	}
+
+	FbxScene* scene = FbxScene::Create( fbx_manager, "Scene" );
+	FbxImporter->Import( scene );
+	FbxImporter->Destroy();
+
+	// Triangulate scene before loading.
+	FbxGeometryConverter triangulator( fbx_manager );
+	triangulator.Triangulate( scene, true );
+
+	return scene;
+}
 
 /**@brief Process single node.*/
 Nullable< FbxMeshCollection >		FBXLoader::ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes )
@@ -194,7 +234,7 @@ Nullable< FbxMeshCollection >		FBXLoader::ProcessNode		( FbxNode* node, Nullable
 
 
 /**@brief Process single mesh.*/
-Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TemporaryMeshInit >& mesh, SkeletonPtr skeleton )
+Nullable< TempShellMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TempShellMeshInit >& mesh, SkeletonPtr skeleton )
 {
 	ReturnIfInvalid( mesh );
 
@@ -202,20 +242,8 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 	FbxMesh* fbxMesh = nodeData.Mesh;
 	uint32 ctrlPointsOffset = (uint32)mesh.Value.Verticies.size();
 
-	// ================================ //
-	// Build index buffer
 	unsigned int polygonsCount = fbxMesh->GetPolygonCount();
 
-	std::vector< Index32 > indicies;		indicies.reserve( 3 * polygonsCount );
-
-	for( Size i = 0; i < polygonsCount; ++i )
-	{
-		for( int vertexIdx = 0; vertexIdx < 3; ++vertexIdx )
-		{
-			Index32 controlPointIdx = (Index32)fbxMesh->GetPolygonVertex( (int)i, vertexIdx );
-			indicies.push_back( controlPointIdx + ctrlPointsOffset );
-		}
-	}
 
 	// ================================ //
 	// Build vertex buffer
@@ -276,10 +304,7 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 			ShellMeshVertex curVertex = controlPoints[ controlPointIdx ];
 
 			// Find vertex normal and uvs coord.
-			FbxVector4 fbxNormal;
-			fbxMesh->GetPolygonVertexNormal( polygonCounter, vertexIdx, fbxNormal );
-
-			curVertex.Normal = Get( fbxNormal );
+			curVertex.Normal = GetVertexNormal( fbxMesh, polygonCounter, vertexIdx );
 
 			verticies.push_back( curVertex );
 
@@ -302,7 +327,62 @@ Nullable< TemporaryMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 
 // ================================ //
 //
-void								FBXLoader::Scale					( Nullable< TemporaryMeshInit >& mesh )
+Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh )
+{
+	ReturnIfInvalid( mesh );
+
+	FbxNode* fbxNode = nodeData.Node;
+	FbxMesh* fbxMesh = nodeData.Mesh;
+	uint32 ctrlPointsOffset = (uint32)mesh.Value.Verticies.size();
+
+	auto fbxControlPoints = fbxMesh->GetControlPoints();
+
+	unsigned int polygonsCount = fbxMesh->GetPolygonCount();
+
+	unsigned int vertexCounter = 0;
+	unsigned int polygonCounter = 0;
+
+	std::vector< TexturedVertex >			verticies;		verticies.reserve( 3 * polygonsCount );
+
+	// Get UV set name at index 0. We assume that there's only one UV set, or the first one is this that we want.
+    FbxStringList lUVSetNameList;
+    fbxMesh->GetUVSetNames( lUVSetNameList );
+	const char* lUVSetName = lUVSetNameList.GetStringAt( 0 );
+
+	// Create vertex buffer.
+	while( polygonCounter < polygonsCount )
+	{
+		for( int vertexIdx = 0; vertexIdx < 3; ++vertexIdx )
+		{
+			TexturedVertex curVertex;
+			Index32 controlPointIdx = fbxMesh->GetPolygonVertex( polygonCounter, vertexIdx );
+			
+			curVertex.Position = Get( fbxControlPoints[ controlPointIdx ] );
+			curVertex.Normal = GetVertexNormal( fbxMesh, polygonCounter, vertexIdx );
+			curVertex.UV = GetVertexUV( fbxMesh, polygonCounter, vertexIdx, lUVSetName );
+
+			verticies.push_back( curVertex );
+
+			++vertexCounter;		//zliczamy wierzcho³ki
+		}
+
+		polygonCounter++;
+	}
+
+	auto newIndicies = sw::geometrics::Converter::MakeIndexed< TexturedVertex, Index32 >( verticies, mesh.Value.Verticies );
+
+	// Verticies in FBX file have transformations which we must apply.
+	// We don't have to preserve transformation matrix for each segment with this approach.
+	TransformVerticies( mesh.Value.Verticies, ctrlPointsOffset, nodeData.Transformation );
+
+	mesh.Value.Indicies.push_back( std::move( newIndicies ) );
+
+	return std::move( mesh );
+}
+
+// ================================ //
+//
+void								FBXLoader::Scale					( Nullable< TempShellMeshInit >& mesh )
 {
 	if( mesh.IsValid )
 	{
@@ -341,7 +421,7 @@ void								FBXLoader::Scale					( Nullable< TemporaryMeshInit >& mesh )
 // ================================ //
 /// Weights were clamped if number of joints influencing one vertex was greater then 4.
 /// We must scale them, so they sum will be equal to 1.0.
-void								FBXLoader::RepairWeights			( Nullable< TemporaryMeshInit >& mesh )
+void								FBXLoader::RepairWeights			( Nullable< TempShellMeshInit >& mesh )
 {
 	if( mesh.IsValid )
 	{
@@ -474,31 +554,33 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 	}
 }
 
-// ================================ //
-//
-void								FBXLoader::TransformVerticies		( std::vector< vr::ShellMeshVertex >& verticies, uint32 offset, const DirectX::XMFLOAT4X4& matrix )
-{
-	XMMATRIX transform = XMLoadFloat4x4( &matrix );
-
-	for( uint32 i = offset; i < verticies.size(); ++i )
-	{
-		auto& vertex = verticies[ i ];
-
-		XMVECTOR position = XMLoadFloat3( &vertex.Position );
-		position = XMVector3Transform( position, transform );
-		XMStoreFloat3( &vertex.Position, position );
-
-		XMVECTOR normal = XMLoadFloat3( &vertex.Normal );
-		normal = XMVector3TransformNormal( normal, transform );
-		XMStoreFloat3( &vertex.Normal, normal );
-	}
-}
 
 
 //====================================================================================//
 //			Helpers	
 //====================================================================================//
 
+// ================================ //
+//
+DirectX::XMFLOAT3		FBXLoader::GetVertexNormal		( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx )
+{
+	FbxVector4 fbxNormal;
+	mesh->GetPolygonVertexNormal( polygonCounter, vertexIdx, fbxNormal );
+
+	return Get( fbxNormal );
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT2		FBXLoader::GetVertexUV			( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx, const char* setName )
+{
+	// Find vertex uv coordinates.
+	FbxVector2 uv;
+	bool unmapped;
+	mesh->GetPolygonVertexUV( polygonCounter, vertexIdx, setName, uv, unmapped );
+
+	return Get( uv );
+}
 
 // ================================ //
 //
@@ -508,6 +590,16 @@ DirectX::XMFLOAT3	Get( const fbxsdk::FbxVector4& vector )
 	result.x = (float)vector.mData[ 0 ];
 	result.y = (float)vector.mData[ 1 ];
 	result.z = (float)vector.mData[ 2 ];
+	return result;
+}
+
+// ================================ //
+//
+DirectX::XMFLOAT2	Get( const fbxsdk::FbxVector2& vector )
+{
+	DirectX::XMFLOAT2 result;
+	result.x = (float)vector.mData[ 0 ];
+	result.y = (float)vector.mData[ 1 ];
 	return result;
 }
 

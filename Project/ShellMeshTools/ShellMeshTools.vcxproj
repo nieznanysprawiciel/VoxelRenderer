@@ -43,6 +43,7 @@
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\DXMathOperator.h" />
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMesh.h" />
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMeshVertex.h" />
+    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\TexturedVertex.h" />
     <ClInclude Include="..\..\Code\ShellMeshTools\stdafx.h" />
     <ClInclude Include="..\..\Code\ShellMeshTools\targetver.h" />
   </ItemGroup>
