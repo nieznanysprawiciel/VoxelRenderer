@@ -13,6 +13,9 @@
     <Filter Include="PrecompiledHeader">
       <UniqueIdentifier>{0d07ffa2-9e8e-4f01-aba0-14d618c6bae6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ShellMeshTools\Loader">
+      <UniqueIdentifier>{a073e014-9504-455b-b4a2-7dacf7ce207a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\ShellMeshTools\stdafx.cpp">
@@ -24,11 +27,11 @@
     <ClCompile Include="..\..\Code\ShellMeshTools\Animation\Skeleton.cpp">
       <Filter>ShellMeshTools\Animation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\ShellMeshTools\ShellMesh\FBXLoader.cpp">
-      <Filter>ShellMeshTools\ShellMesh</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMesh.cpp">
       <Filter>ShellMeshTools\ShellMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Code\ShellMeshTools\Loader\FBXLoader.cpp">
+      <Filter>ShellMeshTools\Loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,25 +50,25 @@
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\DXMathOperator.h">
       <Filter>ShellMeshTools\ShellMesh</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\FbxHelperStructs.h">
-      <Filter>ShellMeshTools\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\FBXLoader.h">
-      <Filter>ShellMeshTools\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ILoader.h">
-      <Filter>ShellMeshTools\ShellMesh</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMesh.h">
       <Filter>ShellMeshTools\ShellMesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Code\ShellMeshTools\ShellMesh\ShellMeshVertex.h">
       <Filter>ShellMeshTools\ShellMesh</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\FbxHelperStructs.h">
+      <Filter>ShellMeshTools\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\FBXLoader.h">
+      <Filter>ShellMeshTools\Loader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\ShellMeshTools\Loader\ILoader.h">
+      <Filter>ShellMeshTools\Loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Code\ShellMeshTools\ShellMesh\FbxLoader.inl">
-      <Filter>ShellMeshTools\ShellMesh</Filter>
+    <None Include="..\..\Code\ShellMeshTools\Loader\FbxLoader.inl">
+      <Filter>ShellMeshTools\Loader</Filter>
     </None>
   </ItemGroup>
 </Project>

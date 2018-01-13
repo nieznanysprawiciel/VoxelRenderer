@@ -1,7 +1,7 @@
 #include "ShellMeshTools/stdafx.h"
 #include "Animation.h"
 
-#include "ShellMeshTools/ShellMesh/FbxHelperStructs.h"
+#include "ShellMeshTools/Loader/FbxHelperStructs.h"
 
 
 namespace vr

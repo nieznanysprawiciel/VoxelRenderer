@@ -6,8 +6,8 @@
 #include "fbxsdk.h"
 #include "FbxHelperStructs.h"
 
-#include "ShellMeshVertex.h"
-#include "ShellMesh.h"
+#include "ShellMeshTools/ShellMesh/ShellMeshVertex.h"
+#include "ShellMeshTools/ShellMesh/ShellMesh.h"
 #include "ShellMeshTools/Animation/Animation.h"
 #include "ShellMeshTools/Animation/Skeleton.h"
 

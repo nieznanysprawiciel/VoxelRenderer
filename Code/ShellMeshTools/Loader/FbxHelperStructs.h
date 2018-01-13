@@ -1,7 +1,7 @@
 #pragma once
 
 #include "swGraphicAPI/Resources/MeshResources.h"
-#include "ShellMeshVertex.h"
+#include "ShellMeshTools/ShellMesh/ShellMeshVertex.h"
 #include "ShellMeshTools/Animation/Animation.h"
 
 #include "fbxsdk.h"

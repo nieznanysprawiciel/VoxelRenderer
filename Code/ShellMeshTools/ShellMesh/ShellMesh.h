@@ -8,7 +8,7 @@
 
 #include "VoxelRenderer/SVO/Octree.h"
 
-#include "ShellMeshTools/ShellMesh/FbxHelperStructs.h"
+#include "ShellMeshTools/Loader/FbxHelperStructs.h"
 
 
 namespace vr
