@@ -8,8 +8,8 @@
 
 #include "ShellMeshVertex.h"
 #include "ShellMesh.h"
-#include "VoxelRenderer/Animation/Animation.h"
-#include "VoxelRenderer/Animation/Skeleton.h"
+#include "ShellMeshTools/Animation/Animation.h"
+#include "ShellMeshTools/Animation/Skeleton.h"
 
 #include "swCommonLib/System/Path.h"
 #include "swCommonLib/Common/Nullable.h"

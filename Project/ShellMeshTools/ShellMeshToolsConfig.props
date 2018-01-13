@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\Paths.props" />
+  <Import Project="IncludeFBX_SDK.props" />
+  <Import Project="..\..\Code\swGUI\ProjectDir\Visual2015\LinkSleepingWombatGUI.props" />
+  
+  <PropertyGroup Label="UserMacros">
+    <ShellMeshToolsName>ShellMeshTools</ShellMeshToolsName>
+    <ShellMeshToolsLibDir>$(LibDir)$(ShellMeshToolsName)\$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</ShellMeshToolsLibDir>
+    <ShellMeshToolsSourceDir>$(SourceDir)$(ShellMeshToolsName)\</ShellMeshToolsSourceDir>
+    <ShellMeshToolsFileName>$(ShellMeshToolsName)</ShellMeshToolsFileName>
+    <ShellMeshToolsBuildDir>$(BuildDir)$(ShellMeshToolsName)$(Configuration)_$(PlatformShortName)_$(PlatformToolset)\</ShellMeshToolsBuildDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <IntDir>$(ShellMeshToolsBuildDir)</IntDir>
+    <TargetName>$(ShellMeshToolsFileName)</TargetName>
+    <OutDir>$(ShellMeshToolsLibDir)</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;RTTR_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

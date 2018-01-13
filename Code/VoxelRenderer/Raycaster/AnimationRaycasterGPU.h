@@ -5,7 +5,7 @@
 
 #include "VoxelRenderer/Application/Presentation/BlitEffect.h"
 
-#include "VoxelRenderer/Animation/Animation.h"
+#include "ShellMeshTools/Animation/Animation.h"
 
 
 namespace vr

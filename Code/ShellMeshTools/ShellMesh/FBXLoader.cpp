@@ -1,3 +1,4 @@
+#include "ShellMeshTools/stdafx.h"
 #include "FBXLoader.h"
 #include "FbxLoader.inl"
 

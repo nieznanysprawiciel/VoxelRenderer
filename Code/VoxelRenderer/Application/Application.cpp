@@ -12,7 +12,7 @@
 
 #include "VoxelRenderer/Actors/CameraController.h"
 
-#include "VoxelRenderer/ShellMesh/FBXLoader.h"
+#include "ShellMeshTools/ShellMesh/FBXLoader.h"
 
 
 #include <iostream>

@@ -1,3 +1,4 @@
+#include "ShellMeshTools/stdafx.h"
 #include "ShellMesh.h"
 
 #include "swGraphicAPI/Resources/ResourcesFactory.h"

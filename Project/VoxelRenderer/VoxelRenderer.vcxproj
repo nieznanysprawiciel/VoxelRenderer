@@ -167,8 +167,6 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\CameraController.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Actors\StaticActor.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Animation.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Application.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Config.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.cpp" />
@@ -185,8 +183,6 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterCPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.cpp" />
-    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.cpp" />
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,8 +191,6 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\CameraController.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\DynamicActor.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Actors\StaticActor.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Animation.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Skeleton.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Application.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Config.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Light\LightConstants.h" />
@@ -215,11 +209,6 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\Structures\ShaderCameraBuffer.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\DXMathOperator.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FbxHelperStructs.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.h" />
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMeshVertex.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\Octree.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\VoxelAttributes.h" />
     <ClInclude Include="..\..\Code\VoxelRenderer\SVO\OctreeNode.h" />
@@ -246,6 +235,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Code\swGUI\ProjectDir\Visual2015\Win32NativeGUI\Win32NativeGUI.vcxproj">
       <Project>{267292a0-c262-43e7-afb1-1f63439fd465}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ShellMeshTools\ShellMeshTools.vcxproj">
+      <Project>{2efecbbb-dd42-4b38-a65a-640eaf4de9b6}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -547,7 +539,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl" />
     <None Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\AnimHelpers.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

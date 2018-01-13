@@ -2,7 +2,7 @@
 
 #include "swGraphicAPI/Resources/MeshResources.h"
 #include "ShellMeshVertex.h"
-#include "VoxelRenderer/Animation/Animation.h"
+#include "ShellMeshTools/Animation/Animation.h"
 
 #include "fbxsdk.h"
 

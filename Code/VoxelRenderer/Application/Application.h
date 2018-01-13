@@ -6,7 +6,7 @@
 
 #include "VoxelRenderer/Raycaster/IRaycaster.h"
 #include "VoxelRenderer/Actors/CameraActor.h"
-#include "VoxelRenderer/ShellMesh/ShellMesh.h"
+#include "ShellMeshTools/ShellMesh/ShellMesh.h"
 
 #include "VoxelRenderer/Application/Time/TimeManager.h"
 #include "VoxelRenderer/Application/Light/LightModule.h"

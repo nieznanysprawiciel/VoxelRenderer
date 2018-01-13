@@ -1,14 +1,14 @@
 #pragma once
 
-#include "VoxelRenderer/Animation/Skeleton.h"
-#include "VoxelRenderer/Animation/Animation.h"
+#include "ShellMeshTools/Animation/Skeleton.h"
+#include "ShellMeshTools/Animation/Animation.h"
 
 #include "swGraphicAPI/Resources/MeshResources.h"
 #include "swGraphicAPI/ResourceManager/ResourceManager.h"
 
 #include "VoxelRenderer/SVO/Octree.h"
 
-#include "VoxelRenderer/ShellMesh/FbxHelperStructs.h"
+#include "ShellMeshTools/ShellMesh/FbxHelperStructs.h"
 
 
 namespace vr

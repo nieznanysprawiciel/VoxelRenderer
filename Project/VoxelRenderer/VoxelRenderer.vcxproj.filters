@@ -25,12 +25,6 @@
     <Filter Include="Shaders\RaycasterGPU">
       <UniqueIdentifier>{7a7d7cf6-6901-4085-aac7-faf02add4fec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VoxelRenderer\ShellMesh">
-      <UniqueIdentifier>{ca0cc299-8513-4168-ad56-16ef1b0e2454}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="VoxelRenderer\Animation">
-      <UniqueIdentifier>{95fd0ca1-487d-4228-a6e6-aac68ac68f94}</UniqueIdentifier>
-    </Filter>
     <Filter Include="VoxelRenderer\Raycaster\Structures">
       <UniqueIdentifier>{1338b9f9-1243-4be5-b7a2-8daf8a831a21}</UniqueIdentifier>
     </Filter>
@@ -105,20 +99,8 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\NormalsRaycaster.cpp">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.cpp">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.cpp">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Skeleton.cpp">
-      <Filter>VoxelRenderer\Animation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.cpp">
       <Filter>VoxelRenderer\Raycaster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Code\VoxelRenderer\Animation\Animation.cpp">
-      <Filter>VoxelRenderer\Animation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Code\VoxelRenderer\Application\Light\LightModule.cpp">
       <Filter>VoxelRenderer\Application\Light</Filter>
@@ -194,24 +176,6 @@
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\RaycasterGPU.h">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FbxHelperStructs.h">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMeshVertex.h">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\FBXLoader.h">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Skeleton.h">
-      <Filter>VoxelRenderer\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\ShellMesh.h">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\Animation\Animation.h">
-      <Filter>VoxelRenderer\Animation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Raycaster\ShellMeshRenderer.h">
       <Filter>VoxelRenderer\Raycaster</Filter>
     </ClInclude>
@@ -232,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelRenderer\Application\Time\FPSCounter.h">
       <Filter>VoxelRenderer\Application\Time</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Code\VoxelRenderer\ShellMesh\DXMathOperator.h">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -327,9 +288,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Code\VoxelRenderer\ShellMesh\FbxLoader.inl">
-      <Filter>VoxelRenderer\ShellMesh</Filter>
-    </None>
     <None Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\AnimHelpers.hlsli">
       <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </None>

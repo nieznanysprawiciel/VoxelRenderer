@@ -3,7 +3,7 @@
 
 #include "swCommonLib/Common/TypesDefinitions.h"
 
-#include "VoxelRenderer/Animation/Skeleton.h"
+#include "ShellMeshTools/Animation/Skeleton.h"
 
 #include <vector>
 #include <DirectXMath.h>

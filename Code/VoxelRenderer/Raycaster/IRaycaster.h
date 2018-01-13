@@ -14,7 +14,7 @@
 #include "swInputLibrary/InputCore/KeyboardState.h"
 #include "swInputLibrary/InputCore/MouseState.h"
 
-#include "VoxelRenderer/ShellMesh/ShellMesh.h"
+#include "ShellMeshTools/ShellMesh/ShellMesh.h"
 
 
 

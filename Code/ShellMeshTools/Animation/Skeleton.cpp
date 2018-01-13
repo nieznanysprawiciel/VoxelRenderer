@@ -1,3 +1,4 @@
+#include "ShellMeshTools/stdafx.h"
 #include "Skeleton.h"
 
 
