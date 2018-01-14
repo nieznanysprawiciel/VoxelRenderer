@@ -14,6 +14,9 @@ private:
 	filesystem::Path		m_texturePath;
 	SamplerType				m_samplerType;
 
+	bool			m_flipU;
+	bool			m_flipV;
+
 protected:
 public:
 	explicit		VoxelConverter		();
@@ -30,6 +33,7 @@ public:
 	void			AddTexture			( const filesystem::Path& texPath );
 
 	void			SetSampler			( SamplerType type ) { m_samplerType = type; }
+	void			FlipUV				( bool u, bool v ) { m_flipU = u; m_flipV = v; }
 };
 
 

@@ -23,6 +23,9 @@ int main( int argc, char** argv )
 		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output VoxelRenderer file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > textureFileArg( "t", "texture", "Input texture to use on octree", false, "", "file path" );
 		TCLAP::ValueArg< std::string > textureFilteringArg( "f", "filter", "Filter used to texture octree", false, "Bilinear", "Filter type string" );
+		
+		TCLAP::SwitchArg flipUArg( "u", "flipU", "Flip U coordinate of texture", false );
+		TCLAP::SwitchArg flipVArg( "v", "flipV", "Flip V coordinate of texture", false );
 
 		cmd.add( inputFileArg );
 		cmd.add( outputFileArg );
@@ -64,6 +67,7 @@ int main( int argc, char** argv )
 			std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
 
 			converter.AddTexture( textureFile );
+			converter.FlipUV( flipUArg.getValue(), flipVArg.getValue() );
 
 			std::string filterName = textureFilteringArg.getValue();
 			

@@ -20,10 +20,14 @@ private:
 
 	OctreeAccessor	m_octree;
 
+	bool			m_flipU;
+	bool			m_flipV;
+
 protected:
 public:
-
+	
 	explicit		Texturing		( OctreeAccessor octree );
+	explicit		Texturing		( OctreeAccessor octree, bool flipU, bool flipV );
 					~Texturing		() = default;
 
 

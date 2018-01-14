@@ -16,8 +16,8 @@ TextureAccessor::TextureAccessor( WrappingMode modeX, WrappingMode modeY )
 	,	m_height( 0 )
 	,	m_width( 0 )
 	,	m_channels( 0 )
-	,	m_flipU( true )
-	,	m_flipV( false )
+	,	m_flipU( false )
+	,	m_flipV( true )
 {}
 
 // ================================ //
@@ -35,8 +35,9 @@ bool			TextureAccessor::LoadImage		( const filesystem::Path& filePath )
 	if( !filePath.Exists() )
 		return false;
 
-	m_textureData = stbi_load( filePath.String().c_str(), &m_width, &m_height, &m_channels, 0 );
-	
+	m_textureData = stbi_load( filePath.String().c_str(), &m_width, &m_height, &m_channels, 4 );
+	m_channels = 4;
+
 	if( !m_textureData )
 		return false;
 

@@ -4,6 +4,11 @@ import sys
 import shutil
 
 
+## Configuration
+cleanTmpFiles = False
+recopyConverters = True
+
+
 def GetConvertersPath():
     scriptPath = sys.argv[ 0 ]
     return os.path.dirname( scriptPath )
@@ -177,8 +182,6 @@ def MakeConvertsion():
     texturePath = None
     filterType = "Bilinear"
     gridSize = 2048
-    cleanTmpFiles = True
-    recopyConverters = True
     
     
     if recopyConverters:

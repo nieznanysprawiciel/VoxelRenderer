@@ -39,6 +39,16 @@ Texturing::Texturing	( OctreeAccessor octree )
 
 // ================================ //
 //
+Texturing::Texturing	( OctreeAccessor octree, bool flipU, bool flipV )
+	:	m_octree( octree )
+	,	m_wrappingModeX( WrappingMode::Mirror )
+	,	m_wrappingModeY( WrappingMode::Mirror )
+	,	m_flipU( flipU )
+	,	m_flipV( flipV )
+{}
+
+// ================================ //
+//
 bool		Texturing::TextureOctree		( const filesystem::Path& filePath, SamplerType samplingType )
 {
 	if( !m_octree.IsValid() )
