@@ -1,22 +1,46 @@
 import subprocess
 import os
 import sys
-
+import shutil
 
 
 def GetConvertersPath():
     scriptPath = sys.argv[ 0 ]
     return os.path.dirname( scriptPath )
 
+def GetOOCBuildDir():
+    convertersPath = GetConvertersPath()
+    return os.path.join( convertersPath, "../../", "External/ooc_svo_builder/build/" )
+    
+def GetVoxelConverterBuildDir():
+    convertersPath = GetConvertersPath()
+    return os.path.join( convertersPath, "../../", "LibDir/VoxelConverter/Release_x64_v140/" )
+    
+def GetFbx2ObjConverterBuildDir():
+    convertersPath = GetConvertersPath()
+    return os.path.join( convertersPath, "../../", "LibDir/FbxToObjConverter/Release_x64_v140/" )
+    
+    
+def CopyExecutableIfNotExist( executableName, buildDir ):
+    
+    convertersDir = GetConvertersPath()
+    converterPath = os.path.join( convertersDir, executableName )
 
+    if not os.path.isfile( converterPath ):
+        
+        converterBuildFileName = buildDir + executableName
+        shutil.copy2( converterBuildFileName, convertersDir )
+    
+        print executableName + " doesn't exist under path [" + converterPath + "]. Coping from [" + converterBuildFileName + "]."
+        #return False
+    
 def CallTriConverter( modelFilePath ):
     
     convertersDir = GetConvertersPath()
-    triConverterPath = os.path.join( convertersDir, "tri_convert.exe" )
+    executableName = "tri_convert.exe"
+    triConverterPath = os.path.join( convertersDir, executableName )
     
-    if not os.path.isfile( triConverterPath ):
-        print "tri_converter.exe doesn't exist under path [" + triConverterPath + "]"
-        return False
+    CopyExecutableIfNotExist( executableName, GetOOCBuildDir() )
     
     print "Calling " + triConverterPath + " with arguments: " + "-f" + modelFilePath
     
@@ -35,11 +59,10 @@ def ComputeTriFile( inputModelFile ):
 def CallSVOBuilder( triFilePath, gridSize ):
     
     convertersDir = GetConvertersPath()
-    svoBuilderPath = os.path.join( convertersDir, "svo_builder.exe" )
+    executableName = "svo_builder.exe"
+    svoBuilderPath = os.path.join( convertersDir, executableName )
     
-    if not os.path.isfile( svoBuilderPath ):
-        print "svo_builder.exe doesn't exist under path [" + svoBuilderPath + "]"
-        return False
+    CopyExecutableIfNotExist( executableName, GetOOCBuildDir() )
         
     arguments = [ svoBuilderPath, "-f", triFilePath ]
     
@@ -59,14 +82,14 @@ def CallSVOBuilder( triFilePath, gridSize ):
 def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
 
     convertersDir = GetConvertersPath()
-    voxelConverterPath = os.path.join( convertersDir, "VoxelConverter.exe" )
+    executableName = "VoxelConverter.exe"
+    voxelConverterPath = os.path.join( convertersDir, executableName )
     
-    if not os.path.isfile( voxelConverterPath ):
-        print "svo_builder.exe doesn't exist under path [" + voxelConverterPath + "]"
-        return False
+    CopyExecutableIfNotExist( executableName, GetVoxelConverterBuildDir() )
+
+    arguments = [ voxelConverterPath ]
     
-    arguments = [ voxelConverterPath, "-i", octreeFilePath ]
-    
+    arguments.extend( [ "-i", octreeFilePath ] )
     arguments.extend( [ "-o", outputPath ] )
     
     if texturePath is not None:
@@ -113,11 +136,12 @@ def CleanTemporaries( triFile, octreeFile):
 def CallFbx2ObjConverter( inputFBX, outputObj ):
     
     convertersDir = GetConvertersPath()
-    Fbx2ObjConverterPath = os.path.join( convertersDir, "FbxToObjConverter.exe" )
+    executableName = "FbxToObjConverter.exe"
+    Fbx2ObjConverterPath = os.path.join( convertersDir, executableName )
     
-    if not os.path.isfile( Fbx2ObjConverterPath ):
-        print "FbxToObjConverter.exe doesn't exist under path [" + Fbx2ObjConverterPath + "]"
-        return False
+    CopyExecutableIfNotExist( executableName, GetFbx2ObjConverterBuildDir() )
+    CopyExecutableIfNotExist( "libfbxsdk.dll", GetFbx2ObjConverterBuildDir() )
+    CopyExecutableIfNotExist( "Reflection.dll", GetFbx2ObjConverterBuildDir() )
     
     arguments = [ Fbx2ObjConverterPath ]
     
@@ -144,7 +168,7 @@ def MakeConvertsion():
     texturePath = None
     filterType = "Bilinear"
     gridSize = 2048
-    clean = True
+    cleanTmpFiles = True
     
     if len( sys.argv ) > 2:
         outputPath = sys.argv[ 2 ]
@@ -167,7 +191,7 @@ def MakeConvertsion():
     CallSVOBuilder( ComputeTriFile( modelToConvert ), gridSize )
     CallVoxelConverter( ComputeOctreeFile( modelToConvert, gridSize ), outputPath, texturePath, filterType )
     
-    if clean:
+    if cleanTmpFiles:
         CleanTemporaries( ComputeTriFile( modelToConvert ), ComputeOctreeFile( modelToConvert, gridSize ) )
     
     
