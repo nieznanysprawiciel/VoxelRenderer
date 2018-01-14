@@ -32,6 +32,9 @@ int main( int argc, char** argv )
 		cmd.add( textureFileArg );
 		cmd.add( textureFilteringArg );
 
+		cmd.add( flipUArg );
+		cmd.add( flipVArg );
+
 		cmd.parse( argc, argv );
 
 		filesystem::Path inputFile = inputFileArg.getValue();
