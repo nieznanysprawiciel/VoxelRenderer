@@ -65,19 +65,7 @@ glm::vec4		TextureAccessor::SampleTexel			( glm::ivec2 texelPos ) const
 	PtrOffset offset = m_width * texelPos.y * m_channels + texelPos.x * m_channels;
 	uint8* texelPtr = m_textureData + offset;
 
-	// Zero color vector.
-	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
-
-	// This dispatches texel written in little endian.
-	int channelOffset = 0;
-	for( int channel = m_channels - 1; channel >= 0; --channel, channelOffset++ )
-	{
-		auto texelChannelPtr = texelPtr + channelOffset;
-		uint8 sample = *texelChannelPtr;
-		color[ channel ] = (float)sample / 255.0f;
-	}
-
-	return color;
+	return DispatchLittleEndian( texelPtr );
 }
 
 
@@ -103,6 +91,44 @@ float			TextureAccessor::ApplyWrapping		( WrappingMode mode, float coord ) const
 	}
 
 	return 0.0f;
+}
+
+// ================================ //
+//
+glm::vec4		TextureAccessor::DispatchLittleEndian	( uint8* texelPtr ) const
+{
+	// Zero color vector.
+	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
+
+	// This dispatches texel written in little endian.
+	int channelOffset = 0;
+	for( int channel = m_channels - 1; channel >= 0; --channel, channelOffset++ )
+	{
+		auto texelChannelPtr = texelPtr + channelOffset;
+		uint8 sample = *texelChannelPtr;
+		color[ channel ] = (float)sample / 255.0f;
+	}
+
+	return color;
+}
+
+// ================================ //
+//
+glm::vec4		TextureAccessor::DispatchBigEndian		( uint8* texelPtr ) const
+{
+	// Zero color vector.
+	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
+
+	// This dispatches texel written in little endian.
+	int channelOffset = 0;
+	for( int channel = 0; channel < m_channels; ++channel, channelOffset++ )
+	{
+		auto texelChannelPtr = texelPtr + channelOffset;
+		uint8 sample = *texelChannelPtr;
+		color[ channel ] = (float)sample / 255.0f;
+	}
+
+	return color;
 }
 
 

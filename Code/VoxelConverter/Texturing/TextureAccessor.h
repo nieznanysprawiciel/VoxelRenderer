@@ -38,6 +38,9 @@ public:
 private:
 
 	float			ApplyWrapping		( WrappingMode mode, float coord ) const;
+
+	glm::vec4		DispatchLittleEndian	( uint8* texelPtr ) const;
+	glm::vec4		DispatchBigEndian		( uint8* texelPtr ) const;
 };
 
 
