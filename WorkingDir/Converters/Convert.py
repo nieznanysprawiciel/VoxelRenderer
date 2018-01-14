@@ -110,6 +110,28 @@ def CleanTemporaries( triFile, octreeFile):
     os.remove( octreeFile + "nodes" )
     
     
+def CallFbx2ObjConverter( inputFBX, outputObj ):
+    
+    convertersDir = GetConvertersPath()
+    Fbx2ObjConverterPath = os.path.join( convertersDir, "FbxToObjConverter.exe" )
+    
+    if not os.path.isfile( Fbx2ObjConverterPath ):
+        print "FbxToObjConverter.exe doesn't exist under path [" + Fbx2ObjConverterPath + "]"
+        return False
+    
+    arguments = [ Fbx2ObjConverterPath ]
+    
+    arguments.extend( [ "-i", inputFBX ] )
+    arguments.extend( [ "-o", outputObj ] )
+    
+    print "Calling " + Fbx2ObjConverterPath + " with arguments: " + str( arguments )
+    
+    result = subprocess.call( arguments )
+
+    if result > 0:
+        return False
+    return True
+    
     
 def MakeConvertsion():
     
@@ -122,18 +144,31 @@ def MakeConvertsion():
     texturePath = None
     filterType = "Bilinear"
     gridSize = 2048
+    clean = True
     
     if len( sys.argv ) > 2:
         outputPath = sys.argv[ 2 ]
     
     if len( sys.argv ) > 3:
         texturePath = sys.argv[ 3 ]
+        
+    modelFileWithoutExt, modelExt = os.path.splitext( modelToConvert )
+        
+    # If file is in FBX format, convert it to .obj
+    if modelExt.lower() == ".fbx":
+        
+        outputFile = modelFileWithoutExt + ".obj"
+        CallFbx2ObjConverter( modelToConvert, outputFile )
+        
+        modelToConvert = outputFile
+        
     
     CallTriConverter( modelToConvert )
     CallSVOBuilder( ComputeTriFile( modelToConvert ), gridSize )
     CallVoxelConverter( ComputeOctreeFile( modelToConvert, gridSize ), outputPath, texturePath, filterType )
     
-    CleanTemporaries( ComputeTriFile( modelToConvert ), ComputeOctreeFile( modelToConvert, gridSize ) )
+    if clean:
+        CleanTemporaries( ComputeTriFile( modelToConvert ), ComputeOctreeFile( modelToConvert, gridSize ) )
     
     
 MakeConvertsion()
