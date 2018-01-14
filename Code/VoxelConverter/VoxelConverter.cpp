@@ -33,6 +33,20 @@ void				VoxelConverter::AddTexture	( const filesystem::Path& texPath )
 	m_texturePath = texPath;
 }
 
+// ================================ //
+//
+bool				VoxelConverter::SetSampler	( const std::string& samplerName )
+{
+	if( samplerName == "Bilinear" )
+		SetSampler( SamplerType::Bilinear );
+	else if( samplerName == "Point" )
+		SetSampler( SamplerType::Point );
+	else
+		return false;
+
+	return true;
+}
+
 
 // ================================ //
 //

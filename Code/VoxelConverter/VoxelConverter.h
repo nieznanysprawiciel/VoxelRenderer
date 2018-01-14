@@ -32,6 +32,7 @@ public:
 	texture index for every voxel.*/
 	void			AddTexture			( const filesystem::Path& texPath );
 
+	bool			SetSampler			( const std::string& samplerName );
 	void			SetSampler			( SamplerType type ) { m_samplerType = type; }
 	void			FlipUV				( bool u, bool v ) { m_flipU = u; m_flipV = v; }
 };

@@ -70,12 +70,8 @@ int main( int argc, char** argv )
 			converter.FlipUV( flipUArg.getValue(), flipVArg.getValue() );
 
 			std::string filterName = textureFilteringArg.getValue();
-			
-			if( filterName == "Bilinear" )
-				converter.SetSampler( SamplerType::Bilinear );
-			else if( filterName == "Point" )
-				converter.SetSampler( SamplerType::Point );
-			else
+
+			if( !converter.SetSampler( filterName ) )
 				std::cout << "Unknown filter: [" << filterName << "]. Using default instead." << std::endl;
 		}
 
