@@ -156,6 +156,15 @@ def CallFbx2ObjConverter( inputFBX, outputObj ):
         return False
     return True
     
+def RemoveConverters():
+
+    convertersDir = GetConvertersPath()
+    os.remove( os.path.join( convertersDir, "FbxToObjConverter.exe" ) )
+    os.remove( os.path.join( convertersDir, "libfbxsdk.dll" ) )
+    os.remove( os.path.join( convertersDir, "Reflection.dll" ) )
+    os.remove( os.path.join( convertersDir, "VoxelConverter.exe" ) )
+    os.remove( os.path.join( convertersDir, "tri_convert.exe" ) )
+    os.remove( os.path.join( convertersDir, "svo_builder.exe" ) )
     
 def MakeConvertsion():
     
@@ -169,6 +178,11 @@ def MakeConvertsion():
     filterType = "Bilinear"
     gridSize = 2048
     cleanTmpFiles = True
+    recopyConverters = True
+    
+    
+    if recopyConverters:
+        RemoveConverters()
     
     if len( sys.argv ) > 2:
         outputPath = sys.argv[ 2 ]
