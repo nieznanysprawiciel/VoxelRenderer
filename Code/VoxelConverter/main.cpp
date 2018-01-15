@@ -22,6 +22,7 @@ int main( int argc, char** argv )
 		TCLAP::ValueArg< std::string > inputFileArg( "i", "input", "Input SVO file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output VoxelRenderer file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > textureFileArg( "t", "texture", "Input texture to use on octree", false, "", "file path" );
+		TCLAP::ValueArg< std::string > matlistFileArg( "m", "materials", "Materials list file (.matlist) to texture octree.", false, "", "file path" );
 		TCLAP::ValueArg< std::string > textureFilteringArg( "f", "filter", "Filter used to texture octree", false, "Bilinear", "Filter type string" );
 		
 		TCLAP::SwitchArg flipUArg( "u", "flipU", "Flip U coordinate of texture", false );
@@ -30,6 +31,7 @@ int main( int argc, char** argv )
 		cmd.add( inputFileArg );
 		cmd.add( outputFileArg );
 		cmd.add( textureFileArg );
+		cmd.add( matlistFileArg );
 		cmd.add( textureFilteringArg );
 
 		cmd.add( flipUArg );
@@ -57,21 +59,36 @@ int main( int argc, char** argv )
 
 		VoxelConverter converter;
 
-		if( textureFileArg.isSet() )
+		if( textureFileArg.isSet() || matlistFileArg.isSet() )
 		{
-			filesystem::Path textureFile = textureFileArg.getValue();
-
-			if( !textureFile.Exists() )
+			if( textureFileArg.isSet() )
 			{
-				std::cout << "Texture Path: [" << textureFile.String() << "] doesn't exist." << std::endl;
-				return 1;
+				filesystem::Path textureFile = textureFileArg.getValue();
+
+				if( !textureFile.Exists() )
+				{
+					std::cout << "Texture Path: [" << textureFile.String() << "] doesn't exist." << std::endl;
+					return 1;
+				}
+
+				converter.AddTexture( textureFile );
+				std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
+			}
+			else if( matlistFileArg.isSet() )
+			{
+				filesystem::Path matlistFile = matlistFileArg.getValue();
+
+				if( !matlistFile.Exists() )
+				{
+					std::cout << "Matlist file path: [" << matlistFile.String() << "] doesn't exist." << std::endl;
+					return 1;
+				}
+
+				converter.LoadMatListFile( matlistFile );
+				std::cout << "Matlist file: [" << matlistFile.String() << "]" << std::endl;
 			}
 
-			std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
-
-			converter.AddTexture( textureFile );
 			converter.FlipUV( flipUArg.getValue(), flipVArg.getValue() );
-
 			std::string filterName = textureFilteringArg.getValue();
 
 			if( !converter.SetSampler( filterName ) )

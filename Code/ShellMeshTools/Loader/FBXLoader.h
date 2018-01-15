@@ -44,8 +44,6 @@ public:
 	Nullable< vr::ShellMeshPtr >	LoadMesh			( ResourceManager* manager, const filesystem::Path& fileName );
 	bool							CanLoad				( const filesystem::Path& fileName );
 
-	bool							ExportObj			( const filesystem::Path& fileName, const TexturedMesh& mesh );
-
 private:
 
 	vr::SkeletonPtr					LoadSkeleton	( FbxNode* rootNode );
@@ -54,9 +52,11 @@ private:
 	vr::AnimationPtr				LoadAnimation	( Nullable< FbxMeshCollection >& nodes, FbxScene* scene, SkeletonPtr skeleton );
 	void							LoadAnimation	( FbxNode* node, FbxScene* scene, TemporaryAnimationInit & animInit, SkeletonPtr skeleton );
 
-	Nullable< FbxMeshCollection >		ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
+	Nullable< FbxMeshCollection >	ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
 	Nullable< TempShellMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TempShellMeshInit >& mesh, SkeletonPtr skeleton );
-	Nullable< TexturedMesh >			ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh );
+	Nullable< TexturedMesh >		ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh );
+
+	std::vector< Material >			ListMaterials	( FbxScene* scene );
 
 	void							Scale			( Nullable< TempShellMeshInit >& mesh );
 	void							RepairWeights	( Nullable< TempShellMeshInit >& mesh );
@@ -71,6 +71,8 @@ private:
 
 	static DirectX::XMFLOAT3		GetVertexNormal		( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx );
 	static DirectX::XMFLOAT2		GetVertexUV			( FbxMesh* mesh, uint32 polygonCounter, uint32 vertexIdx, const char* setName );
+
+	int								ReadMaterialIndex	( FbxMesh* mesh, unsigned int polygonCounter );
 };
 
 

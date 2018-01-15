@@ -8,6 +8,8 @@
 #include "swCommonLib/HierarchicalChunkedFormat/HCF.h"
 #include "swCommonLib/System/Dir.h"
 
+#include <fstream>
+
 
 
 // ================================ //
@@ -30,7 +32,25 @@ bool				VoxelConverter::Convert		( const filesystem::Path& inputFilePath, const 
 //
 void				VoxelConverter::AddTexture	( const filesystem::Path& texPath )
 {
-	m_texturePath = texPath;
+	m_texturesPaths.push_back( texPath );
+}
+
+// ================================ //
+//
+void				VoxelConverter::LoadMatListFile	( const filesystem::Path& matlistPath )
+{
+	std::fstream file( matlistPath.String(), std::fstream::in );
+	if( file.is_open() )
+	{
+		std::string texturePath;
+		while( std::getline( file, texturePath ) )
+		{
+			m_texturesPaths.push_back( texturePath );
+			texturePath.clear();
+		}
+
+		file.close();
+	}
 }
 
 // ================================ //
@@ -47,6 +67,20 @@ bool				VoxelConverter::SetSampler	( const std::string& samplerName )
 	return true;
 }
 
+// ================================ //
+//
+void				VoxelConverter::ApplyTextures	( vr::OctreeBuilder& builder )
+{
+	Size texIdx = 0;
+	for( auto& texture : m_texturesPaths )
+	{
+		if( !texture.String().empty() )
+			builder.TextureOctree( texture, m_samplerType, texIdx, m_flipU, m_flipV );
+
+		texIdx++;
+	}
+}
+
 
 // ================================ //
 //
@@ -59,9 +93,7 @@ vr::OctreePtr		VoxelConverter::Load		( const filesystem::Path& inputFilePath )
 
 	if( builder.ReadOctree( srcOctree ) )
 	{
-		if( !m_texturePath.String().empty() )
-			builder.TextureOctree( m_texturePath, m_samplerType, m_flipU, m_flipV );
-
+		ApplyTextures( builder );
 		return builder.BuildOctree();
 	}
 

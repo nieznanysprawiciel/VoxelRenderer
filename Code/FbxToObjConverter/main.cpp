@@ -42,9 +42,15 @@ int main( int argc, char** argv )
 		bool result = vr::Converter::Convert( inputFile, outputFile );
 
 		if( result )
+		{
 			std::cout << "Conversion succeded." << std::endl;
+			return 0;
+		}
 		else
+		{
 			std::cout << "Conversion failed." << std::endl;
+			return 1;
+		}
 
 	}
 	catch( TCLAP::ArgException &e )

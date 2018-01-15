@@ -31,7 +31,7 @@ public:
 					~Texturing		() = default;
 
 
-	bool			TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType );
+	bool			TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType, Size texIdx );
 };
 
 

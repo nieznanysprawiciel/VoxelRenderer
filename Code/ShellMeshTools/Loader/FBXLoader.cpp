@@ -115,6 +115,8 @@ Nullable< TexturedMesh >			FBXLoader::LoadTexturedMesh		( const filesystem::Path
 
 	Nullable< TexturedMesh > tempMeshInit( NullableInit::Valid );
 
+	tempMeshInit.Value.Materials = ListMaterials( scene );
+
 	for( auto& mesh : meshData.Value.Segments )
 	{
 		tempMeshInit = ProcessMesh( mesh, tempMeshInit );
@@ -176,13 +178,6 @@ bool						FBXLoader::CanLoad		( const filesystem::Path& fileName )
 		if( extension == ext )
 			return true;
 	}
-	return false;
-}
-
-// ================================ //
-//
-bool								FBXLoader::ExportObj		( const filesystem::Path & fileName, const TexturedMesh & mesh )
-{
 	return false;
 }
 
@@ -367,7 +362,7 @@ Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nu
 			curVertex.Position = Get( fbxControlPoints[ controlPointIdx ] );
 			curVertex.Normal = GetVertexNormal( fbxMesh, polygonCounter, vertexIdx );
 			curVertex.UV = GetVertexUV( fbxMesh, polygonCounter, vertexIdx, lUVSetName );
-			curVertex.MaterialID = 0;
+			curVertex.MaterialID = (float)ReadMaterialIndex( fbxMesh, polygonCounter );
 
 			verticies.push_back( curVertex );
 
@@ -386,6 +381,37 @@ Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nu
 	mesh.Value.Indicies.push_back( std::move( newIndicies ) );
 
 	return std::move( mesh );
+}
+
+// ================================ //
+//
+std::vector< Material >				FBXLoader::ListMaterials			( FbxScene* scene )
+{
+	std::vector< Material > materials;
+
+	// We add empty material if there's no texture. MaterialIDs in mesh are numbered by material
+	// So texture indicies must point to valid texture.
+	for( int i = 0; i < scene->GetMaterialCount(); ++i )
+	{
+		auto material = scene->GetMaterial( i );
+		FbxSurfaceLambert* surfMaterial = static_cast< FbxSurfaceLambert* >( material );
+
+		if( surfMaterial->Diffuse.GetSrcObjectCount() > 0 )
+		{
+			FbxFileTexture* texture = static_cast< FbxFileTexture* >( surfMaterial->Diffuse.GetSrcObject() );
+			if( texture != nullptr )
+			{
+				filesystem::Path texPath = texture->GetRelativeFileName();
+				materials.push_back( Material( texPath.String() ) );
+			}
+			else
+				materials.push_back( Material( "" ) );
+		}
+		else
+			materials.push_back( Material( "" ) );
+	}
+
+	return materials;
 }
 
 // ================================ //
@@ -560,6 +586,29 @@ void								FBXLoader::LoadAnimation			( FbxNode* node, FbxScene* scene, Tempora
 			}
 		}
 	}
+}
+
+// ================================ //
+//
+int						FBXLoader::ReadMaterialIndex	( FbxMesh* mesh, unsigned int polygonCounter )
+{
+	if( mesh->GetElementMaterialCount() < 1 )
+		return 0;		//nie by³o materia³ów to mamy tylko jedn¹ tablicê do indeksowania
+
+	FbxGeometryElementMaterial* material = mesh->GetElementMaterial();
+	int index;
+
+	switch( material->GetMappingMode() )
+	{
+		case FbxGeometryElement::eAllSame:
+			index = material->GetIndexArray()[ 0 ];		//mamy tylko jeden materia³ dla ca³ego mesha
+			break;
+
+		case FbxGeometryElement::eByPolygon:
+			index = material->GetIndexArray()[ polygonCounter ];
+			break;
+	}
+	return index;
 }
 
 

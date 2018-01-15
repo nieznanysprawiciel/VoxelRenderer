@@ -41,6 +41,8 @@ private:
 
 	glm::vec4		DispatchLittleEndian	( uint8* texelPtr ) const;
 	glm::vec4		DispatchBigEndian		( uint8* texelPtr ) const;
+
+	float			ReadSample				( uint8* texelPtr ) const;
 };
 
 

@@ -42,6 +42,20 @@ struct FbxMeshCollection
 
 // ================================ //
 //
+struct Material
+{
+	std::string			TexturePath;
+
+// ================================ //
+//
+	Material( const std::string& texPath )
+		: TexturePath( texPath )
+	{}
+};
+
+
+// ================================ //
+//
 template< typename VertexType >
 struct TemporaryMeshInit
 {
@@ -50,7 +64,15 @@ struct TemporaryMeshInit
 };
 
 typedef TemporaryMeshInit< vr::ShellMeshVertex > TempShellMeshInit;
-typedef TemporaryMeshInit< vr::TexturedVertex > TexturedMesh;
+
+// ================================ //
+//
+struct TexturedMesh
+{
+	std::vector< vr::TexturedVertex >		Verticies;
+	std::vector< std::vector< Index32 > >	Indicies;
+	std::vector< Material >					Materials;
+};
 
 
 // ================================ //

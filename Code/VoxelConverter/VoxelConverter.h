@@ -6,12 +6,19 @@
 #include "swCommonLib/System/Path.h"
 
 
+namespace vr
+{
+	class OctreeBuilder;
+}
+
+
 /**@brief */
 class VoxelConverter
 {
+	typedef std::vector< filesystem::Path > PathsVec;
 private:
 
-	filesystem::Path		m_texturePath;
+	PathsVec				m_texturesPaths;
 	SamplerType				m_samplerType;
 
 	bool			m_flipU;
@@ -27,14 +34,20 @@ public:
 
 	bool			Convert				( const filesystem::Path& inputFilePath, const filesystem::Path& outputFilePath );
 
-	/**@brief Adds texture. Overwrites previous if existed.
-	@todo In future add support for multiple textures. To do this we must encode
-	texture index for every voxel.*/
+	/**@brief Adds texture on the end of texture vector.*/
 	void			AddTexture			( const filesystem::Path& texPath );
+
+	/**@brief Loads texture information from .matlist file.
+	This is best way to texture model with multiple textures.*/
+	void			LoadMatListFile		( const filesystem::Path& texPath );
 
 	bool			SetSampler			( const std::string& samplerName );
 	void			SetSampler			( SamplerType type ) { m_samplerType = type; }
 	void			FlipUV				( bool u, bool v ) { m_flipU = u; m_flipV = v; }
+
+private:
+
+	void			ApplyTextures		( vr::OctreeBuilder& builder );
 };
 
 

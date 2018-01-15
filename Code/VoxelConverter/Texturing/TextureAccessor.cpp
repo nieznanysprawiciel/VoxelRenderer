@@ -101,14 +101,11 @@ glm::vec4		TextureAccessor::DispatchLittleEndian	( uint8* texelPtr ) const
 	// Zero color vector.
 	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
 
-	// This dispatches texel written in little endian.
-	int channelOffset = 0;
-	for( int channel = m_channels - 1; channel >= 0; --channel, channelOffset++ )
-	{
-		auto texelChannelPtr = texelPtr + channelOffset;
-		uint8 sample = *texelChannelPtr;
-		color[ channel ] = (float)sample / 255.0f;
-	}
+	// Texels are arranged in memory as BGRA.
+	color[ 0 ] = ReadSample( texelPtr + 2 );
+	color[ 1 ] = ReadSample( texelPtr + 1 );
+	color[ 2 ] = ReadSample( texelPtr );
+	color[ 3 ] = ReadSample( texelPtr + 3 );
 
 	return color;
 }
@@ -120,16 +117,21 @@ glm::vec4		TextureAccessor::DispatchBigEndian		( uint8* texelPtr ) const
 	// Zero color vector.
 	glm::vec4 color( 0.0f, 0.0f, 0.0f, 1.0f );
 
-	// This dispatches texel written in little endian.
-	int channelOffset = 0;
-	for( int channel = 0; channel < m_channels; ++channel, channelOffset++ )
-	{
-		auto texelChannelPtr = texelPtr + channelOffset;
-		uint8 sample = *texelChannelPtr;
-		color[ channel ] = (float)sample / 255.0f;
-	}
+	// Texels are arranged in memory as ARGB.
+	color[ 0 ] = ReadSample( texelPtr + 1 );
+	color[ 1 ] = ReadSample( texelPtr + 2 );
+	color[ 2 ] = ReadSample( texelPtr + 3 );
+	color[ 3 ] = ReadSample( texelPtr );
 
 	return color;
+}
+
+// ================================ //
+//
+float			TextureAccessor::ReadSample				( uint8* texelPtr ) const
+{
+	uint8 sample = *texelPtr;
+	return (float)sample / 255.0f;
 }
 
 

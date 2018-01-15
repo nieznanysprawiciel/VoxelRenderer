@@ -45,7 +45,7 @@ public:
 	OctreePtr		BuildOctree			( OctreeInfo& srcOctree );
 
 	bool			ReadOctree			( OctreeInfo& srcOctree );
-	bool			TextureOctree		( const filesystem::Path& filePath, SamplerType samplingType, bool flipU, bool flipV );
+	bool			TextureOctree		( const filesystem::Path& filePath, SamplerType samplingType, Size texIdx, bool flipU, bool flipV );
 	OctreePtr		BuildOctree			();
 
 private:
