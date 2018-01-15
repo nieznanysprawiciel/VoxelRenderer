@@ -25,6 +25,8 @@ def GetFbx2ObjConverterBuildDir():
     convertersPath = GetConvertersPath()
     return os.path.join( convertersPath, "../../", "LibDir/FbxToObjConverter/Release_x64_v140/" )
     
+def GetMatlistFilePath( mainFilePath ):
+    return mainFilePath + ".matlist"
     
 def CopyExecutableIfNotExist( executableName, buildDir ):
     
@@ -96,7 +98,12 @@ def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
     arguments.extend( [ "-o", outputPath ] )
     
     if texturePath is not None:
-        arguments.extend( [ "-t", texturePath ] )
+        
+        ## Determine if parameter is single texture or texture list file.
+        if os.path.splitext( texturePath )[ -1 ] == ".matlist":
+            arguments.extend( [ "-m", texturePath ] )
+        else:
+            arguments.extend( [ "-t", texturePath ] )
         
         if filter is not None:
             arguments.extend( [ "-f", filter ] )
@@ -196,6 +203,12 @@ def MakeConvertsion():
         
         outputFile = modelFileWithoutExt + ".obj"
         CallFbx2ObjConverter( modelToConvert, outputFile )
+        
+        matlistPath = GetMatlistFilePath( outputFile )
+        
+        # If .matlist file was generated we should use it unless user specified file explicite.
+        if os.path.isfile( matlistPath ) and texturePath is None:
+            texturePath = matlistPath
         
         modelToConvert = outputFile
         
