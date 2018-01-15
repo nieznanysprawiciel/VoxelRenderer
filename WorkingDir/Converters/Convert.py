@@ -47,13 +47,12 @@ def CallTriConverter( modelFilePath ):
     
     CopyExecutableIfNotExist( executableName, GetOOCBuildDir() )
     
-    print "Calling " + triConverterPath + " with arguments: " + "-f" + modelFilePath
+    callInfo = "Calling " + triConverterPath + " with arguments: " + "-f" + modelFilePath
     
     result = subprocess.call( [ triConverterPath, "-f", modelFilePath ] )
     
     if result > 0:
-        return False
-    return True
+        raise NameError( callInfo + " failed" )
     
 def ComputeTriFile( inputModelFile ):
     
@@ -75,13 +74,12 @@ def CallSVOBuilder( triFilePath, gridSize ):
     arguments.extend( [ "-c", "model" ] )
     arguments.extend( [ "-v" ] )
         
-    print "Calling " + svoBuilderPath + " with arguments: " + str( arguments )
+    callInfo = "Calling " + svoBuilderPath + " with arguments: " + str( arguments )
        
     result = subprocess.call( arguments )
 
     if result > 0:
-        return False
-    return True
+        raise NameError( callInfo + " failed" )
     
     
 def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
@@ -103,13 +101,12 @@ def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
         if filter is not None:
             arguments.extend( [ "-f", filter ] )
     
-    print "Calling " + voxelConverterPath + " with arguments: " + str( arguments )
+    callInfo = "Calling " + voxelConverterPath + " with arguments: " + str( arguments )
     
     result = subprocess.call( arguments )
 
     if result > 0:
-        return False
-    return True
+        raise NameError( callInfo + " failed" )
     
     
 def ComputeOctreeFile( inputModelFile, gridSize ):
@@ -153,13 +150,12 @@ def CallFbx2ObjConverter( inputFBX, outputObj ):
     arguments.extend( [ "-i", inputFBX ] )
     arguments.extend( [ "-o", outputObj ] )
     
-    print "Calling " + Fbx2ObjConverterPath + " with arguments: " + str( arguments )
+    callInfo = "Calling " + Fbx2ObjConverterPath + " with arguments: " + str( arguments )
     
     result = subprocess.call( arguments )
 
     if result > 0:
-        return False
-    return True
+        raise NameError( callInfo + " failed" )
     
 def RemoveConverters():
 
