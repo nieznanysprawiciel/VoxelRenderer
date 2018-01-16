@@ -158,7 +158,7 @@ def CallFbx2ObjConverter( inputFBX, outputObj, genMatfile ):
     arguments.extend( [ "-o", outputObj ] )
     
     if genMatfile:
-        arguments.extend( [ "-generateMatfile" ] )
+        arguments.extend( [ "--generateMatfile" ] )
     
     callInfo = "Calling " + Fbx2ObjConverterPath + " with arguments: " + str( arguments )
     
