@@ -54,9 +54,10 @@ private:
 
 	Nullable< FbxMeshCollection >	ProcessNode		( FbxNode* node, Nullable< FbxMeshCollection >& meshes );
 	Nullable< TempShellMeshInit >	ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TempShellMeshInit >& mesh, SkeletonPtr skeleton );
-	Nullable< TexturedMesh >		ProcessMesh		( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh );
+	Nullable< TexturedMesh >		ProcessMesh		( FbxScene* scene, FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh );
 
 	std::vector< Material >			ListMaterials	( FbxScene* scene );
+	std::vector< uint32 >			MaterialMap		( FbxScene* scene, FbxNode* node );
 
 	void							Scale			( Nullable< TempShellMeshInit >& mesh );
 	void							RepairWeights	( Nullable< TempShellMeshInit >& mesh );

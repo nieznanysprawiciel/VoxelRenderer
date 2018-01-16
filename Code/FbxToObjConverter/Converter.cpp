@@ -15,7 +15,7 @@ namespace vr
 
 // ================================ //
 //
-bool			Converter::Convert			( const filesystem::Path& inputFile, const filesystem::Path& outputFile )
+bool			Converter::Convert			( const filesystem::Path& inputFile, const filesystem::Path& outputFile, bool genMatfile )
 {
 	FBXLoader loader;
 
@@ -26,6 +26,9 @@ bool			Converter::Convert			( const filesystem::Path& inputFile, const filesyste
 		
 		if( exporter.Export( outputFile ) )
 		{
+			if( !genMatfile )
+				return true;
+
 			/// @todo Paths in materials vector are relative to FBX file. We should translate them relative to
 			/// outputFile path. This works as long as input and output are in the same folder.
 			return SaveMaterialsList( DefaultMatListFile( outputFile ), mesh.Value.Materials );

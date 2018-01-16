@@ -119,7 +119,7 @@ Nullable< TexturedMesh >			FBXLoader::LoadTexturedMesh		( const filesystem::Path
 
 	for( auto& mesh : meshData.Value.Segments )
 	{
-		tempMeshInit = ProcessMesh( mesh, tempMeshInit );
+		tempMeshInit = ProcessMesh( scene, mesh, tempMeshInit );
 	}
 
 	scene->Destroy();
@@ -329,7 +329,7 @@ Nullable< TempShellMeshInit >		FBXLoader::ProcessMesh		( FbxNodeMesh& nodeData, 
 
 // ================================ //
 //
-Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh )
+Nullable< TexturedMesh >			FBXLoader::ProcessMesh		( FbxScene* fbxScene, FbxNodeMesh& nodeData, Nullable< TexturedMesh >& mesh )
 {
 	ReturnIfInvalid( mesh );
 
@@ -345,6 +345,9 @@ Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nu
 	unsigned int polygonCounter = 0;
 
 	std::vector< TexturedVertex >			verticies;		verticies.reserve( 3 * polygonsCount );
+
+	// Create mapping from node materials to scene materials to get global IDs.
+	auto materialMap = MaterialMap( fbxScene, fbxNode );
 
 	// Get UV set name at index 0. We assume that there's only one UV set, or the first one is this that we want.
     FbxStringList lUVSetNameList;
@@ -362,7 +365,7 @@ Nullable< TexturedMesh >			FBXLoader::ProcessMesh				( FbxNodeMesh& nodeData, Nu
 			curVertex.Position = Get( fbxControlPoints[ controlPointIdx ] );
 			curVertex.Normal = GetVertexNormal( fbxMesh, polygonCounter, vertexIdx );
 			curVertex.UV = GetVertexUV( fbxMesh, polygonCounter, vertexIdx, lUVSetName );
-			curVertex.MaterialID = (float)ReadMaterialIndex( fbxMesh, polygonCounter );
+			curVertex.MaterialID = (float)materialMap[ ReadMaterialIndex( fbxMesh, polygonCounter ) ];
 
 			verticies.push_back( curVertex );
 
@@ -412,6 +415,28 @@ std::vector< Material >				FBXLoader::ListMaterials			( FbxScene* scene )
 	}
 
 	return materials;
+}
+
+// ================================ //
+/// Creates material map that maps scene materials IDs to mesh material IDs.
+/// Each mesh can use onlu part of scene materials and we want global view.
+std::vector< uint32 >				FBXLoader::MaterialMap				( FbxScene* scene, FbxNode* node )
+{
+	std::vector< uint32 > materialMap;
+
+	for( int i = 0; i < node->GetMaterialCount(); ++i )
+	{
+		auto nodeMaterial = node->GetMaterial( i );
+
+		for( int j = 0; j < scene->GetMaterialCount(); ++j )
+		{
+			auto sceneMaterial = scene->GetMaterial( j );
+			if( sceneMaterial == nodeMaterial )
+				materialMap.push_back( j );
+		}
+	}
+
+	return materialMap;
 }
 
 // ================================ //

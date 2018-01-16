@@ -142,7 +142,7 @@ def CleanTemporaries( triFile, octreeFile):
     os.remove( octreeFile + "nodes" )
     
     
-def CallFbx2ObjConverter( inputFBX, outputObj ):
+def CallFbx2ObjConverter( inputFBX, outputObj, genMatfile ):
     
     convertersDir = GetConvertersPath()
     executableName = "FbxToObjConverter.exe"
@@ -156,6 +156,9 @@ def CallFbx2ObjConverter( inputFBX, outputObj ):
     
     arguments.extend( [ "-i", inputFBX ] )
     arguments.extend( [ "-o", outputObj ] )
+    
+    if genMatfile:
+        arguments.extend( [ "-generateMatfile" ] )
     
     callInfo = "Calling " + Fbx2ObjConverterPath + " with arguments: " + str( arguments )
     
@@ -201,13 +204,17 @@ def MakeConvertsion():
     # If file is in FBX format, convert it to .obj
     if modelExt.lower() == ".fbx":
         
+        generateMatfile = True
+        if texturePath is not None:
+            generateMatfile = False
+        
         outputFile = modelFileWithoutExt + ".obj"
-        CallFbx2ObjConverter( modelToConvert, outputFile )
+        CallFbx2ObjConverter( modelToConvert, outputFile, generateMatfile )
         
         matlistPath = GetMatlistFilePath( outputFile )
         
         # If .matlist file was generated we should use it unless user specified file explicite.
-        if os.path.isfile( matlistPath ) and texturePath is None:
+        if generateMatfile:
             texturePath = matlistPath
         
         modelToConvert = outputFile

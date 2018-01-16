@@ -16,6 +16,7 @@
 //
 VoxelConverter::VoxelConverter()
 	:	m_samplerType( SamplerType::Bilinear )
+	,	m_applyTextureToAll( false )
 {}
 
 
@@ -42,10 +43,14 @@ void				VoxelConverter::LoadMatListFile	( const filesystem::Path& matlistPath )
 	std::fstream file( matlistPath.String(), std::fstream::in );
 	if( file.is_open() )
 	{
+		auto matlistDir = matlistPath.GetDirectory();
+
 		std::string texturePath;
 		while( std::getline( file, texturePath ) )
 		{
-			m_texturesPaths.push_back( texturePath );
+			auto finalPath = matlistDir / texturePath;
+
+			m_texturesPaths.push_back( finalPath );
 			texturePath.clear();
 		}
 

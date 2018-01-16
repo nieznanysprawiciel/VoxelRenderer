@@ -21,9 +21,11 @@ int main( int argc, char** argv )
 
 		TCLAP::ValueArg< std::string > inputFileArg( "i", "input", "Input FBX file", true, "", "file path" );
 		TCLAP::ValueArg< std::string > outputFileArg( "o", "output", "Output OBJ file", true, "", "file path" );
+		TCLAP::SwitchArg generateMatfile( "m", "generateMatfile", "Generate file with material paths.", false );
 
 		cmd.add( inputFileArg );
 		cmd.add( outputFileArg );
+		cmd.add( generateMatfile );
 
 		cmd.parse( argc, argv );
 
@@ -39,7 +41,7 @@ int main( int argc, char** argv )
 		std::cout << "Converting file: [" << inputFile.String() << "]" << std::endl;
 		std::cout << "Output file: [" << outputFile.String() << "]" << std::endl;
 
-		bool result = vr::Converter::Convert( inputFile, outputFile );
+		bool result = vr::Converter::Convert( inputFile, outputFile, generateMatfile.getValue() );
 
 		if( result )
 		{

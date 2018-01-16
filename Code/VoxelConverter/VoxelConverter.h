@@ -24,6 +24,8 @@ private:
 	bool			m_flipU;
 	bool			m_flipV;
 
+	bool			m_applyTextureToAll;
+
 protected:
 public:
 	explicit		VoxelConverter		();
@@ -36,6 +38,10 @@ public:
 
 	/**@brief Adds texture on the end of texture vector.*/
 	void			AddTexture			( const filesystem::Path& texPath );
+
+	/**@brief Applies first texture to all voxels.
+	@todo Implement.*/
+	void			ApplyTextureToAll	() { m_applyTextureToAll = true; }
 
 	/**@brief Loads texture information from .matlist file.
 	This is best way to texture model with multiple textures.*/

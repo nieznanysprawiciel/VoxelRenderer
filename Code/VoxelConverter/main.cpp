@@ -72,6 +72,8 @@ int main( int argc, char** argv )
 				}
 
 				converter.AddTexture( textureFile );
+				//converter.ApplyTextureToAll();
+
 				std::cout << "Texture file: [" << textureFile.String() << "]" << std::endl;
 			}
 			else if( matlistFileArg.isSet() )
