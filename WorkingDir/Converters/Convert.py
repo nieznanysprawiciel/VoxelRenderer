@@ -167,15 +167,19 @@ def CallFbx2ObjConverter( inputFBX, outputObj, genMatfile ):
     if result > 0:
         raise NameError( callInfo + " failed" )
     
+def SafeRemove( filePath ):
+    if os.path.exists( filePath ):
+        os.remove( filePath )
+    
 def RemoveConverters():
 
     convertersDir = GetConvertersPath()
-    os.remove( os.path.join( convertersDir, "FbxToObjConverter.exe" ) )
-    os.remove( os.path.join( convertersDir, "libfbxsdk.dll" ) )
-    os.remove( os.path.join( convertersDir, "Reflection.dll" ) )
-    os.remove( os.path.join( convertersDir, "VoxelConverter.exe" ) )
-    os.remove( os.path.join( convertersDir, "tri_convert.exe" ) )
-    os.remove( os.path.join( convertersDir, "svo_builder.exe" ) )
+    SafeRemove( os.path.join( convertersDir, "FbxToObjConverter.exe" ) )
+    SafeRemove( os.path.join( convertersDir, "libfbxsdk.dll" ) )
+    SafeRemove( os.path.join( convertersDir, "Reflection.dll" ) )
+    SafeRemove( os.path.join( convertersDir, "VoxelConverter.exe" ) )
+    SafeRemove( os.path.join( convertersDir, "tri_convert.exe" ) )
+    SafeRemove( os.path.join( convertersDir, "svo_builder.exe" ) )
     
 def MakeConvertsion():
     
