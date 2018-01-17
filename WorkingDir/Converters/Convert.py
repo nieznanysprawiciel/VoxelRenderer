@@ -7,6 +7,7 @@ import shutil
 ## Configuration
 cleanTmpFiles = False
 recopyConverters = True
+colorWithNormals = False
 
 
 def GetConvertersPath():
@@ -62,7 +63,7 @@ def ComputeTriFile( inputModelFile ):
     return modelFileName + ".tri"
     
     
-def CallSVOBuilder( triFilePath, gridSize ):
+def CallSVOBuilder( triFilePath, gridSize, useNormalsAsColor ):
     
     convertersDir = GetConvertersPath()
     executableName = "svo_builder.exe"
@@ -73,7 +74,12 @@ def CallSVOBuilder( triFilePath, gridSize ):
     arguments = [ svoBuilderPath, "-f", triFilePath ]
     
     arguments.extend( [ "-s", str( gridSize ) ] )
-    arguments.extend( [ "-c", "model" ] )
+    
+    if useNormalsAsColor:
+        arguments.extend( [ "-c", "normal" ] )
+    else:
+        arguments.extend( [ "-c", "model" ] )
+        
     arguments.extend( [ "-v" ] )
         
     callInfo = "Calling " + svoBuilderPath + " with arguments: " + str( arguments )
@@ -203,14 +209,16 @@ def MakeConvertsion():
     if len( sys.argv ) > 3:
         texturePath = sys.argv[ 3 ]
         
+    if colorWithNormals == True and texturePath is not None:
+        print "Both texturePath and colorWithNormals set. Choose one option!"
+        return
+        
     modelFileWithoutExt, modelExt = os.path.splitext( modelToConvert )
         
     # If file is in FBX format, convert it to .obj
     if modelExt.lower() == ".fbx":
         
-        generateMatfile = True
-        if texturePath is not None:
-            generateMatfile = False
+        generateMatfile = not colorWithNormals and texturePath is None
         
         outputFile = modelFileWithoutExt + ".obj"
         CallFbx2ObjConverter( modelToConvert, outputFile, generateMatfile )
@@ -225,7 +233,7 @@ def MakeConvertsion():
         
     
     CallTriConverter( modelToConvert )
-    CallSVOBuilder( ComputeTriFile( modelToConvert ), gridSize )
+    CallSVOBuilder( ComputeTriFile( modelToConvert ), gridSize, colorWithNormals )
     CallVoxelConverter( ComputeOctreeFile( modelToConvert, gridSize ), outputPath, texturePath, filterType )
     
     if cleanTmpFiles:
