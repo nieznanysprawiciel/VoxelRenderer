@@ -436,6 +436,10 @@ std::vector< uint32 >				FBXLoader::MaterialMap				( FbxScene* scene, FbxNode* n
 		}
 	}
 
+	// Make material map not empty to simplify further code.
+	if( materialMap.empty() )
+		materialMap.push_back( 0 );
+
 	return materialMap;
 }
 
