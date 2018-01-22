@@ -8,19 +8,21 @@
 
 
 // ================================ //
-//
-RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput );
+// 
+RaycasterResult		RaycastingRange	( float4 screenSpace, CameraData cameraInput, float maxRaycastPath )
+{
+	float3 direction = ComputeRayDirection( cameraInput, screenSpace.x, screenSpace.y );
+	float3 position = ComputeRayPosition( cameraInput, screenSpace.x, screenSpace.y );
 
+	return RaycastingCore( position, direction );
+}
 
 
 // ================================ //
 //
 RaycasterResult		Raycasting		( float4 screenSpace, CameraData cameraInput )
 {
-	float3 direction = ComputeRayDirection( cameraInput, screenSpace.x, screenSpace.y );
-	float3 position = ComputeRayPosition( cameraInput, screenSpace.x, screenSpace.y );
-
-	return RaycastingCore( position, direction );
+	return RaycastingRange( screenSpace, cameraInput, -1.0f );
 }
 
 

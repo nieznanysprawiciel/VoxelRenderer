@@ -53,7 +53,7 @@ float4 main( Output3GS input ) : SV_TARGET
 
 	if( !any( isnan( position ) ) && !any( isnan( direction ) ) )
 	{
-		RaycasterResult result = RaycastingCore( position, direction );
+		RaycasterResult result = RaycastingCoreRange( position, direction, 2 * offsetRay );
 
 		if( result.VoxelIdx != 0 )
 		{

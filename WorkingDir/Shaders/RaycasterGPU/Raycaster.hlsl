@@ -125,8 +125,8 @@ int					HighestBitPos		( int diffs )
 
 
 // ================================ //
-//
-void				InitRaycasting		( float3 position, float3 direction, inout RaycasterContext rayCtx )
+// Negative maxRaycastPath means that we end in infinity.
+void				InitRaycasting		( float3 position, float3 direction, inout RaycasterContext rayCtx, float maxRaycastPath )
 {
 	//const float epsilon = exp2( -(float)CAST_STACK_DEPTH );
 	const float epsilon = 1e-10;
@@ -173,6 +173,12 @@ void				InitRaycasting		( float3 position, float3 direction, inout RaycasterCont
 	rayCtx.tMax = min( rayCtx.tMax, 10000.0f );
 	//rayCtx.tCubeMin = rayCtx.tMin;
 
+	// Compute absolute max t value instead of relative offset.
+	if( maxRaycastPath > 0.0 )
+		rayCtx.MaxRaycastPath = rayCtx.tMin + maxRaycastPath;
+	else
+		rayCtx.MaxRaycastPath = 1.#INF;
+
 	BlockDescriptor blockDesc = GetBlockDescriptor( 0 );
 
 	rayCtx.Current = blockDesc.RootNodeOffset;
@@ -203,6 +209,15 @@ RaycasterResult		CastRay				( RaycasterContext rayCtx )
 		// Terminate.
 		if( IsLeaf( rayCtx.ChildDescriptor ) )
 			break;
+
+		// We exceeded max raycasting path length. Terminate.
+		if( rayCtx.tMin > rayCtx.MaxRaycastPath )
+		{
+			// No voxel found.
+			rayCtx.ChildDescriptor = 0;
+			rayCtx.Current = 0;
+			break;
+		}
 
 		// Compute t-value in which ray leaves current voxel.
 		float3 corner = ParamLine( rayCtx.Position, rayCtx );
@@ -344,15 +359,22 @@ StackOperation		PushStep				( inout RaycasterContext rayCtx, float3 corner, floa
 //			Raycasting skeleton	
 //====================================================================================//
 
+// ================================ //
+//
+RaycasterResult				RaycastingCoreRange		( float3 position, float3 direction, float maxRaycastPath )
+{
+	RaycasterContext rayCtx;
+
+	InitRaycasting( position, direction, rayCtx, maxRaycastPath );
+	return CastRay( rayCtx );
+}
 
 // ================================ //
 //
 RaycasterResult				RaycastingCore			( float3 position, float3 direction )
 {
-	RaycasterContext rayCtx;
-
-	InitRaycasting( position, direction, rayCtx );
-	return CastRay( rayCtx );
+	// Set no maximum raycast length.
+	return RaycastingCoreRange( position, direction, -1.0f );
 }
 
 

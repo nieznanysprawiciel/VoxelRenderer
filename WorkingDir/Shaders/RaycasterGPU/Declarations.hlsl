@@ -64,6 +64,8 @@ struct RaycasterContext
 	
 	int								Scale;
 	float							ScaleExp;
+
+	float							MaxRaycastPath;
 };
 
 

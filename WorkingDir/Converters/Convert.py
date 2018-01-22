@@ -5,7 +5,7 @@ import shutil
 
 
 ## Configuration
-cleanTmpFiles = False
+cleanTmpFiles = True
 recopyConverters = True
 colorWithNormals = False
 
