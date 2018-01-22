@@ -25,7 +25,7 @@ struct Output3GS
 //
 float4 main( Output3GS input ) : SV_TARGET
 {
-	const float offsetRay = OffsetShell;
+	const float offsetRay = OffsetShell + 0.01;
 
 	float4 resultColor = float4( 0.4, 0.4, 0.4, 1.0 );
 

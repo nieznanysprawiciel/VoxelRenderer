@@ -37,7 +37,10 @@ OutputVS	main( InputVS input )
 	float4 position = ComputeBonesPositionsTransform( input.Position, input.BlendIdx, input.BlendWeights );
 	float4 normal = ComputeBonesTransform( float4( input.Normal, 0.0f ), input.BlendIdx, input.BlendWeights );
 
-	output.WorldPosition = position.xyz - normal.xyz * OffsetShell;
+	float3 offset = -normal.xyz * OffsetShell;
+	position.xyz = position.xyz + offset;
+
+	output.WorldPosition = position.xyz;
 	output.Position = mul( position, ViewMatrix );
 	output.Position = mul( output.Position, ProjectionMatrix );
 	output.BlendIdx = input.BlendIdx;
@@ -46,6 +49,7 @@ OutputVS	main( InputVS input )
 	output.ModelPosition = input.Position.xyz;
 	output.ModelPosition += Translate;
 	output.ModelPosition = output.ModelPosition * Scale;
+	output.ModelPosition += offset;
 
 	return output;
 }
