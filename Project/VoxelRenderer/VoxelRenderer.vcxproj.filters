@@ -286,9 +286,21 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\AnimLoadedNormalsPS.hlsl">
       <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation3GS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation3PS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation3VS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\AnimHelpers.hlsli">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </None>
+    <None Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\BonesHelpers.hlsli">
       <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </None>
   </ItemGroup>

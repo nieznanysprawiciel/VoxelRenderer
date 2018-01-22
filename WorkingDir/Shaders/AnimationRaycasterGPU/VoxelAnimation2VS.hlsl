@@ -1,3 +1,5 @@
+#include "BonesHelpers.hlsli"
+
 
 #define MAX_BONES 200
 
@@ -10,13 +12,6 @@ cbuffer CameraConstants : register( b0 )
 	matrix			ViewMatrix;					///< View matrix.
 	matrix			ProjectionMatrix;			///< Projection matrix.
 	float3			CameraPosition;				///< Position of camera in world space.
-}
-
-// ================================ //
-//
-cbuffer BonesTransforms : register( b1 )
-{
-	matrix			BoneTransform[ MAX_BONES ];
 }
 
 // ================================ //
@@ -56,12 +51,7 @@ OutputVS	main( InputVS input )
 {
 	OutputVS output = (OutputVS)0;
 
-	float4 position = mul( input.Position, BoneTransform[ input.BlendIdx.x ] ) * input.BlendWeights.x;
-	position += mul( input.Position, BoneTransform[ input.BlendIdx.y ] ) * input.BlendWeights.y;
-	position += mul( input.Position, BoneTransform[ input.BlendIdx.z ] ) * input.BlendWeights.z;
-	position += mul( input.Position, BoneTransform[ input.BlendIdx.w ] ) * input.BlendWeights.w;
-
-	position.w = 1.0f;
+	float4 position = ComputeBonesPositionsTransform( input.Position, input.BlendIdx, input.BlendWeights );
 
 	output.WorldPosition = position.xyz;
 	output.Position = mul( position, ViewMatrix );

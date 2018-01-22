@@ -1,9 +1,11 @@
 
+#include "BonesHelpers.hlsli"
+
 #define NUM_WEIGHTS 4
 #define NUM_TRIANGLES 3
 #define WEIGHTS_PER_TRIANGLE ( NUM_WEIGHTS * NUM_TRIANGLES )
 #define INVALID_IDX 255
-#define MAX_BONES 200
+
 
 
 // ================================ //
@@ -13,13 +15,6 @@ cbuffer CameraConstants : register( b0 )
 	matrix			ViewMatrix;					///< View matrix.
 	matrix			ProjectionMatrix;			///< Projection matrix.
 	float3			CameraPosition;				///< Position of camera in world space.
-}
-
-// ================================ //
-//
-cbuffer BonesTransforms : register( b1 )
-{
-	matrix			BoneTransform[ MAX_BONES ];
 }
 
 // ================================ //
