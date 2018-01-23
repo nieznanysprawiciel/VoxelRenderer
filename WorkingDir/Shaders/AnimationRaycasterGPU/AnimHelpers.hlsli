@@ -25,6 +25,7 @@ cbuffer MeshContants : register( b2 )
 	float			Scale;
 	float			OffsetShell;
 	bool			EnableShellDisplay;
+	float			MaxShellError;
 }
 
 

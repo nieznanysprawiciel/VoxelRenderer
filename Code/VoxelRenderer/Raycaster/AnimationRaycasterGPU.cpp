@@ -54,6 +54,7 @@ AnimationRaycasterGPU::AnimationRaycasterGPU()
 	,	m_pause( false )
 	,	m_offsetShell( 0.0 )
 	,	m_enableShellDisplay( true )
+	,	m_maxError( 0.0 )
 {}
 
 // ================================ //
@@ -181,6 +182,15 @@ void				AnimationRaycasterGPU::ProcessInput		( const sw::input::MouseState& mous
 		m_offsetShell -= 0.0001f;
 	}
 
+	if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPAD8 ].IsPressed() )
+	{
+		m_maxError += 0.0001f;
+	}
+	else if( keyboard[ Keyboard::PhysicalKeys::KEY_NUMPAD2 ].IsPressed() )
+	{
+		m_maxError -= 0.0001f;
+	}
+
 	if( keyboard[ Keyboard::PhysicalKeys::KEY_TAB ].IsKeyDownEvent() )
 	{
 		m_enableShellDisplay = !m_enableShellDisplay;
@@ -252,6 +262,7 @@ void				AnimationRaycasterGPU::UpdateMeshBuffer			( ShellMeshPtr shellMesh )
 	meshConstants.Scale = shellMesh->GetScale();
 	meshConstants.OffsetShell = m_offsetShell;
 	meshConstants.EnableShellDisplay = m_enableShellDisplay;
+	meshConstants.MaxError = m_maxError;
 
 	uint32 bufferSize = sizeof( MeshContants );
 

@@ -49,6 +49,7 @@ protected:
 	bool				m_pause;
 
 	float				m_offsetShell;
+	float				m_maxError;
 	bool				m_enableShellDisplay;
 
 public:

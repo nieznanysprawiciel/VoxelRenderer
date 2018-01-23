@@ -53,8 +53,9 @@ struct MeshContants
 	float					Scale;
 	float					OffsetShell;
 	bool					EnableShellDisplay;
+	float					MaxError;
 
-	DirectX::XMFLOAT2		Align16;
+	float					Align16;
 };
 
 }
