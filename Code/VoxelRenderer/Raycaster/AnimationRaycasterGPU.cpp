@@ -129,9 +129,9 @@ void				AnimationRaycasterGPU::Init				( IRenderer* renderer, ResourceManager* r
 	// Generate layout for shader that uses all vertex attributes.
 	auto shader = m_resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/AnimLoadedNormalsVS.hlsl", "main", &layout, animLayoutDesc );
 
-	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2VS.hlsl", "main" );
-	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2GS.hlsl", "main" );
-	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation2PS.hlsl", "main" );
+	m_animVertexShader = resourceManager->LoadVertexShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation3VS.hlsl", "main" );
+	m_animGeometryShader = resourceManager->LoadGeometryShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation3GS.hlsl", "main" );
+	m_animPixelShader = resourceManager->LoadPixelShader( L"Shaders/AnimationRaycasterGPU/VoxelAnimation3PS.hlsl", "main" );
 
 	m_layout = layout;
 
