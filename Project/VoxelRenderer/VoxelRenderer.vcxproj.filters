@@ -295,6 +295,12 @@
     <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation3VS.hlsl">
       <Filter>Shaders\AnimationRaycasterGPU</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation4PS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\VoxelAnimation4VS.hlsl">
+      <Filter>Shaders\AnimationRaycasterGPU</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\WorkingDir\Shaders\AnimationRaycasterGPU\AnimHelpers.hlsli">
