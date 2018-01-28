@@ -10,6 +10,8 @@
 
 #include <fstream>
 
+#include "VoxelConverter/Logging/Log.h"
+
 
 
 // ================================ //
@@ -55,6 +57,9 @@ void				VoxelConverter::LoadMatListFile	( const filesystem::Path& matlistPath )
 				texPath = texPath.GetFileName();
 
 			auto finalPath = matlistDir / texturePath;
+
+			if( !finalPath.Exists() )
+				vr::Log( "[Texturing] File: [" + finalPath.String() + "] doesn't exist" );
 
 			m_texturesPaths.push_back( finalPath );
 			texturePath.clear();
