@@ -31,6 +31,8 @@ private:
 	std::unique_ptr< ooc::OctreeNode[] >	m_octree;
 	std::unique_ptr< ooc::Payload[] >		m_attributes;
 
+	std::vector< bool >						m_texturedNodes;		///< Because we make multiple passes through octree and we modify it, we must flag processed entries.
+
 	std::vector< OctreeNode >				m_data;
 
 	Size			m_curNodesOffset;

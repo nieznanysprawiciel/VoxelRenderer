@@ -10,23 +10,29 @@
 // ================================ //
 //
 template< typename SamplerObject >
-void			TextureOctreeWithSampler		( const TextureAccessor& tex, OctreeAccessor& octree, Size texIdx )
+void			Texturing::TextureOctreeWithSampler		( const TextureAccessor& tex, OctreeAccessor& octree, Size texIdx )
 {
-	/// @todo In future we should check bounds of startRange and endRange here, but current implementation iterates
-	/// all attributes, so there's nothing to worry yet.
+	// We shouldn't process textured voxels for the second time, because we use colors
+	// for UVs and colors as well and we could overwrite them.
+	auto& texturedNodes = m_octree.GetTexturedNodesFlags();
 
 	for( Size attribIdx = 0; attribIdx < octree.GetNumberAttributes(); attribIdx++ )
 	{
-		auto& attributes = octree.GetAttributes( attribIdx );
-
-		// Texture index is encoded in z coordinate of color.
-		if( floor( attributes.Color.z ) == texIdx )
+		if( !texturedNodes[ attribIdx ] )
 		{
-			// We interpret colors as UVs coords. External tool should prepare SVO containing UVs.
-			glm::vec2 uv( attributes.Color.x, attributes.Color.y );
-			glm::vec4 color = SamplerObject::Sample( tex, uv );
+			auto& attributes = octree.GetAttributes( attribIdx );
 
-			attributes.Color = DirectX::XMFLOAT3( color.x, color.y, color.z );
+			// Texture index is encoded in z coordinate of color.
+			if( round( attributes.Color.z ) == texIdx )
+			{
+				// We interpret colors as UVs coords. External tool should prepare SVO containing UVs.
+				glm::vec2 uv( attributes.Color.x, attributes.Color.y );
+				glm::vec4 color = SamplerObject::Sample( tex, uv );
+
+				attributes.Color = DirectX::XMFLOAT3( color.x, color.y, color.z );
+
+				texturedNodes[ attribIdx ] = true;
+			}
 		}
 	}
 }

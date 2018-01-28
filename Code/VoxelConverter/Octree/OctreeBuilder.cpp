@@ -85,6 +85,8 @@ bool				OctreeBuilder::ReadOctree		( OctreeInfo& srcOctree )
 		ReadNodes( srcOctree, (uint8*)m_octree.get() );
 		ReadData( srcOctree, (uint8*)m_attributes.get() );
 
+		m_texturedNodes.resize( m_numAttribs );
+
 		return true;
 	}
 
@@ -95,7 +97,7 @@ bool				OctreeBuilder::ReadOctree		( OctreeInfo& srcOctree )
 //
 bool				OctreeBuilder::TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType, Size texIdx, bool flipU, bool flipV )
 {
-	OctreeAccessor octree( m_octree.get(), m_attributes.get(), m_numNodes, m_numAttribs );
+	OctreeAccessor octree( m_octree.get(), m_attributes.get(), m_texturedNodes, m_numNodes, m_numAttribs );
 	Texturing texturing( octree, flipU, flipV );
 
 	return texturing.TextureOctree( filePath, samplingType, texIdx );

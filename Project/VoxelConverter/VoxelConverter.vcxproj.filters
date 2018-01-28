@@ -16,6 +16,9 @@
     <Filter Include="VoxelConverter\Texturing\Samplers">
       <UniqueIdentifier>{dfa4ae12-67ad-4f32-b520-1762fc4a4ca3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="VoxelConverter\Logging">
+      <UniqueIdentifier>{19bfbb6b-84e3-4175-ada9-15743bd0fd05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Code\VoxelConverter\main.cpp">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Code\VoxelConverter\Texturing\Samplers\BilinearSampler.h">
       <Filter>VoxelConverter\Texturing\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Code\VoxelConverter\Logging\Log.h">
+      <Filter>VoxelConverter\Logging</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

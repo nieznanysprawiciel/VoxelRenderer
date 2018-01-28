@@ -5,9 +5,10 @@
 
 // ================================ //
 //
-OctreeAccessor::OctreeAccessor( ooc::OctreeNode* nodes, ooc::Payload* attribs, uint64 numNodes, uint64 numAttribs )
+OctreeAccessor::OctreeAccessor( ooc::OctreeNode* nodes, ooc::Payload* attribs, std::vector< bool >& texturedNodes, uint64 numNodes, uint64 numAttribs )
 	:	m_nodes( nodes )
 	,	m_attributes( attribs )
+	,	m_texturedNodes( texturedNodes )
 	,	m_numNodes( numNodes )
 	,	m_numAttributes( numAttribs )
 {}

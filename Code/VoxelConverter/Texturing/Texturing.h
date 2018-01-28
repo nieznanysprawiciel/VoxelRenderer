@@ -32,6 +32,11 @@ public:
 
 
 	bool			TextureOctree	( const filesystem::Path& filePath, SamplerType samplingType, Size texIdx );
+
+private:
+
+	template< typename SamplerObject >
+	void			TextureOctreeWithSampler		( const TextureAccessor& tex, OctreeAccessor& octree, Size texIdx );
 };
 
 

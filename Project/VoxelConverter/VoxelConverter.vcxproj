@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\Code\VoxelRenderer\SVO\Octree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Code\VoxelConverter\Logging\Log.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\OctreeBuilder.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocOctree.h" />
     <ClInclude Include="..\..\Code\VoxelConverter\Octree\oocPayload.h" />
