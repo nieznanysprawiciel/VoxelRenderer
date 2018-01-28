@@ -397,21 +397,26 @@ std::vector< Material >				FBXLoader::ListMaterials			( FbxScene* scene )
 	for( int i = 0; i < scene->GetMaterialCount(); ++i )
 	{
 		auto material = scene->GetMaterial( i );
-		FbxSurfaceLambert* surfMaterial = static_cast< FbxSurfaceLambert* >( material );
 
-		if( surfMaterial->Diffuse.GetSrcObjectCount() > 0 )
+		if( material->GetClassId().Is( FbxSurfacePhong::ClassId ) ||
+			material->GetClassId().Is( FbxSurfaceLambert::ClassId ) )
 		{
-			FbxFileTexture* texture = static_cast< FbxFileTexture* >( surfMaterial->Diffuse.GetSrcObject() );
-			if( texture != nullptr )
+			FbxSurfaceLambert* surfMaterial = static_cast< FbxSurfaceLambert* >( material );
+
+			if( surfMaterial->Diffuse.GetSrcObjectCount() > 0 )
 			{
-				filesystem::Path texPath = texture->GetRelativeFileName();
-				materials.push_back( Material( texPath.String() ) );
+				FbxFileTexture* texture = static_cast< FbxFileTexture* >( surfMaterial->Diffuse.GetSrcObject() );
+				if( texture != nullptr )
+				{
+					filesystem::Path texPath = texture->GetRelativeFileName();
+					materials.push_back( Material( texPath.String() ) );
+
+					continue;
+				}
 			}
-			else
-				materials.push_back( Material( "" ) );
 		}
-		else
-			materials.push_back( Material( "" ) );
+		
+		materials.push_back( Material( "" ) );
 	}
 
 	return materials;
