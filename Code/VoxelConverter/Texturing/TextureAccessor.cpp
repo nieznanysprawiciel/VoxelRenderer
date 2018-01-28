@@ -86,7 +86,15 @@ float			TextureAccessor::ApplyWrapping		( WrappingMode mode, float coord ) const
 			return clamped;
 		}
 		case WrappingMode::Repeat:
-			return fmod( coord, 1.0f );
+		{
+			float integralPart;
+			float fractionalPart = modf( coord, &integralPart );
+
+			if( fractionalPart < 0.0f )
+				fractionalPart = 1.0f + fractionalPart;
+
+			return fractionalPart;
+		}
 		default:
 			break;
 	}
