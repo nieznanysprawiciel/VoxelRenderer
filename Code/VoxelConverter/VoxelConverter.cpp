@@ -48,6 +48,12 @@ void				VoxelConverter::LoadMatListFile	( const filesystem::Path& matlistPath )
 		std::string texturePath;
 		while( std::getline( file, texturePath ) )
 		{
+			// Absolut paths are always invalid. In such a case we can try to use only
+			// file name and hope the file exists.
+			auto texPath = filesystem::Path( texturePath );
+			if( texPath.IsAbsolut() )
+				texPath = texPath.GetFileName();
+
 			auto finalPath = matlistDir / texturePath;
 
 			m_texturesPaths.push_back( finalPath );
