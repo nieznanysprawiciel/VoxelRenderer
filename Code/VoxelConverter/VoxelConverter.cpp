@@ -56,7 +56,7 @@ void				VoxelConverter::LoadMatListFile	( const filesystem::Path& matlistPath )
 			if( texPath.IsAbsolut() )
 				texPath = texPath.GetFileName();
 
-			auto finalPath = matlistDir / texturePath;
+			auto finalPath = matlistDir / texPath;
 
 			if( !finalPath.Exists() )
 				vr::Log( "[Texturing] File: [" + finalPath.String() + "] doesn't exist" );
