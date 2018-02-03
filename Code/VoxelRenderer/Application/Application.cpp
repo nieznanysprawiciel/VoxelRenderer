@@ -236,30 +236,35 @@ void		Application::InitShellMesh()
 
 	std::cout << "Loading shell mesh from [" << m_config->ShellMeshFilePath() << "]..." << std::endl;
 
-	if( loader->CanLoad( m_config->ShellMeshFilePath() ) )
+	if( filesystem::Path( m_config->ShellMeshFilePath() ).Exists() )
 	{
-		auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
-		if( mesh.IsValid )
+		if( loader->CanLoad( m_config->ShellMeshFilePath() ) )
 		{
-			std::cout << "Shell mesh loaded succesfully.\nLoading animated SVO..." << std::endl;
-
-			m_shellMeshes.push_back( mesh.Value );
-
-			auto& animOctreeFile = m_config->AnimatedOctreePath();
-			OctreePtr animOctree = LoadOctree( animOctreeFile );
-
-			if( animOctree )
+			auto mesh = loader->LoadMesh( m_resourceManager, m_config->ShellMeshFilePath() );
+			if( mesh.IsValid )
 			{
-				mesh.Value->ApplyOctree( m_resourceManager, animOctree );
+				std::cout << "Shell mesh loaded succesfully.\nLoading animated SVO..." << std::endl;
 
-				std::cout << "Shell mesh and animated SVO loaded succesfully." << std::endl;
+				m_shellMeshes.push_back( mesh.Value );
+
+				auto& animOctreeFile = m_config->AnimatedOctreePath();
+				OctreePtr animOctree = LoadOctree( animOctreeFile );
+
+				if( animOctree )
+				{
+					mesh.Value->ApplyOctree( m_resourceManager, animOctree );
+
+					std::cout << "Shell mesh and animated SVO loaded succesfully." << std::endl;
+				}
 			}
+			else
+				std::cout << "Loading shell mesh failed." << std::endl;
 		}
 		else
-			std::cout << "Loading shell mesh failed." << std::endl;
+			std::cout << "Loader can load this type of file." << std::endl;
 	}
 	else
-		std::cout << "Loader can load this type of file." << std::endl;
+		std::cout << "File doesn't exist." << std::endl;
 
 	delete loader;
 }
