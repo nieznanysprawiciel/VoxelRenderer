@@ -45,6 +45,8 @@ private:
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, ShellMeshFilePath, "" );
 	DEFINE_CONFIG_VALUE_DEFAULT( std::string, AnimatedOctreePath, "" );
 
+	DEFINE_CONFIG_VALUE_DEFAULT( std::string, PerformanceFilePath, "Performance.txt" );
+
 public:
 	explicit		Config	( const std::string& filePath );
 					~Config	() = default;

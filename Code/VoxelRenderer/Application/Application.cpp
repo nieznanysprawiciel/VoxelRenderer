@@ -104,6 +104,11 @@ void		Application::UpdateTime		( const sw::gui::FrameTime & frameTime )
 		auto fpsText = m_timeManager.GetFPSCounter().PrintFPS();
 		m_windows[ 0 ]->GetNativeWindow()->SetTitle( "Voxel skeletal animation. " + fpsText );
 	}
+
+	if( m_input->GetKeyboardDevice()[ 0 ]->GetState()[ sw::input::Keyboard::PhysicalKeys::KEY_F1 ].IsKeyDownEvent() )
+	{
+		m_timeManager.GetFPSCounter().PrintSamples( m_config->PerformanceFilePath() );
+	}
 }
 
 // ================================ //

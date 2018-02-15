@@ -4,6 +4,7 @@
 #include "swGUI/Core/System/Time/FrameTime.h"
 
 #include <string>
+#include <vector>
 
 
 namespace vr
@@ -22,12 +23,16 @@ private:
 	bool					m_needsRefresh;		///< Check if you should call PrintFPS.
 	sw::gui::TimeRatio		m_avgMillisPerFrame;
 
+	std::vector< sw::gui::TimeRatio >		m_timeSamples;		///< Collects average time from multiple refreshes.
+	Size									m_curSamplePtr;
+
 public:
 
 	explicit		FPSCounter	( uint32 refreshRate );
 
 	void			ProcessTime		( const sw::gui::FrameTime& frameTime );
 	std::string		PrintFPS		();
+	void			PrintSamples	( const std::string& file );
 	bool			NeedsFPSRefresh	() const;
 };
 

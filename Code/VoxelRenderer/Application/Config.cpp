@@ -33,6 +33,13 @@ Config::Config	( const std::string& filePath )
 				deser.Exit();
 			}
 
+			if( deser.EnterObject( "Debug" ) )
+			{
+				m_PerformanceFilePath = deser.GetAttribute( "PerformanceFile", m_PerformanceFilePath );
+
+				deser.Exit();
+			}
+
 			if( deser.EnterObject( "Camera" ) )
 			{
 				if( deser.EnterObject( "Position" ) )
