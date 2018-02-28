@@ -72,6 +72,8 @@ There're multiple raycasters implemented which can be configured from StartConfi
 
 ```
 	<Raycaster Type="AnimationRaycasterGPU" />
+	<!-- or -->
+	<Raycaster Type="GPU Raycaster" />
 ```
 
 
@@ -83,7 +85,6 @@ Most of raycasters are for debugging purposes only. To test application I propos
 #### GPU Raycaster
 
 GPU Raycaster can display static SVOs.
-
 You can choose one of following shaders:
 
 - Key 1 - RaycasterGPU/SimpleColor.hlsl - Displays voxels with colours defined in SVO.
@@ -102,6 +103,20 @@ You can configure light parameters in config:
 ```
 
 #### AnimationRaycasterGPU
+
+AnimationRaycasterGPU implements animation algorithms.
+You can choose one of following shaders:
+
+- Key 5 - Shell Mesh transforms rays with inverse animation matrix.
+- Key 6 - Shell Mesh transforms rays with change of basis matrix.
+
+Keys from 1 to 4 implement old prototype versions of animation.
+
+Use one of these keys to control animation parameters:
+
+- Numpad Plus (and Minus) - Increase/Decrease shell mesh offset.
+- Numpad 8 (and Numpad 2) - Increase/Decrease max aproximation error. (Check in shader what it really does)
+- Tab - Enable/Disable shell mesh rendering for rays that didn't hit any voxel on it's path. Pixels for these rays will be painted to grey colour.
 
 
 ## Offline Tools
