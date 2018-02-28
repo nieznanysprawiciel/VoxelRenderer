@@ -121,11 +121,30 @@ Use one of these keys to control animation parameters:
 
 ## Offline Tools
 
-TODO:
+Offline tools can convert .FBX models to .voxtree format. If source files contain textures, conversion scripts will use them to texture voxel model.
+
+Conversion is performed in four steps, because I use [external tools](https://github.com/nieznanysprawiciel/ooc_svo_builder) to build SVO. That's why the easiest way to convert your own models, is to use WorkingDir/Converters/Convert.py script, that will do whole work for you.
+To use script you need Python 2.7
 
 ### Conversion script
 
-TODO:
+This example will build SVO from *Minotaur@Idle.FBX* file:
+```
+python Converters/Convert.py PreBuildAssets\Minotaur\animation\Minotaur@Idle.FBX Assets/Minotaur/Minotaur.voxtree
+```
+
+Note that script created *Minotaur@Idle.obj.matlist* file in the same directory as .FBX file. Matlist file contains textures information about model. Meshes consist of multiple segments and each can have separate material. For each segment in source model, script writes diffuse texture path to matlist file. Then next scripts can read this file and texture voxel model.
+
+You can provide your own .matlist file and call script like this:
+```
+python Converters/Convert.py PreBuildAssets\Minotaur\Minotaur@Idle.FBX Assets/Minotaur/Minotaur.voxtree PreBuildAssets\Minotaur\Minotaur@Idle.obj.matlist
+```
+
+#### Known issues
+
+Sometimes .FBX files resolves textures paths incorectly and paths in .matlist file point to wrong directories. When this happend, generated voxel model will have default colours.
+To fix this, you can change path in generated .matlist file and call script for the second time with this changed .matlist file.
+
 
 ### FbxToObjConverter
 
