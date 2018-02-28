@@ -84,7 +84,12 @@ Most of raycasters are for debugging purposes only. To test application I propos
 
 #### GPU Raycaster
 
-GPU Raycaster can display static SVOs.
+GPU Raycaster can display static SVOs. Configure octree in StartConfig.config:
+
+```
+<Octree FilePath="Assets/Golem/Golem.voxtree" />
+```
+
 You can choose one of following shaders:
 
 - Key 1 - RaycasterGPU/SimpleColor.hlsl - Displays voxels with colours defined in SVO.
@@ -104,7 +109,11 @@ You can configure light parameters in config:
 
 #### AnimationRaycasterGPU
 
-AnimationRaycasterGPU implements animation algorithms.
+AnimationRaycasterGPU implements animation algorithms. To animate model, you must provide .voxtree file with octree to animate and .FBX file to load shell mesh and animations. Configuration in StartConfig.config:
+```
+<ShellMesh FilePath="Assets/Dino/Dinosaurus_run.FBX" OctreeFile="Assets/Dino/Dino.voxtree" />
+```
+
 You can choose one of following shaders:
 
 - Key 5 - Shell Mesh transforms rays with inverse animation matrix.
@@ -128,16 +137,16 @@ To use script you need Python 2.7
 
 ### Conversion script
 
-This example will build SVO from *Minotaur@Idle.FBX* file:
+This example will build SVO from *Minotaur-Idle.FBX* file:
 ```
-python Converters/Convert.py PreBuildAssets\Minotaur\animation\Minotaur@Idle.FBX Assets/Minotaur/Minotaur.voxtree
+python Converters/Convert.py PreBuildAssets\Minotaur\animation\Minotaur-Idle.FBX Assets/Minotaur/Minotaur.voxtree
 ```
 
-Note that script created *Minotaur@Idle.obj.matlist* file in the same directory as .FBX file. Matlist file contains textures information about model. Meshes consist of multiple segments and each can have separate material. For each segment in source model, script writes diffuse texture path to matlist file. Then next scripts can read this file and texture voxel model.
+Note that script created *Minotaur-Idle.obj.matlist* file in the same directory as .FBX file. Matlist file contains textures information about model. Meshes consist of multiple segments and each can have separate material. For each segment in source model, script writes diffuse texture path to matlist file. Then next scripts can read this file and texture voxel model.
 
 You can provide your own .matlist file and call script like this:
 ```
-python Converters/Convert.py PreBuildAssets\Minotaur\Minotaur@Idle.FBX Assets/Minotaur/Minotaur.voxtree PreBuildAssets\Minotaur\Minotaur@Idle.obj.matlist
+python Converters/Convert.py PreBuildAssets\Minotaur\Minotaur-Idle.FBX Assets/Minotaur/Minotaur.voxtree PreBuildAssets\Minotaur\Minotaur-Idle.obj.matlist
 ```
 
 #### Known issues
@@ -148,10 +157,12 @@ To fix this, you can change path in generated .matlist file and call script for 
 
 ### FbxToObjConverter
 
+Normally it is recommended to use Conversion script.
 TODO:
 
 ### VoxelConverter
 
+Normally it is recommended to use Conversion script.
 TODO:
 
 ## Copyright
