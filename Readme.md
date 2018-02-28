@@ -35,8 +35,8 @@ All other dependencies are included in repository:
 To build conversion tools, you must download and compile some libraries:
 
 - [liboctree](https://github.com/Forceflow/liboctree)
-- My fork of [ooc_svo_builder](https://github.com/nieznanysprawiciel/ooc_svo_builder) library. Original version [here](https://github.com/Forceflow/ooc_svo_builder).
-- My fork of [trimesh2](https://github.com/nieznanysprawiciel/trimesh2) library. Original version [here](http://gfx.cs.princeton.edu/proj/trimesh2/).
+- My modified fork of [ooc_svo_builder](https://github.com/nieznanysprawiciel/ooc_svo_builder) library. Original version [here](https://github.com/Forceflow/ooc_svo_builder).
+- My modified fork of [trimesh2](https://github.com/nieznanysprawiciel/trimesh2) library. Original version [here](http://gfx.cs.princeton.edu/proj/trimesh2/).
 
 All libraries should be cloned to folder **/External**.
 
