@@ -2,6 +2,20 @@
 
 Repository contains implementation of skeleton animation of voxel models.
 
+Models are represented as Sparse Voxel Octrees with grid size 2048x2048x2048.
+Renderer uses animated shell meshes to transform rays from word space to voxel space.
+
+First - shell meshes are rasterized, next - for each screen pixel ray transformation is computed
+and then ray casting in voxel space is used to determine visible voxel.
+Voxel model remains always in it's bind pose - it is never modified.
+
+In depth description of method will come later.
+
+Watch [demo](https://www.youtube.com/watch?v=jhMh0Pxvjho) on youtube.
+
+Method works in real time on GTX 750 TI. This demo was captured with screen resolution 1240x720,
+but it would work in real time even in Full HD.
+
 ## Building instruction
 
 If you want to use application only with already converted models, build Voxel Renderer application.
