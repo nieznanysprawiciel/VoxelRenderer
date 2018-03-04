@@ -9,6 +9,9 @@ cleanTmpFiles = True
 recopyConverters = True
 colorWithNormals = False
 
+flipU = False
+flipV = False
+
 
 def GetConvertersPath():
     scriptPath = sys.argv[ 0 ]
@@ -113,6 +116,12 @@ def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
         
         if filter is not None:
             arguments.extend( [ "-f", filter ] )
+            
+        if flipU:
+            arguments.extend( [ "-u" ] )
+            
+        if flipV:
+            arguments.extend( [ "-v" ] )
     
     callInfo = "Calling " + voxelConverterPath + " with arguments: " + str( arguments )
     
