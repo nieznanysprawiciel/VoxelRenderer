@@ -12,6 +12,10 @@ colorWithNormals = False
 flipU = False
 flipV = False
 
+memoryLimit = 2048
+filterType = "Bilinear"
+gridSize = 2048
+
 
 def GetConvertersPath():
     scriptPath = sys.argv[ 0 ]
@@ -77,6 +81,7 @@ def CallSVOBuilder( triFilePath, gridSize, useNormalsAsColor ):
     arguments = [ svoBuilderPath, "-f", triFilePath ]
     
     arguments.extend( [ "-s", str( gridSize ) ] )
+    arguments.extend( [ "-l", str( memoryLimit ) ] )
     
     if useNormalsAsColor:
         arguments.extend( [ "-c", "normal" ] )
@@ -130,13 +135,28 @@ def CallVoxelConverter( octreeFilePath, outputPath, texturePath, filter ):
     if result > 0:
         raise NameError( callInfo + " failed" )
     
+def EsitmatePartitions( gridSize ):
+    
+    # Code copied from partitioner.h (svo_builder)
+    required = ( gridSize * gridSize * gridSize ) / 1024 / 1024;
+    
+    numPartitions = 1;
+    requiredPartition = required;
+    
+    while requiredPartition > memoryLimit:
+        requiredPartition = requiredPartition / 8;
+        numPartitions = numPartitions * 8;
+        
+    return numPartitions
+    
     
 def ComputeOctreeFile( inputModelFile, gridSize ):
     
     modelFileName, modelFileExtension = os.path.splitext( inputModelFile )
     
-    # I don't know how to determine this number from svo_builder arguments yet.
-    splitCount = "_8"
+    # Hopefully this is right way to produce output file name
+    numPartitions = EsitmatePartitions( gridSize )
+    splitCount = "_" + str( numPartitions )
     
     return modelFileName + str( gridSize ) + splitCount + ".octree"
     
@@ -205,8 +225,6 @@ def MakeConvertsion():
     modelToConvert = sys.argv[ 1 ]
     outputPath = ComputeDefaultOuputPath( modelToConvert )
     texturePath = None
-    filterType = "Bilinear"
-    gridSize = 2048
     
     
     if recopyConverters:
